@@ -42,13 +42,13 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   int num_of_events = Model_getNumEvents(m);
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
 
-  int num_of_all_var_species = 0; //量が変化する全ての分子の数
-  int num_of_all_var_parameters = 0; //量が変化する全てのパラメータの数
-  int num_of_all_var_compartments = 0; //量が変化する全てのコンパートメントの数
+  int num_of_all_var_species = 0; //num of species whose quantity is not constant
+  int num_of_all_var_parameters = 0; //num of parameters whose value is not constant
+  int num_of_all_var_compartments = 0; //num of compartment whose value is not constant
   int num_of_all_var_species_reference = 0;
-  int num_of_var_species = 0; //assignment, algebraic rule以外で量が変化する分子の数
-  int num_of_var_parameters = 0; //assignment, algebraic rule以外で量が変化するパラメータの数
-  int num_of_var_compartments = 0; //assignment, algebraic rule以外で量が変化するコンパートメントの数
+  int num_of_var_species = 0; //num of species whose quantity changes, but not by assignment, algebraic rule
+  int num_of_var_parameters = 0; //num of parameters whose value changes, but not by assignment, algebraic rule
+  int num_of_var_compartments = 0; //num of compartments whose value changes, but not by assignment, algebraic rule
   int num_of_var_species_reference = 0;
 
   check_num(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, &num_of_all_var_species, &num_of_all_var_parameters, &num_of_all_var_compartments, &num_of_all_var_species_reference, &num_of_var_species, &num_of_var_parameters, &num_of_var_compartments, &num_of_var_species_reference, sp, param, comp, re);
@@ -351,7 +351,7 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
 //        }
       }
       fprintf(fp1, "\n");
-      fprintf(fp2, "%lf", *time);
+      fprintf(fp2, "%.16g", *time);
       // Parameter
       for(i=0; i<num_of_parameters; i++){
 //        if(!Parameter_getConstant(param[i]->origin)){ // XXX must remove this
@@ -363,7 +363,7 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
           value_param_p++;
       }
       fprintf(fp2, "\n");
-      fprintf(fp3, "%lf", *time);
+      fprintf(fp3, "%.16g", *time);
       // Compartment
       for(i=0; i<num_of_compartments; i++){
 //        if(!Compartment_getConstant(comp[i]->origin)){ // XXX must remove this
@@ -376,32 +376,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
       }
       fprintf(fp3, "\n");
     }
-    //print result
-    /*     if(cycle%print_interval == 0){ */
-    /*       fprintf(fp1, "%.16g", *time); */
-    /*       for(i=0; i<num_of_species; i++){ */
-    /* 	if(print_amount){ */
-    /* 	  if(sp[i]->is_concentration){ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value); */
-    /* 	  }else{ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
-    /* 	  } */
-    /* 	}else{ */
-    /* 	  if(sp[i]->is_amount){ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value); */
-    /* 	  }else{ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
-    /* 	  } */
-    /* 	} */
-    /*       } */
-    /*       for(i=0; i<num_of_parameters; i++){ */
-    /*     	fprintf(fp1, " ,%.16g", param[i]->value); */
-    /*       } */
-    /*       for(i=0; i<num_of_compartments; i++){ */
-    /*     	fprintf(fp1, " ,%.16g", comp[i]->value); */
-    /*       } */
-    /*       fprintf(fp1, "\n"); */
-    /*     } */
 
     //time increase
     *time = (cycle+1)*dt;

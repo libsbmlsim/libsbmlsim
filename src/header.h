@@ -280,6 +280,7 @@ void write_result(myResult* result, char* file);
 void write_csv(myResult* result, char* file);
 void print_result_to_file(myResult* result, char* file, char delimiter);
 void output_result(myResult* result, FILE* fp, char delimiter);
+void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c); 
 
 //calc k(gradient or value of algebraic or assignment rule)
 void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, myReaction *re[], int re_num, myRule *rule[], int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);

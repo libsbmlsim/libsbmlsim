@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h> 
+#include <errno.h> 
 #include "header.h"
 
 void print_result(myResult* result){
@@ -38,14 +39,81 @@ void output_result(myResult* result, FILE* fp, char delimiter){
   double *value_p = result->values;
 
   for (i = 0; i < result->num_of_columns; i++) {
-    fprintf(fp, "%s%c", result->column_name[i], delimiter);
+    if (i == 0) {
+      fprintf(fp, "%s", result->column_name[i]);
+    } else {
+      fprintf(fp, "%c%s", delimiter, result->column_name[i]);
+    }
   }
   fprintf(fp, "\n");
   for (i = 0; i < result->num_of_rows; i++) {
     for (j = 0; j < result->num_of_columns; j++) {
-      fprintf(fp, "%.16g%c", *(value_p), delimiter);
+      if (j == 0) {
+        fprintf(fp, "%.16g", *(value_p));
+      } else {
+        fprintf(fp, "%c%.16g", delimiter, *(value_p));
+      }
       value_p++;
     }
     fprintf(fp, "\n");
   }
+}
+
+void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c) {
+  FILE *fp_s, *fp_p, *fp_c;
+  int i, j;
+  char delimiter = ' ';
+  double *value_time_p  = result->values_time;
+  double *value_sp_p    = result->values_sp;
+  double *value_param_p = result->values_param;
+  double *value_comp_p  = result->values_comp;
+
+  if ((fp_s = fopen(file_s, "w")) == NULL ) {
+    fprintf(stderr, "Failed to open %s: %s\n", file_s, strerror(errno));
+    return;
+  }
+  if ((fp_p = fopen(file_p, "w")) == NULL ) {
+    fprintf(stderr, "Failed to open %s: %s\n", file_p, strerror(errno));
+    return;
+  }
+  if ((fp_c = fopen(file_c, "w")) == NULL ) {
+    fprintf(stderr, "Failed to open %s: %s\n", file_c, strerror(errno));
+    return;
+  }
+
+  // Species
+  for (i = 0; i < result->num_of_rows; i++) {
+    fprintf(fp_s, "%.16g", *(value_time_p));
+    value_time_p++;
+    for (j = 0; j < result->num_of_columns_sp; j++) {
+      fprintf(fp_s, "%c%.16g", delimiter, *(value_sp_p));
+      value_sp_p++;
+    }
+    fprintf(fp_s, "\n");
+  }
+  // Parameters
+  value_time_p  = result->values_time;
+  for (i = 0; i < result->num_of_rows; i++) {
+    fprintf(fp_p, "%.16g", *(value_time_p));
+    value_time_p++;
+    for (j = 0; j < result->num_of_columns_param; j++) {
+      fprintf(fp_p, "%c%.16g", delimiter, *(value_param_p));
+      value_param_p++;
+    }
+    fprintf(fp_p, "\n");
+  }
+  // Compartments
+  value_time_p  = result->values_time;
+  for (i = 0; i < result->num_of_rows; i++) {
+    fprintf(fp_c, "%.16g", *(value_time_p));
+    value_time_p++;
+    for (j = 0; j < result->num_of_columns_comp; j++) {
+      fprintf(fp_c, "%c%.16g", delimiter, *(value_comp_p));
+      value_comp_p++;
+    }
+    fprintf(fp_c, "\n");
+  }
+  fclose(fp_s);
+  fclose(fp_p);
+  fclose(fp_c);
 }

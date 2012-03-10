@@ -39,6 +39,9 @@ int main(int argc, char *argv[]){
     print_result(rtn);
     write_result(rtn, "test.dat");
     write_csv(rtn, "test.csv");
+    write_separate_result(rtn, "./simulation_results/species_result2.dat",
+                               "./simulation_results/parameter_result2.dat",
+                               "./simulation_results/compartment_result2.dat");
   }
 
   SBMLDocument_free(d);

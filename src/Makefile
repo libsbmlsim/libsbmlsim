@@ -24,7 +24,6 @@ CC = gcc
 
 .PHONY: all
 all: $(PROG) $(BUILD_STATIC_LIB) $(BUILD_SHARED_LIB) $(BUILD_TEST)
-#all: $(PROG) $(BUILD_SHARED_LIB) $(BUILD_TEST)
 
 ### make object files ###
 .SUFFIXES: .o .c
@@ -44,7 +43,6 @@ $(BUILD_SHARED_LIB): $(OBJS_LIB)
 	$(CC) -dynamiclib -install_name $(BUILD_SHARED_LIB) -compatibility_version 1.0 -current_version 1.0.0 -o $(BUILD_SHARED_LIB) $(OBJS_LIB) -lsbml -lc
 
 ### make test binary with library ###
-#$(BUILD_TEST): $(OBJS_TEST) $(BUILD_STATIC_LIB)
 $(BUILD_TEST): $(OBJS_TEST) $(BUILD_SHARED_LIB)
 	$(CC) $(CFLAGS) $(OBJS_TEST) -o test -L. -lsbmlsim -lsbml
 

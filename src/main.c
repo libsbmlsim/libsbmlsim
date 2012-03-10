@@ -297,6 +297,9 @@ int main(int argc, char *argv[]){
     printf("Returned result is NULL\n");
   } else {
     write_csv(rtn, "out.csv");
+    write_separate_result(rtn, "./simulation_results/species_result2.dat",
+        "./simulation_results/parameter_result2.dat",
+        "./simulation_results/compartment_result2.dat");
   }
 
   //print result list
