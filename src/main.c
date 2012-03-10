@@ -14,10 +14,10 @@ void usage(char *str) {
   printf(" -s # : specify simulation step (ex. -s 100 )\n");
   printf(" -d # : specify simulation delta (ex. -d 0.01 [default:1/4092])");
   printf("        dt is calculated in (delta)*(time)/(step)\n");
-  printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
   printf(" -l   : use lazy method for integration\n");
   printf(" -n   : do not use lazy method\n");
   printf(" -a   : print Species Value in Amount\n");
+  printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
   printf("        1: runge kutta\n");
   printf("        2: AM1 & BD1 (implicit eular)\n");
   printf("        3: AM2 (crank nicolson)\n");
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
   myResult* rtn;
   //
   if(myAlgEq == NULL){
-    printf("myAlgEq is NULL\n");
+    dbg_printf("myAlgEq is NULL\n");
   }
   //CUI
   if (method == -1) {

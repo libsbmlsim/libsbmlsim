@@ -25,7 +25,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
   for(i=0; i<eq->math_length; i++){
     if(eq->number[i]!=NULL){
       stack[pos] = *eq->number[i];
-      //printf("%lf is stacked\n", stack[pos]);
+      //dbg_printf("%lf is stacked\n", stack[pos]);
       pos++;
     }else if(eq->delay_number[i]!=NULL){
       delay_preserver = eq->delay_number[i];
@@ -38,69 +38,69 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
     }else{
       switch(eq->operator[i]){
       case AST_PLUS: 
-	//printf("operate +\n");
+	//dbg_printf("operate +\n");
 	stack[pos-2] += stack[pos-1];
 	pos--;
 	break;
       case AST_MINUS:
-	//printf("operate -\n");
+	//dbg_printf("operate -\n");
 	stack[pos-2] -= stack[pos-1];
 	pos--;
 	break;
       case AST_TIMES:
-	//printf("operate *\n");
+	//dbg_printf("operate *\n");
 	stack[pos-2] *= stack[pos-1];
 	pos--;
 	break;
       case AST_DIVIDE:
-	//printf("operate /\n");
+	//dbg_printf("operate /\n");
 	stack[pos-2] /= stack[pos-1];
 	pos--;
 	break;
       case AST_POWER:
-	//printf("operate pow\n");
+	//dbg_printf("operate pow\n");
 	stack[pos-2] = pow(stack[pos-2], stack[pos-1]);
 	pos--;
 	break;
       case AST_FUNCTION_POWER:
-	//printf("operate pow\n");
+	//dbg_printf("operate pow\n");
 	stack[pos-2] = pow(stack[pos-2], stack[pos-1]);
 	pos--;
 	break;
       case AST_FUNCTION_FACTORIAL:
-	//printf("operate !\n");
+	//dbg_printf("operate !\n");
 	stack[pos-1] = (double)factorial((int)stack[pos-1]);
 	break;
       case AST_FUNCTION_ABS:	
-	//printf("operate abs\n");
+	//dbg_printf("operate abs\n");
 	stack[pos-1] = fabs(stack[pos-1]);
 	break;
       case AST_FUNCTION_SIN:
-	//printf("operate sin\n");
+	//dbg_printf("operate sin\n");
 	stack[pos-1] = sin(stack[pos-1]);
 	break;
       case AST_FUNCTION_COS:
-	//printf("operate cos\n");
+	//dbg_printf("operate cos\n");
 	stack[pos-1] = cos(stack[pos-1]);
 	break;
       case AST_FUNCTION_TAN:
-	//printf("operate tan\n");
+	//dbg_printf("operate tan\n");
 	stack[pos-1] = tan(stack[pos-1]);
 	break;
       case AST_FUNCTION_CSC:
-	//printf("operate csc\n");
+	//dbg_printf("operate csc\n");
 	stack[pos-1] = 1.0/sin(stack[pos-1]);
 	break;
       case AST_FUNCTION_SEC:
-	//printf("operate sec\n");
+	//dbg_printf("operate sec\n");
 	stack[pos-1] = 1.0/cos(stack[pos-1]);
 	break;
       case AST_FUNCTION_COT:
-	//printf("operate cot\n");
+	//dbg_printf("operate cot\n");
 	stack[pos-1] = 1.0/tan(stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCSIN:
-	//printf("operate arcsin\n");
+	//dbg_printf("operate arcsin\n");
 	if(stack[pos-1] > 1){
 	  stack[pos-1] = asin(1);
 	}else if(stack[pos-1] < -1){
@@ -110,7 +110,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCCOS:
-	//printf("operate arccos\n");
+	//dbg_printf("operate arccos\n");
 	if(stack[pos-1] > 1){
 	  stack[pos-1] = acos(1);
 	}else if(stack[pos-1] < -1){
@@ -120,11 +120,11 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCTAN:
-	//printf("operate arctan\n");
+	//dbg_printf("operate arctan\n");
 	stack[pos-1] = atan(stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCCSC:
-	//printf("operate arccsc\n");
+	//dbg_printf("operate arccsc\n");
 	if(1.0/stack[pos-1] > 1){
 	  stack[pos-1] = asin(1);
 	}else if(1.0/stack[pos-1] < -1){
@@ -134,7 +134,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCSEC:
-	//printf("operate arcsec\n");
+	//dbg_printf("operate arcsec\n");
 	if(1.0/stack[pos-1] > 1){
 	  stack[pos-1] = acos(1);
 	}else if(1.0/stack[pos-1] < -1){
@@ -144,7 +144,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCCOT:
-	//printf("operate arccot\n");
+	//dbg_printf("operate arccot\n");
 	if(eq->operator[i-1] == AST_MINUS
 	   && DOUBLE_EQ(*eq->number[i-2], 0)
 	   && DOUBLE_EQ(*eq->number[i-3], 0)){
@@ -154,39 +154,39 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_SINH:
-	//printf("operate sinh\n");
+	//dbg_printf("operate sinh\n");
 	stack[pos-1] = sinh(stack[pos-1]);
 	break;
       case AST_FUNCTION_COSH:
-	//printf("operate cosh\n");
+	//dbg_printf("operate cosh\n");
 	stack[pos-1] = cosh(stack[pos-1]);
 	break;
       case AST_FUNCTION_TANH:
-	//printf("operate tanh\n");
+	//dbg_printf("operate tanh\n");
 	stack[pos-1] = tanh(stack[pos-1]);
 	break;
       case AST_FUNCTION_CSCH:
-	//printf("operate csch\n");
+	//dbg_printf("operate csch\n");
 	stack[pos-1] = sinh(1.0/stack[pos-1]);
 	break;
       case AST_FUNCTION_SECH:
-	//printf("operate sech\n");
+	//dbg_printf("operate sech\n");
 	stack[pos-1] = cosh(1.0/stack[pos-1]);
 	break;
       case AST_FUNCTION_COTH:
-	//printf("operate coth\n");
+	//dbg_printf("operate coth\n");
 	stack[pos-1] = tanh(1.0/stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCSINH:
-	//printf("operate arcsinh\n");
+	//dbg_printf("operate arcsinh\n");
 	stack[pos-1] = asinh(stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCCOSH:
-	//printf("operate arccosh\n");
+	//dbg_printf("operate arccosh\n");
 	stack[pos-1] = acosh(stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCTANH:
-	//printf("operate arctanh\n");
+	//dbg_printf("operate arctanh\n");
 	if(stack[pos-1] >= 1){
 	  stack[pos-1] = DBL_MAX;
 	}else if(stack[pos-1] <= -1){
@@ -196,11 +196,11 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCCSCH:
-	//printf("operate arccsch\n");
+	//dbg_printf("operate arccsch\n");
 	stack[pos-1] = asinh(1.0/stack[pos-1]);
 	break;
       case AST_FUNCTION_ARCSECH:
-	//printf("operate arcsech\n");
+	//dbg_printf("operate arcsech\n");
 	if(DOUBLE_EQ(stack[pos-1], 0)){
 	  stack[pos-1] = DBL_MAX;
 	}else if(stack[pos-1] > 1){
@@ -210,7 +210,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_ARCCOTH:
-	//printf("operate arccoth\n");
+	//dbg_printf("operate arccoth\n");
 	if(1.0/stack[pos-1] >= 1){
 	  stack[pos-1] = DBL_MAX;
 	}else if(1.0/stack[pos-1] <= -1){
@@ -220,33 +220,33 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_FUNCTION_EXP:
-	//printf("operate exp\n");
+	//dbg_printf("operate exp\n");
 	stack[pos-1] = exp(stack[pos-1]);
 	break;
       case AST_FUNCTION_LN:
-	//printf("operate ln\n");
+	//dbg_printf("operate ln\n");
 	stack[pos-1] = log(stack[pos-1]);
 	break;
       case AST_FUNCTION_LOG:
-	//printf("operate log\n");
+	//dbg_printf("operate log\n");
 	stack[pos-2] = log(stack[pos-1])/log(stack[pos-2]);
 	pos--;
 	break;
       case AST_FUNCTION_ROOT:
-	//printf("operate root\n");
+	//dbg_printf("operate root\n");
 	stack[pos-2] = pow(stack[pos-1], 1/stack[pos-2]);
 	pos--;
 	break;
       case AST_FUNCTION_CEILING:
-	//printf("operate ceiling\n");
+	//dbg_printf("operate ceiling\n");
 	stack[pos-1] = ceilf((float)stack[pos-1]);
 	break;
       case AST_FUNCTION_FLOOR:
-	//printf("operate floor\n");
+	//dbg_printf("operate floor\n");
 	stack[pos-1] = floorf((float)stack[pos-1]);
 	break;
       case AST_FUNCTION_DELAY:
-	//printf("operate delay\n");
+	//dbg_printf("operate delay\n");
 	if(delay_comp_preserver != NULL){
 	  if(cycle-(int)(stack[pos-1]/dt) > 0){
 	    delay_value = delay_preserver[cycle-(int)(stack[pos-1]/dt)];
@@ -280,9 +280,9 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_EQ:
-	//printf("operate eq\n");
+	//dbg_printf("operate eq\n");
 	//if(stack[pos-2] == stack[pos-1]){
-	//printf("EQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
+	//dbg_printf("EQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
 	if(DOUBLE_EQ(stack[pos-2], stack[pos-1])){
 	  stack[pos-2] = 1;
 	}else{
@@ -291,9 +291,9 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_NEQ:
-	//printf("operate neq\n");
+	//dbg_printf("operate neq\n");
 	//if(stack[pos-2] != stack[pos-1]){
-	//printf("NEQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
+	//dbg_printf("NEQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
 	if(!DOUBLE_EQ(stack[pos-2], stack[pos-1])){
 	  stack[pos-2] = 1;
 	}else{
@@ -302,7 +302,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_LT:
-	//printf("operate lt\n");
+	//dbg_printf("operate lt\n");
 	if(stack[pos-2] < stack[pos-1]){
 	  stack[pos-2] = 1;
 	}else{
@@ -311,7 +311,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_GT:
-	//printf("operate gt\n");
+	//dbg_printf("operate gt\n");
 	if(stack[pos-2] > stack[pos-1]){
 	  stack[pos-2] = 1;
 	}else{
@@ -320,7 +320,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_LEQ:
-	//printf("operate leq\n");
+	//dbg_printf("operate leq\n");
 	if(stack[pos-2] <= stack[pos-1]){
 	  stack[pos-2] = 1;
 	}else{
@@ -329,7 +329,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_RELATIONAL_GEQ:
-	//printf("operate geq\n");
+	//dbg_printf("operate geq\n");
 	if(stack[pos-2] >= stack[pos-1]){
 	  stack[pos-2] = 1;
 	}else{
@@ -338,7 +338,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_LOGICAL_AND:
-	//printf("operate and\n");
+	//dbg_printf("operate and\n");
 	if(stack[pos-2] >= 0.5 && stack[pos-1] >= 0.5){
 	  stack[pos-2] = 1;
 	}else{
@@ -347,7 +347,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_LOGICAL_NOT:
-	//printf("operate not\n");
+	//dbg_printf("operate not\n");
 	if(stack[pos-1] >= 0.5){
 	  stack[pos-1] = 0;
 	}else{
@@ -355,7 +355,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	}
 	break;
       case AST_LOGICAL_OR:
-	//printf("operate or\n");
+	//dbg_printf("operate or\n");
 	if(stack[pos-2] >= 0.5 || stack[pos-1] >= 0.5){
 	  stack[pos-2] = 1;
 	}else{
@@ -364,7 +364,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_LOGICAL_XOR:
-	//printf("operate xor\n");
+	//dbg_printf("operate xor\n");
 	if((stack[pos-2] >= 0.5 && stack[pos-1] < 0.5)
 	   || (stack[pos-2] < 0.5 && stack[pos-1] >= 0.5)){
 	  stack[pos-2] = 1;
@@ -374,12 +374,12 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
 	pos--;
 	break;
       case AST_CONSTANT_TRUE:
-	//printf("stack true\n");
+	//dbg_printf("stack true\n");
 	stack[pos] = 1;
 	pos++;
 	break;
       case AST_CONSTANT_FALSE:
-	//printf("stack false\n");
+	//dbg_printf("stack false\n");
 	stack[pos] = 0;
 	pos++;
 	break;

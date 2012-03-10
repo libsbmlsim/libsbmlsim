@@ -1,3 +1,19 @@
+//debug print
+//#define DEBUG_PRINT
+#ifdef DEBUG_PRINT
+#define dbg_printf printf
+#else
+#define dbg_printf 1 ? (void) 0 : printf
+#endif
+
+//progress print
+//#define PROGRESS_PRINT
+#ifdef PROGRESS_PRINT
+#define prg_printf printf
+#else
+#define prg_printf 1 ? (void) 0 : printf
+#endif
+
 //define
 #define MAX_MATH_LENGTH 256
 #define MAX_DELAY_REACTION_NUM 256

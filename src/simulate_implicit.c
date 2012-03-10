@@ -102,20 +102,8 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   fp1 = fopen("./simulation_results/species_result.dat", "w");
   fp2 = fopen("./simulation_results/parameter_result.dat", "w");
   fp3 = fopen("./simulation_results/compartment_result.dat", "w");
-  /*   fp1 = fopen("./out.csv", "w"); */
-  /*   fprintf(fp1, "time"); */
-  /*   for(i=0; i<num_of_species; i++){ */
-  /*     fprintf(fp1, ",%s", Species_getId(sp[i]->origin)); */
-  /*   } */
-  /*   for(i=0; i<num_of_parameters; i++){ */
-  /*     fprintf(fp1, ",%s", Parameter_getId(param[i]->origin)); */
-  /*   } */
-  /*   for(i=0; i<num_of_compartments; i++){ */
-  /*     fprintf(fp1, ",%s", Compartment_getId(comp[i]->origin)); */
-  /*   } */
-  /*   fprintf(fp1, "\n"); */
 
-  printf("Simulation Starts!\n");
+  prg_printf("Simulation for [%s] Starts!\n", Model_getId(m));
   cycle = 0;
 
   //initialize delay_val
@@ -159,7 +147,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   for(i=0; i<num_of_initialAssignments; i++){
     for(j=0; j<initAssign[i]->eq->math_length; j++){
       if(initAssign[i]->eq->number[j] == time){
-        printf("time is replaced with reverse time\n");
+        dbg_printf("time is replaced with reverse time\n");
         initAssign[i]->eq->number[j] = &reverse_time;
       }else if(initAssign[i]->eq->number[j] != NULL){
         init_val = (double*)malloc(sizeof(double));
@@ -172,7 +160,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   for(i=0; i<timeVarAssign->num_of_time_variant_assignments; i++){
     for(j=0; j<timeVarAssign->eq[i]->math_length; j++){
       if(timeVarAssign->eq[i]->number[j] == time){
-        printf("time is replaced with reverse time\n");
+        dbg_printf("time is replaced with reverse time\n");
         timeVarAssign->eq[i]->number[j] = &reverse_time;
       }else if(timeVarAssign->eq[i]->number[j] != NULL){
         init_val = (double*)malloc(sizeof(double));
@@ -336,9 +324,9 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
 
     //progress
     if(cycle%(int)(end_cycle/10) == 0){
-      printf("%3d %%\n", (int)(100*((double)cycle/(double)end_cycle)));
-      printf("\x1b[1A");
-      printf("\x1b[5D");
+      prg_printf("%3d %%\n", (int)(100*((double)cycle/(double)end_cycle)));
+      prg_printf("\x1b[1A");
+      prg_printf("\x1b[5D");
     }
     //print result
     if(cycle%print_interval == 0){
@@ -376,33 +364,6 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
       fprintf(fp3, "\n");
     }
-
-    /*     //print result */
-    /*     if(cycle%print_interval == 0){ */
-    /*       fprintf(fp1, "%g", *time); */
-    /*       for(i=0; i<num_of_species; i++){ */
-    /* 	if(print_amount){ */
-    /* 	  if(sp[i]->is_concentration){ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value); */
-    /* 	  }else{ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
-    /* 	  } */
-    /* 	}else{ */
-    /* 	  if(sp[i]->is_amount){ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value); */
-    /* 	  }else{ */
-    /* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
-    /* 	  } */
-    /* 	} */
-    /*       } */
-    /*       for(i=0; i<num_of_parameters; i++){ */
-    /*     	fprintf(fp1, " ,%.16g", param[i]->value); */
-    /*       } */
-    /*       for(i=0; i<num_of_compartments; i++){ */
-    /*     	fprintf(fp1, " ,%.16g", comp[i]->value); */
-    /*       } */
-    /*       fprintf(fp1, "\n"); */
-    /*     } */
 
     //time increse
     *time = (cycle+1)*dt;
@@ -664,7 +625,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     //forwarding value
     forwarding_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference);
   }
-  printf("Simulation Ends!\n");
+  prg_printf("Simulation for [%s] Ends!\n", Model_getId(m));
   fclose(fp1);
   fclose(fp2);
   fclose(fp3);

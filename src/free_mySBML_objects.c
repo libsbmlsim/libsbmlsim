@@ -118,10 +118,10 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     free(mem->memory[i]);
   }
   free(mem);
-  //piecewiseを含むテストケースでsegmentation fault
+  //segmentation fault on a model which contains piecewise
 /*   for(i=0; i<cp_AST->num_of_copied_AST; i++){ */
 /*     ASTNode_free(cp_AST->ast[i]); */
 /*   } */
 /*   free(cp_AST); */
-  printf("all allocated memory is freeed\n");
+  dbg_printf("all allocated memory is freeed\n");
 }

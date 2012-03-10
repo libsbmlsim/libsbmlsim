@@ -79,7 +79,7 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
 	}
       }
       final_eq_node = eq_root_node->origin;
-      printf("myASTNode is\n");
+      dbg_printf("myASTNode is\n");
       check_myAST(eq_root_node);
       ASTNode_recreate(eq_root_node, final_eq_node);
       if(minus_sign == -1){
@@ -91,11 +91,11 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
 	final_eq_node = minus_node;
       }
       if(algEq->num_of_algebraic_variables > 1){
-	printf("math AST of coefficient matrix[%d][%d] is\n", alg_order, variable_order);
+	dbg_printf("math AST of coefficient matrix[%d][%d] is\n", alg_order, variable_order);
 	check_AST(eq_root_node->origin, NULL);
 	algEq->coefficient_matrix[alg_order][variable_order]->math_length = get_equation(m, algEq->coefficient_matrix[alg_order][variable_order], sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }else{
-	printf("math AST of coefficient is\n");
+	dbg_printf("math AST of coefficient is\n");
 	check_AST(eq_root_node->origin, NULL);
 	algEq->coefficient->math_length = get_equation(m, algEq->coefficient, sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }
@@ -107,11 +107,11 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
 void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem){
   _prepare_algebraic4(node, algEq);
   if(algEq->num_of_algebraic_variables > 1){
-    printf("math AST of constant vector[%d] is\n", alg_order);
+    dbg_printf("math AST of constant vector[%d] is\n", alg_order);
     check_AST(node, NULL);
     algEq->constant_vector[alg_order]->math_length = get_equation(m, algEq->constant_vector[alg_order], sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
   }else{
-    printf("math AST of constant is\n");
+    dbg_printf("math AST of constant is\n");
     check_AST(node, NULL);
     algEq->constant->math_length = get_equation(m, algEq->constant, sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
   }
@@ -161,7 +161,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
   int num_of_copied_myAST = 0;
   //find constant in calculation algebraic rule
   //reaction target(reactants and products)
-  printf("Reaction\n");
+  dbg_printf("Reaction\n");
   for(i=0; i<Model_getNumSpecies(m); i++){
      flag = 0;
      local_sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
@@ -182,7 +182,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
      }
   }
   //rule target
-  printf("Rule\n");
+  dbg_printf("Rule\n");
   for(i=0; i<Model_getNumRules(m); i++){
     if(Rule_isRate(ru[i]->origin) || Rule_isAssignment(ru[i]->origin)){
       if(ru[i]->target_species != NULL){
@@ -197,7 +197,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
   //event target
-  printf("Event\n");
+  dbg_printf("Event\n");
   for(i=0; i<Model_getNumEvents(m); i++){
     for(j=0; j<Event_getNumEventAssignments(ev[i]->origin); j++){
       flag = 1;
@@ -232,7 +232,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
   //initial assignment
-  printf("Initial Assignment\n");
+  dbg_printf("Initial Assignment\n");
   for(i=0; i<Model_getNumInitialAssignments(m); i++){
     flag = 1;
     for(j=0; j<num_of_constants_in_alg; j++){
@@ -265,7 +265,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
   //constant
-  printf("Constant\n");
+  dbg_printf("Constant\n");
   for(i=0; i<Model_getNumSpecies(m); i++){
     local_sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
     if(Species_getConstant(local_sp)){
@@ -285,9 +285,9 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
 
-  printf("constants in alg are\n");
+  dbg_printf("constants in alg are\n");
   for(i=0; i<num_of_constants_in_alg; i++){
-    printf("%s\n", constants_in_alg[i]);
+    dbg_printf("%s\n", constants_in_alg[i]);
   }
 
   for(i=0; i<Model_getNumRules(m); i++){
@@ -299,9 +299,9 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
 
-  printf("included id in algebraic rules are\n");
+  dbg_printf("included id in algebraic rules are\n");
   for(i=0; i<num_of_included_id_in_alg; i++){
-    printf("%s\n", included_id_in_alg[i]);
+    dbg_printf("%s\n", included_id_in_alg[i]);
   }
 
   for(i=0; i<num_of_included_id_in_alg; i++){
@@ -315,20 +315,20 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       algEq->variables_id[algEq->num_of_algebraic_variables++] = (char*)included_id_in_alg[i];
     }
   }
-  printf("algebraic variable is\n");
+  dbg_printf("algebraic variable is\n");
   for(i=0; i<algEq->num_of_algebraic_variables; i++){
-    printf("%s\n", algEq->variables_id[i]);
+    dbg_printf("%s\n", algEq->variables_id[i]);
   }
  
   //get coeffient
-  printf("get coefficient matrix\n");
+  dbg_printf("get coefficient matrix\n");
   for(i=0; i<Model_getNumRules(m); i++){
     if(ru[i]->is_algebraic){
       node = (ASTNode_t*)Rule_getMath(ru[i]->origin);
       node = ASTNode_deepCopy(node);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       alg_alter_tree_structure(&node, NULL, 0);
-      printf("algebraic AST is\n");
+      dbg_printf("algebraic AST is\n");
       check_AST(node, NULL);
       for(j=0; j<algEq->num_of_algebraic_variables; j++){
 	myNode = (myASTNode*)malloc(sizeof(myASTNode));
@@ -343,7 +343,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       }
     }
   }
-  printf("zero substitute\n");
+  dbg_printf("zero substitute\n");
   if(algEq->num_of_algebraic_rules > 1){
     for(i=0; i<algEq->num_of_algebraic_rules; i++){
       for(j=0; j<algEq->num_of_algebraic_rules; j++){
@@ -356,7 +356,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
   //get constant
-  printf("get constant\n");
+  dbg_printf("get constant\n");
   for(i=0; i<Model_getNumRules(m); i++){
     if(ru[i]->is_algebraic){
       node = (ASTNode_t*)Rule_getMath(ru[i]->origin);

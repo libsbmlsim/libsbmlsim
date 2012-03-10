@@ -83,7 +83,7 @@ void calc_initial_assignment(myInitialAssignment *initAssign[], int num_of_initi
 	    initAssign[i]->target_species_reference->value = initAssign[i]->target_species_reference->temp_value;
 	  }
 	  assigned_target_list[num_of_assigned_targets++] = target_list[i];
-	  printf("target : %s is assigned to %lf\n", target_list[i], calc(initAssign[i]->eq, dt, cycle, reverse_time, 0));
+	  dbg_printf("target : %s is assigned to %lf\n", target_list[i], calc(initAssign[i]->eq, dt, cycle, reverse_time, 0));
 	}
       }
     }

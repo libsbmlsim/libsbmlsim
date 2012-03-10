@@ -9,222 +9,222 @@
 
 void check_math(equation *eq){
   int i;
-  printf("value:");
+  dbg_printf("value:");
   for(i=0; i<eq->math_length; i++){
     if(eq->number[i] != NULL){
-      printf("%lf ", *eq->number[i]);
+      dbg_printf("%lf ", *eq->number[i]);
     }else{
-      printf("NULL ");
+      dbg_printf("NULL ");
     }
   }
-  printf("\n");
-  printf("operator:");
+  dbg_printf("\n");
+  dbg_printf("operator:");
   for(i=0; i<eq->math_length; i++){
     switch(eq->operator[i]){
     case AST_PLUS:
-      printf("+ ");
+      dbg_printf("+ ");
       break;
     case AST_MINUS:
-      printf("- ");
+      dbg_printf("- ");
       break;
     case AST_TIMES:
-      printf("* ");
+      dbg_printf("* ");
       break;
     case AST_DIVIDE:
-      printf("/ ");
+      dbg_printf("/ ");
       break;
     case AST_POWER:
-      printf("pow ");
+      dbg_printf("pow ");
       break;
     case AST_INTEGER:
-      printf("integer ");
+      dbg_printf("integer ");
       break;
     case AST_REAL:
-      printf("real ");
+      dbg_printf("real ");
       break;
     case AST_REAL_E:
-      printf("real_E ");
+      dbg_printf("real_E ");
       break;
     case AST_RATIONAL:
-      printf("rational ");
+      dbg_printf("rational ");
       break;
     case AST_NAME:
-      printf("name ");
+      dbg_printf("name ");
       break;
     case AST_NAME_AVOGADRO:
-      printf("avogadro ");
+      dbg_printf("avogadro ");
       break;
     case AST_NAME_TIME:
-      printf("time ");
+      dbg_printf("time ");
       break;
     case AST_CONSTANT_E:
-      printf("constant ");
+      dbg_printf("constant ");
       break;
     case AST_CONSTANT_FALSE:
-      printf("constant_false ");
+      dbg_printf("constant_false ");
       break;
     case AST_CONSTANT_PI:
-      printf("pi ");
+      dbg_printf("pi ");
       break;
     case AST_CONSTANT_TRUE:
-      printf("constant_true ");
+      dbg_printf("constant_true ");
       break;
     case AST_LAMBDA:
-      printf("lambda ");
+      dbg_printf("lambda ");
       break;
     case AST_FUNCTION:
-      printf("function ");
+      dbg_printf("function ");
       break;
     case AST_FUNCTION_ABS:
-      printf("abs ");
+      dbg_printf("abs ");
       break;
     case AST_FUNCTION_ARCCOS:
-      printf("arccos ");
+      dbg_printf("arccos ");
       break;
     case AST_FUNCTION_ARCCOSH:
-      printf("arccosh ");
+      dbg_printf("arccosh ");
       break;
     case AST_FUNCTION_ARCCOT:
-      printf("arccot ");
+      dbg_printf("arccot ");
       break;
     case AST_FUNCTION_ARCCOTH:
-      printf("arccoth ");
+      dbg_printf("arccoth ");
       break;
     case AST_FUNCTION_ARCCSC:
-      printf("arccsc ");
+      dbg_printf("arccsc ");
       break;
     case AST_FUNCTION_ARCCSCH:
-      printf("arccsch ");
+      dbg_printf("arccsch ");
       break;
     case AST_FUNCTION_ARCSEC:
-      printf("arcsec ");
+      dbg_printf("arcsec ");
       break;
     case AST_FUNCTION_ARCSECH:
-      printf("arcsech ");
+      dbg_printf("arcsech ");
       break;
     case AST_FUNCTION_ARCSIN:
-      printf("arcsin ");
+      dbg_printf("arcsin ");
       break;
     case AST_FUNCTION_ARCSINH:
-      printf("arcsinh ");
+      dbg_printf("arcsinh ");
       break;
     case AST_FUNCTION_ARCTAN:
-      printf("arctan ");
+      dbg_printf("arctan ");
       break;
     case AST_FUNCTION_ARCTANH:
-      printf("arctanh ");
+      dbg_printf("arctanh ");
       break;
     case AST_FUNCTION_CEILING:
-      printf("ceil ");
+      dbg_printf("ceil ");
       break;
     case AST_FUNCTION_COS:
-      printf("cos ");
+      dbg_printf("cos ");
       break;
     case AST_FUNCTION_COSH:
-      printf("cosh ");
+      dbg_printf("cosh ");
       break;
     case AST_FUNCTION_COT:
-      printf("cot ");
+      dbg_printf("cot ");
       break;
     case AST_FUNCTION_COTH:
-      printf("coth ");
+      dbg_printf("coth ");
       break;
     case AST_FUNCTION_CSC:
-      printf("csc ");
+      dbg_printf("csc ");
       break;
     case AST_FUNCTION_CSCH:
-      printf("csch ");
+      dbg_printf("csch ");
       break;
     case AST_FUNCTION_DELAY:
-      printf("delay ");
+      dbg_printf("delay ");
       break;
     case AST_FUNCTION_EXP:
-      printf("exp ");
+      dbg_printf("exp ");
       break;
     case AST_FUNCTION_FACTORIAL:
-      printf("! ");
+      dbg_printf("! ");
       break;
     case AST_FUNCTION_FLOOR:
-      printf("floor ");
+      dbg_printf("floor ");
       break;
     case AST_FUNCTION_LN:
-      printf("ln ");
+      dbg_printf("ln ");
       break;
     case AST_FUNCTION_LOG:
-      printf("log10 ");
+      dbg_printf("log10 ");
       break;
     case AST_FUNCTION_PIECEWISE:
-      printf("piecewise ");
+      dbg_printf("piecewise ");
       break;
     case AST_FUNCTION_POWER:
-      printf("f_pow ");
+      dbg_printf("f_pow ");
       break;
     case AST_FUNCTION_ROOT:
-      printf("sqrt ");
+      dbg_printf("sqrt ");
       break;
     case AST_FUNCTION_SEC:
-      printf("sec ");
+      dbg_printf("sec ");
       break;
     case AST_FUNCTION_SECH:
-      printf("sech ");
+      dbg_printf("sech ");
       break;
     case AST_FUNCTION_SIN:
-      printf("sin ");
+      dbg_printf("sin ");
       break;
     case AST_FUNCTION_SINH:
-      printf("sinh ");
+      dbg_printf("sinh ");
       break;
     case AST_FUNCTION_TAN:
-      printf("tan ");
+      dbg_printf("tan ");
       break;
     case AST_FUNCTION_TANH:
-      printf("tanh ");
+      dbg_printf("tanh ");
       break;
     case AST_LOGICAL_AND:
-      printf("and ");
+      dbg_printf("and ");
       break;
     case AST_LOGICAL_NOT:
-      printf("not ");
+      dbg_printf("not ");
       break;
     case AST_LOGICAL_OR:
-      printf("or ");
+      dbg_printf("or ");
       break;
     case AST_LOGICAL_XOR:
-      printf("xor ");
+      dbg_printf("xor ");
       break;
     case AST_RELATIONAL_EQ:
-      printf("eq ");
+      dbg_printf("eq ");
       break;
     case AST_RELATIONAL_GEQ:
-      printf("geq ");
+      dbg_printf("geq ");
       break;
     case AST_RELATIONAL_GT:
-      printf("gt ");
+      dbg_printf("gt ");
       break;
     case AST_RELATIONAL_LEQ:
-      printf("leq ");
+      dbg_printf("leq ");
       break;
     case AST_RELATIONAL_LT:
-      printf("lt ");
+      dbg_printf("lt ");
       break;
     case AST_RELATIONAL_NEQ:
-      printf("neq ");
+      dbg_printf("neq ");
       break;
     case AST_UNKNOWN:
-      printf("unknown ");
+      dbg_printf("unknown ");
       break;
     default:
-      printf("0 ");
+      dbg_printf("0 ");
     }
   }
-  printf("\n");
-  printf("delay_value:");
+  dbg_printf("\n");
+  dbg_printf("delay_value:");
   for(i=0; i<eq->math_length; i++){
     if(eq->delay_number[i] != NULL){
-      printf("exist ");
+      dbg_printf("exist ");
     }else{
-      printf("NULL ");
+      dbg_printf("NULL ");
     }
   }
-  printf("\n\n");
+  dbg_printf("\n\n");
 }

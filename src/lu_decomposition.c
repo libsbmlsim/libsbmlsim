@@ -40,7 +40,7 @@ int lu_decomposition(double **A, int *p, int N){
     }
     /*## END PIVOT ##*/
     if(fabs(A[t][t]) < Eps){
-      printf("A is singular matrix \n");
+      dbg_printf("A is singular matrix \n");
       return 0;
     }
     for(j=t+1; j<N; j++){

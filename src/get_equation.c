@@ -39,7 +39,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
 	  }
 	}
 	if(comp_node != NULL){
-	  printf("comp delay creation for species start\n");
+	  dbg_printf("comp delay creation for species start\n");
 	  for(j=0; j<Model_getNumCompartments(m); j++){
 	    if(strcmp(ASTNode_getName(comp_node), Compartment_getId(comp[j]->origin)) == 0){
 	      if(comp[j]->delay_val == NULL){
@@ -51,7 +51,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
 	    }
 	  }
 	}
-	printf("comp delay creation for species finish\n");
+	dbg_printf("comp delay creation for species finish\n");
 	eq->number[index] = NULL;
 	eq->operator[index] = 0;
 	eq->delay_number[index] = sp[i]->delay_val;

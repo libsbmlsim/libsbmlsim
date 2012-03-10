@@ -68,60 +68,60 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
 
   switch(method) {
   case 1:
-    printf("simulate with runge kutta\n");
+    dbg_printf("simulate with runge kutta\n");
     order = 4;
     is_explicit = 1;
     break;
   case 2:
-    printf("simulate with Backward-Eular\n");
+    dbg_printf("simulate with Backward-Eular\n");
     order = 0;
     break;
   case 3:
-    printf("simulate with AM2(Crank-Nicolson)\n");
+    dbg_printf("simulate with AM2(Crank-Nicolson)\n");
     order = 1;
     break;
   case 4:
-    printf("simulate with AM3\n");
+    dbg_printf("simulate with AM3\n");
     order = 2;
     break;
   case 5:
-    printf("simulate with AM4\n");
+    dbg_printf("simulate with AM4\n");
     order = 3;
     break;
   case 6:
-    printf("simulate with BD2\n");
+    dbg_printf("simulate with BD2\n");
     order = 4;
     break;
   case 7:
-    printf("simulate with BD3\n");
+    dbg_printf("simulate with BD3\n");
     order = 5;
     break;
   case 8:
-    printf("simulate with BD4\n");
+    dbg_printf("simulate with BD4\n");
     order = 6;
     break;
   case 9:
-    printf("simulate with AB1(eular)\n");
+    dbg_printf("simulate with AB1(eular)\n");
     order = 0;
     is_explicit = 1;
     break;
   case 10:
-    printf("simulate with AB2\n");
+    dbg_printf("simulate with AB2\n");
     order = 1;
     is_explicit = 1;
     break;
   case 11:
-    printf("simulate with AB3\n");
+    dbg_printf("simulate with AB3\n");
     order = 2;
     is_explicit = 1;
     break;
   case 12:
-    printf("simulate with AB4\n");
+    dbg_printf("simulate with AB4\n");
     order = 3;
     is_explicit = 1;
     break;
   default:
-    printf("simulate with runge kutta\n");
+    dbg_printf("simulate with runge kutta\n");
     order = 4;
     break;
   }

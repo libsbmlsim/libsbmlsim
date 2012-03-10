@@ -22,7 +22,7 @@ void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_bu
   //event_buf check(remove persistent = false && trigger = false)
   for(i=0; i<(*num_of_remained_events); i++){
     if(!event_buf[i]->is_persistent && calc(event_buf[i]->eq, dt, cycle, reverse_time, 0) < 0.5){
-      //printf("%s is deleted\n", Event_getId(event_buf[i]->origin));
+      //dbg_printf("%s is deleted\n", Event_getId(event_buf[i]->origin));
       for(j=i; j<(*num_of_remained_events)-1; j++){
 	for(k=0; k<Event_getNumEventAssignments(event_buf[j+1]->origin); k++){
 	  assignment_values_from_trigger_time[j][k] = assignment_values_from_trigger_time[j+1][k];
@@ -61,11 +61,11 @@ void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_bu
     }
     if(flag){
       //buffering
-      //printf("%s is buffered in event_buf[%d]\n", Event_getId(event[i]->origin), *num_of_remained_events);
+      //dbg_printf("%s is buffered in event_buf[%d]\n", Event_getId(event[i]->origin), *num_of_remained_events);
       event_buf[(*num_of_remained_events)] = event[i];
       for(j=0; j<Event_getNumEventAssignments(event[i]->origin); j++){
 	assignment_values_from_trigger_time[(*num_of_remained_events)][j] = calc(event[i]->assignments[j]->eq, dt, cycle, reverse_time, 0);
-	//printf("%lf(%p) is buffered in assignment_values_from_trigger_time[%d][%d]\n", assignment_values_from_trigger_time[(*num_of_remained_events)][j], &(assignment_values_from_trigger_time[(*num_of_remained_events)][j]), *num_of_remained_events, j);
+	//dbg_printf("%lf(%p) is buffered in assignment_values_from_trigger_time[%d][%d]\n", assignment_values_from_trigger_time[(*num_of_remained_events)][j], &(assignment_values_from_trigger_time[(*num_of_remained_events)][j]), *num_of_remained_events, j);
       }
       (*num_of_remained_events)++;
     }
@@ -138,12 +138,12 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
   //proccess assignment start
   while(num_of_remained_events != 0){
     if(event_buf[0]->is_persistent || calc(event_buf[0]->eq, dt, cycle, reverse_time, 0) >= 0.5){
-      //printf("%s's assignment is processed\n", Event_getId(event_buf[0]->origin));
+      //dbg_printf("%s's assignment is processed\n", Event_getId(event_buf[0]->origin));
       //forwarding value
       if(Event_getUseValuesFromTriggerTime(event_buf[0]->origin)){
 	for(i=0; i<Event_getNumEventAssignments(event_buf[0]->origin); i++){
 	  assignment = event_buf[0]->assignments[i];
-	  //printf("value used in assignment is %lf(%p)\n", assignment_values_from_trigger_time[0][i], &assignment_values_from_trigger_time[0][i]);
+	  //dbg_printf("value used in assignment is %lf(%p)\n", assignment_values_from_trigger_time[0][i], &assignment_values_from_trigger_time[0][i]);
 	  if(assignment->target_species != NULL){
 	    assignment->target_species->value = assignment_values_from_trigger_time[0][i];
 	  }else if(assignment->target_parameter != NULL){
@@ -197,11 +197,11 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
       event_buf[i-1] = event_buf[i];
     }
     num_of_remained_events--;
-/*     printf("buffer state is\n"); */
+/*     dbg_printf("buffer state is\n"); */
 /*     for(i=0; i<num_of_remained_events; i++){ */
-/*       printf("event_buf[%d] = %s\n", i, Event_getId(event_buf[i]->origin)); */
+/*       dbg_printf("event_buf[%d] = %s\n", i, Event_getId(event_buf[i]->origin)); */
 /*       for(j=0; j<Event_getNumEventAssignments(event_buf[i]->origin); j++){ */
-/* 	printf("assignment_values_from_trigger_time[%d][%d] = %lf\n", i, j, assignment_values_from_trigger_time[i][j]); */
+/* 	dbg_printf("assignment_values_from_trigger_time[%d][%d] = %lf\n", i, j, assignment_values_from_trigger_time[i][j]); */
 /*       } */
 /*     } */
     //recursive processing

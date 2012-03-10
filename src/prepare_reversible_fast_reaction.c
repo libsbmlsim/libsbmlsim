@@ -48,7 +48,7 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
 	}
       }
       final_eq_node = eq_root_node->origin;
-      printf("myASTNode is\n");
+      dbg_printf("myASTNode is\n");
       check_myAST(eq_root_node);
       ASTNode_recreate(eq_root_node, final_eq_node);
       if(minus_sign == -1){
@@ -60,7 +60,7 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
 	final_eq_node = minus_node;
       }
       if(p_or_r == 0){//products coefficient
-	printf("AST of product numerator is\n");
+	dbg_printf("AST of product numerator is\n");
 	check_AST(final_eq_node, NULL);
 	re->products_equili_numerator->math_length = get_equation(m, re->products_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }else{//reactants coefficient
@@ -70,7 +70,7 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
 	ASTNode_addChild(minus_node, zero_node);
 	ASTNode_addChild(minus_node, final_eq_node);
 	final_eq_node = minus_node;
-	printf("AST of reactant numerator is\n");
+	dbg_printf("AST of reactant numerator is\n");
 	check_AST(final_eq_node, NULL);
 	re->reactants_equili_numerator->math_length = get_equation(m, re->reactants_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }
@@ -89,12 +89,12 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
     if(re[i]->is_fast && re[i]->is_reversible){
       node = (ASTNode_t*)KineticLaw_getMath(Reaction_getKineticLaw(re[i]->origin));
       node = ASTNode_deepCopy(node);
-      printf("original math of %s: ", Reaction_getId(re[i]->origin));
+      dbg_printf("original math of %s: ", Reaction_getId(re[i]->origin));
       check_AST(node, NULL);
       //alter_tree_structure(m, &node, cp_AST);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       set_local_para_as_value(node, Reaction_getKineticLaw(re[i]->origin));
-      printf("alterated math of %s : ", Reaction_getId(re[i]->origin));
+      dbg_printf("alterated math of %s : ", Reaction_getId(re[i]->origin));
       check_AST(node, NULL);
       cp_node1 = ASTNode_deepCopy(node);
       cp_node2 = ASTNode_deepCopy(node);
@@ -107,7 +107,7 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       myNode->right = NULL;
       myASTNode_create(myNode, cp_node1, copied_myAST, &num_of_copied_myAST);
       re[i]->products_equili_numerator = (equation*)malloc(sizeof(equation));
-      printf("target_id is %s\n", Species_getId(re[i]->reactants[0]->mySp->origin));
+      dbg_printf("target_id is %s\n", Species_getId(re[i]->reactants[0]->mySp->origin));
       check_AST(cp_node1, NULL);
       _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->reactants[0]->mySp->origin), 0, mem);
       //get reactants numerator
@@ -119,7 +119,7 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       myNode->right = NULL;
       re[i]->reactants_equili_numerator = (equation*)malloc(sizeof(equation));
       myASTNode_create(myNode, cp_node2, copied_myAST, &num_of_copied_myAST);
-      printf("target_id is %s\n", Species_getId(re[i]->products[0]->mySp->origin));
+      dbg_printf("target_id is %s\n", Species_getId(re[i]->products[0]->mySp->origin));
       check_AST(cp_node2, NULL);
       _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->products[0]->mySp->origin), 1, mem);
       myASTNode_free(copied_myAST, num_of_copied_myAST);
