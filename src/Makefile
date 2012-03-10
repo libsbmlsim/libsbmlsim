@@ -1,5 +1,6 @@
 PROG = ../sim
-BUILD_LIB = libsbmlsim.a
+BUILD_STATIC_LIB = libsbmlsim.a
+BUILD_SHARED_LIB = libsbmlsim.1.0.0.dylib
 BUILD_TEST = test
 OBJS_COMMON = set_local_para_as_value.o get_equation.o \
 calc.o calc_event.o simulate_explicit.o prepare_algebraic.o \
@@ -17,12 +18,13 @@ OBJS = $(OBJS_COMMON) main.o
 OBJS_LIB = $(OBJS_COMMON) lib_main.o
 OBJS_TEST = test.o
 
-CFLAGS = -Wall -O2 -g
+CFLAGS = -fno-common -fPIC -Wall -O2 -g 
 
 CC = gcc
 
 .PHONY: all
-all: $(PROG) $(BUILD_LIB) $(BUILD_TEST)
+all: $(PROG) $(BUILD_STATIC_LIB) $(BUILD_SHARED_LIB) $(BUILD_TEST)
+#all: $(PROG) $(BUILD_SHARED_LIB) $(BUILD_TEST)
 
 ### make object files ###
 .SUFFIXES: .o .c
@@ -34,11 +36,16 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -L. -lsbml
 
 ### make static library ###
-$(BUILD_LIB): $(OBJS_LIB)
-	ar rcs $(BUILD_LIB) $(OBJS_LIB)
+$(BUILD_STATIC_LIB): $(OBJS_LIB)
+	ar rcs $(BUILD_STATIC_LIB) $(OBJS_LIB)
+
+### make shared library ###
+$(BUILD_SHARED_LIB): $(OBJS_LIB)
+	$(CC) -dynamiclib -install_name $(BUILD_SHARED_LIB) -compatibility_version 1.0 -current_version 1.0.0 -o $(BUILD_SHARED_LIB) $(OBJS_LIB) -lsbml -lc
 
 ### make test binary with library ###
-$(BUILD_TEST): $(OBJS_TEST) $(BUILD_LIB)
+#$(BUILD_TEST): $(OBJS_TEST) $(BUILD_STATIC_LIB)
+$(BUILD_TEST): $(OBJS_TEST) $(BUILD_SHARED_LIB)
 	$(CC) $(CFLAGS) $(OBJS_TEST) -o test -L. -lsbmlsim -lsbml
 
 ### include ###
@@ -47,4 +54,4 @@ $(OBJS): header.h
 ### clean up! ###
 .PHONY: clean
 clean:
-	rm -f $(PROG) $(BUILD_LIB) $(BUILD_TEST) $(OBJS) $(OBJS_LIB) $(OBJS_TEST)
+	rm -f $(PROG) $(BUILD_STATIC_LIB) $(BUILD_SHARED_LIB) $(BUILD_TEST) $(OBJS) $(OBJS_LIB) $(OBJS_TEST)
