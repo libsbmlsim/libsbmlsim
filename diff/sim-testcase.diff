@@ -1,0 +1,420 @@
+Only in SBML_simulator_1203: .DS_Store
+Only in SBML_simulator_test_suite: compare.pl
+Only in SBML_simulator_test_suite: genresult.pl
+Only in SBML_simulator_test_suite: l2v4_explicit_result.zip
+Only in SBML_simulator_test_suite: l3v1_explicit_result.zip
+Only in SBML_simulator_test_suite: runall.sh
+Binary files SBML_simulator_test_suite/sim and SBML_simulator_1203/sim differ
+Only in SBML_simulator_test_suite: simulate_explicit.c
+Only in SBML_simulator_test_suite: simulate_implicit.c
+diff -ruBb SBML_simulator_test_suite/src/alter_tree_structure.c SBML_simulator_1203/src/alter_tree_structure.c
+--- SBML_simulator_test_suite/src/alter_tree_structure.c	2011-12-03 21:38:51.000000000 +0900
++++ SBML_simulator_1203/src/alter_tree_structure.c	2012-03-06 03:31:50.000000000 +0900
+@@ -7,6 +7,24 @@
+ #include <stdio.h> 
+ #include "header.h"
+ 
++void minus_func(ASTNode_t *node){
++  int i;
++  ASTNode_t *next_node, *zero_node;
++  for(i=0; i<ASTNode_getNumChildren(node); i++){
++    next_node = ASTNode_getChild(node, i);
++    if(ASTNode_getNumChildren(node) == 1 && ASTNode_getType(node) == AST_MINUS){
++      zero_node = ASTNode_create();
++      ASTNode_setType(zero_node, AST_REAL);
++      ASTNode_setReal(zero_node, 0);
++      ASTNode_replaceChild(node, 0, zero_node);
++      ASTNode_addChild(node, next_node);
++    }else{
++      minus_func(next_node);
++    }
++  }
++  return;
++}
++
+ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int child_order, copied_AST *cp_AST){
+   ASTNode_t *zero_node;
+   ASTNode_t *compartment_node;
+@@ -85,6 +103,15 @@
+ 	  fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
+ 	  ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
+ 	}
++	//test
++/* 	for(i=0; i<ASTNode_getNumChildren(fd_body); i++){ */
++/* 	  next_node = ASTNode_getChild(fd_body, i); */
++/* 	  //printf("down to %d th child from\n", i); */
++/* 	  //print_node_type(node); */
++/* 	  alter_tree_structure(m, &next_node, fd_body, i, cp_AST); */
++/* 	} */
++	minus_func(fd_body);
++	//
+ 	check_AST(fd_body, NULL);
+ 	if(parent != NULL){
+ 	  ASTNode_replaceChild(parent, child_order, fd_body);
+Binary files SBML_simulator_test_suite/src/alter_tree_structure.o and SBML_simulator_1203/src/alter_tree_structure.o differ
+diff -ruBb SBML_simulator_test_suite/src/simulate_explicit.c SBML_simulator_1203/src/simulate_explicit.c
+--- SBML_simulator_test_suite/src/simulate_explicit.c	2011-12-03 21:39:07.000000000 +0900
++++ SBML_simulator_1203/src/simulate_explicit.c	2012-02-26 17:54:17.000000000 +0900
+@@ -74,22 +74,22 @@
+   double reactants_numerator, products_numerator;
+   double min_value;
+ 
+-  FILE *fp1;//, *fp2, *fp3;
+-  //fp1 = fopen("./simulation_results/species_result.dat", "w");
+-  //fp2 = fopen("./simulation_results/parameter_result.dat", "w");
+-  //fp3 = fopen("./simulation_results/compartment_result.dat", "w");
+-  fp1 = fopen("./out.csv", "w");
+-  fprintf(fp1, "time");
+-  for(i=0; i<num_of_species; i++){
+-    fprintf(fp1, ",%s", Species_getId(sp[i]->origin));
+-  }
+-  for(i=0; i<num_of_parameters; i++){
+-    fprintf(fp1, ",%s", Parameter_getId(param[i]->origin));
+-  }
+-  for(i=0; i<num_of_compartments; i++){
+-    fprintf(fp1, ",%s", Compartment_getId(comp[i]->origin));
+-  }
+-  fprintf(fp1, "\n");
++  FILE *fp1, *fp2, *fp3;
++  fp1 = fopen("./simulation_results/species_result.dat", "w");
++  fp2 = fopen("./simulation_results/parameter_result.dat", "w");
++  fp3 = fopen("./simulation_results/compartment_result.dat", "w");
++/*   fp1 = fopen("./out.csv", "w"); */
++/*   fprintf(fp1, "time"); */
++/*   for(i=0; i<num_of_species; i++){ */
++/*     fprintf(fp1, ",%s", Species_getId(sp[i]->origin)); */
++/*   } */
++/*   for(i=0; i<num_of_parameters; i++){ */
++/*     fprintf(fp1, ",%s", Parameter_getId(param[i]->origin)); */
++/*   } */
++/*   for(i=0; i<num_of_compartments; i++){ */
++/*     fprintf(fp1, ",%s", Compartment_getId(comp[i]->origin)); */
++/*   } */
++/*   fprintf(fp1, "\n"); */
+ 
+   printf("Simulation Starts!\n");
+   cycle = 0;
+@@ -286,6 +286,7 @@
+ 	     && Species_getBoundaryCondition(re[i]->reactants[0]->mySp->origin))){
+ 	  products_numerator = calc(re[i]->products_equili_numerator, dt, cycle, &reverse_time, 0);
+ 	  reactants_numerator = calc(re[i]->reactants_equili_numerator, dt, cycle, &reverse_time, 0);	  
++	  if(products_numerator > 0 || reactants_numerator > 0){
+ 	  if(Species_getBoundaryCondition(re[i]->products[0]->mySp->origin)){
+ 	    re[i]->reactants[0]->mySp->value = (reactants_numerator/products_numerator)*re[i]->products[0]->mySp->value;
+ 	    re[i]->reactants[0]->mySp->temp_value = re[i]->reactants[0]->mySp->value;
+@@ -301,6 +302,7 @@
+ 	}
+       }
+     }
++    }
+     
+     //event
+     calc_event(event, num_of_events, dt, *time, cycle, &reverse_time);
+@@ -315,67 +317,67 @@
+       printf("\x1b[5D");
+     }
+     //print result
+-/*     if(cycle%print_interval == 0){ */
+-/*       fprintf(fp1, "%lf", *time); */
+-/*       for(i=0; i<num_of_species; i++){ */
+-/* 	if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ */
+-/* 	  if(print_amount){ */
+-/* 	    if(sp[i]->is_concentration){ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value); */
+-/* 	    }else{ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value); */
+-/* 	    } */
+-/* 	  }else{ */
+-/* 	    if(sp[i]->is_amount){ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value); */
+-/* 	    }else{ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value); */
+-/* 	    } */
+-/* 	  } */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp1, "\n"); */
+-/*       fprintf(fp2, "%lf", *time); */
+-/*       for(i=0; i<num_of_parameters; i++){ */
+-/* 	if(!Parameter_getConstant(param[i]->origin)){ */
+-/* 	  fprintf(fp2, " %.16g", param[i]->value); */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp2, "\n"); */
+-/*       fprintf(fp3, "%lf", *time); */
+-/*       for(i=0; i<num_of_compartments; i++){ */
+-/* 	if(!Compartment_getConstant(comp[i]->origin)){ */
+-/* 	  fprintf(fp3, " %.16g", comp[i]->value); */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp3, "\n"); */
+-/*     } */
+-    //print result
+     if(cycle%print_interval == 0){
+-      fprintf(fp1, "%.16g", *time);
++      fprintf(fp1, "%lf", *time);
+       for(i=0; i<num_of_species; i++){
++	if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){
+ 	if(print_amount){
+ 	  if(sp[i]->is_concentration){
+-	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value);
++	      fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value);
+ 	  }else{
+-	    fprintf(fp1, " ,%.16g", sp[i]->value);
++	      fprintf(fp1, " %.16g", sp[i]->value);
+ 	  }
+ 	}else{
+ 	  if(sp[i]->is_amount){
+-	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value);
++	      fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value);
+ 	  }else{
+-	    fprintf(fp1, " ,%.16g", sp[i]->value);
++	      fprintf(fp1, " %.16g", sp[i]->value);
+ 	  }
+ 	}
+       }
++      }
++      fprintf(fp1, "\n");
++      fprintf(fp2, "%lf", *time);
+       for(i=0; i<num_of_parameters; i++){
+-    	fprintf(fp1, " ,%.16g", param[i]->value);
++	if(!Parameter_getConstant(param[i]->origin)){
++	  fprintf(fp2, " %.16g", param[i]->value);
+       }
++      }
++      fprintf(fp2, "\n");
++      fprintf(fp3, "%lf", *time);
+       for(i=0; i<num_of_compartments; i++){
+-    	fprintf(fp1, " ,%.16g", comp[i]->value);
++	if(!Compartment_getConstant(comp[i]->origin)){
++	  fprintf(fp3, " %.16g", comp[i]->value);
+       }
+-      fprintf(fp1, "\n");
+     }
++      fprintf(fp3, "\n");
++    }
++    //print result
++/*     if(cycle%print_interval == 0){ */
++/*       fprintf(fp1, "%.16g", *time); */
++/*       for(i=0; i<num_of_species; i++){ */
++/* 	if(print_amount){ */
++/* 	  if(sp[i]->is_concentration){ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value); */
++/* 	  }else{ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
++/* 	  } */
++/* 	}else{ */
++/* 	  if(sp[i]->is_amount){ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value); */
++/* 	  }else{ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
++/* 	  } */
++/* 	} */
++/*       } */
++/*       for(i=0; i<num_of_parameters; i++){ */
++/*     	fprintf(fp1, " ,%.16g", param[i]->value); */
++/*       } */
++/*       for(i=0; i<num_of_compartments; i++){ */
++/*     	fprintf(fp1, " ,%.16g", comp[i]->value); */
++/*       } */
++/*       fprintf(fp1, "\n"); */
++/*     } */
+ 
+     //time increase
+     *time = (cycle+1)*dt;
+@@ -514,8 +516,8 @@
+   }
+   printf("Simulation Ends!\n");
+   fclose(fp1);
+-  //fclose(fp2);
+-  //fclose(fp3);
++  fclose(fp2);
++  fclose(fp3);
+   if(algEq != NULL){
+     for(i=0; i<algEq->num_of_algebraic_variables; i++){
+       free(coefficient_matrix[i]);
+Binary files SBML_simulator_test_suite/src/simulate_explicit.o and SBML_simulator_1203/src/simulate_explicit.o differ
+diff -ruBb SBML_simulator_test_suite/src/simulate_implicit.c SBML_simulator_1203/src/simulate_implicit.c
+--- SBML_simulator_test_suite/src/simulate_implicit.c	2011-12-03 21:39:07.000000000 +0900
++++ SBML_simulator_1203/src/simulate_implicit.c	2012-02-26 17:54:36.000000000 +0900
+@@ -98,22 +98,22 @@
+   double reactants_numerator, products_numerator;
+   double min_value;
+   
+-  FILE *fp1;//, *fp2, *fp3;
+-  //fp1 = fopen("./simulation_results/species_result.dat", "w");
+-  //fp2 = fopen("./simulation_results/parameter_result.dat", "w");
+-  //fp3 = fopen("./simulation_results/compartment_result.dat", "w");
+-  fp1 = fopen("./out.csv", "w");
+-  fprintf(fp1, "time");
+-  for(i=0; i<num_of_species; i++){
+-    fprintf(fp1, ",%s", Species_getId(sp[i]->origin));
+-  }
+-  for(i=0; i<num_of_parameters; i++){
+-    fprintf(fp1, ",%s", Parameter_getId(param[i]->origin));
+-  }
+-  for(i=0; i<num_of_compartments; i++){
+-    fprintf(fp1, ",%s", Compartment_getId(comp[i]->origin));
+-  }
+-  fprintf(fp1, "\n");
++  FILE *fp1, *fp2, *fp3;
++  fp1 = fopen("./simulation_results/species_result.dat", "w");
++  fp2 = fopen("./simulation_results/parameter_result.dat", "w");
++  fp3 = fopen("./simulation_results/compartment_result.dat", "w");
++/*   fp1 = fopen("./out.csv", "w"); */
++/*   fprintf(fp1, "time"); */
++/*   for(i=0; i<num_of_species; i++){ */
++/*     fprintf(fp1, ",%s", Species_getId(sp[i]->origin)); */
++/*   } */
++/*   for(i=0; i<num_of_parameters; i++){ */
++/*     fprintf(fp1, ",%s", Parameter_getId(param[i]->origin)); */
++/*   } */
++/*   for(i=0; i<num_of_compartments; i++){ */
++/*     fprintf(fp1, ",%s", Compartment_getId(comp[i]->origin)); */
++/*   } */
++/*   fprintf(fp1, "\n"); */
+ 
+   printf("Simulation Starts!\n");
+   cycle = 0;
+@@ -305,6 +305,7 @@
+ 	     && Species_getBoundaryCondition(re[i]->reactants[0]->mySp->origin))){
+ 	  products_numerator = calc(re[i]->products_equili_numerator, dt, cycle, &reverse_time, 0);
+ 	  reactants_numerator = calc(re[i]->reactants_equili_numerator, dt, cycle, &reverse_time, 0);	  
++	  if(products_numerator > 0 || reactants_numerator > 0){
+ 	  if(Species_getBoundaryCondition(re[i]->products[0]->mySp->origin)){
+ 	    re[i]->reactants[0]->mySp->value = (reactants_numerator/products_numerator)*re[i]->products[0]->mySp->value;
+ 	    re[i]->reactants[0]->mySp->temp_value = re[i]->reactants[0]->mySp->value;
+@@ -320,6 +321,7 @@
+ 	}
+       }
+     }
++    }
+ 
+     //event
+     calc_event(event, num_of_events, dt, *time, cycle, &reverse_time);    
+@@ -334,68 +336,68 @@
+       printf("\x1b[5D");
+     }
+     //print result
+-/*     if(cycle%print_interval == 0){ */
+-/*       fprintf(fp1, "%lf", *time); */
+-/*       for(i=0; i<num_of_species; i++){ */
+-/* 	if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ */
+-/* 	  if(print_amount){ */
+-/* 	    if(sp[i]->is_concentration){ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value); */
+-/* 	    }else{ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value); */
+-/* 	    } */
+-/* 	  }else{ */
+-/* 	    if(sp[i]->is_amount){ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value); */
+-/* 	    }else{ */
+-/* 	      fprintf(fp1, " %.16g", sp[i]->value); */
+-/* 	    } */
+-/* 	  } */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp1, "\n"); */
+-/*       fprintf(fp2, "%lf", *time); */
+-/*       for(i=0; i<num_of_parameters; i++){ */
+-/* 	if(!Parameter_getConstant(param[i]->origin)){ */
+-/* 	  fprintf(fp2, " %.16g", param[i]->value); */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp2, "\n"); */
+-/*       fprintf(fp3, "%lf", *time); */
+-/*       for(i=0; i<num_of_compartments; i++){ */
+-/* 	if(!Compartment_getConstant(comp[i]->origin)){ */
+-/* 	  fprintf(fp3, " %.16g", comp[i]->value); */
+-/* 	} */
+-/*       } */
+-/*       fprintf(fp3, "\n"); */
+-/*     } */
+-
+-    //print result
+     if(cycle%print_interval == 0){
+-      fprintf(fp1, "%g", *time);
++      fprintf(fp1, "%lf", *time);
+       for(i=0; i<num_of_species; i++){
++	if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){
+ 	if(print_amount){
+ 	  if(sp[i]->is_concentration){
+-	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value);
++	      fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value);
+ 	  }else{
+-	    fprintf(fp1, " ,%.16g", sp[i]->value);
++	      fprintf(fp1, " %.16g", sp[i]->value);
+ 	  }
+ 	}else{
+ 	  if(sp[i]->is_amount){
+-	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value);
++	      fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value);
+ 	  }else{
+-	    fprintf(fp1, " ,%.16g", sp[i]->value);
++	      fprintf(fp1, " %.16g", sp[i]->value);
++	    }
+ 	  }
+ 	}
+       }
++      fprintf(fp1, "\n");
++      fprintf(fp2, "%lf", *time);
+       for(i=0; i<num_of_parameters; i++){
+-    	fprintf(fp1, " ,%.16g", param[i]->value);
++	if(!Parameter_getConstant(param[i]->origin)){
++	  fprintf(fp2, " %.16g", param[i]->value);
++	}
+       }
++      fprintf(fp2, "\n");
++      fprintf(fp3, "%lf", *time);
+       for(i=0; i<num_of_compartments; i++){
+-    	fprintf(fp1, " ,%.16g", comp[i]->value);
++	if(!Compartment_getConstant(comp[i]->origin)){
++	  fprintf(fp3, " %.16g", comp[i]->value);
+       }
+-      fprintf(fp1, "\n");
+     }
++      fprintf(fp3, "\n");
++    }
++
++/*     //print result */
++/*     if(cycle%print_interval == 0){ */
++/*       fprintf(fp1, "%g", *time); */
++/*       for(i=0; i<num_of_species; i++){ */
++/* 	if(print_amount){ */
++/* 	  if(sp[i]->is_concentration){ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value*sp[i]->locating_compartment->value); */
++/* 	  }else{ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
++/* 	  } */
++/* 	}else{ */
++/* 	  if(sp[i]->is_amount){ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value/sp[i]->locating_compartment->value); */
++/* 	  }else{ */
++/* 	    fprintf(fp1, " ,%.16g", sp[i]->value); */
++/* 	  } */
++/* 	} */
++/*       } */
++/*       for(i=0; i<num_of_parameters; i++){ */
++/*     	fprintf(fp1, " ,%.16g", param[i]->value); */
++/*       } */
++/*       for(i=0; i<num_of_compartments; i++){ */
++/*     	fprintf(fp1, " ,%.16g", comp[i]->value); */
++/*       } */
++/*       fprintf(fp1, "\n"); */
++/*     } */
+     
+     //time increse
+     *time = (cycle+1)*dt;
+@@ -654,8 +656,8 @@
+   }
+   printf("Simulation Ends!\n");
+   fclose(fp1);
+-  //fclose(fp2);
+-  //fclose(fp3);
++  fclose(fp2);
++  fclose(fp3);
+   if(algEq != NULL){
+     for(i=0; i<algEq->num_of_algebraic_variables; i++){
+       free(coefficient_matrix[i]);
+Binary files SBML_simulator_test_suite/src/simulate_implicit.o and SBML_simulator_1203/src/simulate_implicit.o differ
