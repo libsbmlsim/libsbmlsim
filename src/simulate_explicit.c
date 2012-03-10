@@ -79,11 +79,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   double reactants_numerator, products_numerator;
   double min_value;
 
-  FILE *fp1, *fp2, *fp3;
-  fp1 = fopen("./simulation_results/species_result.dat", "w");
-  fp2 = fopen("./simulation_results/parameter_result.dat", "w");
-  fp3 = fopen("./simulation_results/compartment_result.dat", "w");
-
   printf("Simulation Starts!\n");
   cycle = 0;
 
@@ -317,7 +312,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
     //print result
     if(cycle%print_interval == 0){
       // Time
-      fprintf(fp1, "%.16g", *time);
       *value_p = *time;
       value_p++;
       *value_time_p = *time;
@@ -327,21 +321,17 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
 //        if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ // XXX must remove this
           if(print_amount){
             if(sp[i]->is_concentration){
-              fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value);
               *value_p = sp[i]->value*sp[i]->locating_compartment->value;
               *value_sp_p = sp[i]->value*sp[i]->locating_compartment->value;
             }else{
-              fprintf(fp1, " %.16g", sp[i]->value);
               *value_p = sp[i]->value;
               *value_sp_p = sp[i]->value;
             }
           }else{
             if(sp[i]->is_amount){
-              fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value);
               *value_p = sp[i]->value/sp[i]->locating_compartment->value;
               *value_sp_p = sp[i]->value/sp[i]->locating_compartment->value;
             }else{
-              fprintf(fp1, " %.16g", sp[i]->value);
               *value_p = sp[i]->value;
               *value_sp_p = sp[i]->value;
             }
@@ -350,31 +340,24 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
           value_sp_p++;
 //        }
       }
-      fprintf(fp1, "\n");
-      fprintf(fp2, "%.16g", *time);
       // Parameter
       for(i=0; i<num_of_parameters; i++){
 //        if(!Parameter_getConstant(param[i]->origin)){ // XXX must remove this
-          fprintf(fp2, " %.16g", param[i]->value);
           *value_p = param[i]->value;
           *value_param_p = param[i]->value;
 //        }
           value_p++;
           value_param_p++;
       }
-      fprintf(fp2, "\n");
-      fprintf(fp3, "%.16g", *time);
       // Compartment
       for(i=0; i<num_of_compartments; i++){
 //        if(!Compartment_getConstant(comp[i]->origin)){ // XXX must remove this
-          fprintf(fp3, " %.16g", comp[i]->value);
           *value_p = comp[i]->value;
           *value_comp_p = comp[i]->value;
 //        }
           value_p++;
           value_comp_p++;
       }
-      fprintf(fp3, "\n");
     }
 
     //time increase
@@ -518,9 +501,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
     forwarding_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference);
   }
   printf("Simulation Ends!\n");
-  fclose(fp1);
-  fclose(fp2);
-  fclose(fp3);
   if(algEq != NULL){
     for(i=0; i<algEq->num_of_algebraic_variables; i++){
       free(coefficient_matrix[i]);

@@ -296,14 +296,17 @@ int main(int argc, char *argv[]){
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-    write_csv(rtn, "out.csv");
-    write_separate_result(rtn, "./simulation_results/species_result2.dat",
-        "./simulation_results/parameter_result2.dat",
-        "./simulation_results/compartment_result2.dat");
+    write_csv(rtn, "out.csv"); // for SBML test suite
+    /* for more generic simulator
+    write_separate_result(rtn,
+        "./simulation_results/species_result.dat",
+        "./simulation_results/parameter_result.dat",
+        "./simulation_results/compartment_result.dat");
+     */
   }
 
   //print result list
-  print_result_list(m, mySp, myParam, myComp);
+  //print_result_list(m, mySp, myParam, myComp);
 
   //free
   printf("free all allocated memory\n");
