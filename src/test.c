@@ -36,8 +36,9 @@ int main(int argc, char *argv[]){
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-//    print_result(rtn);
-    print_result_to_file(&result, "test.dat");
+    print_result(rtn);
+    write_result(rtn, "test.dat");
+    write_csv(rtn, "test.csv");
   }
 
   SBMLDocument_free(d);

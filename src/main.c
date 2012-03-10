@@ -292,6 +292,13 @@ int main(int argc, char *argv[]){
     rtn = simulate_implicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
 
+  //write CSV
+  if (rtn == NULL) {
+    printf("Returned result is NULL\n");
+  } else {
+    write_csv(rtn, "out.csv");
+  }
+
   //print result list
   print_result_list(m, mySp, myParam, myComp);
 

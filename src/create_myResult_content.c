@@ -23,7 +23,7 @@ void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], my
   result->num_of_rows = end_cycle / print_interval + 1;
   //XXX
   result->column_name = (const char **)malloc(sizeof(char *) * result->num_of_columns);
-  result->column_name_time  = "#time";
+  result->column_name_time  = "time";
   result->column_name_sp    = (const char **)malloc(sizeof(char *) * num_of_species);
   result->column_name_param = (const char **)malloc(sizeof(char *) * num_of_parameters);
   result->column_name_comp  = (const char **)malloc(sizeof(char *) * num_of_compartments);
@@ -33,7 +33,7 @@ void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], my
   result->values_sp = (double *)malloc(sizeof(double) * num_of_species * result->num_of_rows);
   result->values_param = (double *)malloc(sizeof(double) * num_of_parameters * result->num_of_rows);
   result->values_comp = (double *)malloc(sizeof(double) * num_of_compartments * result->num_of_rows);
-  result->column_name[0] = "#time";
+  result->column_name[0] = "time";
   last = 1;
   for(i=0; i<num_of_species; i++){
     result->column_name[last] = Species_getId(mySp[i]->origin); // XXX

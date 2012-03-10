@@ -1,12 +1,8 @@
 Result : Species List
-column 2 : ID=MKK Name=MKK
-column 3 : ID=MKKK Name=MKKK
-column 4 : ID=MAPK Name=MAPK
-column 5 : ID=MKKK_P Name=MKKK
-column 6 : ID=MKK_P Name=MKK
-column 7 : ID=MKK_PP Name=MKK
-column 8 : ID=MAPK_P Name=MAPK
-column 9 : ID=MAPK_PP Name=MAPK
 
 Result : Parameter List
+column 2 : ID=x Name=(null)
+column 3 : ID=y Name=(null)
+column 4 : ID=p Name=(null)
+column 5 : ID=q Name=(null)
 Result : Compartment List

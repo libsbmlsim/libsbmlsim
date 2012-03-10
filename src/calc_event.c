@@ -126,14 +126,6 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
   int num_of_remained_events = 0;
   myEventAssignment* assignment;
 
-  //initialize
-  for(i=0; i<num_of_events; i++){
-    for(j=0; j<Event_getNumEventAssignments(event[i]->origin); j++){
-      if(event[i]->assignments[j]->target_species != NULL){
-	event[i]->assignments[j]->target_species->depending_event_is_fired = 0;
-      }
-    }
-  }
   if(cycle == 0){
     for(i=0; i<MAX_IDENTICAL_EVENTS; i++){
       assignment_values_from_trigger_time[i] = sub_assignment_values_from_trigger_time[i];
@@ -154,7 +146,6 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
 	  //printf("value used in assignment is %lf(%p)\n", assignment_values_from_trigger_time[0][i], &assignment_values_from_trigger_time[0][i]);
 	  if(assignment->target_species != NULL){
 	    assignment->target_species->value = assignment_values_from_trigger_time[0][i];
-	    assignment->target_species->depending_event_is_fired = 1;
 	  }else if(assignment->target_parameter != NULL){
 	    assignment->target_parameter->value = assignment_values_from_trigger_time[0][i];
 	  }else if(assignment->target_compartment != NULL){
@@ -168,7 +159,6 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
 	  assignment = event_buf[0]->assignments[i];
 	  if(assignment->target_species != NULL){
 	    assignment->target_species->value = calc(assignment->eq, dt, cycle, reverse_time, 0);
-	    assignment->target_species->depending_event_is_fired = 1;
 	  }else if(assignment->target_parameter != NULL){
 	    assignment->target_parameter->value = calc(assignment->eq, dt, cycle, reverse_time, 0);
 	  }else if(assignment->target_compartment != NULL){
@@ -183,13 +173,18 @@ void calc_event(myEvent *event[], int num_of_events, double dt, double time, int
 	assignment = event_buf[0]->assignments[i];
 	if(assignment->target_species != NULL){
 	  assignment->target_species->temp_value = assignment->target_species->value;
-	  if(assignment->target_species->is_concentration && assignment->target_species->is_independent){
-	    assignment->target_species->initial_amount = assignment->target_species->value*assignment->target_species->locating_compartment->value;
-	  }
 	}else if(assignment->target_parameter != NULL){
 	  assignment->target_parameter->temp_value = assignment->target_parameter->value;
 	}else if(assignment->target_compartment != NULL){
-	  assignment->target_compartment->temp_value = assignment->target_compartment->value;
+    //new code
+    for(j=0; j<assignment->target_compartment->num_of_including_species; j++){
+      if(assignment->target_compartment->including_species[j]->is_concentration){
+        assignment->target_compartment->including_species[j]->value = assignment->target_compartment->including_species[j]->value*assignment->target_compartment->temp_value/assignment->target_compartment->value;
+        assignment->target_compartment->including_species[j]->temp_value = assignment->target_compartment->including_species[j]->value;
+      }
+    }
+    //
+    assignment->target_compartment->temp_value = assignment->target_compartment->value;
 	}else if(assignment->target_species_reference != NULL){
 	  assignment->target_species_reference->temp_value = assignment->target_species_reference->value;
 	}

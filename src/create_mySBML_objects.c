@@ -67,8 +67,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     mySp[i]->has_only_substance_units = Species_getHasOnlySubstanceUnits(sp);
     mySp[i]->temp_value = mySp[i]->value;
     mySp[i]->locating_compartment = NULL;
-    mySp[i]->is_independent = 1;
-    mySp[i]->depending_event_is_fired = 0;
     mySp[i]->delay_val = NULL;
     mySp[i]->depending_rule = NULL;
     mySp[i]->k[0] = 0;
@@ -133,22 +131,17 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     myComp[i]->prev_k[0] = 0;
     myComp[i]->prev_k[1] = 0;
     myComp[i]->prev_k[2] = 0;
+    myComp[i]->num_of_including_species = 0;
   }
 
-  //determin species locating compartment
+  //determine species locating compartment
   for(i=0; i<num_of_species; i++){
     for(j=0; j<num_of_compartments; j++){
       if(strcmp(Species_getCompartment(mySp[i]->origin), Compartment_getId(myComp[j]->origin)) == 0){
 	mySp[i]->locating_compartment = myComp[j];
+  myComp[j]->including_species[myComp[j]->num_of_including_species] = mySp[i];
+  myComp[j]->num_of_including_species++;
       }
-    }
-  }
-  //determin species initial amount (for independent species)
-  for(i=0; i<num_of_species; i++){
-    if(mySp[i]->is_amount){
-      mySp[i]->initial_amount = mySp[i]->value;
-    }else{
-      mySp[i]->initial_amount = mySp[i]->value*mySp[i]->locating_compartment->value;
     }
   }
 
@@ -612,21 +605,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       //ASTNode_free(node);
       printf("math\n");
       check_math(myRu[i]->eq);
-    }
-  }
-  
-  //species independency check
-  for(i=0; i<num_of_reactions; i++){
-    for(j=0; j<myRe[i]->num_of_products; j++){
-      myRe[i]->products[j]->mySp->is_independent = 0;
-    }
-    for(j=0; j<myRe[i]->num_of_reactants; j++){
-      myRe[i]->reactants[j]->mySp->is_independent = 0;
-    }
-  }
-  for(i=0; i<num_of_rules; i++){
-    if(myRu[i]->target_species != NULL){
-      myRu[i]->target_species->is_independent = 0;
     }
   }
   

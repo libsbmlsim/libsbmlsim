@@ -4,8 +4,8 @@ use strict;
 use warnings;
 
 my $HOME = $ENV{"HOME"};
-#my $BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic";
-my $BaseDir="$HOME/Downloads/sbml-test-cases-2/cases/semantic";
+my $BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic";
+#my $BaseDir="$HOME/Downloads/sbml-test-cases-2/cases/semantic";
 
 my $verbose = 0;
 my $red     = "\x1b[1;31m";

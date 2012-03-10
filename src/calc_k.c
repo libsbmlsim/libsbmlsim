@@ -106,8 +106,22 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
       //compartment
       for(i=0; i<comp_num; i++){
 	if(comp[i]->depending_rule != NULL && comp[i]->depending_rule->is_assignment){
+    //new code
+    for(j=0; j<comp[i]->num_of_including_species; j++){
+      if(comp[i]->including_species[j]->is_concentration){
+        comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->temp_value/comp[i]->k[step];
+      }
+    }
+    //
 	  comp[i]->temp_value = comp[i]->k[step];
 	}else{
+    //new code
+    for(j=0; j<comp[i]->num_of_including_species; j++){
+      if(comp[i]->including_species[j]->is_concentration){
+        comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->temp_value/(comp[i]->value + comp[i]->k[step]*dt*rk_cef[step]);
+      }
+    }
+    //
 	  comp[i]->temp_value = comp[i]->value + comp[i]->k[step]*dt*rk_cef[step];
 	}
       }

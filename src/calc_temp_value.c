@@ -8,7 +8,7 @@
 #include "header.h"
 
 void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, int cycle, double dt, int use_rk){
-  int i;
+  int i, j;
   
   if(use_rk){
     //species
@@ -34,6 +34,13 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
       }else{
 	comp[i]->temp_value = comp[i]->value + (comp[i]->k[0]+2*comp[i]->k[1]+2*comp[i]->k[2]+comp[i]->k[3])/6*dt;
       }
+      //new code
+      for(j=0; j<comp[i]->num_of_including_species; j++){
+        if(comp[i]->including_species[j]->is_concentration){
+          comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->value/comp[i]->temp_value;
+        }
+      }
+      //
     }
     //species reference
     for(i=0; i<spr_num; i++){
@@ -67,6 +74,13 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
       }else{
 	comp[i]->temp_value = comp[i]->value + comp[i]->k[0]*dt;
       }
+      //new code
+      for(j=0; j<comp[i]->num_of_including_species; j++){
+        if(comp[i]->including_species[j]->is_concentration){
+          comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->value/comp[i]->temp_value;
+        }
+      }
+      //
     }
     //species reference
     for(i=0; i<spr_num; i++){

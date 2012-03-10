@@ -9,6 +9,7 @@
 #define MAX_IDENTICAL_EVENTS 256
 #define MAX_EVENTASSIGNMENTS 256
 #define MAX_TIME_VARIANT_ASSIGNMENT 1024
+#define MAX_INCLUDING_SPECIES 256
 
 //structures for efficient simulation
 typedef struct _equation equation;
@@ -49,9 +50,6 @@ struct _mySpecies{
   int is_concentration;
   int has_only_substance_units;
   myCompartment *locating_compartment;
-  int is_independent;
-  int depending_event_is_fired;
-  double initial_amount; //for rule and reaction independent species
   double k[4]; //for runge kutta
   double **delay_val;
   myRule *depending_rule;
@@ -92,6 +90,8 @@ struct _myCompartment{
   myRule *depending_rule;
   double prev_val[3]; //previous values for multistep solution
   double prev_k[3]; //previous values for multistep solution
+  mySpecies *including_species[MAX_INCLUDING_SPECIES];
+  int num_of_including_species;
 };
 
 struct _myReaction{
@@ -276,8 +276,10 @@ void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], my
 
 //print result
 void print_result(myResult* result);
-void print_result_to_file(myResult* result, char* file);
-void output_result(myResult* result, FILE* fp);
+void write_result(myResult* result, char* file);
+void write_csv(myResult* result, char* file);
+void print_result_to_file(myResult* result, char* file, char delimiter);
+void output_result(myResult* result, FILE* fp, char delimiter);
 
 //calc k(gradient or value of algebraic or assignment rule)
 void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, myReaction *re[], int re_num, myRule *rule[], int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);

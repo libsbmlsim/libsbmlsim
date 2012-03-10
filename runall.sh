@@ -6,8 +6,8 @@
 #   00980-sbml-l2v4.xml
 #   00980-results.csv
 
-#BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic"
-BaseDir="$HOME/Downloads/sbml-test-cases-2/cases/semantic"
+BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic"
+#BaseDir="$HOME/Downloads/sbml-test-cases-2/cases/semantic"
 
 ### 00001-settings.txt
 # duration: 5
@@ -63,5 +63,5 @@ unset index
 unset files
 unset fine_delta
 rm -f out.csv
-zip result.zip 00*-results.csv
-rm 00*-results.csv
+#zip result.zip 00*-results.csv
+#rm 00*-results.csv

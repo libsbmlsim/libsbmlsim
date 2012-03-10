@@ -242,8 +242,15 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
         algEq->alg_target_parameter[i]->target_parameter->temp_value = constant_vector[algEq->alg_target_parameter[i]->order];
       }    
       for(i=0; i<algEq->num_of_alg_target_comp; i++){
+        //new code
+        for(j=0; j<algEq->alg_target_compartment[i]->target_compartment->num_of_including_species; j++){
+          if(algEq->alg_target_compartment[i]->target_compartment->including_species[j]->is_concentration){
+            algEq->alg_target_compartment[i]->target_compartment->including_species[j]->temp_value = algEq->alg_target_compartment[i]->target_compartment->including_species[j]->temp_value*algEq->alg_target_compartment[i]->target_compartment->temp_value/constant_vector[algEq->alg_target_compartment[i]->order];
+          }
+        }
+        //
         algEq->alg_target_compartment[i]->target_compartment->temp_value = constant_vector[algEq->alg_target_compartment[i]->order];
-      }    
+      }
     }else{
       if(algEq->target_species != NULL){
         algEq->target_species->temp_value = -calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0);
@@ -252,20 +259,18 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
         algEq->target_parameter->temp_value = -calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0);
       }
       if(algEq->target_compartment != NULL){
+        //new code
+        for(i=0; i<algEq->target_compartment->num_of_including_species; i++){
+          if(algEq->target_compartment->including_species[i]->is_concentration){
+            algEq->target_compartment->including_species[i]->temp_value = algEq->target_compartment->including_species[i]->temp_value*algEq->target_compartment->temp_value/(-calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0));
+          }
+        }
+        //
         algEq->target_compartment->temp_value = -calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0);
       }
     }
     //forwarding value
     forwarding_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference);
-  }
-
-  //determin species initial amount (for independent species)
-  for(i=0; i<num_of_species; i++){
-    if(sp[i]->is_amount){
-      sp[i]->initial_amount = sp[i]->value;
-    }else{
-      sp[i]->initial_amount = sp[i]->value*sp[i]->locating_compartment->value;
-    }
   }
 
   //initialize delay_val
@@ -564,15 +569,6 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
     }
 
-    //calc independent species value
-    for(i=0; i<num_of_species; i++){
-      if(sp[i]->is_concentration && sp[i]->is_independent
-          && !sp[i]->depending_event_is_fired){
-        sp[i]->temp_value = sp[i]->initial_amount/sp[i]->locating_compartment->temp_value;
-        sp[i]->value = sp[i]->temp_value;
-      }
-    }     
-
     //calc temp value algebraic by algebraic
     if(algEq != NULL){
       if(algEq->num_of_algebraic_variables > 1){
@@ -602,6 +598,13 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
           algEq->alg_target_parameter[i]->target_parameter->temp_value = constant_vector[algEq->alg_target_parameter[i]->order];
         }    
         for(i=0; i<algEq->num_of_alg_target_comp; i++){
+          //new code
+          for(j=0; j<algEq->alg_target_compartment[i]->target_compartment->num_of_including_species; j++){
+            if(algEq->alg_target_compartment[i]->target_compartment->including_species[j]->is_concentration){
+              algEq->alg_target_compartment[i]->target_compartment->including_species[j]->temp_value = algEq->alg_target_compartment[i]->target_compartment->including_species[j]->temp_value*algEq->alg_target_compartment[i]->target_compartment->temp_value/constant_vector[algEq->alg_target_compartment[i]->order];
+            }
+          }
+          //
           algEq->alg_target_compartment[i]->target_compartment->temp_value = constant_vector[algEq->alg_target_compartment[i]->order];
         }    
       }else{
@@ -612,6 +615,13 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
           algEq->target_parameter->temp_value = -calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0);
         }
         if(algEq->target_compartment != NULL){
+          //new code
+          for(i=0; i<algEq->target_compartment->num_of_including_species; i++){
+            if(algEq->target_compartment->including_species[i]->is_concentration){
+              algEq->target_compartment->including_species[i]->temp_value = algEq->target_compartment->including_species[i]->temp_value*algEq->target_compartment->temp_value/(-calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0));
+            }
+          }
+          //
           algEq->target_compartment->temp_value = -calc(algEq->constant, dt, cycle, &reverse_time, 0)/calc(algEq->coefficient, dt, cycle, &reverse_time, 0);
         }
       }
