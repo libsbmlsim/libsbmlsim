@@ -23,11 +23,11 @@ fine_delta=(`echo $files`)
 foreach i ({00001..00980}) 
 #foreach i ({00952..00980}) 
   head="$BaseDir/$i/$i"
-  duration=`nkf -Lu "$head-settings.txt" | grep duration | cut -d" " -f 2`
-  steps=`nkf -Lu "$head-settings.txt" | grep steps | cut -d" " -f 2`
-  variables=`nkf -Lu "$head-settings.txt" | grep variables | cut -d":" -f 2 | sed -e "s/ //g"`
-  amount=`nkf -Lu "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
-  concentration=`nkf -Lu "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
+  duration=`tr -d '\r' < "$head-settings.txt" | grep duration | cut -d" " -f 2`
+  steps=`tr -d '\r' < "$head-settings.txt" | grep steps | cut -d" " -f 2`
+  variables=`tr -d '\r' < "$head-settings.txt" | grep variables | cut -d":" -f 2 | sed -e "s/ //g"`
+  amount=`tr -d '\r' < "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
+  concentration=`tr -d '\r' < "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
   #sbml="$head-sbml-l2v4.xml"
   sbml="$head-sbml-l3v1.xml"
   result="$i-results.csv"
