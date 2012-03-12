@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
   int print_interval = 100;
   int print_amount = 1;
   int method = 1;
-  int use_lazy_method = -1;
+  int use_lazy_method = 0;
 
   if (argc < 2) {
     printf("Input SBML file is not specified.\n  Usage: %s sbml.xml\n", argv[0]);
@@ -32,16 +32,21 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   m = SBMLDocument_getModel(d);
-  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  // RK
+  //rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  // AM2 (w/o lazy)
+  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, 3, 0);
+  // AM2 (w/ lazy)
+  //rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, 3, 1);
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-    print_result(rtn);
+//    print_result(rtn);
     write_result(rtn, "test.dat");
-    write_csv(rtn, "test.csv");
-    write_separate_result(rtn, "./simulation_results/species_result.dat",
-                               "./simulation_results/parameter_result.dat",
-                               "./simulation_results/compartment_result.dat");
+//    write_csv(rtn, "test.csv");
+    write_separate_result(rtn, "./simulation_results/species_result_imp30.dat",
+                               "./simulation_results/parameter_result_imp30.dat",
+                               "./simulation_results/compartment_result_imp30.dat");
   }
 
   SBMLDocument_free(d);

@@ -32,6 +32,11 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   seed_set_imp();
   int i, j, cycle;
   double reverse_time;
+  double *value_p = result->values;
+  double *value_time_p = result->values_time;
+  double *value_sp_p = result->values_sp;
+  double *value_param_p = result->values_param;
+  double *value_comp_p = result->values_comp;
   int end_cycle = get_end_cycle(sim_time, dt);
   int num_of_species = Model_getNumSpecies(m);
   int num_of_parameters = Model_getNumParameters(m);
@@ -330,37 +335,63 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     }
     //print result
     if(cycle%print_interval == 0){
-      fprintf(fp1, "%lf", *time);
+      // Time
+      *value_p = *time;
+      value_p++;
+      *value_time_p = *time;
+      value_time_p++;
+      fprintf(fp1, "%.16g", *time);
+      // Species
       for(i=0; i<num_of_species; i++){
-        if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){
+//        if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ // XXX must remove this
           if(print_amount){
             if(sp[i]->is_concentration){
               fprintf(fp1, " %.16g", sp[i]->value*sp[i]->locating_compartment->value);
+              *value_p = sp[i]->value*sp[i]->locating_compartment->value;
+              *value_sp_p = sp[i]->value*sp[i]->locating_compartment->value;
             }else{
               fprintf(fp1, " %.16g", sp[i]->value);
+              *value_p = sp[i]->value;
+              *value_sp_p = sp[i]->value;
             }
           }else{
             if(sp[i]->is_amount){
               fprintf(fp1, " %.16g", sp[i]->value/sp[i]->locating_compartment->value);
+              *value_p = sp[i]->value/sp[i]->locating_compartment->value;
+              *value_sp_p = sp[i]->value/sp[i]->locating_compartment->value;
             }else{
               fprintf(fp1, " %.16g", sp[i]->value);
+              *value_p = sp[i]->value;
+              *value_sp_p = sp[i]->value;
             }
           }
-        }
+          value_p++;
+          value_sp_p++;
+//        }
       }
       fprintf(fp1, "\n");
-      fprintf(fp2, "%lf", *time);
+      fprintf(fp2, "%.16g", *time);
+      // Parameter
       for(i=0; i<num_of_parameters; i++){
-        if(!Parameter_getConstant(param[i]->origin)){
+//        if(!Parameter_getConstant(param[i]->origin)){ // XXX must remove this
           fprintf(fp2, " %.16g", param[i]->value);
-        }
+          *value_p = param[i]->value;
+          *value_param_p = param[i]->value;
+//        }
+          value_p++;
+          value_param_p++;
       }
       fprintf(fp2, "\n");
-      fprintf(fp3, "%lf", *time);
+      fprintf(fp3, "%.16g", *time);
+      // Compartment
       for(i=0; i<num_of_compartments; i++){
-        if(!Compartment_getConstant(comp[i]->origin)){
+//        if(!Compartment_getConstant(comp[i]->origin)){ XXX must remove this
           fprintf(fp3, " %.16g", comp[i]->value);
-        }
+          *value_p = comp[i]->value;
+          *value_comp_p = comp[i]->value;
+//        }
+          value_p++;
+          value_comp_p++;
       }
       fprintf(fp3, "\n");
     }
