@@ -73,7 +73,7 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
     is_explicit = 1;
     break;
   case 2:
-    dbg_printf("simulate with Backward-Eular\n");
+    dbg_printf("simulate with Backward-Euler\n");
     order = 0;
     break;
   case 3:
@@ -101,7 +101,7 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
     order = 6;
     break;
   case 9:
-    dbg_printf("simulate with AB1(eular)\n");
+    dbg_printf("simulate with AB1(Euler)\n");
     order = 0;
     is_explicit = 1;
     break;

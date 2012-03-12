@@ -10,7 +10,7 @@
 #include "header.h"
 
 //coefficient matrix for implicit numerical integration
-int c_i[7][9] = {{1, -1, 0, 0, 0, -1, 0, 0, 0}, //AM1 & AM2 (Backword-Eular) : orcer = 0
+int c_i[7][9] = {{1, -1, 0, 0, 0, -1, 0, 0, 0}, //AM1 & AM2 (Backward-Euler) : orcer = 0
   {2, -2, 0, 0, 0, -1, -1, 0, 0}, //AM2 (Crank-Nicolson) : order = 1
   {12, -12, 0, 0, 0, -5, -8, 1, 0}, //AM3 : order = 2
   {24, -24, 0, 0, 0, -9, -19, 5, -1}, //AM4 : order = 3
@@ -46,13 +46,13 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   int num_of_events = Model_getNumEvents(m);
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
 
-  int num_of_all_var_species = 0; //量が変化する全ての分子の数
-  int num_of_all_var_parameters = 0; //量が変化する全てのパラメータの数
-  int num_of_all_var_compartments = 0; //量が変化する全てのコンパートメントの数
+  int num_of_all_var_species = 0; //num of species whose quantity is not constant
+  int num_of_all_var_parameters = 0; //num of parameters whose value is not constant
+  int num_of_all_var_compartments = 0; //num of compartment whose value is not constant
   int num_of_all_var_species_reference = 0;
-  int num_of_var_species = 0; //assignment, algebraic rule以外で量が変化する分子の数
-  int num_of_var_parameters = 0; //assignment, algebraic rule以外で量が変化するパラメータの数
-  int num_of_var_compartments = 0; //assignment, algebraic rule以外で量が変化するコンパートメントの数
+  int num_of_var_species = 0; //num of species whose quantity changes, but not by assignment, algebraic rule
+  int num_of_var_parameters = 0; //num of parameters whose value changes, but not by assignment, algebraic rule
+  int num_of_var_compartments = 0; //num of compartments whose value changes, but not by assignment, algebraic rule
   int num_of_var_species_reference = 0;
 
   check_num(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, &num_of_all_var_species, &num_of_all_var_parameters, &num_of_all_var_compartments, &num_of_all_var_species_reference, &num_of_var_species, &num_of_var_parameters, &num_of_var_compartments, &num_of_var_species_reference, sp, param, comp, re);
@@ -136,7 +136,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   //initialize delay_val
   initialize_delay_val(sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, sim_time, dt, 0);
 
-  //calc InitialAssignmet
+  //calc InitialAssignment
   calc_initial_assignment(initAssign, num_of_initialAssignments, dt, cycle, &reverse_time);
 
   //initialize delay_val
@@ -211,10 +211,12 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       for(i=0; i<algEq->num_of_algebraic_variables; i++){
         for(j=0; j<algEq->num_of_algebraic_variables; j++){
           coefficient_matrix[i][j] = calc(algEq->coefficient_matrix[i][j], dt, cycle, &reverse_time, 0);
+          //dbg_printf("coefficient matrix[%d][%d] = %lf\n", i, j, coefficient_matrix[i][j]);
         }
       }
       for(i=0; i<algEq->num_of_algebraic_variables; i++){
         constant_vector[i] = -calc(algEq->constant_vector[i], dt, cycle, &reverse_time, 0);
+        //dbg_printf("constant vector[%d] = %lf\n", i, constant_vector[i]);
       }
       //LU decompostion
       error = lu_decomposition(coefficient_matrix, alg_pivot, algEq->num_of_algebraic_variables);
@@ -223,6 +225,9 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
       //forward substitution & backward substitution
       lu_solve(coefficient_matrix, alg_pivot, algEq->num_of_algebraic_variables, constant_vector);
+      /*       for(i=0; i<algEq->num_of_algebraic_variables; i++){ */
+      /*  dbg_printf("ans[%d] = %lf\n", i, constant_vector[i]); */
+      /*       } */
       for(i=0; i<algEq->num_of_alg_target_sp; i++){
         algEq->alg_target_species[i]->target_species->temp_value = constant_vector[algEq->alg_target_species[i]->order];
       }    
@@ -370,7 +375,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
       // Compartment
       for(i=0; i<num_of_compartments; i++){
-//        if(!Compartment_getConstant(comp[i]->origin)){ XXX must remove this
+//        if(!Compartment_getConstant(comp[i]->origin)){ // XXX must remove this
           *value_p = comp[i]->value;
           *value_comp_p = comp[i]->value;
 //        }
@@ -379,11 +384,11 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
     }
 
-    //time increse
+    //time increase
     *time = (cycle+1)*dt;
 
     //implicit method
-    //define init value by eular start
+    //define init value by Euler start
     calc_k(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference, re, num_of_reactions, rule, num_of_rules, cycle, dt, &reverse_time, 0, 1);
 
     //preserve k(t) value
@@ -400,7 +405,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     }
 
     calc_temp_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference, cycle, dt, 0);
-    //define init value by eular end
+    //define init value by Euler end
 
     //newton method
     if(use_lazy_method){

@@ -10,7 +10,7 @@
 #include "header.h"
 
 //coefficient matrix for Adams Bashforth
-double c_e[4][4] = {{1.0, 0, 0, 0}, //AB1 (eular) : order = 0
+double c_e[4][4] = {{1.0, 0, 0, 0}, //AB1 (Euler) : order = 0
   {3.0/2.0, -1.0/2.0, 0, 0}, //AB2 : order = 1
   {23.0/12.0, -16.0/12.0, 5.0/12.0, 0}, //AB3 : order = 2
   {55.0/24.0, -59.0/24.0, 37.0/24.0, -9.0/24.0}}; //AB4 : order = 3

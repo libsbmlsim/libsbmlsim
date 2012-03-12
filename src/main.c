@@ -19,14 +19,14 @@ void usage(char *str) {
   printf(" -a   : print Species Value in Amount\n");
   printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
   printf("        1: runge kutta\n");
-  printf("        2: AM1 & BD1 (implicit eular)\n");
+  printf("        2: AM1 & BD1 (implicit Euler)\n");
   printf("        3: AM2 (crank nicolson)\n");
   printf("        4: AM3\n");
   printf("        5: AM4\n");
   printf("        6: BD2\n");
   printf("        7: BD3\n");
   printf("        8: BD4\n");
-  printf("        9: AB1 (explicit eular)\n");
+  printf("        9: AB1 (explicit Euler)\n");
   printf("       10: AB2\n");
   printf("       11: AB3\n");
   printf("       12: AB4\n");
@@ -187,14 +187,14 @@ int main(int argc, char *argv[]){
       printf("select neumerical integration method\n");
       printf("simulate with\n");
       printf("runge kutta : push \"1\"\n");
-      printf("AM1 & BD1 (implicit eular) : push \"2\"\n");
+      printf("AM1 & BD1 (implicit Euler) : push \"2\"\n");
       printf("AM2 (crank nicolson) : push \"3\"\n");
       printf("AM3 : push \"4\"\n");
       printf("AM4 : push \"5\"\n");
       printf("BD2 : push \"6\"\n");
       printf("BD3 : push \"7\"\n");
       printf("BD4 : push \"8\"\n");
-      printf("AB1 (explicit eular) : push \"9\"\n");
+      printf("AB1 (explicit Euler) : push \"9\"\n");
       printf("AB2 : push \"10\"\n");
       printf("AB3 : push \"11\"\n");
       printf("AB4 : push \"12\"\n");
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]){
     is_explicit = 1;
     break;
   case 2:
-    printf("  simulate with Backward-Eular\n");
+    printf("  simulate with Backward-Euler\n");
     order = 0;
     break;
   case 3:
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]){
     order = 6;
     break;
   case 9:
-    printf("  simulate with AB1(eular)\n");
+    printf("  simulate with AB1(Euler)\n");
     order = 0;
     is_explicit = 1;
     break;
