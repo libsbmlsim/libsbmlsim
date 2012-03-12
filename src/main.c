@@ -140,7 +140,7 @@ int main(int argc, char *argv[]){
   //calculate simulation condition
   dt = delta*(sim_time/step);
   print_interval = (int)(1/delta);
-  printf("  time:%g step:%d dt:%.16g\n", sim_time, step, dt);
+  printf("  time:%g step:%d dt:%lf\n", sim_time, step, dt);
 
   //time in simulation
   double time = 0;
