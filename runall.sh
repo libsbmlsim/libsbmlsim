@@ -16,13 +16,14 @@ BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic"
 # amount: S1, S2
 # concentration:
 
-index=1
-files="00952 00953 00962 00963 00964 00965 00966 00967"
-fine_delta=(`echo $files`)
+# Simulate following models with small dt
+fine_delta="00952 00953 00962 00963 00964 00965 00966 00967"
 
 foreach i ({00001..00980}) 
 #foreach i ({00952..00980}) 
   head="$BaseDir/$i/$i"
+  # 00926 and 00927 contains '\r' before '\n' on each line (DOS format),
+  # so we have to call tr -d '\r' before parsing the settings file...
   duration=`tr -d '\r' < "$head-settings.txt" | grep duration | cut -d" " -f 2`
   steps=`tr -d '\r' < "$head-settings.txt" | grep steps | cut -d" " -f 2`
   variables=`tr -d '\r' < "$head-settings.txt" | grep variables | cut -d":" -f 2 | sed -e "s/ //g"`
@@ -34,16 +35,15 @@ foreach i ({00001..00980})
   opt_delta=""
   opt_amount=""
   echo "$i: $duration : $steps : [$variables] : [$amount] : [$concentration]"
-  if [ "$i" = ${fine_delta[$index]} ] ; then
-      echo "simulate with fine delta"
-	  opt_delta="-d 0.00001"
-      index=`expr $index + 1`
+  if expr $fine_delta : ".*$i.*" >/dev/null; then
+    echo "  simulate with fine delta"
+    opt_delta="-d 0.00001"
   fi
   if [ -n "$amount" ] ; then
-	  echo "print amount"
+	  echo "  print amount"
 	  opt_amount="-a"
   else
-	  echo "print concentration"
+	  echo "  print concentration"
   fi
   ./sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
   ./genresult.pl out.csv $variables $steps >! $result
@@ -59,8 +59,6 @@ foreach i ({00001..00980})
   unset opt_amount
 end
 unset BaseDir
-unset index
-unset files
 unset fine_delta
 rm -f out.csv
 #zip result.zip 00*-results.csv
