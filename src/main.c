@@ -140,7 +140,7 @@ int main(int argc, char *argv[]){
   //calculate simulation condition
   dt = delta*(sim_time/step);
   print_interval = (int)(1/delta);
-  printf("time:%lf step:%d dt:%lf\n", sim_time, step, dt);
+  printf("  time:%g step:%d dt:%.16g\n", sim_time, step, dt);
 
   //time in simulation
   double time = 0;
@@ -210,60 +210,60 @@ int main(int argc, char *argv[]){
   }
   switch(method) {
   case 1:
-    printf("simulate with runge kutta\n");
+    printf("  simulate with runge kutta\n");
     order = 4;
     is_explicit = 1;
     break;
   case 2:
-    printf("simulate with Backward-Eular\n");
+    printf("  simulate with Backward-Eular\n");
     order = 0;
     break;
   case 3:
-    printf("simulate with AM2(Crank-Nicolson)\n");
+    printf("  simulate with AM2(Crank-Nicolson)\n");
     order = 1;
     break;
   case 4:
-    printf("simulate with AM3\n");
+    printf("  simulate with AM3\n");
     order = 2;
     break;
   case 5:
-    printf("simulate with AM4\n");
+    printf("  simulate with AM4\n");
     order = 3;
     break;
   case 6:
-    printf("simulate with BD2\n");
+    printf("  simulate with BD2\n");
     order = 4;
     break;
   case 7:
-    printf("simulate with BD3\n");
+    printf("  simulate with BD3\n");
     order = 5;
     break;
   case 8:
-    printf("simulate with BD4\n");
+    printf("  simulate with BD4\n");
     order = 6;
     break;
   case 9:
-    printf("simulate with AB1(eular)\n");
+    printf("  simulate with AB1(eular)\n");
     order = 0;
     is_explicit = 1;
     break;
   case 10:
-    printf("simulate with AB2\n");
+    printf("  simulate with AB2\n");
     order = 1;
     is_explicit = 1;
     break;
   case 11:
-    printf("simulate with AB3\n");
+    printf("  simulate with AB3\n");
     order = 2;
     is_explicit = 1;
     break;
   case 12:
-    printf("simulate with AB4\n");
+    printf("  simulate with AB4\n");
     order = 3;
     is_explicit = 1;
     break;
   default:
-    printf("simulate with runge kutta\n");
+    printf("  simulate with runge kutta\n");
     order = 4;
     break;
   }
@@ -287,7 +287,7 @@ int main(int argc, char *argv[]){
       }
     }
     if(use_lazy_method == 1) {
-      printf("simulate with lazy mode\n");
+      printf("  simulate with lazy mode\n");
     }
     rtn = simulate_implicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
@@ -309,7 +309,7 @@ int main(int argc, char *argv[]){
   //print_result_list(m, mySp, myParam, myComp);
 
   //free
-  printf("free all allocated memory\n");
+  printf("  free all allocated memory\n");
   free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
   SBMLDocument_free(d);
   return 0;
