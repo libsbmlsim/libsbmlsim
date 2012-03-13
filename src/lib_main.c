@@ -15,9 +15,10 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
 }
 
 myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method){
-  int is_explicit = 0;
   double time = 0;
   int order = 0;
+  int is_explicit = 0;
+  char *method_name;
 
   allocated_memory *mem;
   mem = (allocated_memory*)malloc(sizeof(allocated_memory));
@@ -60,64 +61,50 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   myResult* rtn;
 
   switch(method) {
-    case 1:
-      dbg_printf("simulate with runge kutta\n");
-      order = 4;
-      is_explicit = 1;
+    case MTHD_RUNGE_KUTTA: // Runge-Kutta
+      method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
-    case 2:
-      dbg_printf("simulate with Backward-Euler\n");
-      order = 0;
+    case MTHD_BACKWARD_EULER: // Backward-Euler
+      method_name = MTHD_NAME_BACKWARD_EULER;
       break;
-    case 3:
-      dbg_printf("simulate with AM2(Crank-Nicolson)\n");
-      order = 1;
+    case MTHD_CRANK_NICOLSON: // Crank-Nicolson (Adams-Moulton 2)
+      method_name = MTHD_NAME_CRANK_NICOLSON;
       break;
-    case 4:
-      dbg_printf("simulate with AM3\n");
-      order = 2;
+    case MTHD_ADAMS_MOULTON_3: // Adams-Moulton 3
+      method_name = MTHD_NAME_ADAMS_MOULTON_3;
       break;
-    case 5:
-      dbg_printf("simulate with AM4\n");
-      order = 3;
+    case MTHD_ADAMS_MOULTON_4: // Adams-Moulton 4
+      method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case 6:
-      dbg_printf("simulate with BD2\n");
-      order = 4;
+    case MTHD_BACKWARD_DIFFERENTIATION_2: // Backward-Differentiation 2
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
       break;
-    case 7:
-      dbg_printf("simulate with BD3\n");
-      order = 5;
+    case MTHD_BACKWARD_DIFFERENTIATION_3: // Backward-Differentiation 3
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
       break;
-    case 8:
-      dbg_printf("simulate with BD4\n");
-      order = 6;
+    case MTHD_BACKWARD_DIFFERENTIATION_4: // Backward-Differentiation 4
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
       break;
-    case 9:
-      dbg_printf("simulate with AB1(Euler)\n");
-      order = 0;
-      is_explicit = 1;
+    case MTHD_EULER: // Euler (Adams-Bashforth)
+      method_name = MTHD_NAME_EULER;
       break;
-    case 10:
-      dbg_printf("simulate with AB2\n");
-      order = 1;
-      is_explicit = 1;
+    case MTHD_ADAMS_BASHFORTH_2: // Adams-Bashforth 2
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_2;
       break;
-    case 11:
-      dbg_printf("simulate with AB3\n");
-      order = 2;
-      is_explicit = 1;
+    case MTHD_ADAMS_BASHFORTH_3: // Adams-Bashforth 3
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_3;
       break;
-    case 12:
-      dbg_printf("simulate with AB4\n");
-      order = 3;
-      is_explicit = 1;
+    case MTHD_ADAMS_BASHFORTH_4: // Adams-Bashforth 4
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_4;
       break;
     default:
-      dbg_printf("simulate with runge kutta\n");
-      order = 4;
+      method = MTHD_RUNGE_KUTTA;
+      method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
   }
+  order = method / 10;
+  is_explicit = method % 10;
+  dbg_printf("simulate with %s\n", method_name);
 
   //simulation
   if (is_explicit == 1) {
@@ -125,9 +112,6 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   }else{
     rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
-
-  //print result list
-  //print_result_list(m, mySp, myParam, myComp);
 
   //free
   free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);

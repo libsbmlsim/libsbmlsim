@@ -27,31 +27,6 @@ void print_result_to_file(myResult* result, char* file, char delimiter){
   }
 }
 
-void output_result0(myResult* result, FILE* fp, char delimiter){
-  int i, j;
-  double *value_p = result->values;
-
-  for (i = 0; i < result->num_of_columns; i++) {
-    if (i == 0) {
-      fprintf(fp, "%s", result->column_name[i]);
-    } else {
-      fprintf(fp, "%c%s", delimiter, result->column_name[i]);
-    }
-  }
-  fprintf(fp, "\n");
-  for (i = 0; i < result->num_of_rows; i++) {
-    for (j = 0; j < result->num_of_columns; j++) {
-      if (j == 0) {
-        fprintf(fp, "%.16g", *(value_p));
-      } else {
-        fprintf(fp, "%c%.16g", delimiter, *(value_p));
-      }
-      value_p++;
-    }
-    fprintf(fp, "\n");
-  }
-}
-
 void output_result(myResult* result, FILE* fp, char delimiter){
   int i, j;
   double *value_time_p  = result->values_time;

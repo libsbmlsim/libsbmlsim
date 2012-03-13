@@ -11,9 +11,9 @@ void usage(char *str) {
   printf(" -n   : do not use lazy method\n");
   printf(" -a   : print Species Value in Amount\n");
   printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
-  printf("        1: runge kutta\n");
+  printf("        1: Runge-Kutta\n");
   printf("        2: AM1 & BD1 (implicit Euler)\n");
-  printf("        3: AM2 (crank nicolson)\n");
+  printf("        3: AM2 (Crank Nicolson)\n");
   printf("        4: AM3\n");
   printf("        5: AM4\n");
   printf("        6: BD2\n");
@@ -40,7 +40,6 @@ int main(int argc, char *argv[]){
 
   char *myname;
   boolean use_lazy_method = -1;
-  int is_explicit = 0;
   int print_amount = 0;
 
   double sim_time = 0;
@@ -50,8 +49,11 @@ int main(int argc, char *argv[]){
   int print_interval = 0;
 
   char buf1[256], buf2[256], buf3[256];
+  int method;
   int order = 0;
-  int method = -1;
+  int is_explicit;
+  char *method_name;
+  int method_key = -1;
 
   allocated_memory *mem;
   mem = (allocated_memory*)malloc(sizeof(allocated_memory));
@@ -74,7 +76,7 @@ int main(int argc, char *argv[]){
         delta = atof(optarg);
         break;
       case 'm':
-        method = atoi(optarg);
+        method_key = atoi(optarg);
         break;
       case 'l':
         use_lazy_method = true;
@@ -175,91 +177,89 @@ int main(int argc, char *argv[]){
     dbg_printf("myAlgEq is NULL\n");
   }
   //CUI
-  if (method == -1) {
+  if (method_key == -1) {
     while(1){
       printf("select neumerical integration method\n");
       printf("simulate with\n");
-      printf("runge kutta : push \"1\"\n");
-      printf("AM1 & BD1 (implicit Euler) : push \"2\"\n");
-      printf("AM2 (crank nicolson) : push \"3\"\n");
-      printf("AM3 : push \"4\"\n");
-      printf("AM4 : push \"5\"\n");
-      printf("BD2 : push \"6\"\n");
-      printf("BD3 : push \"7\"\n");
-      printf("BD4 : push \"8\"\n");
-      printf("AB1 (explicit Euler) : push \"9\"\n");
-      printf("AB2 : push \"10\"\n");
-      printf("AB3 : push \"11\"\n");
-      printf("AB4 : push \"12\"\n");
+      printf("Runge-Kutta : press \"1\"\n");
+      printf("AM1 & BD1 (implicit Euler) : press \"2\"\n");
+      printf("AM2 (Crank Nicolson) : press \"3\"\n");
+      printf("AM3 : press \"4\"\n");
+      printf("AM4 : press \"5\"\n");
+      printf("BD2 : press \"6\"\n");
+      printf("BD3 : press \"7\"\n");
+      printf("BD4 : press \"8\"\n");
+      printf("AB1 (explicit Euler) : press \"9\"\n");
+      printf("AB2 : press \"10\"\n");
+      printf("AB3 : press \"11\"\n");
+      printf("AB4 : press \"12\"\n");
 
       fgets(buf2, 256, stdin);
-      method = atoi(buf2);
-      if (method < 1 || method > 12) {
+      method_key = atoi(buf2);
+      if (method_key < 1 || method_key > 12) {
         printf("Invalid Input!\nSelect and input the number \"1~12\"");
       } else {
         break;
       }
     }
   }
-  switch(method) {
-    case 1:
-      printf("  simulate with runge kutta\n");
-      order = 4;
-      is_explicit = 1;
+  switch(method_key) {
+    case 1: // Runge-Kutta
+      method = MTHD_RUNGE_KUTTA;
+      method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
-    case 2:
-      printf("  simulate with Backward-Euler\n");
-      order = 0;
+    case 2: // Backward-Euler
+      method = MTHD_BACKWARD_EULER;
+      method_name = MTHD_NAME_BACKWARD_EULER;
       break;
-    case 3:
-      printf("  simulate with AM2(Crank-Nicolson)\n");
-      order = 1;
+    case 3: // Crank-Nicolson
+      method = MTHD_CRANK_NICOLSON;
+      method_name = MTHD_NAME_CRANK_NICOLSON;
       break;
-    case 4:
-      printf("  simulate with AM3\n");
-      order = 2;
+    case 4: // Adams-Moulton 3
+      method = MTHD_ADAMS_MOULTON_3;
+      method_name = MTHD_NAME_ADAMS_MOULTON_3;
       break;
-    case 5:
-      printf("  simulate with AM4\n");
-      order = 3;
+    case 5: // Adams-Moultion 4
+      method = MTHD_ADAMS_MOULTON_4;
+      method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case 6:
-      printf("  simulate with BD2\n");
-      order = 4;
+    case 6: // Backward-Differentiation 2
+      method = MTHD_BACKWARD_DIFFERENTIATION_2;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
       break;
-    case 7:
-      printf("  simulate with BD3\n");
-      order = 5;
+    case 7: // Backward-Differentiation 3
+      method = MTHD_BACKWARD_DIFFERENTIATION_3;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
       break;
-    case 8:
-      printf("  simulate with BD4\n");
-      order = 6;
+    case 8: // Backward-Differentiation 4
+      method = MTHD_BACKWARD_DIFFERENTIATION_4;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
       break;
-    case 9:
-      printf("  simulate with AB1(Euler)\n");
-      order = 0;
-      is_explicit = 1;
+    case 9: // Euler (Adams-Bashforth)
+      method = MTHD_EULER;
+      method_name = MTHD_NAME_EULER;
       break;
-    case 10:
-      printf("  simulate with AB2\n");
-      order = 1;
-      is_explicit = 1;
+    case 10: // Adams-Bashforth 2
+      method = MTHD_ADAMS_BASHFORTH_2;
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_2;
       break;
-    case 11:
-      printf("  simulate with AB3\n");
-      order = 2;
-      is_explicit = 1;
+    case 11: // Adams-Bashforth 3
+      method = MTHD_ADAMS_BASHFORTH_3;
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_3;
       break;
-    case 12:
-      printf("  simulate with AB4\n");
-      order = 3;
-      is_explicit = 1;
+    case 12: // Adams-Bashforth 4
+      method = MTHD_ADAMS_BASHFORTH_4;
+      method_name = MTHD_NAME_ADAMS_BASHFORTH_4;
       break;
     default:
-      printf("  simulate with runge kutta\n");
-      order = 4;
+      method = MTHD_RUNGE_KUTTA;
+      method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
   }
+  order = method / 10;
+  is_explicit = method % 10;
+  dbg_printf("simulate with %s\n", method_name);
 
   //simulation
   if (is_explicit == 1) {

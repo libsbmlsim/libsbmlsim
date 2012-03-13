@@ -8,6 +8,8 @@
 #include <sbml/SBMLTypes.h>
 
 #include "common.h"
+#include "methods.h"
+#include "version.h"
 
 // Boolean
 typedef enum _boolean { false, true } boolean;
@@ -219,9 +221,6 @@ struct _copied_AST{
 
 struct _myResult{
   int num_of_rows;
-  int num_of_columns;
-  const char **column_name;
-  double *values;
   int num_of_columns_sp;
   int num_of_columns_param;
   int num_of_columns_comp;
@@ -280,7 +279,6 @@ void print_result(myResult* result);
 void write_result(myResult* result, char* file);
 void write_csv(myResult* result, char* file);
 void print_result_to_file(myResult* result, char* file, char delimiter);
-void output_result0(myResult* result, FILE* fp, char delimiter);
 void output_result(myResult* result, FILE* fp, char delimiter);
 void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c); 
 
