@@ -7,7 +7,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   for(i=0; i<Model_getNumSpecies(m); i++){
     if(mySp[i]->delay_val != NULL){
       for(j=0; j<(int)(sim_time/dt+1); j++){
-	free(mySp[i]->delay_val[j]);
+        free(mySp[i]->delay_val[j]);
       }
       free(mySp[i]->delay_val);
     }
@@ -16,7 +16,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   for(i=0; i<Model_getNumParameters(m); i++){
     if(myParam[i]->delay_val != NULL){
       for(j=0; j<(int)(sim_time/dt+1); j++){
-	free(myParam[i]->delay_val[j]);
+        free(myParam[i]->delay_val[j]);
       }
       free(myParam[i]->delay_val);
     }
@@ -25,7 +25,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   for(i=0; i<Model_getNumCompartments(m); i++){
     if(myComp[i]->delay_val != NULL){
       for(j=0; j<(int)(sim_time/dt+1); j++){
-	free(myComp[i]->delay_val[j]);
+        free(myComp[i]->delay_val[j]);
       }
       free(myComp[i]->delay_val);
     }
@@ -78,24 +78,24 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   if(myAlgEq != NULL){
     if(myAlgEq->num_of_algebraic_variables > 1){
       for(i=0; i<myAlgEq->num_of_algebraic_variables; i++){
-	for(j=0; j<myAlgEq->num_of_algebraic_variables; j++){
-	  free(myAlgEq->coefficient_matrix[i][j]);
-	}
-	free(myAlgEq->coefficient_matrix[i]);
+        for(j=0; j<myAlgEq->num_of_algebraic_variables; j++){
+          free(myAlgEq->coefficient_matrix[i][j]);
+        }
+        free(myAlgEq->coefficient_matrix[i]);
       }
       free(myAlgEq->coefficient_matrix);
       for(i=0; i<myAlgEq->num_of_algebraic_variables; i++){
-	free(myAlgEq->constant_vector[i]);
+        free(myAlgEq->constant_vector[i]);
       }
       free(myAlgEq->constant_vector);
       for(i=0; i<myAlgEq->num_of_alg_target_sp; i++){
-	free(myAlgEq->alg_target_species[i]);
+        free(myAlgEq->alg_target_species[i]);
       }
       for(i=0; i<myAlgEq->num_of_alg_target_param; i++){
-	free(myAlgEq->alg_target_parameter[i]);
+        free(myAlgEq->alg_target_parameter[i]);
       }
       for(i=0; i<myAlgEq->num_of_alg_target_comp; i++){
-	free(myAlgEq->alg_target_compartment[i]);
+        free(myAlgEq->alg_target_compartment[i]);
       }
     }else{
       free(myAlgEq->coefficient);
@@ -112,9 +112,9 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   }
   free(mem);
   //segmentation fault on a model which contains piecewise
-/*   for(i=0; i<cp_AST->num_of_copied_AST; i++){ */
-/*     ASTNode_free(cp_AST->ast[i]); */
-/*   } */
-/*   free(cp_AST); */
+  /*   for(i=0; i<cp_AST->num_of_copied_AST; i++){ */
+  /*     ASTNode_free(cp_AST->ast[i]); */
+  /*   } */
+  /*   free(cp_AST); */
   dbg_printf("all allocated memory is freeed\n");
 }

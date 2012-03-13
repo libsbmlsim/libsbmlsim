@@ -29,18 +29,18 @@ void substitute_delay_val(mySpecies *sp[], int num_of_species, myParameter *para
   for(i=0; i<num_of_reactions; i++){
     for(j=0; j<re[i]->num_of_products; j++){
       if(re[i]->products[j]->delay_val != NULL){
-	re[i]->products[j]->delay_val[cycle][0] = re[i]->products[j]->value;
-	re[i]->products[j]->delay_val[cycle][1] = re[i]->products[j]->value;
-	re[i]->products[j]->delay_val[cycle][2] = re[i]->products[j]->value;
-	re[i]->products[j]->delay_val[cycle][3] = re[i]->products[j]->value;
+        re[i]->products[j]->delay_val[cycle][0] = re[i]->products[j]->value;
+        re[i]->products[j]->delay_val[cycle][1] = re[i]->products[j]->value;
+        re[i]->products[j]->delay_val[cycle][2] = re[i]->products[j]->value;
+        re[i]->products[j]->delay_val[cycle][3] = re[i]->products[j]->value;
       }
     }
     for(j=0; j<re[i]->num_of_reactants; j++){
       if(re[i]->reactants[j]->delay_val != NULL){
-	re[i]->reactants[j]->delay_val[cycle][0] = re[i]->reactants[j]->value;
-	re[i]->reactants[j]->delay_val[cycle][1] = re[i]->reactants[j]->value;
-	re[i]->reactants[j]->delay_val[cycle][2] = re[i]->reactants[j]->value;
-	re[i]->reactants[j]->delay_val[cycle][3] = re[i]->reactants[j]->value;
+        re[i]->reactants[j]->delay_val[cycle][0] = re[i]->reactants[j]->value;
+        re[i]->reactants[j]->delay_val[cycle][1] = re[i]->reactants[j]->value;
+        re[i]->reactants[j]->delay_val[cycle][2] = re[i]->reactants[j]->value;
+        re[i]->reactants[j]->delay_val[cycle][3] = re[i]->reactants[j]->value;
       }
     }
   }

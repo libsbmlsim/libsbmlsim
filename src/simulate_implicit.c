@@ -334,45 +334,45 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       value_time_p++;
       // Species
       for(i=0; i<num_of_species; i++){
-//        if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ // XXX must remove this
-          if(print_amount){
-            if(sp[i]->is_concentration){
-              *value_p = sp[i]->value*sp[i]->locating_compartment->value;
-              *value_sp_p = sp[i]->value*sp[i]->locating_compartment->value;
-            }else{
-              *value_p = sp[i]->value;
-              *value_sp_p = sp[i]->value;
-            }
+        //        if(!(Species_getConstant(sp[i]->origin) && Species_getBoundaryCondition(sp[i]->origin))){ // XXX must remove this
+        if(print_amount){
+          if(sp[i]->is_concentration){
+            *value_p = sp[i]->value*sp[i]->locating_compartment->value;
+            *value_sp_p = sp[i]->value*sp[i]->locating_compartment->value;
           }else{
-            if(sp[i]->is_amount){
-              *value_p = sp[i]->value/sp[i]->locating_compartment->value;
-              *value_sp_p = sp[i]->value/sp[i]->locating_compartment->value;
-            }else{
-              *value_p = sp[i]->value;
-              *value_sp_p = sp[i]->value;
-            }
+            *value_p = sp[i]->value;
+            *value_sp_p = sp[i]->value;
           }
-          value_p++;
-          value_sp_p++;
-//        }
+        }else{
+          if(sp[i]->is_amount){
+            *value_p = sp[i]->value/sp[i]->locating_compartment->value;
+            *value_sp_p = sp[i]->value/sp[i]->locating_compartment->value;
+          }else{
+            *value_p = sp[i]->value;
+            *value_sp_p = sp[i]->value;
+          }
+        }
+        value_p++;
+        value_sp_p++;
+        //        }
       }
       // Parameter
       for(i=0; i<num_of_parameters; i++){
-//        if(!Parameter_getConstant(param[i]->origin)){ // XXX must remove this
-          *value_p = param[i]->value;
-          *value_param_p = param[i]->value;
-//        }
-          value_p++;
-          value_param_p++;
+        //        if(!Parameter_getConstant(param[i]->origin)){ // XXX must remove this
+        *value_p = param[i]->value;
+        *value_param_p = param[i]->value;
+        //        }
+        value_p++;
+        value_param_p++;
       }
       // Compartment
       for(i=0; i<num_of_compartments; i++){
-//        if(!Compartment_getConstant(comp[i]->origin)){ // XXX must remove this
-          *value_p = comp[i]->value;
-          *value_comp_p = comp[i]->value;
-//        }
-          value_p++;
-          value_comp_p++;
+        //        if(!Compartment_getConstant(comp[i]->origin)){ // XXX must remove this
+        *value_p = comp[i]->value;
+        *value_comp_p = comp[i]->value;
+        //        }
+        value_p++;
+        value_comp_p++;
       }
     }
 

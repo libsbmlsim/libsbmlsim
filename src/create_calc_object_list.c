@@ -27,12 +27,12 @@ void create_calc_object_list(int num_of_species, int num_of_parameters, int num_
   for(i=0; i<num_of_reactions; i++){
     for(j=0; j<re[i]->num_of_products; j++){
       if(!SpeciesReference_getConstant(re[i]->products[j]->origin)){
-	all_var_spr[index1++] = re[i]->products[j];
+        all_var_spr[index1++] = re[i]->products[j];
       }
     }
     for(j=0; j<re[i]->num_of_reactants; j++){
       if(!SpeciesReference_getConstant(re[i]->reactants[j]->origin)){
-	all_var_spr[index1++] = re[i]->reactants[j];
+        all_var_spr[index1++] = re[i]->reactants[j];
       }
     }
   }
@@ -41,29 +41,29 @@ void create_calc_object_list(int num_of_species, int num_of_parameters, int num_
   for(i=0; i<num_of_species; i++){
     if(!Species_getConstant(sp[i]->origin)){
       if(sp[i]->depending_rule == NULL){
-	is_included_in_reaction = 0;
-	for(j=0; j<num_of_reactions; j++){
-	  if(!re[j]->is_fast){
-	    if(is_included_in_reaction){
-	      break;
-	    }
-	    for(index1=0; index1<re[j]->num_of_products; index1++){
-	      if(strcmp(Species_getId(sp[i]->origin), Species_getId(re[j]->products[index1]->mySp->origin)) == 0){
-		is_included_in_reaction = 1;
-	      }
-	    }
-	    for(index1=0; index1<re[j]->num_of_reactants; index1++){
-	      if(strcmp(Species_getId(sp[i]->origin), Species_getId(re[j]->reactants[index1]->mySp->origin)) == 0){
-		is_included_in_reaction = 1;
-	      }
-	    }
-	  }
-	}
-	if(is_included_in_reaction){
-	  var_sp[index2++] = sp[i];
-	}
+        is_included_in_reaction = 0;
+        for(j=0; j<num_of_reactions; j++){
+          if(!re[j]->is_fast){
+            if(is_included_in_reaction){
+              break;
+            }
+            for(index1=0; index1<re[j]->num_of_products; index1++){
+              if(strcmp(Species_getId(sp[i]->origin), Species_getId(re[j]->products[index1]->mySp->origin)) == 0){
+                is_included_in_reaction = 1;
+              }
+            }
+            for(index1=0; index1<re[j]->num_of_reactants; index1++){
+              if(strcmp(Species_getId(sp[i]->origin), Species_getId(re[j]->reactants[index1]->mySp->origin)) == 0){
+                is_included_in_reaction = 1;
+              }
+            }
+          }
+        }
+        if(is_included_in_reaction){
+          var_sp[index2++] = sp[i];
+        }
       }else if(sp[i]->depending_rule->is_rate){
-	var_sp[index2++] = sp[i];
+        var_sp[index2++] = sp[i];
       }
     }
   }
@@ -71,7 +71,7 @@ void create_calc_object_list(int num_of_species, int num_of_parameters, int num_
   for(i=0; i<num_of_parameters; i++){
     if(!Parameter_getConstant(param[i]->origin)){
       if(param[i]->depending_rule != NULL && param[i]->depending_rule->is_rate){
-	var_param[index1++] = param[i];
+        var_param[index1++] = param[i];
       }
     }
   }
@@ -79,7 +79,7 @@ void create_calc_object_list(int num_of_species, int num_of_parameters, int num_
   for(i=0; i<num_of_compartments; i++){
     if(!Compartment_getConstant(comp[i]->origin)){
       if(comp[i]->depending_rule != NULL && comp[i]->depending_rule->is_rate){
-	var_comp[index1++] = comp[i];
+        var_comp[index1++] = comp[i];
       }
     }
   }
@@ -87,16 +87,16 @@ void create_calc_object_list(int num_of_species, int num_of_parameters, int num_
   for(i=0; i<num_of_reactions; i++){
     for(j=0; j<re[i]->num_of_products; j++){
       if(!SpeciesReference_getConstant(re[i]->products[j]->origin)){
-	if(re[i]->products[j]->depending_rule != NULL && re[i]->products[j]->depending_rule->is_rate){
-	  var_spr[index1++] = re[i]->products[j];
-	}
+        if(re[i]->products[j]->depending_rule != NULL && re[i]->products[j]->depending_rule->is_rate){
+          var_spr[index1++] = re[i]->products[j];
+        }
       }
     }
     for(j=0; j<re[i]->num_of_reactants; j++){
       if(!SpeciesReference_getConstant(re[i]->reactants[j]->origin)){
-	if(re[i]->reactants[j]->depending_rule != NULL && re[i]->reactants[j]->depending_rule->is_rate){
-	  var_spr[index1++] = re[i]->reactants[j];
-	}
+        if(re[i]->reactants[j]->depending_rule != NULL && re[i]->reactants[j]->depending_rule->is_rate){
+          var_spr[index1++] = re[i]->reactants[j];
+        }
       }
     }
   }

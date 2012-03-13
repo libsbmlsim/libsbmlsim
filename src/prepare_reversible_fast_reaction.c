@@ -4,7 +4,7 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
   ASTNode_t *minus_node, *zero_node, *final_eq_node;
   myASTNode *eq_root_node;
   int minus_sign;
-  
+
   if(myNode->left != NULL){
     _prepare_reversible_fast_reaction(m, myNode->left, re, sp, param, comp, re_whole, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, target_id, p_or_r, mem);
   }
@@ -18,53 +18,53 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
       eq_root_node = myNode;
       minus_sign = 1;
       while(eq_root_node->parent != NULL){
-	if(ASTNode_getType(eq_root_node->parent->origin) != AST_TIMES
-	   && ASTNode_getType(eq_root_node->parent->origin) != AST_DIVIDE){
-	  if(ASTNode_getType(eq_root_node->parent->origin) == AST_MINUS
-	     && eq_root_node->parent->right == eq_root_node){
-	    minus_sign *= -1;
-	  }
-	  if(eq_root_node->parent->parent != NULL){
-	    if(eq_root_node->parent->parent->left == eq_root_node->parent){
-	      eq_root_node->parent->parent->left = eq_root_node;
-	    }else{
-	      eq_root_node->parent->parent->right = eq_root_node;
-	    }
-	    eq_root_node->parent = eq_root_node->parent->parent;
-	  }else{
-	    eq_root_node->parent = NULL;
-	    break;
-	  } 
-	}else{
-	  eq_root_node = eq_root_node->parent;
-	}
+        if(ASTNode_getType(eq_root_node->parent->origin) != AST_TIMES
+            && ASTNode_getType(eq_root_node->parent->origin) != AST_DIVIDE){
+          if(ASTNode_getType(eq_root_node->parent->origin) == AST_MINUS
+              && eq_root_node->parent->right == eq_root_node){
+            minus_sign *= -1;
+          }
+          if(eq_root_node->parent->parent != NULL){
+            if(eq_root_node->parent->parent->left == eq_root_node->parent){
+              eq_root_node->parent->parent->left = eq_root_node;
+            }else{
+              eq_root_node->parent->parent->right = eq_root_node;
+            }
+            eq_root_node->parent = eq_root_node->parent->parent;
+          }else{
+            eq_root_node->parent = NULL;
+            break;
+          } 
+        }else{
+          eq_root_node = eq_root_node->parent;
+        }
       }
       final_eq_node = eq_root_node->origin;
       dbg_printf("myASTNode is\n");
       check_myAST(eq_root_node);
       ASTNode_recreate(eq_root_node, final_eq_node);
       if(minus_sign == -1){
-	minus_node = ASTNode_createWithType(AST_MINUS);
-	zero_node = ASTNode_createWithType(AST_INTEGER);
-	ASTNode_setInteger(zero_node, 0);
-	ASTNode_addChild(minus_node, zero_node);
-	ASTNode_addChild(minus_node, final_eq_node);
-	final_eq_node = minus_node;
+        minus_node = ASTNode_createWithType(AST_MINUS);
+        zero_node = ASTNode_createWithType(AST_INTEGER);
+        ASTNode_setInteger(zero_node, 0);
+        ASTNode_addChild(minus_node, zero_node);
+        ASTNode_addChild(minus_node, final_eq_node);
+        final_eq_node = minus_node;
       }
       if(p_or_r == 0){//products coefficient
-	dbg_printf("AST of product numerator is\n");
-	check_AST(final_eq_node, NULL);
-	re->products_equili_numerator->math_length = get_equation(m, re->products_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        dbg_printf("AST of product numerator is\n");
+        check_AST(final_eq_node, NULL);
+        re->products_equili_numerator->math_length = get_equation(m, re->products_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }else{//reactants coefficient
-	minus_node = ASTNode_createWithType(AST_MINUS);
-	zero_node = ASTNode_createWithType(AST_INTEGER);
-	ASTNode_setInteger(zero_node, 0);
-	ASTNode_addChild(minus_node, zero_node);
-	ASTNode_addChild(minus_node, final_eq_node);
-	final_eq_node = minus_node;
-	dbg_printf("AST of reactant numerator is\n");
-	check_AST(final_eq_node, NULL);
-	re->reactants_equili_numerator->math_length = get_equation(m, re->reactants_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        minus_node = ASTNode_createWithType(AST_MINUS);
+        zero_node = ASTNode_createWithType(AST_INTEGER);
+        ASTNode_setInteger(zero_node, 0);
+        ASTNode_addChild(minus_node, zero_node);
+        ASTNode_addChild(minus_node, final_eq_node);
+        final_eq_node = minus_node;
+        dbg_printf("AST of reactant numerator is\n");
+        check_AST(final_eq_node, NULL);
+        re->reactants_equili_numerator->math_length = get_equation(m, re->reactants_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }
     }
   }

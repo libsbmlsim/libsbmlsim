@@ -15,24 +15,24 @@ int lu_decomposition(double **A, int *p, int N){
   Eps = 1e-10;
 
   for(t=0; t<N; t++){
-    /*## PIVOT ##*/
+    /* PIVOT */
     mj = t;
     for(j=t+1;j<N;j++){
       if(fabs(A[j][t]) > fabs(A[mj][t])){
-	mj = j;
+        mj = j;
       }
     }
     if(mj != t){
       for(i=0; i<N; i++){
-	tmp = A[mj][i];
-	A[mj][i] = A[t][i];
-	A[t][i]  = tmp;
+        tmp = A[mj][i];
+        A[mj][i] = A[t][i];
+        A[t][i]  = tmp;
       }
       tmp2 = p[mj];
       p[mj] = p[t];
       p[t] = tmp2;
     }
-    /*## END PIVOT ##*/
+    /* END PIVOT */
     if(fabs(A[t][t]) < Eps){
       dbg_printf("A is singular matrix \n");
       return 0;
@@ -40,7 +40,7 @@ int lu_decomposition(double **A, int *p, int N){
     for(j=t+1; j<N; j++){
       A[j][t] = A[j][t]/A[t][t]; 
       for(i=t+1; i<N; i++){
-	A[j][i] = A[j][i] - A[j][t]*A[t][i];
+        A[j][i] = A[j][i] - A[j][t]*A[t][i];
       }
     }
   }

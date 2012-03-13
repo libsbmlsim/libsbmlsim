@@ -54,20 +54,20 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
       fd = (FunctionDefinition_t*)ListOf_get(Model_getListOfFunctionDefinitions(m), i);
       fd_body = (ASTNode_t*)FunctionDefinition_getBody(fd);
       if(strcmp(FunctionDefinition_getId(fd), ASTNode_getName(node)) == 0){
-	fd_body = ASTNode_deepCopy(fd_body);
-	cp_AST->ast[cp_AST->num_of_copied_AST++] = fd_body;
-	for(j=0; j<FunctionDefinition_getNumArguments(fd); j++){
-	  fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
-	  ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
-	}
-	//check_AST(fd_body, NULL);
-	if(parent != NULL){
-	  ASTNode_replaceChild(parent, child_order, fd_body);
-	}else{
-	  *node_p = fd_body;
-	}
-	node = *node_p;
-	break;
+        fd_body = ASTNode_deepCopy(fd_body);
+        cp_AST->ast[cp_AST->num_of_copied_AST++] = fd_body;
+        for(j=0; j<FunctionDefinition_getNumArguments(fd); j++){
+          fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
+          ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
+        }
+        //check_AST(fd_body, NULL);
+        if(parent != NULL){
+          ASTNode_replaceChild(parent, child_order, fd_body);
+        }else{
+          *node_p = fd_body;
+        }
+        node = *node_p;
+        break;
       }
     }
   }
@@ -81,10 +81,10 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
       and_node = ASTNode_createWithType(AST_LOGICAL_AND);
       ASTNode_addChild(times_node, and_node);
       for(i=ASTNode_getNumChildren(node)-2; i >= 1; i = i-2){
-	pc_cd = ASTNode_getChild(node, i);
-	not_node = ASTNode_createWithType(AST_LOGICAL_NOT);
-	ASTNode_addChild(not_node, pc_cd);
-	ASTNode_addChild(and_node, not_node);
+        pc_cd = ASTNode_getChild(node, i);
+        not_node = ASTNode_createWithType(AST_LOGICAL_NOT);
+        ASTNode_addChild(not_node, pc_cd);
+        ASTNode_addChild(and_node, not_node);
       }
       ASTNode_reduceToBinary(and_node);
     }else{
@@ -124,33 +124,33 @@ void post_ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *par
     for(i=0; i<Model_getNumSpecies(m); i++){
       sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
       if(strcmp(Species_getId(sp), ASTNode_getName(node)) == 0){
-	if(!Species_getHasOnlySubstanceUnits(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){//use val/comp in calculation
-	  divide_node = ASTNode_createWithType(AST_DIVIDE);
-	  compartment_node = ASTNode_createWithType(AST_NAME);
-	  ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
-	  ASTNode_addChild(divide_node, node);
-	  ASTNode_addChild(divide_node, compartment_node);
-	  if(parent != NULL){
-	    ASTNode_replaceChild(parent, child_order, divide_node);
-	  }else{
-	    *node_p = divide_node;
-	  }
-	  node = *node_p;
-	  break;
-	}else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){// use val*comp in calculation
-	  times_node = ASTNode_createWithType(AST_TIMES);
-	  compartment_node = ASTNode_createWithType(AST_NAME);
-	  ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
-	  ASTNode_addChild(times_node, node);
-	  ASTNode_addChild(times_node, compartment_node);
-	  if(parent != NULL){
-	    ASTNode_replaceChild(parent, child_order, times_node);
-	  }else{
-	    *node_p = times_node;
-	  }
-	  node = *node_p;
-	  break;
-	}
+        if(!Species_getHasOnlySubstanceUnits(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){//use val/comp in calculation
+          divide_node = ASTNode_createWithType(AST_DIVIDE);
+          compartment_node = ASTNode_createWithType(AST_NAME);
+          ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
+          ASTNode_addChild(divide_node, node);
+          ASTNode_addChild(divide_node, compartment_node);
+          if(parent != NULL){
+            ASTNode_replaceChild(parent, child_order, divide_node);
+          }else{
+            *node_p = divide_node;
+          }
+          node = *node_p;
+          break;
+        }else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){// use val*comp in calculation
+          times_node = ASTNode_createWithType(AST_TIMES);
+          compartment_node = ASTNode_createWithType(AST_NAME);
+          ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
+          ASTNode_addChild(times_node, node);
+          ASTNode_addChild(times_node, compartment_node);
+          if(parent != NULL){
+            ASTNode_replaceChild(parent, child_order, times_node);
+          }else{
+            *node_p = times_node;
+          }
+          node = *node_p;
+          break;
+        }
       }
     }
   }

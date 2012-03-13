@@ -22,7 +22,7 @@ void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], int *num_o
   if(ASTNode_getType(node) == AST_NAME){
     for(i=0; i<*num_of_included_id_in_alg; i++){
       if(strcmp(ASTNode_getName(node), included_id_in_alg[i]) == 0){
-	flag = 0;
+        flag = 0;
       }
     }
     if(flag){
@@ -50,47 +50,47 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
       eq_root_node = myNode;
       minus_sign = 1;
       while(eq_root_node->parent != NULL){
-	if(ASTNode_getType(eq_root_node->parent->origin) != AST_TIMES
-	   && ASTNode_getType(eq_root_node->parent->origin) != AST_DIVIDE){
-	  if(ASTNode_getType(eq_root_node->parent->origin) == AST_MINUS
-	     && eq_root_node->parent->right == eq_root_node){
-	    minus_sign *= -1;
-	  }
-	  if(eq_root_node->parent->parent != NULL){
-	    if(eq_root_node->parent->parent->left == eq_root_node->parent){
-	      eq_root_node->parent->parent->left = eq_root_node;
-	    }else{
-	      eq_root_node->parent->parent->right = eq_root_node;
-	    }
-	    eq_root_node->parent = eq_root_node->parent->parent;
-	  }else{
-	    eq_root_node->parent = NULL;
-	    break;
-	  } 
-	}else{
-	  eq_root_node = eq_root_node->parent;
-	}
+        if(ASTNode_getType(eq_root_node->parent->origin) != AST_TIMES
+            && ASTNode_getType(eq_root_node->parent->origin) != AST_DIVIDE){
+          if(ASTNode_getType(eq_root_node->parent->origin) == AST_MINUS
+              && eq_root_node->parent->right == eq_root_node){
+            minus_sign *= -1;
+          }
+          if(eq_root_node->parent->parent != NULL){
+            if(eq_root_node->parent->parent->left == eq_root_node->parent){
+              eq_root_node->parent->parent->left = eq_root_node;
+            }else{
+              eq_root_node->parent->parent->right = eq_root_node;
+            }
+            eq_root_node->parent = eq_root_node->parent->parent;
+          }else{
+            eq_root_node->parent = NULL;
+            break;
+          } 
+        }else{
+          eq_root_node = eq_root_node->parent;
+        }
       }
       final_eq_node = eq_root_node->origin;
       dbg_printf("myASTNode is\n");
       check_myAST(eq_root_node);
       ASTNode_recreate(eq_root_node, final_eq_node);
       if(minus_sign == -1){
-	minus_node = ASTNode_createWithType(AST_MINUS);
-	zero_node = ASTNode_createWithType(AST_INTEGER);
-	ASTNode_setInteger(zero_node, 0);
-	ASTNode_addChild(minus_node, zero_node);
-	ASTNode_addChild(minus_node, final_eq_node);
-	final_eq_node = minus_node;
+        minus_node = ASTNode_createWithType(AST_MINUS);
+        zero_node = ASTNode_createWithType(AST_INTEGER);
+        ASTNode_setInteger(zero_node, 0);
+        ASTNode_addChild(minus_node, zero_node);
+        ASTNode_addChild(minus_node, final_eq_node);
+        final_eq_node = minus_node;
       }
       if(algEq->num_of_algebraic_variables > 1){
-	dbg_printf("math AST of coefficient matrix[%d][%d] is\n", alg_order, variable_order);
-	check_AST(eq_root_node->origin, NULL);
-	algEq->coefficient_matrix[alg_order][variable_order]->math_length = get_equation(m, algEq->coefficient_matrix[alg_order][variable_order], sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        dbg_printf("math AST of coefficient matrix[%d][%d] is\n", alg_order, variable_order);
+        check_AST(eq_root_node->origin, NULL);
+        algEq->coefficient_matrix[alg_order][variable_order]->math_length = get_equation(m, algEq->coefficient_matrix[alg_order][variable_order], sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }else{
-	dbg_printf("math AST of coefficient is\n");
-	check_AST(eq_root_node->origin, NULL);
-	algEq->coefficient->math_length = get_equation(m, algEq->coefficient, sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        dbg_printf("math AST of coefficient is\n");
+        check_AST(eq_root_node->origin, NULL);
+        algEq->coefficient->math_length = get_equation(m, algEq->coefficient, sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
       }
     }
   }
@@ -108,7 +108,7 @@ void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParamet
     check_AST(node, NULL);
     algEq->constant->math_length = get_equation(m, algEq->constant, sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
   }
-  
+
 }
 
 //recursive function in _prepare_algebraic3
@@ -127,7 +127,7 @@ void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq){
     flag = 0;
     for(i=0; i<algEq->num_of_algebraic_variables; i++){
       if(strcmp(ASTNode_getName(node), algEq->variables_id[i]) == 0){
-	flag = 1;
+        flag = 1;
       }
     }
     if(flag){
@@ -156,36 +156,36 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
   //reaction target(reactants and products)
   dbg_printf("Reaction\n");
   for(i=0; i<Model_getNumSpecies(m); i++){
-     flag = 0;
-     local_sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
-     for(j=0; j<Model_getNumReactions(m); j++){
-       for(k=0; k<re[j]->num_of_products; k++){
-	 if(strcmp(Species_getId(re[j]->products[k]->mySp->origin), Species_getId(local_sp)) == 0){
-	   flag = 1;
-	 }
-       }
-       for(k=0; k<re[j]->num_of_reactants; k++){
-	 if(strcmp(Species_getId(re[j]->reactants[k]->mySp->origin), Species_getId(local_sp)) == 0){
-	   flag = 1;
-	 }
-       }
-     }
-     if(flag){
-       constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(local_sp);
-     }
+    flag = 0;
+    local_sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
+    for(j=0; j<Model_getNumReactions(m); j++){
+      for(k=0; k<re[j]->num_of_products; k++){
+        if(strcmp(Species_getId(re[j]->products[k]->mySp->origin), Species_getId(local_sp)) == 0){
+          flag = 1;
+        }
+      }
+      for(k=0; k<re[j]->num_of_reactants; k++){
+        if(strcmp(Species_getId(re[j]->reactants[k]->mySp->origin), Species_getId(local_sp)) == 0){
+          flag = 1;
+        }
+      }
+    }
+    if(flag){
+      constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(local_sp);
+    }
   }
   //rule target
   dbg_printf("Rule\n");
   for(i=0; i<Model_getNumRules(m); i++){
     if(Rule_isRate(ru[i]->origin) || Rule_isAssignment(ru[i]->origin)){
       if(ru[i]->target_species != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ru[i]->target_species->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ru[i]->target_species->origin);
       }
       if(ru[i]->target_parameter != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Parameter_getId(ru[i]->target_parameter->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Parameter_getId(ru[i]->target_parameter->origin);
       }
       if(ru[i]->target_compartment != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Compartment_getId(ru[i]->target_compartment->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Compartment_getId(ru[i]->target_compartment->origin);
       }
     }
   }
@@ -195,32 +195,32 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     for(j=0; j<Event_getNumEventAssignments(ev[i]->origin); j++){
       flag = 1;
       for(k=0; k<num_of_constants_in_alg; k++){
-	if(ev[i]->assignments[j]->target_species != NULL){
-	  if(strcmp(constants_in_alg[k], Species_getId(ev[i]->assignments[j]->target_species->origin)) == 0){
-	    flag = 0;
-	  }
-	}
-	if(ev[i]->assignments[j]->target_parameter != NULL){
-	  if(strcmp(constants_in_alg[k], Parameter_getId(ev[i]->assignments[j]->target_parameter->origin)) == 0){
-	    flag = 0;
-	  }	
-	}
-	if(ev[i]->assignments[j]->target_compartment != NULL){
-	  if(strcmp(constants_in_alg[k], Compartment_getId(ev[i]->assignments[j]->target_compartment->origin)) == 0){
-	    flag = 0;
-	  }
-	}
+        if(ev[i]->assignments[j]->target_species != NULL){
+          if(strcmp(constants_in_alg[k], Species_getId(ev[i]->assignments[j]->target_species->origin)) == 0){
+            flag = 0;
+          }
+        }
+        if(ev[i]->assignments[j]->target_parameter != NULL){
+          if(strcmp(constants_in_alg[k], Parameter_getId(ev[i]->assignments[j]->target_parameter->origin)) == 0){
+            flag = 0;
+          }	
+        }
+        if(ev[i]->assignments[j]->target_compartment != NULL){
+          if(strcmp(constants_in_alg[k], Compartment_getId(ev[i]->assignments[j]->target_compartment->origin)) == 0){
+            flag = 0;
+          }
+        }
       }
       if(flag){
-	if(ev[i]->assignments[j]->target_species != NULL){
-	  constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
-	}
-	if(ev[i]->assignments[j]->target_species != NULL){
-	  constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
-	}
-	if(ev[i]->assignments[j]->target_species != NULL){
-	  constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
-	}
+        if(ev[i]->assignments[j]->target_species != NULL){
+          constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
+        }
+        if(ev[i]->assignments[j]->target_species != NULL){
+          constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
+        }
+        if(ev[i]->assignments[j]->target_species != NULL){
+          constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(ev[i]->assignments[j]->target_species->origin);
+        }
       }
     }
   }
@@ -230,30 +230,30 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     flag = 1;
     for(j=0; j<num_of_constants_in_alg; j++){
       if(initAssign[i]->target_species != NULL){
-	if(strcmp(constants_in_alg[i], Species_getId(initAssign[i]->target_species->origin)) == 0){
-	  flag = 0;
-	}
+        if(strcmp(constants_in_alg[i], Species_getId(initAssign[i]->target_species->origin)) == 0){
+          flag = 0;
+        }
       }
       if(initAssign[i]->target_parameter != NULL){
-	if(strcmp(constants_in_alg[i], Parameter_getId(initAssign[i]->target_parameter->origin)) == 0){
-	  flag = 0;
-	}	
+        if(strcmp(constants_in_alg[i], Parameter_getId(initAssign[i]->target_parameter->origin)) == 0){
+          flag = 0;
+        }	
       }
       if(initAssign[i]->target_compartment != NULL){
-	if(strcmp(constants_in_alg[i], Compartment_getId(initAssign[i]->target_compartment->origin)) == 0){
-	  flag = 0;
-	}
+        if(strcmp(constants_in_alg[i], Compartment_getId(initAssign[i]->target_compartment->origin)) == 0){
+          flag = 0;
+        }
       }
     }
     if(flag){
       if(initAssign[i]->target_species != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(initAssign[i]->target_species->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Species_getId(initAssign[i]->target_species->origin);
       }
       if(initAssign[i]->target_parameter != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Parameter_getId(initAssign[i]->target_parameter->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Parameter_getId(initAssign[i]->target_parameter->origin);
       }
       if(initAssign[i]->target_compartment != NULL){
-	constants_in_alg[num_of_constants_in_alg++] = (char*)Compartment_getId(initAssign[i]->target_compartment->origin);
+        constants_in_alg[num_of_constants_in_alg++] = (char*)Compartment_getId(initAssign[i]->target_compartment->origin);
       }
     }
   }
@@ -266,13 +266,13 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     }
   }
   for(i=0; i<Model_getNumParameters(m); i++){
-      local_param = (Parameter_t*)ListOf_get(Model_getListOfParameters(m), i);
+    local_param = (Parameter_t*)ListOf_get(Model_getListOfParameters(m), i);
     if(Parameter_getConstant(local_param)){
       constants_in_alg[num_of_constants_in_alg++] = (char*)Parameter_getId(local_param);
     }
   }
   for(i=0; i<Model_getNumCompartments(m); i++){
-      local_comp = (Compartment_t*)ListOf_get(Model_getListOfCompartments(m), i);
+    local_comp = (Compartment_t*)ListOf_get(Model_getListOfCompartments(m), i);
     if(Compartment_getConstant(local_comp)){
       constants_in_alg[num_of_constants_in_alg++] = (char*)Compartment_getId(local_comp);
     }
@@ -301,7 +301,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
     flag = 1;
     for(j=0; j<num_of_constants_in_alg; j++){
       if(strcmp(included_id_in_alg[i], constants_in_alg[j]) == 0){
-	flag = 0;
+        flag = 0;
       }
     }
     if(flag){
@@ -312,7 +312,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
   for(i=0; i<algEq->num_of_algebraic_variables; i++){
     dbg_printf("%s\n", algEq->variables_id[i]);
   }
- 
+
   //get coeffient
   dbg_printf("get coefficient matrix\n");
   for(i=0; i<Model_getNumRules(m); i++){
@@ -324,15 +324,15 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       dbg_printf("algebraic AST is\n");
       check_AST(node, NULL);
       for(j=0; j<algEq->num_of_algebraic_variables; j++){
-	myNode = (myASTNode*)malloc(sizeof(myASTNode));
-	copied_myAST[num_of_copied_myAST++] = myNode;
-	myNode->origin = node;
-	myNode->parent = NULL;
-	myNode->left = NULL;
-	myNode->right = NULL;
-	myASTNode_create(myNode, node, copied_myAST, &num_of_copied_myAST);
-	_prepare_algebraic2(m, myNode, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, algEq->variables_id[j], j, mem);
-	myASTNode_free(copied_myAST, num_of_copied_myAST);
+        myNode = (myASTNode*)malloc(sizeof(myASTNode));
+        copied_myAST[num_of_copied_myAST++] = myNode;
+        myNode->origin = node;
+        myNode->parent = NULL;
+        myNode->left = NULL;
+        myNode->right = NULL;
+        myASTNode_create(myNode, node, copied_myAST, &num_of_copied_myAST);
+        _prepare_algebraic2(m, myNode, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, algEq->variables_id[j], j, mem);
+        myASTNode_free(copied_myAST, num_of_copied_myAST);
       }
     }
   }
@@ -340,11 +340,11 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
   if(algEq->num_of_algebraic_rules > 1){
     for(i=0; i<algEq->num_of_algebraic_rules; i++){
       for(j=0; j<algEq->num_of_algebraic_rules; j++){
-	if(algEq->coefficient_matrix[i][j]->math_length == 0){
-	  node = ASTNode_createWithType(AST_INTEGER);
-	  ASTNode_setInteger(node, 0);
-	  algEq->coefficient_matrix[i][j]->math_length = get_equation(m, algEq->coefficient_matrix[i][j], sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
-	}
+        if(algEq->coefficient_matrix[i][j]->math_length == 0){
+          node = ASTNode_createWithType(AST_INTEGER);
+          ASTNode_setInteger(node, 0);
+          algEq->coefficient_matrix[i][j]->math_length = get_equation(m, algEq->coefficient_matrix[i][j], sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        }
       }
     }
   }

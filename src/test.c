@@ -34,12 +34,12 @@ int main(int argc, char *argv[]){
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-//    print_result(rtn);
+    //    print_result(rtn);
     write_result(rtn, "test.dat");
-//    write_csv(rtn, "test.csv");
+    //    write_csv(rtn, "test.csv");
     write_separate_result(rtn, "./simulation_results/species_result_exp10.dat",
-                               "./simulation_results/parameter_result_exp10.dat",
-                               "./simulation_results/compartment_result_exp10.dat");
+        "./simulation_results/parameter_result_exp10.dat",
+        "./simulation_results/compartment_result_exp10.dat");
   }
 
   SBMLDocument_free(d);

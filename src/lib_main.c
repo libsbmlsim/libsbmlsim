@@ -3,13 +3,13 @@
 /* libSBMLSimulator API */
 
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
-	SBMLDocument_t* d;
-	Model_t* m;
+  SBMLDocument_t* d;
+  Model_t* m;
   myResult result;
   myResult *rtn;
-	d = readSBMLFromString(str);
-	m = SBMLDocument_getModel(d);
-	rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  d = readSBMLFromString(str);
+  m = SBMLDocument_getModel(d);
+  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   SBMLDocument_free(d);
   return rtn;
 }
@@ -60,63 +60,63 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   myResult* rtn;
 
   switch(method) {
-  case 1:
-    dbg_printf("simulate with runge kutta\n");
-    order = 4;
-    is_explicit = 1;
-    break;
-  case 2:
-    dbg_printf("simulate with Backward-Euler\n");
-    order = 0;
-    break;
-  case 3:
-    dbg_printf("simulate with AM2(Crank-Nicolson)\n");
-    order = 1;
-    break;
-  case 4:
-    dbg_printf("simulate with AM3\n");
-    order = 2;
-    break;
-  case 5:
-    dbg_printf("simulate with AM4\n");
-    order = 3;
-    break;
-  case 6:
-    dbg_printf("simulate with BD2\n");
-    order = 4;
-    break;
-  case 7:
-    dbg_printf("simulate with BD3\n");
-    order = 5;
-    break;
-  case 8:
-    dbg_printf("simulate with BD4\n");
-    order = 6;
-    break;
-  case 9:
-    dbg_printf("simulate with AB1(Euler)\n");
-    order = 0;
-    is_explicit = 1;
-    break;
-  case 10:
-    dbg_printf("simulate with AB2\n");
-    order = 1;
-    is_explicit = 1;
-    break;
-  case 11:
-    dbg_printf("simulate with AB3\n");
-    order = 2;
-    is_explicit = 1;
-    break;
-  case 12:
-    dbg_printf("simulate with AB4\n");
-    order = 3;
-    is_explicit = 1;
-    break;
-  default:
-    dbg_printf("simulate with runge kutta\n");
-    order = 4;
-    break;
+    case 1:
+      dbg_printf("simulate with runge kutta\n");
+      order = 4;
+      is_explicit = 1;
+      break;
+    case 2:
+      dbg_printf("simulate with Backward-Euler\n");
+      order = 0;
+      break;
+    case 3:
+      dbg_printf("simulate with AM2(Crank-Nicolson)\n");
+      order = 1;
+      break;
+    case 4:
+      dbg_printf("simulate with AM3\n");
+      order = 2;
+      break;
+    case 5:
+      dbg_printf("simulate with AM4\n");
+      order = 3;
+      break;
+    case 6:
+      dbg_printf("simulate with BD2\n");
+      order = 4;
+      break;
+    case 7:
+      dbg_printf("simulate with BD3\n");
+      order = 5;
+      break;
+    case 8:
+      dbg_printf("simulate with BD4\n");
+      order = 6;
+      break;
+    case 9:
+      dbg_printf("simulate with AB1(Euler)\n");
+      order = 0;
+      is_explicit = 1;
+      break;
+    case 10:
+      dbg_printf("simulate with AB2\n");
+      order = 1;
+      is_explicit = 1;
+      break;
+    case 11:
+      dbg_printf("simulate with AB3\n");
+      order = 2;
+      is_explicit = 1;
+      break;
+    case 12:
+      dbg_printf("simulate with AB4\n");
+      order = 3;
+      is_explicit = 1;
+      break;
+    default:
+      dbg_printf("simulate with runge kutta\n");
+      order = 4;
+      break;
   }
 
   //simulation

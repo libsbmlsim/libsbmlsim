@@ -37,6 +37,6 @@ int lu_solve(double **A, int *p, int N, double *b){
     }
     b[j] = sum / A[j][j];
   }
-  
+
   return 0;
 }
