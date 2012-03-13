@@ -49,20 +49,20 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     mySp[i]->origin = sp;
     if(Species_isSetInitialAmount(sp)){
       mySp[i]->value = Species_getInitialAmount(sp);
-      mySp[i]->is_amount = 1;
-      mySp[i]->is_concentration = 0;
+      mySp[i]->is_amount = true;
+      mySp[i]->is_concentration = false;
     }else if(Species_isSetInitialConcentration(sp)){
       mySp[i]->value = Species_getInitialConcentration(sp);
-      mySp[i]->is_amount = 0;
-      mySp[i]->is_concentration = 1;
+      mySp[i]->is_amount = false;
+      mySp[i]->is_concentration = true;
     }else if(Species_getHasOnlySubstanceUnits(sp) || Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) == 0){
       mySp[i]->value = 0;
-      mySp[i]->is_amount = 1;
-      mySp[i]->is_concentration = 0;      
+      mySp[i]->is_amount = true;
+      mySp[i]->is_concentration = false;      
     }else{
       mySp[i]->value = 0;
-      mySp[i]->is_amount = 0;
-      mySp[i]->is_concentration = 1;
+      mySp[i]->is_amount = false;
+      mySp[i]->is_concentration = true;
     }
     mySp[i]->has_only_substance_units = Species_getHasOnlySubstanceUnits(sp);
     mySp[i]->temp_value = mySp[i]->value;
@@ -617,7 +617,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     if(Trigger_isSetPersistent(Event_getTrigger(event))){
       myEv[i]->is_persistent = Trigger_getPersistent(Event_getTrigger(event));
     }else{
-      myEv[i]->is_persistent = 1;
+      myEv[i]->is_persistent = true;
     }
     node = (ASTNode_t*)Trigger_getMath(Event_getTrigger(event));
     node = ASTNode_deepCopy(node);
@@ -635,7 +635,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     if(Trigger_isSetInitialValue(Event_getTrigger(event))){
       myEv[i]->is_able_to_fire = !Trigger_getInitialValue(Event_getTrigger(event));
     }else{
-      myEv[i]->is_able_to_fire = 1;
+      myEv[i]->is_able_to_fire = true;
     }
     myEv[i]->assignments = (myEventAssignment**)malloc(sizeof(myEventAssignment*)*Event_getNumEventAssignments(event));
     for(j=0; j<Event_getNumEventAssignments(event); j++){

@@ -27,6 +27,9 @@
 #define MAX_TIME_VARIANT_ASSIGNMENT 1024
 #define MAX_INCLUDING_SPECIES 256
 
+// Boolean
+typedef enum _boolean { false, true } boolean;
+
 //structures for efficient simulation
 typedef struct _equation equation;
 typedef struct _mySpecies mySpecies;
@@ -62,8 +65,8 @@ struct _mySpecies{
   Species_t *origin;
   double value;
   double temp_value;
-  int is_amount;
-  int is_concentration;
+  boolean is_amount;
+  boolean is_concentration;
   int has_only_substance_units;
   myCompartment *locating_compartment;
   double k[4]; //for runge kutta
@@ -117,8 +120,8 @@ struct _myReaction{
   int num_of_products;
   mySpeciesReference **reactants;
   int num_of_reactants;
-  int is_fast;
-  int is_reversible;
+  boolean is_fast;
+  boolean is_reversible;
   equation *products_equili_numerator;
   equation *reactants_equili_numerator;
 };
@@ -130,9 +133,9 @@ struct _myRule{
   myParameter *target_parameter;
   myCompartment *target_compartment;
   mySpeciesReference *target_species_reference;
-  int is_rate;
-  int is_assignment;
-  int is_algebraic;
+  boolean is_rate;
+  boolean is_assignment;
+  boolean is_algebraic;
 };
 
 struct _timeVariantAssignments{
@@ -145,12 +148,12 @@ struct _myEvent{
   Event_t *origin;
   equation *eq; //condition equation
   myEventAssignment** assignments;
-  int is_able_to_fire;
+  boolean is_able_to_fire;
   myDelay *event_delay;
   double *firing_times;
   int num_of_delayed_events_que;
   int next_firing_index;
-  int is_persistent;
+  boolean is_persistent;
   equation *priority_eq;
 };
 
@@ -314,7 +317,7 @@ void check_num(int num_of_species, int num_of_parameters, int num_of_compartment
 void create_calc_object_list(int num_of_species, int num_of_parameters, int num_of_compartments, int num_of_reactions, int num_of_all_var_species, int num_of_all_var_parameters, int num_of_all_var_compartments, int num_of_all_var_species_reference, int num_of_var_species, int num_of_var_parameters, int num_of_var_compartments, int num_of_var_species_reference, mySpecies *all_var_sp[], myParameter *all_var_param[], myCompartment *all_var_comp[], mySpeciesReference *all_var_spr[], mySpecies *var_sp[], myParameter *var_param[], myCompartment *var_comp[], mySpeciesReference *var_spr[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
 
 //function for checking whether string is number
-int str_is_number(const char *str);
+boolean str_is_number(const char *str);
 
 //chomp
 void chomp(char *str);
@@ -366,13 +369,13 @@ void initialize_delay_val(mySpecies *sp[], int num_of_species, myParameter *para
 //substitute delay val
 void substitute_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, int cycle);
 
-//following functions are defined in math_functions.c
-//factorial
-long long int factorial(int n);
-
 //Run Simulation and output CSV
 myResult* simulateSBMLModel(Model_t *m, myResult *result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 //Run Simulation from SBML string
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+
+//following functions are defined in math_functions.c
+//factorial
+long long int factorial(int n);
 

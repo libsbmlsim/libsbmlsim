@@ -1,6 +1,8 @@
 #include<stdio.h>
+#include "sbml/SBMLTypes.h"
+#include "header.h"
 
-int str_is_number(const char *str){
+boolean str_is_number(const char *str){
   int i = 0;
   int dot_count = 0;
   while(str[i] != '\0'){
@@ -9,7 +11,7 @@ int str_is_number(const char *str){
     }else if(str[i] == 46){
       dot_count++;
       if(dot_count > 1){
-	return 0;
+        return 0;
       }
     }
     i++;

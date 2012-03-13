@@ -40,16 +40,16 @@ void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_bu
       is_condition_satisfied = 1;
     }else{
       is_condition_satisfied = 0;
-      event[i]->is_able_to_fire = 1;
+      event[i]->is_able_to_fire = true;
     }
     //firing flag determination
     if(is_condition_satisfied && event[i]->is_able_to_fire){
       if(event[i]->event_delay == NULL){
 	flag = 1;
-	event[i]->is_able_to_fire = 0;
+	event[i]->is_able_to_fire = false;
       }else{
 	event[i]->firing_times[event[i]->num_of_delayed_events_que++] = time + calc(event[i]->event_delay->eq, dt, cycle, reverse_time, 0);
-	event[i]->is_able_to_fire = 0;
+	event[i]->is_able_to_fire = false;
       }
     }
     //delay event firing determination

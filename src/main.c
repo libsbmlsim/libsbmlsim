@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
   extern int optind, opterr;
 
   char *myname;
-  int use_lazy_method = -1;
+  boolean use_lazy_method = -1;
   int is_explicit = 0;
   int print_amount = 0;
 
@@ -71,29 +71,29 @@ int main(int argc, char *argv[]){
   myname = argv[0];
   while ((ch = getopt(argc, argv, "t:s:d:m:lna")) != -1){
     switch (ch) {
-    case 't':
-      sim_time = atof(optarg);
-      break;
-    case 's':
-      step = atoi(optarg);
-      break;
-    case 'd':
-      delta = atof(optarg);
-      break;
-    case 'm':
-      method = atoi(optarg);
-      break;
-    case 'l':
-      use_lazy_method = 1;
-      break;
-    case 'n':
-      use_lazy_method = 0;
-      break;
-    case 'a':
-      print_amount = 1;
-      break;
-    default:
-      usage(myname);
+      case 't':
+        sim_time = atof(optarg);
+        break;
+      case 's':
+        step = atoi(optarg);
+        break;
+      case 'd':
+        delta = atof(optarg);
+        break;
+      case 'm':
+        method = atoi(optarg);
+        break;
+      case 'l':
+        use_lazy_method = true;
+        break;
+      case 'n':
+        use_lazy_method = false;
+        break;
+      case 'a':
+        print_amount = 1;
+        break;
+      default:
+        usage(myname);
     }
   }
   argc -= optind;
@@ -104,12 +104,12 @@ int main(int argc, char *argv[]){
     usage(myname);
   }
   d = readSBML(argv[0]);
-/*   if(SBMLDocument_getNumErrors(d) > 0){ */
-/*     printf("Input file [%s] is not an appropriate SBML file\n", argv[0]); */
-/*     exit(1); */
-/*   } */
+  /*   if(SBMLDocument_getNumErrors(d) > 0){ */
+  /*     printf("Input file [%s] is not an appropriate SBML file\n", argv[0]); */
+  /*     exit(1); */
+  /*   } */
   m = SBMLDocument_getModel(d);
-  
+
   //determine sim_time
   if(sim_time == 0){
     while(1){
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
       fgets(buf1, 256, stdin);
       chomp(buf1);
       if(str_is_number(buf1)){
-	break;
+        break;
       }
       printf("not a number!\n");
     }
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]){
       fgets(buf1, 256, stdin);
       chomp(buf1);
       if(str_is_number(buf1)){
-	break;
+        break;
       }
       printf("not a number!\n");
     }
@@ -202,70 +202,70 @@ int main(int argc, char *argv[]){
       fgets(buf2, 256, stdin);
       method = atoi(buf2);
       if (method < 1 || method > 12) {
-	printf("Invalid Input!\nSelect and input the number \"1~12\"");
+        printf("Invalid Input!\nSelect and input the number \"1~12\"");
       } else {
-	break;
+        break;
       }
     }
   }
   switch(method) {
-  case 1:
-    printf("  simulate with runge kutta\n");
-    order = 4;
-    is_explicit = 1;
-    break;
-  case 2:
-    printf("  simulate with Backward-Euler\n");
-    order = 0;
-    break;
-  case 3:
-    printf("  simulate with AM2(Crank-Nicolson)\n");
-    order = 1;
-    break;
-  case 4:
-    printf("  simulate with AM3\n");
-    order = 2;
-    break;
-  case 5:
-    printf("  simulate with AM4\n");
-    order = 3;
-    break;
-  case 6:
-    printf("  simulate with BD2\n");
-    order = 4;
-    break;
-  case 7:
-    printf("  simulate with BD3\n");
-    order = 5;
-    break;
-  case 8:
-    printf("  simulate with BD4\n");
-    order = 6;
-    break;
-  case 9:
-    printf("  simulate with AB1(Euler)\n");
-    order = 0;
-    is_explicit = 1;
-    break;
-  case 10:
-    printf("  simulate with AB2\n");
-    order = 1;
-    is_explicit = 1;
-    break;
-  case 11:
-    printf("  simulate with AB3\n");
-    order = 2;
-    is_explicit = 1;
-    break;
-  case 12:
-    printf("  simulate with AB4\n");
-    order = 3;
-    is_explicit = 1;
-    break;
-  default:
-    printf("  simulate with runge kutta\n");
-    order = 4;
-    break;
+    case 1:
+      printf("  simulate with runge kutta\n");
+      order = 4;
+      is_explicit = 1;
+      break;
+    case 2:
+      printf("  simulate with Backward-Euler\n");
+      order = 0;
+      break;
+    case 3:
+      printf("  simulate with AM2(Crank-Nicolson)\n");
+      order = 1;
+      break;
+    case 4:
+      printf("  simulate with AM3\n");
+      order = 2;
+      break;
+    case 5:
+      printf("  simulate with AM4\n");
+      order = 3;
+      break;
+    case 6:
+      printf("  simulate with BD2\n");
+      order = 4;
+      break;
+    case 7:
+      printf("  simulate with BD3\n");
+      order = 5;
+      break;
+    case 8:
+      printf("  simulate with BD4\n");
+      order = 6;
+      break;
+    case 9:
+      printf("  simulate with AB1(Euler)\n");
+      order = 0;
+      is_explicit = 1;
+      break;
+    case 10:
+      printf("  simulate with AB2\n");
+      order = 1;
+      is_explicit = 1;
+      break;
+    case 11:
+      printf("  simulate with AB3\n");
+      order = 2;
+      is_explicit = 1;
+      break;
+    case 12:
+      printf("  simulate with AB4\n");
+      order = 3;
+      is_explicit = 1;
+      break;
+    default:
+      printf("  simulate with runge kutta\n");
+      order = 4;
+      break;
   }
 
   //simulation
@@ -274,19 +274,19 @@ int main(int argc, char *argv[]){
   }else{
     if (use_lazy_method == -1) {
       while(1){
-	printf("use lazy mode?\nlazy mode:using jacobian continuously while the solutions of equations are converging in newton method.\nyes(y) or no(n)\n");
-	fgets(buf3, 256, stdin);
-	if(strcmp(buf3, "y\n") == 0 || strcmp(buf3, "yes\n") == 0) {
-	  use_lazy_method = 1;
-	  break;
-	} else if(strcmp(buf3, "n\n") == 0 || strcmp(buf3, "no\n") == 0) {
-	  use_lazy_method = 0;
-	  break;
-	}
-	printf("Invalid Input!!!\nSelect yes(y) or no(n)\n");
+        printf("use lazy mode?\nlazy mode:using jacobian continuously while the solutions of equations are converging in newton method.\nyes(y) or no(n)\n");
+        fgets(buf3, 256, stdin);
+        if(strcmp(buf3, "y\n") == 0 || strcmp(buf3, "yes\n") == 0) {
+          use_lazy_method = true;
+          break;
+        } else if(strcmp(buf3, "n\n") == 0 || strcmp(buf3, "no\n") == 0) {
+          use_lazy_method = false;
+          break;
+        }
+        printf("Invalid Input!!!\nSelect yes(y) or no(n)\n");
       }
     }
-    if(use_lazy_method == 1) {
+    if(use_lazy_method == true) {
       printf("  simulate with lazy mode\n");
     }
     rtn = simulate_implicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
@@ -298,11 +298,11 @@ int main(int argc, char *argv[]){
   } else {
     write_csv(rtn, "out.csv"); // for SBML test suite
     /* for more generic simulator
-    write_separate_result(rtn,
-        "./simulation_results/species_result.dat",
-        "./simulation_results/parameter_result.dat",
-        "./simulation_results/compartment_result.dat");
-     */
+       write_separate_result(rtn,
+       "./simulation_results/species_result.dat",
+       "./simulation_results/parameter_result.dat",
+       "./simulation_results/compartment_result.dat");
+       */
   }
 
   //print result list
