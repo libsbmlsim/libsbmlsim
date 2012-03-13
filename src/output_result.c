@@ -27,7 +27,7 @@ void print_result_to_file(myResult* result, char* file, char delimiter){
   }
 }
 
-void output_result(myResult* result, FILE* fp, char delimiter){
+void output_result0(myResult* result, FILE* fp, char delimiter){
   int i, j;
   double *value_p = result->values;
 
@@ -47,6 +47,51 @@ void output_result(myResult* result, FILE* fp, char delimiter){
         fprintf(fp, "%c%.16g", delimiter, *(value_p));
       }
       value_p++;
+    }
+    fprintf(fp, "\n");
+  }
+}
+
+void output_result(myResult* result, FILE* fp, char delimiter){
+  int i, j;
+  double *value_time_p  = result->values_time;
+  double *value_sp_p    = result->values_sp;
+  double *value_param_p = result->values_param;
+  double *value_comp_p  = result->values_comp;
+
+  // Column name (time)
+  fprintf(fp, "%s", result->column_name_time);
+  // Column name (Species)
+  for (i = 0; i < result->num_of_columns_sp; i++) {
+    fprintf(fp, "%c%s", delimiter, result->column_name_sp[i]);
+  }
+  // Column name (Parameters)
+  for (i = 0; i < result->num_of_columns_param; i++) {
+    fprintf(fp, "%c%s", delimiter, result->column_name_param[i]);
+  }
+  // Column name (Compartments)
+  for (i = 0; i < result->num_of_columns_comp; i++) {
+    fprintf(fp, "%c%s", delimiter, result->column_name_comp[i]);
+  }
+  fprintf(fp, "\n");
+
+  for (i = 0; i < result->num_of_rows; i++) {
+    fprintf(fp, "%.16g", *(value_time_p));
+    value_time_p++;
+    // Species
+    for (j = 0; j < result->num_of_columns_sp; j++) {
+      fprintf(fp, "%c%.16g", delimiter, *(value_sp_p));
+      value_sp_p++;
+    }
+    // Parameters
+    for (j = 0; j < result->num_of_columns_param; j++) {
+      fprintf(fp, "%c%.16g", delimiter, *(value_param_p));
+      value_param_p++;
+    }
+    // Compartments
+    for (j = 0; j < result->num_of_columns_comp; j++) {
+      fprintf(fp, "%c%.16g", delimiter, *(value_comp_p));
+      value_comp_p++;
     }
     fprintf(fp, "\n");
   }
