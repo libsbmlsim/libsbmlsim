@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void create_calc_object_list(int num_of_species, int num_of_parameters, int num_of_compartments, int num_of_reactions, int num_of_all_var_species, int num_of_all_var_parameters, int num_of_all_var_compartments, int num_of_all_var_species_reference, int num_of_var_species, int num_of_var_parameters, int num_of_var_compartments, int num_of_var_species_reference, mySpecies *all_var_sp[], myParameter *all_var_param[], myCompartment *all_var_comp[], mySpeciesReference *all_var_spr[], mySpecies *var_sp[], myParameter *var_param[], myCompartment *var_comp[], mySpeciesReference *var_spr[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]){
 

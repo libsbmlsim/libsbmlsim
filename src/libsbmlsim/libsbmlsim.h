@@ -1,31 +1,13 @@
-//debug print
-//#define DEBUG_PRINT
-#ifdef DEBUG_PRINT
-#define dbg_printf printf
-#else
-#define dbg_printf 1 ? (void) 0 : printf
-#endif
+#ifndef LibSBMLSim_h
+#define LibSBMLSim_h
 
-//progress print
-//#define PROGRESS_PRINT
-#ifdef PROGRESS_PRINT
-#define prg_printf printf
-#else
-#define prg_printf 1 ? (void) 0 : printf
-#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <sbml/SBMLTypes.h>
 
-//define
-#define MAX_MATH_LENGTH 256
-#define MAX_DELAY_REACTION_NUM 256
-#define MAX_ARG_NUM 256
-#define MAX_ALLOCATED_MEMORY 1024
-#define MAX_COPIED_AST 1024
-#define MAX_ALGEBRAIC_VARIABLES 1024
-#define MAX_ALGEBRAIC_CONSTANTS 1024
-#define MAX_IDENTICAL_EVENTS 256
-#define MAX_EVENTASSIGNMENTS 256
-#define MAX_TIME_VARIANT_ASSIGNMENT 1024
-#define MAX_INCLUDING_SPECIES 256
+#include "common.h"
 
 // Boolean
 typedef enum _boolean { false, true } boolean;
@@ -379,3 +361,4 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
 //factorial
 long long int factorial(int n);
 
+#endif  /* LibSBMLSim_h */

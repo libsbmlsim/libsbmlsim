@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 //create contents of myResult object
 void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval) {

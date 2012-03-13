@@ -1,12 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <time.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void substitute_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, int cycle){
   int i, j;

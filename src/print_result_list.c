@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]){
   FILE *fp;

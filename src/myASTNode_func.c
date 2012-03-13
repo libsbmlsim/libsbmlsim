@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void myASTNode_create(myASTNode *myNode, ASTNode_t *node, myASTNode *copied_myAST[], int *num_of_copied_myAST){
   ASTNode_t *left, *right;

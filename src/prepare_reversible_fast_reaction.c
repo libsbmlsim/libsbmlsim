@@ -1,12 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <time.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re_whole[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r, allocated_memory *mem){
   ASTNode_t *minus_node, *zero_node, *final_eq_node;

@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void set_local_para_as_value(ASTNode_t *node, KineticLaw_t *kl){
   int i;

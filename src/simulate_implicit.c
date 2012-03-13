@@ -1,13 +1,5 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <time.h>
-#include <float.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 //coefficient matrix for implicit numerical integration
 int c_i[7][9] = {{1, -1, 0, 0, 0, -1, 0, 0, 0}, //AM1 & AM2 (Backward-Euler) : orcer = 0

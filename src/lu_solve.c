@@ -1,17 +1,12 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
-/*AはN*Nの正方行列*/
-/*pはピボット交換した行を格納している*/
-/*p[0] = 4 ならば、0行目は4行目と交換している*/
-/*同時にp[4] = 0 となっている*/
-/*b は定数列ベクトル Ax=b*/
+/* 
+ * A = N*N (matrix).
+ * p contains an index of rows where pivot is exchanged.
+ * b is vector of contant column: Ax = b.
+ * (ex.) p[0] = 4 ... row 0 and 4 are exchanged.
+ *                    at the same time, p[4] = 0.
+ */
 int lu_solve(double **A, int *p, int N, double *b){
   float sum;
   int i, j;
@@ -24,8 +19,8 @@ int lu_solve(double **A, int *p, int N, double *b){
       b[p[j]]= tmp;
     }
   }
-  /*## Ly=b を解いてyを求める LはAの下三角 ##*/
-  /*## 前進代入 ##*/
+  /* Solve Ly = b, and obtain y. L: lower triangular matrix of A */
+  /* Forward substitution */
   for(j=0; j<N; j++){
     sum = b[j];
     for(i=0;i<j;i++){
@@ -33,8 +28,8 @@ int lu_solve(double **A, int *p, int N, double *b){
     }
     b[j] = sum;
   }
-  /*## Ux=y を解いてx(b)を求める UはAの上三角 ##*/
-  /*## 後退代入 ##*/
+  /* Solve Ux = y, and obtain x(b). U: upper triangular matrix of A */
+  /* Backward substitution */
   for(j=N-1; j>=0; j--){
     sum = b[j];
     for(i=N-1; i>j; i--){

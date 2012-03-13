@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include "libsbmlsim/libsbmlsim.h"
 
 void chomp(char *str){
   int i;

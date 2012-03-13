@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <unistd.h>
+#include "libsbmlsim/libsbmlsim.h"
 
 void print_node_type(ASTNode_t *node){
   int type;

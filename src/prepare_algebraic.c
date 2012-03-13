@@ -1,11 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], int *num_of_included_id_in_alg);
 void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem);

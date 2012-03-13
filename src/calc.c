@@ -1,15 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <float.h>
-#include "header.h"
-
-#define EPSIRON 1.0e-8
-#define DOUBLE_EQ(x, v) (((v-EPSIRON) < x) && (x < (v+EPSIRON)))
+#include "libsbmlsim/libsbmlsim.h"
 
 double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_order){
   int i;

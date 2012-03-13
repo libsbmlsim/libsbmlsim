@@ -1,12 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <time.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 int list_has_element(char *list[], int list_length, char *element){
   int i;

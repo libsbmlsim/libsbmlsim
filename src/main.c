@@ -1,12 +1,5 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
 #include <unistd.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void usage(char *str) {
   printf("Usage : %s [option] filename(SBML file only)\n", str);

@@ -1,14 +1,7 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
-//Extended SBML_simulator_1028 
-//improved in main.c optget
-//processing for compartment is added
+/* libSBMLSimulator API */
+
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
 	SBMLDocument_t* d;
 	Model_t* m;

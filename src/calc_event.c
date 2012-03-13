@@ -1,12 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <float.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_buf[], int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time){
   int i, j, k;

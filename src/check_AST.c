@@ -1,12 +1,4 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include <unistd.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void check_AST(ASTNode_t* node, ASTNode_t* parent){
   int i;

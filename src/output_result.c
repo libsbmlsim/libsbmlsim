@@ -1,12 +1,5 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
 #include <errno.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 void print_result(myResult* result){
   output_result(result, stdout, ' ');

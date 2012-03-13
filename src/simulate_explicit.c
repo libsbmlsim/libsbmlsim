@@ -1,13 +1,5 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
 #include <time.h>
-#include <float.h>
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 //coefficient matrix for Adams Bashforth
 double c_e[4][4] = {{1.0, 0, 0, 0}, //AB1 (Euler) : order = 0

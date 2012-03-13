@@ -1,6 +1,4 @@
-#include<stdio.h>
-#include "sbml/SBMLTypes.h"
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
 boolean str_is_number(const char *str){
   int i = 0;

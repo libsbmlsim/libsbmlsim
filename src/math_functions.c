@@ -1,5 +1,4 @@
-#include <stdio.h> 
-#include <math.h>
+#include "libsbmlsim/libsbmlsim.h"
 
 long long int factorial(int n){
   int i;

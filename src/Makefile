@@ -47,7 +47,7 @@ $(BUILD_TEST): $(OBJS_TEST) $(BUILD_SHARED_LIB)
 	$(CC) $(CFLAGS) $(OBJS_TEST) -o test -L. -lsbmlsim -lsbml
 
 ### include ###
-$(OBJS): header.h
+$(OBJS): libsbmlsim/libsbmlsim.h
 
 ### clean up! ###
 .PHONY: clean

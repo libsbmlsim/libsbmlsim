@@ -1,17 +1,11 @@
-#include "sbml/common/common.h"
-#include "sbml/SBMLReader.h"
-#include "sbml/SBMLTypes.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h> 
-#include "header.h"
+#include "libsbmlsim/libsbmlsim.h"
 
-/*ピボット交換ありのLU分解*/
-/*AはN*Nの正方行列*/
-/*pはピボット交換した行を格納している*/
-/*p[0] = 4 ならば、0行目は4行目と交換している*/
-/*同時にp[4] = 0 となっている*/
+/* LU decomposition with pivoting
+ * A = N*N (matrix)
+ * p contains an index of rows where pivot is exchanged.
+ * (ex.) p[0] = 4 ... row 0 and 4 are exchanged.
+ *                    at the same time, p[4] = 0.
+ */
 int lu_decomposition(double **A, int *p, int N){
   float Eps;
   int i, j, t;
