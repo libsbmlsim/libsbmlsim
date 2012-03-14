@@ -27,6 +27,12 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   int num_of_events;
   int num_of_initialAssignments;
   mySpecies **mySp;
+  myParameter **myParam;
+  myCompartment **myComp;
+  myReaction **myRe;
+  myRule **myRu;
+  myEvent **myEv;
+  myInitialAssignment **myInitAssign;
   //prepare myAlgebraicEquations
   myAlgebraicEquations *myAlgEq = NULL;
   //prepare timeVariantAssignments
@@ -35,10 +41,11 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   myResult* rtn;
 
   allocated_memory *mem;
+  copied_AST *cp_AST;
+
   mem = (allocated_memory*)malloc(sizeof(allocated_memory));
   mem->num_of_allocated_memory = 0;
 
-  copied_AST *cp_AST;
   cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
   cp_AST->num_of_copied_AST = 0;
 
@@ -48,22 +55,28 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   mySp = (mySpecies**)malloc(sizeof(mySpecies*) * num_of_species);
   //prepare myParameters
   num_of_parameters = Model_getNumParameters(m);
-  myParameter *myParam[num_of_parameters];
+  myParam = (myParameter**)malloc(sizeof(myParameter*) * num_of_parameters);
+  //myParameter *myParam[num_of_parameters];
   //prepare myCompartments
   num_of_compartments = Model_getNumCompartments(m);
-  myCompartment *myComp[num_of_compartments];
+  myComp = (myCompartment**)malloc(sizeof(mySpecies*) * num_of_compartments);
+  //myCompartment *myComp[num_of_compartments];
   //prepare myReactions
   num_of_reactions = Model_getNumReactions(m);
-  myReaction *myRe[num_of_reactions];
+  myRe = (myReaction**)malloc(sizeof(myReaction*) * num_of_reactions);
+  //myReaction *myRe[num_of_reactions];
   //prepare myRules
   num_of_rules = Model_getNumRules(m);
-  myRule *myRu[num_of_rules];
+  myRu = (myRule**)malloc(sizeof(myRule*) * num_of_rules);
+  //myRule *myRu[num_of_rules];
   //prepare myEvents
   num_of_events = Model_getNumEvents(m);  
-  myEvent *myEv[num_of_events];
+  myEv = (myEvent**)malloc(sizeof(myEvent*) * num_of_events);
+  //myEvent *myEv[num_of_events];
   //prepare myInitial Assignments
   num_of_initialAssignments = Model_getNumInitialAssignments(m);
-  myInitialAssignment *myInitAssign[num_of_initialAssignments];
+  myInitAssign = (myInitialAssignment**)malloc(sizeof(myInitialAssignment*) * num_of_initialAssignments);
+  //myInitialAssignment *myInitAssign[num_of_initialAssignments];
   //create myObjects
   create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
   //create myResult
