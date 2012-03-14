@@ -16,7 +16,6 @@ void seed_set_ex(){
 }
 
 myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem){
-  seed_set_ex();
   int i, j, cycle;
   double reverse_time;
   double *value_time_p = result->values_time;
@@ -41,6 +40,8 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   int num_of_var_parameters = 0; //num of parameters whose value changes, but not by assignment, algebraic rule
   int num_of_var_compartments = 0; //num of compartments whose value changes, but not by assignment, algebraic rule
   int num_of_var_species_reference = 0;
+
+  seed_set_ex();
 
   check_num(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, &num_of_all_var_species, &num_of_all_var_parameters, &num_of_all_var_compartments, &num_of_all_var_species_reference, &num_of_var_species, &num_of_var_parameters, &num_of_var_compartments, &num_of_var_species_reference, sp, param, comp, re);
 
