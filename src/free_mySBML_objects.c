@@ -13,6 +13,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(mySp[i]);
   }
+  free(mySp);
   for(i=0; i<Model_getNumParameters(m); i++){
     if(myParam[i]->delay_val != NULL){
       for(j=0; j<(int)(sim_time/dt+1); j++){
@@ -22,6 +23,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(myParam[i]);
   }
+  free(myParam);
   for(i=0; i<Model_getNumCompartments(m); i++){
     if(myComp[i]->delay_val != NULL){
       for(j=0; j<(int)(sim_time/dt+1); j++){
@@ -31,6 +33,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(myComp[i]);
   }
+  free(myComp);
   for(i=0; i<Model_getNumReactions(m); i++){
     for(j=0; j<myRe[i]->num_of_products; j++){
       free(myRe[i]->products[j]);
@@ -49,12 +52,14 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(myRe[i]);
   }
+  free(myRe);
   for(i=0; i<Model_getNumRules(m); i++){
     if(!myRu[i]->is_algebraic){
       free(myRu[i]->eq);
     }
     free(myRu[i]);
   }
+  free(myRu);
   for(i=0; i<Model_getNumEvents(m); i++){
     for(j=0; j<Event_getNumEventAssignments(myEv[i]->origin); j++){
       free(myEv[i]->assignments[j]->eq);
@@ -71,10 +76,12 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(myEv[i]);
   }
+  free(myEv);
   for(i=0; i<Model_getNumInitialAssignments(m); i++){
     free(myInitAssign[i]->eq);
     free(myInitAssign[i]);
   }
+  free(myInitAssign);
   if(myAlgEq != NULL){
     if(myAlgEq->num_of_algebraic_variables > 1){
       for(i=0; i<myAlgEq->num_of_algebraic_variables; i++){
