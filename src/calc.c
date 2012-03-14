@@ -270,7 +270,6 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_RELATIONAL_EQ:
           //dbg_printf("operate eq\n");
-          //if(stack[pos-2] == stack[pos-1]){
           //dbg_printf("EQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
           if(DOUBLE_EQ(stack[pos-2], stack[pos-1])){
             stack[pos-2] = 1;
@@ -281,7 +280,6 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_RELATIONAL_NEQ:
           //dbg_printf("operate neq\n");
-          //if(stack[pos-2] != stack[pos-1]){
           //dbg_printf("NEQ stack[pos-2] = %lf : stack[pos-1] = %lf\n", stack[pos-2], stack[pos-1]);
           if(!DOUBLE_EQ(stack[pos-2], stack[pos-1])){
             stack[pos-2] = 1;
@@ -373,8 +371,8 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           pos++;
           break;
       }
-      }
-      }
-
-      return stack[0];
     }
+  }
+
+  return stack[0];
+}

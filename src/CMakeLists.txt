@@ -46,8 +46,16 @@ set (SOURCES_MAIN ${SOURCES_COMMON} main.c)
 set (SOURCES_TEST test.c)
 
 include_directories("./libsbmlsim")
-add_library(sbmlsim STATIC ${SOURCES_LIB})
-#add_library(sbmlsim SHARED ${SOURCES_LIB})
+
+# Static library
+add_library(sbmlsim-static STATIC ${SOURCES_LIB})
+target_link_libraries(sbmlsim-static sbml)
+
+# Shared library
+add_library(sbmlsim SHARED ${SOURCES_LIB})
+target_link_libraries(sbmlsim sbml)
+
+# Test program
 add_executable(test ${SOURCES_TEST})
 target_link_libraries(test sbmlsim sbml)
 

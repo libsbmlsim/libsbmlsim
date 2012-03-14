@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
   int print_interval = 100;
   int print_amount = 1;
   int method = MTHD_RUNGE_KUTTA;
+//  int method = 21;
   boolean use_lazy_method = false;
 
   if (argc < 2) {
