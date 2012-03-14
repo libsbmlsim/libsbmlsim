@@ -11,8 +11,8 @@ int main(int argc, char *argv[]) {
   int print_interval = 100;
   int print_amount = 1;
   int method = MTHD_RUNGE_KUTTA;
-//  int method = 21;
   boolean use_lazy_method = false;
+  unsigned int error_num;
 
   if (argc < 2) {
     printf("Input SBML file is not specified.\n  Usage: %s sbml.xml\n", argv[0]);
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
   }
   d = readSBML(argv[1]);
 
-  unsigned int error_num = SBMLDocument_getNumErrors(d);
+  error_num = SBMLDocument_getNumErrors(d);
   if (error_num > 0) {
     unsigned int i;
     for (i = 0; i < error_num; i++) {
@@ -36,8 +36,8 @@ int main(int argc, char *argv[]) {
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-    // print_result(rtn);
-    // write_csv(rtn, "test.csv");
+    /*  print_result(rtn); */
+    /*  write_csv(rtn, "test.csv"); */
     write_result(rtn, "test.dat");
   }
 

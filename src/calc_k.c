@@ -15,7 +15,7 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
 
   for(step=0; step<step_num; step++){
     if(call_first_time_in_cycle){
-      //substitute to delay buf
+      /* substitute to delay buf */
       for(i=0; i<sp_num; i++){
         if(sp[i]->delay_val != NULL){
           sp[i]->delay_val[cycle][step] = sp[i]->temp_value;
@@ -37,7 +37,7 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
         }
       }
     }
-    //initialize k
+    /* initialize k */
     for(i=0; i<sp_num; i++){
       sp[i]->k[step] = 0;
     }
@@ -50,7 +50,7 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
     for(i=0; i<spr_num; i++){
       spr[i]->k[step] = 0;
     }
-    //reaction
+    /* reaction */
     for(i=0; i<re_num; i++){
       if(!re[i]->is_fast){
         k = calc(re[i]->eq, dt, cycle, reverse_time, step);
@@ -66,21 +66,21 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
         }
       }
     }
-    //rule
+    /* rule */
     for(i=0; i<rule_num; i++){
-      if(rule[i]->target_species != NULL){// calculate math in rule
+      if(rule[i]->target_species != NULL){/*  calculate math in rule */
         rule[i]->target_species->k[step] += calc(rule[i]->eq, dt, cycle, reverse_time, step);
-      }else if(rule[i]->target_parameter != NULL){// calculate math in rule
+      }else if(rule[i]->target_parameter != NULL){/*  calculate math in rule */
         rule[i]->target_parameter->k[step] += calc(rule[i]->eq, dt, cycle, reverse_time, step);
-      }else if(rule[i]->target_compartment != NULL){// calculate math in rule
+      }else if(rule[i]->target_compartment != NULL){/*  calculate math in rule */
         rule[i]->target_compartment->k[step] += calc(rule[i]->eq, dt, cycle, reverse_time, step);
-      }else if(rule[i]->target_species_reference != NULL){// calculate math in rule
+      }else if(rule[i]->target_species_reference != NULL){/*  calculate math in rule */
         rule[i]->target_species_reference->k[step] += calc(rule[i]->eq, dt, cycle, reverse_time, step);
       }
     }
 
     if(use_rk){
-      //species
+      /* species */
       for(i=0; i<sp_num; i++){
         if(sp[i]->depending_rule != NULL && sp[i]->depending_rule->is_assignment){
           sp[i]->temp_value = sp[i]->k[step];
@@ -88,7 +88,7 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
           sp[i]->temp_value = sp[i]->value + sp[i]->k[step]*dt*rk_cef[step];
         }
       }
-      //parameter
+      /* parameter */
       for(i=0; i<param_num; i++){
         if(param[i]->depending_rule != NULL && param[i]->depending_rule->is_assignment){
           param[i]->temp_value = param[i]->k[step];
@@ -96,29 +96,29 @@ void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, my
           param[i]->temp_value = param[i]->value + param[i]->k[step]*dt*rk_cef[step];
         }
       }
-      //compartment
+      /* compartment */
       for(i=0; i<comp_num; i++){
         if(comp[i]->depending_rule != NULL && comp[i]->depending_rule->is_assignment){
-          //new code
+          /* new code */
           for(j=0; j<comp[i]->num_of_including_species; j++){
             if(comp[i]->including_species[j]->is_concentration){
               comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->temp_value/comp[i]->k[step];
             }
           }
-          //
+         /* new code end */
           comp[i]->temp_value = comp[i]->k[step];
         }else{
-          //new code
+          /* new code */
           for(j=0; j<comp[i]->num_of_including_species; j++){
             if(comp[i]->including_species[j]->is_concentration){
               comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->temp_value/(comp[i]->value + comp[i]->k[step]*dt*rk_cef[step]);
             }
           }
-          //
+         /* new code end */
           comp[i]->temp_value = comp[i]->value + comp[i]->k[step]*dt*rk_cef[step];
         }
       }
-      //species reference
+      /* species reference */
       for(i=0; i<spr_num; i++){
         if(spr[i]->depending_rule != NULL && spr[i]->depending_rule->is_assignment){
           spr[i]->temp_value = spr[i]->k[step];

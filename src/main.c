@@ -26,14 +26,14 @@ void usage(char *str) {
   exit(1);
 }
 
-//Extended SBML_simulator_1028 
-//improved in main.c optget
-//processing for compartment is added
+/* Extended SBML_simulator_1028  */
+/* improved in main.c optget */
+/* processing for compartment is added */
 int main(int argc, char *argv[]){
   SBMLDocument_t *d;
   Model_t *m;
 
-  // Valuables for getopt()
+  /*  Valuables for getopt() */
   int ch;
   extern char *optarg;
   extern int optind, opterr;
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
   argc -= optind;
   argv += optind;
 
-  //get SBML Model
+  /* get SBML Model */
   if(argc < 1){
     usage(myname);
   }
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]){
   /*   } */
   m = SBMLDocument_getModel(d);
 
-  //determine sim_time
+  /* determine sim_time */
   if(sim_time == 0){
     while(1){
       printf("Simulation time : ");
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]){
     }
     sscanf(buf1, "%lf", &sim_time);
   }
-  //determine step
+  /* determine step */
   if(step == 0){
     while(1){
       printf("simulation step : ");
@@ -132,51 +132,50 @@ int main(int argc, char *argv[]){
     sscanf(buf1, "%d", &step);
   }
 
-  //calculate simulation condition
+  /* calculate simulation condition */
   dt = delta*(sim_time/step);
   print_interval = (int)(1/delta);
   printf("  time:%g step:%d dt:%lf\n", sim_time, step, dt);
 
-  //time in simulation
+  /* time in simulation */
   double time = 0;
-  //prepare mySpecies
+  /* prepare mySpecies */
   int num_of_species = Model_getNumSpecies(m);
   mySpecies *mySp[num_of_species];
-  //prepare myParameters
+  /* prepare myParameters */
   int num_of_parameters = Model_getNumParameters(m);
   myParameter *myParam[num_of_parameters];
-  //prepare myCompartments
+  /* prepare myCompartments */
   int num_of_compartments = Model_getNumCompartments(m);
   myCompartment *myComp[num_of_compartments];
-  //prepare myReactions
+  /* prepare myReactions */
   int num_of_reactions = Model_getNumReactions(m);
   myReaction *myRe[num_of_reactions];
-  //prepare myRules
+  /* prepare myRules */
   int num_of_rules = Model_getNumRules(m);
   myRule *myRu[num_of_rules];
-  //prepare myEvents
+  /* prepare myEvents */
   int num_of_events = Model_getNumEvents(m);  
   myEvent *myEv[num_of_events];
-  //prepare myInitial Assignments
+  /* prepare myInitial Assignments */
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
   myInitialAssignment *myInitAssign[num_of_initialAssignments];
-  //prepare myAlgebraicEquations
+  /* prepare myAlgebraicEquations */
   myAlgebraicEquations *myAlgEq = NULL;
-  //prepare timeVariantAssignments
+  /* prepare timeVariantAssignments */
   timeVariantAssignments *timeVarAssign = NULL;
-  //create myObjects
+  /* create myObjects */
   create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
-  //prepare myResult
+  /* prepare myResult */
   myResult result;
-  //create myResult
+  /* create myResult */
   create_myResult_content(m, &result, mySp, myParam, myComp, sim_time, dt, print_interval);
-  //prepare return value
+  /* prepare return value */
   myResult* rtn;
-  //
   if(myAlgEq == NULL){
     dbg_printf("myAlgEq is NULL\n");
   }
-  //CUI
+  /* CUI */
   if (method_key == -1) {
     while(1){
       printf("select neumerical integration method\n");
@@ -204,51 +203,51 @@ int main(int argc, char *argv[]){
     }
   }
   switch(method_key) {
-    case 1: // Runge-Kutta
+    case 1: /*  Runge-Kutta */
       method = MTHD_RUNGE_KUTTA;
       method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
-    case 2: // Backward-Euler
+    case 2: /*  Backward-Euler */
       method = MTHD_BACKWARD_EULER;
       method_name = MTHD_NAME_BACKWARD_EULER;
       break;
-    case 3: // Crank-Nicolson
+    case 3: /*  Crank-Nicolson */
       method = MTHD_CRANK_NICOLSON;
       method_name = MTHD_NAME_CRANK_NICOLSON;
       break;
-    case 4: // Adams-Moulton 3
+    case 4: /*  Adams-Moulton 3 */
       method = MTHD_ADAMS_MOULTON_3;
       method_name = MTHD_NAME_ADAMS_MOULTON_3;
       break;
-    case 5: // Adams-Moultion 4
+    case 5: /*  Adams-Moultion 4 */
       method = MTHD_ADAMS_MOULTON_4;
       method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case 6: // Backward-Differentiation 2
+    case 6: /*  Backward-Differentiation 2 */
       method = MTHD_BACKWARD_DIFFERENTIATION_2;
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
       break;
-    case 7: // Backward-Differentiation 3
+    case 7: /*  Backward-Differentiation 3 */
       method = MTHD_BACKWARD_DIFFERENTIATION_3;
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
       break;
-    case 8: // Backward-Differentiation 4
+    case 8: /*  Backward-Differentiation 4 */
       method = MTHD_BACKWARD_DIFFERENTIATION_4;
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
       break;
-    case 9: // Euler (Adams-Bashforth)
+    case 9: /*  Euler (Adams-Bashforth) */
       method = MTHD_EULER;
       method_name = MTHD_NAME_EULER;
       break;
-    case 10: // Adams-Bashforth 2
+    case 10: /*  Adams-Bashforth 2 */
       method = MTHD_ADAMS_BASHFORTH_2;
       method_name = MTHD_NAME_ADAMS_BASHFORTH_2;
       break;
-    case 11: // Adams-Bashforth 3
+    case 11: /*  Adams-Bashforth 3 */
       method = MTHD_ADAMS_BASHFORTH_3;
       method_name = MTHD_NAME_ADAMS_BASHFORTH_3;
       break;
-    case 12: // Adams-Bashforth 4
+    case 12: /*  Adams-Bashforth 4 */
       method = MTHD_ADAMS_BASHFORTH_4;
       method_name = MTHD_NAME_ADAMS_BASHFORTH_4;
       break;
@@ -261,7 +260,7 @@ int main(int argc, char *argv[]){
   is_explicit = method % 10;
   dbg_printf("simulate with %s\n", method_name);
 
-  //simulation
+  /* simulation */
   if (is_explicit == 1) {
     rtn = simulate_explicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
   }else{
@@ -285,11 +284,11 @@ int main(int argc, char *argv[]){
     rtn = simulate_implicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
 
-  //write CSV
+  /* write CSV */
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-    write_csv(rtn, "out.csv"); // for SBML test suite
+    write_csv(rtn, "out.csv"); /*  for SBML test suite */
     /* for more generic simulator
        write_separate_result(rtn,
        "./simulation_results/species_result.dat",
@@ -298,10 +297,10 @@ int main(int argc, char *argv[]){
        */
   }
 
-  //print result list
-  //print_result_list(m, mySp, myParam, myComp);
+  /* print result list */
+  /* print_result_list(m, mySp, myParam, myComp); */
 
-  //free
+  /* free */
   printf("  free all allocated memory\n");
   free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
   SBMLDocument_free(d);

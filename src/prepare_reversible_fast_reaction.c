@@ -51,11 +51,11 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
         ASTNode_addChild(minus_node, final_eq_node);
         final_eq_node = minus_node;
       }
-      if(p_or_r == 0){//products coefficient
+      if(p_or_r == 0){/* products coefficient */
         dbg_printf("AST of product numerator is\n");
         check_AST(final_eq_node, NULL);
         re->products_equili_numerator->math_length = get_equation(m, re->products_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
-      }else{//reactants coefficient
+      }else{/* reactants coefficient */
         minus_node = ASTNode_createWithType(AST_MINUS);
         zero_node = ASTNode_createWithType(AST_INTEGER);
         ASTNode_setInteger(zero_node, 0);
@@ -83,14 +83,14 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       node = ASTNode_deepCopy(node);
       dbg_printf("original math of %s: ", Reaction_getId(re[i]->origin));
       check_AST(node, NULL);
-      //alter_tree_structure(m, &node, cp_AST);
+      /* alter_tree_structure(m, &node, cp_AST); */
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       set_local_para_as_value(node, Reaction_getKineticLaw(re[i]->origin));
       dbg_printf("alterated math of %s : ", Reaction_getId(re[i]->origin));
       check_AST(node, NULL);
       cp_node1 = ASTNode_deepCopy(node);
       cp_node2 = ASTNode_deepCopy(node);
-      //get products numerator
+      /* get products numerator */
       myNode = (myASTNode*)malloc(sizeof(myASTNode));
       copied_myAST[num_of_copied_myAST++] = myNode;
       myNode->origin = cp_node1;
@@ -102,7 +102,7 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       dbg_printf("target_id is %s\n", Species_getId(re[i]->reactants[0]->mySp->origin));
       check_AST(cp_node1, NULL);
       _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->reactants[0]->mySp->origin), 0, mem);
-      //get reactants numerator
+      /* get reactants numerator */
       myNode = (myASTNode*)malloc(sizeof(myASTNode));
       copied_myAST[num_of_copied_myAST++] = myNode;
       myNode->origin = cp_node2;

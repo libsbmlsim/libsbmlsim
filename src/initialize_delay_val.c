@@ -2,7 +2,7 @@
 
 void initialize_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, double sim_time, double dt, int last_call){
   int i, j, k;
-  //initialize delay_val
+  /* initialize delay_val */
   if(last_call){
     for(i=0; i<num_of_species; i++){
       if(sp[i]->delay_val != NULL){

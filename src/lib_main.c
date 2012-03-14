@@ -33,11 +33,11 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   myRule **myRu;
   myEvent **myEv;
   myInitialAssignment **myInitAssign;
-  //prepare myAlgebraicEquations
+  /* prepare myAlgebraicEquations */
   myAlgebraicEquations *myAlgEq = NULL;
-  //prepare timeVariantAssignments
+  /* prepare timeVariantAssignments */
   timeVariantAssignments *timeVarAssign = NULL;
-  //prepare return value
+  /* prepare return value */
   myResult* rtn;
 
   allocated_memory *mem;
@@ -49,74 +49,74 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
   cp_AST->num_of_copied_AST = 0;
 
-  //prepare mySpecies
+  /* prepare mySpecies */
   num_of_species = Model_getNumSpecies(m);
-  //mySpecies *mySp[num_of_species];
+  /* mySpecies *mySp[num_of_species]; */
   mySp = (mySpecies**)malloc(sizeof(mySpecies*) * num_of_species);
-  //prepare myParameters
+  /* prepare myParameters */
   num_of_parameters = Model_getNumParameters(m);
+  /* myParameter *myParam[num_of_parameters]; */
   myParam = (myParameter**)malloc(sizeof(myParameter*) * num_of_parameters);
-  //myParameter *myParam[num_of_parameters];
-  //prepare myCompartments
+  /* prepare myCompartments */
   num_of_compartments = Model_getNumCompartments(m);
+  /* myCompartment *myComp[num_of_compartments]; */
   myComp = (myCompartment**)malloc(sizeof(mySpecies*) * num_of_compartments);
-  //myCompartment *myComp[num_of_compartments];
-  //prepare myReactions
+  /* prepare myReactions */
   num_of_reactions = Model_getNumReactions(m);
+  /* myReaction *myRe[num_of_reactions]; */
   myRe = (myReaction**)malloc(sizeof(myReaction*) * num_of_reactions);
-  //myReaction *myRe[num_of_reactions];
-  //prepare myRules
+  /* prepare myRules */
   num_of_rules = Model_getNumRules(m);
+  /* myRule *myRu[num_of_rules]; */
   myRu = (myRule**)malloc(sizeof(myRule*) * num_of_rules);
-  //myRule *myRu[num_of_rules];
-  //prepare myEvents
+  /* prepare myEvents */
   num_of_events = Model_getNumEvents(m);  
+  /* myEvent *myEv[num_of_events]; */
   myEv = (myEvent**)malloc(sizeof(myEvent*) * num_of_events);
-  //myEvent *myEv[num_of_events];
-  //prepare myInitial Assignments
+  /* prepare myInitial Assignments */
   num_of_initialAssignments = Model_getNumInitialAssignments(m);
+  /* myInitialAssignment *myInitAssign[num_of_initialAssignments]; */
   myInitAssign = (myInitialAssignment**)malloc(sizeof(myInitialAssignment*) * num_of_initialAssignments);
-  //myInitialAssignment *myInitAssign[num_of_initialAssignments];
-  //create myObjects
+  /* create myObjects */
   create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
-  //create myResult
+  /* create myResult */
   create_myResult_content(m, result, mySp, myParam, myComp, sim_time, dt, print_interval);
 
   switch(method) {
-    case MTHD_RUNGE_KUTTA: // Runge-Kutta
+    case MTHD_RUNGE_KUTTA: /*  Runge-Kutta */
       method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
-    case MTHD_BACKWARD_EULER: // Backward-Euler
+    case MTHD_BACKWARD_EULER: /*  Backward-Euler */
       method_name = MTHD_NAME_BACKWARD_EULER;
       break;
-    case MTHD_CRANK_NICOLSON: // Crank-Nicolson (Adams-Moulton 2)
+    case MTHD_CRANK_NICOLSON: /*  Crank-Nicolson (Adams-Moulton 2) */
       method_name = MTHD_NAME_CRANK_NICOLSON;
       break;
-    case MTHD_ADAMS_MOULTON_3: // Adams-Moulton 3
+    case MTHD_ADAMS_MOULTON_3: /*  Adams-Moulton 3 */
       method_name = MTHD_NAME_ADAMS_MOULTON_3;
       break;
-    case MTHD_ADAMS_MOULTON_4: // Adams-Moulton 4
+    case MTHD_ADAMS_MOULTON_4: /*  Adams-Moulton 4 */
       method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_2: // Backward-Differentiation 2
+    case MTHD_BACKWARD_DIFFERENTIATION_2: /*  Backward-Differentiation 2 */
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_3: // Backward-Differentiation 3
+    case MTHD_BACKWARD_DIFFERENTIATION_3: /*  Backward-Differentiation 3 */
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_4: // Backward-Differentiation 4
+    case MTHD_BACKWARD_DIFFERENTIATION_4: /*  Backward-Differentiation 4 */
       method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
       break;
-    case MTHD_EULER: // Euler (Adams-Bashforth)
+    case MTHD_EULER: /*  Euler (Adams-Bashforth) */
       method_name = MTHD_NAME_EULER;
       break;
-    case MTHD_ADAMS_BASHFORTH_2: // Adams-Bashforth 2
+    case MTHD_ADAMS_BASHFORTH_2: /*  Adams-Bashforth 2 */
       method_name = MTHD_NAME_ADAMS_BASHFORTH_2;
       break;
-    case MTHD_ADAMS_BASHFORTH_3: // Adams-Bashforth 3
+    case MTHD_ADAMS_BASHFORTH_3: /*  Adams-Bashforth 3 */
       method_name = MTHD_NAME_ADAMS_BASHFORTH_3;
       break;
-    case MTHD_ADAMS_BASHFORTH_4: // Adams-Bashforth 4
+    case MTHD_ADAMS_BASHFORTH_4: /*  Adams-Bashforth 4 */
       method_name = MTHD_NAME_ADAMS_BASHFORTH_4;
       break;
     default:
@@ -128,14 +128,14 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   is_explicit = method % 10;
   dbg_printf("simulate with %s\n", method_name);
 
-  //simulation
+  /* simulation */
   if (is_explicit == 1) {
     rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
   }else{
     rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
 
-  //free
+  /* free */
   free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
   return rtn;
 }

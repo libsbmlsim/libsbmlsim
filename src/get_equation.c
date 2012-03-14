@@ -24,7 +24,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
     flag = 1;
     for(i=0; i<Model_getNumSpecies(m); i++){
       if(strcmp(name, Species_getId(sp[i]->origin)) == 0){
-        //create delay
+        /* create delay */
         if(sp[i]->delay_val == NULL){
           sp[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
           for(j=0; j<(int)(sim_time/dt+1); j++){
@@ -85,7 +85,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
     if(flag){
       for(i=0; i<Model_getNumParameters(m); i++){
         if(strcmp(name, Parameter_getId(param[i]->origin)) == 0){
-          //create delay
+          /* create delay */
           if(param[i]->delay_val == NULL){
             param[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
             for(j=0; j<(int)(sim_time/dt+1); j++){
@@ -124,7 +124,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
     if(flag){
       for(i=0; i<Model_getNumCompartments(m); i++){
         if(strcmp(name, Compartment_getId(comp[i]->origin)) == 0){
-          //create delay
+          /* create delay */
           if(comp[i]->delay_val == NULL){
             comp[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
             for(j=0; j<(int)(sim_time/dt+1); j++){
@@ -165,7 +165,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
         for(j=0; j<re[i]->num_of_products; j++){
           if(SpeciesReference_isSetId(re[i]->products[j]->origin)
               && strcmp(name, SpeciesReference_getId(re[i]->products[j]->origin)) == 0){
-            //create delay
+            /* create delay */
             if(re[i]->products[j]->delay_val == NULL){
               re[i]->products[j]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
               for(k=0; k<(int)(sim_time/dt+1); k++){
@@ -206,7 +206,7 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
         for(j=0; j<re[i]->num_of_reactants; j++){
           if(SpeciesReference_isSetId(re[i]->reactants[j]->origin)
               && strcmp(name, SpeciesReference_getId(re[i]->reactants[j]->origin)) == 0){
-            //create delay
+            /* create delay */
             if(re[i]->reactants[j]->delay_val == NULL){
               re[i]->reactants[j]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
               for(k=0; k<(int)(sim_time/dt+1); k++){

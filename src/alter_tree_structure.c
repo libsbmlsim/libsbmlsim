@@ -41,8 +41,8 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       ASTNode_replaceChild(node, 0, zero_node);
       ASTNode_addChild(*node_p, next_node);
     }else{
-      //dbg_printf("down to %d th child from\n", i);
-      //print_node_type(node);
+      /* dbg_printf("down to %d th child from\n", i); */
+      /* print_node_type(node); */
       alter_tree_structure(m, &next_node, *node_p, i, cp_AST);
     }
   }
@@ -51,7 +51,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     for(i=0; i<Model_getNumSpecies(m); i++){
       sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);      
       if(strcmp(Species_getId(sp), ASTNode_getName(node)) == 0){
-        if(!Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialAmount(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){//use val/comp in calculation
+        if(!Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialAmount(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){/* use val/comp in calculation */
           divide_node = ASTNode_createWithType(AST_DIVIDE);
           compartment_node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
@@ -64,7 +64,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
           }
           node = *node_p;
           break;
-        }else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){// use val*comp in calculation
+        }else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){/*  use val*comp in calculation */
           times_node = ASTNode_createWithType(AST_TIMES);
           compartment_node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
@@ -96,15 +96,14 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
           fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
           ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
         }
-        //test
+        /* test */
         /* 	for(i=0; i<ASTNode_getNumChildren(fd_body); i++){ */
         /* 	  next_node = ASTNode_getChild(fd_body, i); */
-        /* 	  //dbg_printf("down to %d th child from\n", i); */
-        /* 	  //print_node_type(node); */
+        /* 	  dbg_printf("down to %d th child from\n", i); */
+        /* 	  print_node_type(node); */
         /* 	  alter_tree_structure(m, &next_node, fd_body, i, cp_AST); */
         /* 	} */
         minus_func(fd_body);
-        //
         check_AST(fd_body, NULL);
         if(parent != NULL){
           ASTNode_replaceChild(parent, child_order, fd_body);
@@ -150,7 +149,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     }
     ASTNode_reduceToBinary(node);
   }
-  //print_node_type(node);
-  //dbg_printf("is proccessed\n");
+  /* print_node_type(node); */
+  /* dbg_printf("is proccessed\n"); */
   return;
 }

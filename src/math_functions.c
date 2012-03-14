@@ -1,8 +1,8 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-long long int factorial(int n){
+int64_t factorial(int n){
   int i;
-  long long int ans;
+  int64_t ans;
   ans = 1;
   for(i=1; i<=n; i++){
     ans *= i;

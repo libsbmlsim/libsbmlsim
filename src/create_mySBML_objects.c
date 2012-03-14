@@ -20,11 +20,11 @@ int include_time(ASTNode_t *node, int flag){
   return flag;
 }
 
-//create my SBML obejects for efficient simulations
+/* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST){
   int i, j, k, l;
   int flag;
-  //num of each objects
+  /* num of each objects */
   int num_of_species = Model_getNumSpecies(m);
   int num_of_parameters = Model_getNumParameters(m);
   int num_of_compartments = Model_getNumCompartments(m);
@@ -34,7 +34,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
   ASTNode_t *node;
 
-  //create mySpecies  
+  /* create mySpecies   */
   Species_t *sp;
   for(i=0; i<num_of_species; i++){
     sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
@@ -74,7 +74,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     mySp[i]->prev_k[2] = 0;
   }
 
-  //create myParameters
+  /* create myParameters */
   Parameter_t *param;
   for(i=0; i<num_of_parameters; i++){
     param = (Parameter_t*)ListOf_get(Model_getListOfParameters(m), i);
@@ -100,7 +100,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     myParam[i]->prev_k[2] = 0;
   }
 
-  //create myCompartment
+  /* create myCompartment */
   Compartment_t *comp;
   for(i=0; i<num_of_compartments; i++){
     comp = (Compartment_t*)ListOf_get(Model_getListOfCompartments(m), i);
@@ -127,7 +127,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     myComp[i]->num_of_including_species = 0;
   }
 
-  //determine species locating compartment
+  /* determine species locating compartment */
   for(i=0; i<num_of_species; i++){
     for(j=0; j<num_of_compartments; j++){
       if(strcmp(Species_getCompartment(mySp[i]->origin), Compartment_getId(myComp[j]->origin)) == 0){
@@ -138,7 +138,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
   }
 
-  //create myReaction & mySpeciseReference without equation
+  /* create myReaction & mySpeciseReference without equation */
   Reaction_t *re;
   const char *product_id, *reactant_id;
   for(i=0; i<num_of_reactions; i++){
@@ -151,7 +151,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     myRe[i]->num_of_reactants = 0;
     myRe[i]->products = (mySpeciesReference**)malloc(sizeof(mySpeciesReference*)*Reaction_getNumProducts(myRe[i]->origin));
     myRe[i]->reactants = (mySpeciesReference**)malloc(sizeof(mySpeciesReference*)*Reaction_getNumReactants(myRe[i]->origin));
-    //products start
+    /* products start */
     for(j=0; j<Reaction_getNumProducts(myRe[i]->origin); j++){
       product_id = SpeciesReference_getSpecies((SpeciesReference_t*)ListOf_get(Reaction_getListOfProducts(myRe[i]->origin), j));
       for(k=0; k<num_of_species; k++){
@@ -164,8 +164,8 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           myRe[i]->num_of_products++;
         }
       }
-    }//products fin
-    //reactants start
+    }/* products fin */
+    /* reactants start */
     for(j=0; j<Reaction_getNumReactants(myRe[i]->origin); j++){
       reactant_id = SpeciesReference_getSpecies((SpeciesReference_t*)ListOf_get(Reaction_getListOfReactants(myRe[i]->origin), j));
       for(k=0; k<num_of_species; k++){
@@ -178,12 +178,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           myRe[i]->num_of_reactants++;
         }
       }
-    }//reactants fin
+    }/* reactants fin */
     myRe[i]->products_equili_numerator = NULL;
     myRe[i]->reactants_equili_numerator = NULL;
   }
 
-  //create myInitialAssignments
+  /* create myInitialAssignments */
   InitialAssignment_t *initAssign;
   char *time_variant_target_id[MAX_DELAY_REACTION_NUM];
   int num_of_time_variant_targets = 0;
@@ -225,9 +225,9 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     node = ASTNode_deepCopy(node);
     dbg_printf("original math : ");
     check_AST(node, NULL);
-    //alter_tree_structure(m, &node, cp_AST);
+    /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
-    //unit
+    /* unit */
     if(myInitAssign[i]->target_species != NULL){
       if(myInitAssign[i]->target_species->is_amount
           && !myInitAssign[i]->target_species->has_only_substance_units
@@ -238,7 +238,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         assignment_alter_tree_structure(&node, (char*)Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(myInitAssign[i]->target_species->origin))), 1);
       }
     }
-    //unit
+    /* unit */
     dbg_printf("altered math : ");
     check_AST(node, NULL);
     if(include_time(node, 0)){
@@ -246,12 +246,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
     myInitAssign[i]->eq = (equation*)malloc(sizeof(equation));
     myInitAssign[i]->eq->math_length = get_equation(m, myInitAssign[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem);
-    //ASTNode_free(node);
+    /* ASTNode_free(node); */
     dbg_printf("math\n");
     check_math(myInitAssign[i]->eq);
   }
 
-  //find time variant target of assignment rule
+  /* find time variant target of assignment rule */
   Rule_t *rule;
   *timeVarAssign = (timeVariantAssignments*)malloc(sizeof(timeVariantAssignments));
   (*timeVarAssign)->num_of_time_variant_assignments = 0;
@@ -264,7 +264,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       dbg_printf("original math : ");
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      //unit
+      /* unit */
       for(j=0; j<num_of_species; j++){
         if(strcmp(Species_getId(mySp[j]->origin), Rule_getVariable(rule)) == 0){
           if(mySp[j]->is_amount
@@ -278,7 +278,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           break;
         }
       }
-      //unit
+      /* unit */
       dbg_printf("altered math : ");
       check_AST(node, NULL);
       (*timeVarAssign)->eq[(*timeVarAssign)->num_of_time_variant_assignments] = (equation*)malloc(sizeof(equation));
@@ -287,7 +287,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
   }
 
-  //create myReaction & mySpeciseReference equation
+  /* create myReaction & mySpeciseReference equation */
   ASTNode_t *times_node, *conv_factor_node;
   for(i=0; i<num_of_reactions; i++){
     re = (Reaction_t*)ListOf_get(Model_getListOfReactions(m), i);
@@ -301,15 +301,15 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     check_AST(node, NULL);
     myRe[i]->eq = (equation*)malloc(sizeof(equation));
     myRe[i]->eq->math_length = get_equation(m, myRe[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-    //ASTNode_free(node);
+    /* ASTNode_free(node); */
     dbg_printf("math of %s\n", Reaction_getId(myRe[i]->origin));
     check_math(myRe[i]->eq);
-    //products start
+    /* products start */
     for(j=0; j<myRe[i]->num_of_products; j++){
       myRe[i]->products[j]->eq = (equation*)malloc(sizeof(equation));
       myRe[i]->products[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->products[j]->origin));
-      if(node != NULL){//l2v4
+      if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
         myRe[i]->products[j]->value = 0;
         myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
@@ -325,17 +325,17 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
       }
       if(node == NULL){
-        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin)) && SpeciesReference_isSetId(myRe[i]->products[j]->origin)){//l3v1
+        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin)) && SpeciesReference_isSetId(myRe[i]->products[j]->origin)){/* l3v1 */
           node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(node, SpeciesReference_getId(myRe[i]->products[j]->origin));
           myRe[i]->products[j]->value = 1.0;
           myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
-        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin))){//l3v1
+        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin))){/* l3v1 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, 1.0);
           myRe[i]->products[j]->value = 1.0;
           myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
-        }else{//l2v4
+        }else{/* l2v4 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin));
           myRe[i]->products[j]->value = SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin);
@@ -345,12 +345,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       dbg_printf("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      //unit
+      /* unit */
       if(myRe[i]->products[j]->mySp->is_concentration){
         assignment_alter_tree_structure(&node, (char*)Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(myRe[i]->products[j]->mySp->origin))), 1);
       }
-      //unit
-      //conversion factor
+      /* unit */
+      /* conversion factor */
       if(Species_isSetConversionFactor(myRe[i]->products[j]->mySp->origin)){
         times_node = ASTNode_createWithType(AST_TIMES);
         conv_factor_node = ASTNode_createWithType(AST_NAME);
@@ -366,11 +366,11 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         ASTNode_addChild(times_node, node);
         node = times_node;
       }
-      //conversion factor
+      /* conversion factor */
       myRe[i]->products[j]->eq->math_length = get_equation(m, myRe[i]->products[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       dbg_printf("alterated math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
       check_AST(node, NULL);
-      //ASTNode_free(node);
+      /* ASTNode_free(node); */
       dbg_printf("math of %s\n", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
       check_math(myRe[i]->products[j]->eq);
       myRe[i]->products[j]->k[0] = 0;
@@ -384,14 +384,14 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       myRe[i]->products[j]->prev_k[1] = 0;
       myRe[i]->products[j]->prev_k[2] = 0;
     }
-    //products fin
-    //reactants start
+    /* products fin */
+    /* reactants start */
     for(j=0; j<myRe[i]->num_of_reactants; j++){
       myRe[i]->reactants[j]->depending_rule = NULL;
       myRe[i]->reactants[j]->eq = (equation*)malloc(sizeof(equation));
       myRe[i]->reactants[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->reactants[j]->origin));
-      if(node != NULL){//l2v4
+      if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
         myRe[i]->reactants[j]->value = 0;
         myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
@@ -407,17 +407,17 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
       }
       if(node == NULL){
-        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin)) && SpeciesReference_isSetId(myRe[i]->reactants[j]->origin)){//l3v1
+        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin)) && SpeciesReference_isSetId(myRe[i]->reactants[j]->origin)){/* l3v1 */
           node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(node, SpeciesReference_getId(myRe[i]->reactants[j]->origin));
           myRe[i]->reactants[j]->value = 1.0;
           myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
-        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin))){//l3v1
+        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin))){/* l3v1 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, 1.0);
           myRe[i]->reactants[j]->value = 1.0;
           myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
-        }else{//l2v4
+        }else{/* l2v4 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin));
           myRe[i]->reactants[j]->value = SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin);
@@ -427,12 +427,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       dbg_printf("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      //unit
+      /* unit */
       if(myRe[i]->reactants[j]->mySp->is_concentration){
         assignment_alter_tree_structure(&node, (char*)Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(myRe[i]->reactants[j]->mySp->origin))), 1);
       }
-      //unit
-      //conversion factor
+      /* unit */
+      /* conversion factor */
       if(Species_isSetConversionFactor(myRe[i]->reactants[j]->mySp->origin)){
         times_node = ASTNode_createWithType(AST_TIMES);
         conv_factor_node = ASTNode_createWithType(AST_NAME);
@@ -448,11 +448,11 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         ASTNode_addChild(times_node, node);
         node = times_node;
       }
-      //conversion factor
+      /* conversion factor */
       myRe[i]->reactants[j]->eq->math_length = get_equation(m, myRe[i]->reactants[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       dbg_printf("altered math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
       check_AST(node, NULL);
-      //ASTNode_free(node);
+      /* ASTNode_free(node); */
       dbg_printf("math of %s\n", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
       check_math(myRe[i]->reactants[j]->eq);
       myRe[i]->reactants[j]->k[0] = 0;      
@@ -465,12 +465,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       myRe[i]->reactants[j]->prev_k[0] = 0;
       myRe[i]->reactants[j]->prev_k[1] = 0;
       myRe[i]->reactants[j]->prev_k[2] = 0;
-      //reactants fin
+      /* reactants fin */
     }
   }
 
 
-  //Initial Assignment target_species_reference
+  /* Initial Assignment target_species_reference */
   for(i=0; i<num_of_initialAssignments; i++){
     flag = 1;
     if(flag){
@@ -501,10 +501,10 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
   }
 
-  //prepare reversible fast reaction
+  /* prepare reversible fast reaction */
   prepare_reversible_fast_reaction(m, myRe, mySp, myParam, myComp, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, cp_AST);
 
-  //create myRules
+  /* create myRules */
   for(i=0; i<num_of_rules; i++){
     rule = (Rule_t*)ListOf_get(Model_getListOfRules(m), i);
     myRu[i] = (myRule*)malloc(sizeof(myRule));
@@ -579,7 +579,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       dbg_printf("original math : ");
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      //unit
+      /* unit */
       if(myRu[i]->target_species != NULL){
         if(myRu[i]->target_species->is_amount
             && !myRu[i]->target_species->has_only_substance_units
@@ -590,18 +590,18 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           assignment_alter_tree_structure(&node, (char*)Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(myRu[i]->target_species->origin))), 1);
         }
       }
-      //unit
+      /* unit */
       dbg_printf("altered math : ");
       check_AST(node, NULL);
       myRu[i]->eq = (equation*)malloc(sizeof(equation));
       myRu[i]->eq->math_length = get_equation(m, myRu[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-      //ASTNode_free(node);
+      /* ASTNode_free(node); */
       dbg_printf("math\n");
       check_math(myRu[i]->eq);
     }
   }
 
-  //create myEvents & myEventAssignments
+  /* create myEvents & myEventAssignments */
   Event_t *event;
   for(i=0; i<num_of_events; i++){
     event = (Event_t*)ListOf_get(Model_getListOfEvents(m), i);
@@ -616,13 +616,13 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     node = ASTNode_deepCopy(node);
     dbg_printf("original math of %s : ", Event_getId(myEv[i]->origin));
     check_AST(node, NULL);
-    //alter_tree_structure(m, &node, cp_AST);
+    /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
     myEv[i]->eq = (equation*)malloc(sizeof(equation));
     myEv[i]->eq->math_length = get_equation(m, myEv[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     dbg_printf("altered math of %s : ", Event_getId(myEv[i]->origin));
     check_AST(node, NULL);
-    //ASTNode_free(node);
+    /* ASTNode_free(node); */
     dbg_printf("math of %s\n", Event_getId(myEv[i]->origin));
     check_math(myEv[i]->eq);
     if(Trigger_isSetInitialValue(Event_getTrigger(event))){
@@ -707,7 +707,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }else{
         alter_tree_structure(m, &node, NULL, 0, cp_AST);
       }
-      //unit
+      /* unit */
       if(myEv[i]->assignments[j]->target_species != NULL){
         if(myEv[i]->assignments[j]->target_species->is_amount
             && !myEv[i]->assignments[j]->target_species->has_only_substance_units
@@ -718,12 +718,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           assignment_alter_tree_structure(&node, (char*)Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(myEv[i]->assignments[j]->target_species->origin))), 1);
         }
       }
-      //unit
+      /* unit */
       dbg_printf("altered math : ");
       check_AST(node, NULL);
       myEv[i]->assignments[j]->eq = (equation*)malloc(sizeof(equation));
       myEv[i]->assignments[j]->eq->math_length = get_equation(m, myEv[i]->assignments[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-      //ASTNode_free(node);
+      /* ASTNode_free(node); */
       dbg_printf("math\n");
       check_math(myEv[i]->assignments[j]->eq);
     }
@@ -735,13 +735,13 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       node = ASTNode_deepCopy(node);
       dbg_printf("original math : ");
       check_AST(node, NULL);
-      //alter_tree_structure(m, &node, cp_AST);
+      /* alter_tree_structure(m, &node, cp_AST); */
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       myEv[i]->event_delay->eq = (equation*)malloc(sizeof(equation));
       myEv[i]->event_delay->eq->math_length = get_equation(m, myEv[i]->event_delay->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       dbg_printf("altered math : ");
       check_AST(node, NULL);
-      //ASTNode_free(node);
+      /* ASTNode_free(node); */
       dbg_printf("math\n");
       check_math(myEv[i]->event_delay->eq);
       myEv[i]->firing_times = (double*)malloc(sizeof(double)*(int)(sim_time/dt));
@@ -761,7 +761,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
   }
 
-  //prepare Algebraic
+  /* prepare Algebraic */
   int num_of_algebraic_rules = 0;
   myAlgebraicEquations *algEq;
   for(i=0; i<num_of_rules; i++){

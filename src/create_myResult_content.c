@@ -1,6 +1,6 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-//create contents of myResult object
+/* create contents of myResult object */
 void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval) {
   int i;
   int num_of_species = Model_getNumSpecies(m);

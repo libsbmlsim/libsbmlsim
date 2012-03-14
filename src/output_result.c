@@ -34,17 +34,17 @@ void output_result(myResult* result, FILE* fp, char delimiter){
   double *value_param_p = result->values_param;
   double *value_comp_p  = result->values_comp;
 
-  // Column name (time)
+  /*  Column name (time) */
   fprintf(fp, "%s", result->column_name_time);
-  // Column name (Species)
+  /*  Column name (Species) */
   for (i = 0; i < result->num_of_columns_sp; i++) {
     fprintf(fp, "%c%s", delimiter, result->column_name_sp[i]);
   }
-  // Column name (Parameters)
+  /*  Column name (Parameters) */
   for (i = 0; i < result->num_of_columns_param; i++) {
     fprintf(fp, "%c%s", delimiter, result->column_name_param[i]);
   }
-  // Column name (Compartments)
+  /*  Column name (Compartments) */
   for (i = 0; i < result->num_of_columns_comp; i++) {
     fprintf(fp, "%c%s", delimiter, result->column_name_comp[i]);
   }
@@ -53,17 +53,17 @@ void output_result(myResult* result, FILE* fp, char delimiter){
   for (i = 0; i < result->num_of_rows; i++) {
     fprintf(fp, "%.16g", *(value_time_p));
     value_time_p++;
-    // Species
+    /*  Species */
     for (j = 0; j < result->num_of_columns_sp; j++) {
       fprintf(fp, "%c%.16g", delimiter, *(value_sp_p));
       value_sp_p++;
     }
-    // Parameters
+    /*  Parameters */
     for (j = 0; j < result->num_of_columns_param; j++) {
       fprintf(fp, "%c%.16g", delimiter, *(value_param_p));
       value_param_p++;
     }
-    // Compartments
+    /*  Compartments */
     for (j = 0; j < result->num_of_columns_comp; j++) {
       fprintf(fp, "%c%.16g", delimiter, *(value_comp_p));
       value_comp_p++;
@@ -94,7 +94,7 @@ void write_separate_result(myResult* result, char* file_s, char* file_p, char* f
     return;
   }
 
-  // Species
+  /*  Species */
   for (i = 0; i < result->num_of_rows; i++) {
     fprintf(fp_s, "%.16g", *(value_time_p));
     value_time_p++;
@@ -104,7 +104,7 @@ void write_separate_result(myResult* result, char* file_s, char* file_p, char* f
     }
     fprintf(fp_s, "\n");
   }
-  // Parameters
+  /*  Parameters */
   value_time_p  = result->values_time;
   for (i = 0; i < result->num_of_rows; i++) {
     fprintf(fp_p, "%.16g", *(value_time_p));
@@ -115,7 +115,7 @@ void write_separate_result(myResult* result, char* file_s, char* file_p, char* f
     }
     fprintf(fp_p, "\n");
   }
-  // Compartments
+  /*  Compartments */
   value_time_p  = result->values_time;
   for (i = 0; i < result->num_of_rows; i++) {
     fprintf(fp_c, "%.16g", *(value_time_p));

@@ -4,7 +4,7 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
   int i, j;
 
   if(use_rk){
-    //species
+    /* species */
     for(i=0; i<sp_num; i++){
       if(sp[i]->depending_rule != NULL && !sp[i]->depending_rule->is_rate){
         sp[i]->temp_value = (sp[i]->k[0]+2*sp[i]->k[1]+2*sp[i]->k[2]+sp[i]->k[3])/6;
@@ -12,7 +12,7 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
         sp[i]->temp_value = sp[i]->value + (sp[i]->k[0]+2*sp[i]->k[1]+2*sp[i]->k[2]+sp[i]->k[3])/6*dt;
       }
     }
-    //parameter
+    /* parameter */
     for(i=0; i<param_num; i++){
       if(param[i]->depending_rule != NULL && !param[i]->depending_rule->is_rate){
         param[i]->temp_value = (param[i]->k[0]+2*param[i]->k[1]+2*param[i]->k[2]+param[i]->k[3])/6;
@@ -20,22 +20,22 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
         param[i]->temp_value = param[i]->value + (param[i]->k[0]+2*param[i]->k[1]+2*param[i]->k[2]+param[i]->k[3])/6*dt;
       }
     }
-    //compartment
+    /* compartment */
     for(i=0; i<comp_num; i++){
       if(comp[i]->depending_rule != NULL && !comp[i]->depending_rule->is_rate){
         comp[i]->temp_value = (comp[i]->k[0]+2*comp[i]->k[1]+2*comp[i]->k[2]+comp[i]->k[3])/6;
       }else{
         comp[i]->temp_value = comp[i]->value + (comp[i]->k[0]+2*comp[i]->k[1]+2*comp[i]->k[2]+comp[i]->k[3])/6*dt;
       }
-      //new code
+      /* new code */
       for(j=0; j<comp[i]->num_of_including_species; j++){
         if(comp[i]->including_species[j]->is_concentration){
           comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->value/comp[i]->temp_value;
         }
       }
-      //
+     /* new code end */
     }
-    //species reference
+    /* species reference */
     for(i=0; i<spr_num; i++){
       if(spr[i]->depending_rule != NULL && !spr[i]->depending_rule->is_rate){
         spr[i]->temp_value = (spr[i]->k[0]+2*spr[i]->k[1]+2*spr[i]->k[2]+spr[i]->k[3])/6;
@@ -44,7 +44,7 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
       }
     }
   }else{
-    //species
+    /* species */
     for(i=0; i<sp_num; i++){
       if(sp[i]->depending_rule != NULL && !sp[i]->depending_rule->is_rate){
         sp[i]->temp_value = sp[i]->k[0];
@@ -52,7 +52,7 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
         sp[i]->temp_value = sp[i]->value + sp[i]->k[0]*dt;
       }
     }
-    //parameter
+    /* parameter */
     for(i=0; i<param_num; i++){
       if(param[i]->depending_rule != NULL && !param[i]->depending_rule->is_rate){
         param[i]->temp_value = param[i]->k[0];
@@ -60,22 +60,22 @@ void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int para
         param[i]->temp_value = param[i]->value + param[i]->k[0]*dt;
       }
     }
-    //compartment
+    /* compartment */
     for(i=0; i<comp_num; i++){
       if(comp[i]->depending_rule != NULL && !comp[i]->depending_rule->is_rate){
         comp[i]->temp_value = comp[i]->k[0];
       }else{
         comp[i]->temp_value = comp[i]->value + comp[i]->k[0]*dt;
       }
-      //new code
+      /* new code */
       for(j=0; j<comp[i]->num_of_including_species; j++){
         if(comp[i]->including_species[j]->is_concentration){
           comp[i]->including_species[j]->temp_value = comp[i]->including_species[j]->temp_value*comp[i]->value/comp[i]->temp_value;
         }
       }
-      //
+     /* new code end */
     }
-    //species reference
+    /* species reference */
     for(i=0; i<spr_num; i++){
       if(spr[i]->depending_rule != NULL && !spr[i]->depending_rule->is_rate){
         spr[i]->temp_value = spr[i]->k[0];

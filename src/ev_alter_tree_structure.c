@@ -60,7 +60,7 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
           fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
           ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
         }
-        //check_AST(fd_body, NULL);
+        /* check_AST(fd_body, NULL); */
         if(parent != NULL){
           ASTNode_replaceChild(parent, child_order, fd_body);
         }else{
@@ -124,7 +124,7 @@ void post_ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *par
     for(i=0; i<Model_getNumSpecies(m); i++){
       sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
       if(strcmp(Species_getId(sp), ASTNode_getName(node)) == 0){
-        if(!Species_getHasOnlySubstanceUnits(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){//use val/comp in calculation
+        if(!Species_getHasOnlySubstanceUnits(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){/* use val/comp in calculation */
           divide_node = ASTNode_createWithType(AST_DIVIDE);
           compartment_node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
@@ -137,7 +137,7 @@ void post_ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *par
           }
           node = *node_p;
           break;
-        }else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){// use val*comp in calculation
+        }else if(Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialConcentration(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){/*  use val*comp in calculation */
           times_node = ASTNode_createWithType(AST_TIMES);
           compartment_node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(compartment_node, Compartment_getId(Model_getCompartmentById(m, Species_getCompartment(sp))));
