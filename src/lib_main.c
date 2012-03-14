@@ -19,6 +19,20 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   int order = 0;
   int is_explicit = 0;
   char *method_name;
+  int num_of_species;
+  int num_of_parameters;
+  int num_of_compartments;
+  int num_of_reactions;
+  int num_of_rules;
+  int num_of_events;
+  int num_of_initialAssignments;
+  mySpecies **mySp;
+  //prepare myAlgebraicEquations
+  myAlgebraicEquations *myAlgEq = NULL;
+  //prepare timeVariantAssignments
+  timeVariantAssignments *timeVarAssign = NULL;
+  //prepare return value
+  myResult* rtn;
 
   allocated_memory *mem;
   mem = (allocated_memory*)malloc(sizeof(allocated_memory));
@@ -29,36 +43,31 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   cp_AST->num_of_copied_AST = 0;
 
   //prepare mySpecies
-  int num_of_species = Model_getNumSpecies(m);
-  mySpecies *mySp[num_of_species];
+  num_of_species = Model_getNumSpecies(m);
+  //mySpecies *mySp[num_of_species];
+  mySp = (mySpecies**)malloc(sizeof(mySpecies*) * num_of_species);
   //prepare myParameters
-  int num_of_parameters = Model_getNumParameters(m);
+  num_of_parameters = Model_getNumParameters(m);
   myParameter *myParam[num_of_parameters];
   //prepare myCompartments
-  int num_of_compartments = Model_getNumCompartments(m);
+  num_of_compartments = Model_getNumCompartments(m);
   myCompartment *myComp[num_of_compartments];
   //prepare myReactions
-  int num_of_reactions = Model_getNumReactions(m);
+  num_of_reactions = Model_getNumReactions(m);
   myReaction *myRe[num_of_reactions];
   //prepare myRules
-  int num_of_rules = Model_getNumRules(m);
+  num_of_rules = Model_getNumRules(m);
   myRule *myRu[num_of_rules];
   //prepare myEvents
-  int num_of_events = Model_getNumEvents(m);  
+  num_of_events = Model_getNumEvents(m);  
   myEvent *myEv[num_of_events];
   //prepare myInitial Assignments
-  int num_of_initialAssignments = Model_getNumInitialAssignments(m);
+  num_of_initialAssignments = Model_getNumInitialAssignments(m);
   myInitialAssignment *myInitAssign[num_of_initialAssignments];
-  //prepare myAlgebraicEquations
-  myAlgebraicEquations *myAlgEq = NULL;
-  //prepare timeVariantAssignments
-  timeVariantAssignments *timeVarAssign = NULL;
   //create myObjects
   create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
   //create myResult
   create_myResult_content(m, result, mySp, myParam, myComp, sim_time, dt, print_interval);
-  //prepare return value
-  myResult* rtn;
 
   switch(method) {
     case MTHD_RUNGE_KUTTA: // Runge-Kutta
