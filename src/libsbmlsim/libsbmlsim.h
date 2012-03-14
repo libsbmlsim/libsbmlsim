@@ -4,11 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _MSC_VER
 #define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <float.h>
 #include <sbml/SBMLTypes.h>
 
+#include "osarch.h"
 #include "common.h"
 #include "methods.h"
 #include "version.h"
