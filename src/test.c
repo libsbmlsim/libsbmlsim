@@ -19,9 +19,17 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   d = readSBML(argv[1]);
-  if (SBMLDocument_getNumErrors(d) > 0) {
-    printf("Input file [%s] is not an appropriate SBML file\n", argv[1]);
-    exit(1);
+
+  unsigned int error_num = SBMLDocument_getNumErrors(d);
+  if (error_num > 0) {
+    unsigned int i;
+    for (i = 0; i < error_num; i++) {
+      const SBMLError_t *err = SBMLDocument_getError(d, i);
+      if (XMLError_isError((XMLError_t *)err) || XMLError_isFatal((XMLError_t *)err)) {
+        printf("Input file [%s] is not an appropriate SBML file\n", argv[1]);
+        exit(1);
+      }
+    }
   }
   m = SBMLDocument_getModel(d);
   rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
