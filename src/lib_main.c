@@ -5,11 +5,15 @@
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
   SBMLDocument_t* d;
   Model_t* m;
-  myResult result;
+  //myResult result;
+  myResult *result = (myResult *)malloc(sizeof(myResult));
   myResult *rtn;
   d = readSBMLFromString(str);
   m = SBMLDocument_getModel(d);
-  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  printf("simulation start\n");
+  //rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  rtn = simulateSBMLModel(m, result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  printf("simulation end\n");
   SBMLDocument_free(d);
   return rtn;
 }
