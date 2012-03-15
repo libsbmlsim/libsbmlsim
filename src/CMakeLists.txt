@@ -3,6 +3,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   libsbmlsim/common.h
   libsbmlsim/libsbmlsim.h
   libsbmlsim/methods.h
+  libsbmlsim/myResult.h
   libsbmlsim/osarch.h
   libsbmlsim/version.h
   alg_alter_tree_structure.c
