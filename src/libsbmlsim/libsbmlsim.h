@@ -15,6 +15,7 @@
 #include "common.h"
 #include "methods.h"
 #include "version.h"
+#include "myResult.h"
 
 /* Boolean */
 typedef enum _boolean { false, true } boolean;
@@ -39,7 +40,6 @@ typedef struct _myAlgTargetParam myAlgTargetParam;
 typedef struct _myAlgTargetComp myAlgTargetComp;
 typedef struct _allocated_memory allocated_memory;
 typedef struct _copied_AST copied_AST;
-typedef struct _myResult myResult;
 
 struct _equation{
   double *number[MAX_MATH_LENGTH];
@@ -222,21 +222,6 @@ struct _allocated_memory{
 struct _copied_AST{
   ASTNode_t *ast[MAX_COPIED_AST];
   int num_of_copied_AST;
-};
-
-struct _myResult{
-  int num_of_rows;
-  int num_of_columns_sp;
-  int num_of_columns_param;
-  int num_of_columns_comp;
-  const char *column_name_time;
-  const char **column_name_sp;
-  const char **column_name_param;
-  const char **column_name_comp;
-  double *values_time;
-  double *values_sp;
-  double *values_param;
-  double *values_comp;
 };
 
 /* Substitute kineticlaw local parameter node to simple Real value node in AST Tree
