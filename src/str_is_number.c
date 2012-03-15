@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "libsbmlsim/libsbmlsim.h"
 
 boolean str_is_number(const char *str)
