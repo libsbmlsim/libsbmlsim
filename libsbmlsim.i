@@ -2,14 +2,17 @@
 %module libsbmlsim
 
 %include "enumsimple.swg"
+%include "carrays.i"
 
 %{
 #include "src/libsbmlsim/myResult.h"
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 %}
 
+%array_class(double,doubleArray);
+/*
 //////////////////////////////////////////////////////////////////////
-// (Java) double[] ->  (C) double*                                                                  
+// (Java) double[] ->  (C) double*
 //////////////////////////////////////////////////////////////////////
 %typemap(jni)   double*  "jdoubleArray" 
 %typemap(jtype) double*  "double[]" 
@@ -44,17 +47,18 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
   free($1);
 }
 //////////////////////////////////////////////////////////////////////
+*/
 
+%array_functions(char*,stringArray);
+/*
 //////////////////////////////////////////////////////////////////////
 // (Java) String[] ->  (C) char**
 //////////////////////////////////////////////////////////////////////
-/* This tells SWIG to treat char ** as a special case when used as a parameter
-   in a function call */
 %typemap(in) char ** (jint size) {
   int i = 0;
   size = (*jenv)->GetArrayLength(jenv, $input);
   $1 = (char **) malloc((size+1)*sizeof(char *));
-  /* make a copy of each string */
+
   for (i = 0; i<size; i++) {
     jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, $input, i);
     const char * c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
@@ -66,7 +70,6 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
   $1[i] = 0;
 }
 
-/* This cleans up the memory we malloc'd before the function call */
 %typemap(freearg) char ** {
   int i;
   for (i=0; i<size$argnum-1; i++)
@@ -74,7 +77,6 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
   free($1);
 }
 
-/* This allows a C function to return a char ** as a Java String array */
 %typemap(out) char ** {
   int i;
   int len=0;
@@ -83,7 +85,6 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
 
   while ($1[len]) len++;    
   jresult = (*jenv)->NewObjectArray(jenv, len, clazz, NULL);
-  /* exception checking omitted */
 
   for (i=0; i<len; i++) {
     temp_string = (*jenv)->NewStringUTF(jenv, *result++);
@@ -92,18 +93,16 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
   }
 }
 
-/* These 3 typemaps tell SWIG what JNI and Java types to use */
 %typemap(jni) char ** "jobjectArray"
 %typemap(jtype) char ** "String[]"
 %typemap(jstype) char ** "String[]"
 
-/* These 2 typemaps handle the conversion of the jtype to jstype typemap type
-   and vice versa */
 %typemap(javain) char ** "$javainput"
 %typemap(javaout) char ** {
   return $jnicall;
 }
 //////////////////////////////////////////////////////////////////////
+*/
 
 /* %include "src/libsbmlsim/myResult.h" */
 typedef _myResult myResult;
