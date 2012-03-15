@@ -9,5 +9,6 @@ public class Test {
     System.loadLibrary("sbmlj");
     SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
     result = libsbmlsim.simulateSBMLFromString(d.toSBML(), 4000.0, 0.1, 100, 1, 41, 0);
+    System.out.println(result.getColumn_name_time());
   }
 }
