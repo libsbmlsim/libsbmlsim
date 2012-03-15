@@ -223,7 +223,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
     node = (ASTNode_t*)InitialAssignment_getMath(initAssign);
     node = ASTNode_deepCopy(node);
-    dbg_printf("original math : ");
+    TRACE(("original math : "));
     check_AST(node, NULL);
     /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
@@ -239,7 +239,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
     }
     /* unit */
-    dbg_printf("altered math : ");
+    TRACE(("altered math : "));
     check_AST(node, NULL);
     if(include_time(node, 0)){
       time_variant_target_id[num_of_time_variant_targets++] = (char*)InitialAssignment_getSymbol(initAssign);
@@ -247,7 +247,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     myInitAssign[i]->eq = (equation*)malloc(sizeof(equation));
     myInitAssign[i]->eq->math_length = get_equation(m, myInitAssign[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem);
     /* ASTNode_free(node); */
-    dbg_printf("math\n");
+    TRACE(("math\n"));
     check_math(myInitAssign[i]->eq);
   }
 
@@ -261,7 +261,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     if(Rule_isAssignment(rule) && include_time(node, 0)){
       node = ASTNode_deepCopy(node);
       (*timeVarAssign)->target_id[(*timeVarAssign)->num_of_time_variant_assignments] = (char*)Rule_getVariable(rule);
-      dbg_printf("original math : ");
+      TRACE(("original math : "));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       /* unit */
@@ -279,7 +279,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         }
       }
       /* unit */
-      dbg_printf("altered math : ");
+      TRACE(("altered math : "));
       check_AST(node, NULL);
       (*timeVarAssign)->eq[(*timeVarAssign)->num_of_time_variant_assignments] = (equation*)malloc(sizeof(equation));
       (*timeVarAssign)->eq[(*timeVarAssign)->num_of_time_variant_assignments]->math_length = get_equation(m, (*timeVarAssign)->eq[(*timeVarAssign)->num_of_time_variant_assignments], mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem);
@@ -293,16 +293,16 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     re = (Reaction_t*)ListOf_get(Model_getListOfReactions(m), i);
     node = (ASTNode_t*)KineticLaw_getMath(Reaction_getKineticLaw(re));
     node = ASTNode_deepCopy(node);
-    dbg_printf("original math of %s: ", Reaction_getId(myRe[i]->origin));
+    TRACE(("original math of %s: ", Reaction_getId(myRe[i]->origin)));
     check_AST(node, NULL);
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
     set_local_para_as_value(node, Reaction_getKineticLaw(re));
-    dbg_printf("alterated math of %s : ", Reaction_getId(myRe[i]->origin));
+    TRACE(("alterated math of %s : ", Reaction_getId(myRe[i]->origin)));
     check_AST(node, NULL);
     myRe[i]->eq = (equation*)malloc(sizeof(equation));
     myRe[i]->eq->math_length = get_equation(m, myRe[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     /* ASTNode_free(node); */
-    dbg_printf("math of %s\n", Reaction_getId(myRe[i]->origin));
+    TRACE(("math of %s\n", Reaction_getId(myRe[i]->origin)));
     check_math(myRe[i]->eq);
     /* products start */
     for(j=0; j<myRe[i]->num_of_products; j++){
@@ -342,7 +342,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
         }
       }
-      dbg_printf("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
+      TRACE(("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin)));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       /* unit */
@@ -368,10 +368,10 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
       /* conversion factor */
       myRe[i]->products[j]->eq->math_length = get_equation(m, myRe[i]->products[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-      dbg_printf("alterated math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
+      TRACE(("alterated math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin)));
       check_AST(node, NULL);
       /* ASTNode_free(node); */
-      dbg_printf("math of %s\n", SpeciesReference_getSpecies(myRe[i]->products[j]->origin));
+      TRACE(("math of %s\n", SpeciesReference_getSpecies(myRe[i]->products[j]->origin)));
       check_math(myRe[i]->products[j]->eq);
       myRe[i]->products[j]->k[0] = 0;
       myRe[i]->products[j]->k[1] = 0;
@@ -424,7 +424,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
         }
       }
-      dbg_printf("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
+      TRACE(("original math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin)));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       /* unit */
@@ -450,10 +450,10 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
       /* conversion factor */
       myRe[i]->reactants[j]->eq->math_length = get_equation(m, myRe[i]->reactants[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-      dbg_printf("altered math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
+      TRACE(("altered math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin)));
       check_AST(node, NULL);
       /* ASTNode_free(node); */
-      dbg_printf("math of %s\n", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin));
+      TRACE(("math of %s\n", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin)));
       check_math(myRe[i]->reactants[j]->eq);
       myRe[i]->reactants[j]->k[0] = 0;      
       myRe[i]->reactants[j]->k[1] = 0;      
@@ -576,7 +576,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
       node = (ASTNode_t*)Rule_getMath(rule);
       node = ASTNode_deepCopy(node);
-      dbg_printf("original math : ");
+      TRACE(("original math : "));
       check_AST(node, NULL);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       /* unit */
@@ -591,12 +591,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         }
       }
       /* unit */
-      dbg_printf("altered math : ");
+      TRACE(("altered math : "));
       check_AST(node, NULL);
       myRu[i]->eq = (equation*)malloc(sizeof(equation));
       myRu[i]->eq->math_length = get_equation(m, myRu[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
-      dbg_printf("math\n");
+      TRACE(("math\n"));
       check_math(myRu[i]->eq);
     }
   }
@@ -614,16 +614,16 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
     node = (ASTNode_t*)Trigger_getMath(Event_getTrigger(event));
     node = ASTNode_deepCopy(node);
-    dbg_printf("original math of %s : ", Event_getId(myEv[i]->origin));
+    TRACE(("original math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
     myEv[i]->eq = (equation*)malloc(sizeof(equation));
     myEv[i]->eq->math_length = get_equation(m, myEv[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-    dbg_printf("altered math of %s : ", Event_getId(myEv[i]->origin));
+    TRACE(("altered math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* ASTNode_free(node); */
-    dbg_printf("math of %s\n", Event_getId(myEv[i]->origin));
+    TRACE(("math of %s\n", Event_getId(myEv[i]->origin)));
     check_math(myEv[i]->eq);
     if(Trigger_isSetInitialValue(Event_getTrigger(event))){
       myEv[i]->is_able_to_fire = !Trigger_getInitialValue(Event_getTrigger(event));
@@ -692,17 +692,17 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
       node = (ASTNode_t*)EventAssignment_getMath(myEv[i]->assignments[j]->origin);
       node = ASTNode_deepCopy(node);
-      dbg_printf("original math : ");
+      TRACE(("original math : "));
       check_AST(node, NULL);
       if(Event_getDelay(myEv[i]->origin) != NULL && Event_getUseValuesFromTriggerTime(myEv[i]->origin)){
         pre_ev_alter_tree_structure(&node, NULL, 0, (ASTNode_t*)Delay_getMath(Event_getDelay(myEv[i]->origin)));
-        dbg_printf("after pre ev alter math : ");
+        TRACE(("after pre ev alter math : "));
         check_AST(node, NULL);
         ev_alter_tree_structure(m, &node, NULL, 0, cp_AST);
-        dbg_printf("after ev alter math : ");
+        TRACE(("after ev alter math : "));
         check_AST(node, NULL);
         post_ev_alter_tree_structure(m, &node, NULL, 0);
-        dbg_printf("after post ev alter math : ");
+        TRACE(("after post ev alter math : "));
         check_AST(node, NULL);
       }else{
         alter_tree_structure(m, &node, NULL, 0, cp_AST);
@@ -719,12 +719,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         }
       }
       /* unit */
-      dbg_printf("altered math : ");
+      TRACE(("altered math : "));
       check_AST(node, NULL);
       myEv[i]->assignments[j]->eq = (equation*)malloc(sizeof(equation));
       myEv[i]->assignments[j]->eq->math_length = get_equation(m, myEv[i]->assignments[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
-      dbg_printf("math\n");
+      TRACE(("math\n"));
       check_math(myEv[i]->assignments[j]->eq);
     }
     myEv[i]->event_delay = NULL;
@@ -733,16 +733,16 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       myEv[i]->event_delay->origin = Event_getDelay(event);
       node = (ASTNode_t*)Delay_getMath(myEv[i]->event_delay->origin);
       node = ASTNode_deepCopy(node);
-      dbg_printf("original math : ");
+      TRACE(("original math : "));
       check_AST(node, NULL);
       /* alter_tree_structure(m, &node, cp_AST); */
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       myEv[i]->event_delay->eq = (equation*)malloc(sizeof(equation));
       myEv[i]->event_delay->eq->math_length = get_equation(m, myEv[i]->event_delay->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
-      dbg_printf("altered math : ");
+      TRACE(("altered math : "));
       check_AST(node, NULL);
       /* ASTNode_free(node); */
-      dbg_printf("math\n");
+      TRACE(("math\n"));
       check_math(myEv[i]->event_delay->eq);
       myEv[i]->firing_times = (double*)malloc(sizeof(double)*(int)(sim_time/dt));
       for(j=0; j<(int)(sim_time/dt); j++){
@@ -806,24 +806,24 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       algEq->coefficient = (equation*)malloc(sizeof(equation));
       algEq->constant = (equation*)malloc(sizeof(equation));
     }
-    dbg_printf("prepare algebraic start\n");
+    TRACE(("prepare algebraic start\n"));
     prepare_algebraic(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, algEq, sim_time, dt, time, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, cp_AST);
-    dbg_printf("prepare algebraic finish\n");
+    TRACE(("prepare algebraic finish\n"));
     if(algEq->num_of_algebraic_rules > 1){
       for(i=0; i<algEq->num_of_algebraic_rules; i++){
         for(j=0; j<algEq->num_of_algebraic_rules; j++){
-          dbg_printf("math of coefficient matrix[%d][%d] is\n", i, j);
+          TRACE(("math of coefficient matrix[%d][%d] is\n", i, j));
           check_math(algEq->coefficient_matrix[i][j]);
         }
       }
       for(i=0; i<algEq->num_of_algebraic_rules; i++){
-        dbg_printf("constant vector[%d] is\n", i);
+        TRACE(("constant vector[%d] is\n", i));
         check_math(algEq->constant_vector[i]);
       }
     }else{
-      dbg_printf("math of coefficient is\n");
+      TRACE(("math of coefficient is\n"));
       check_math(algEq->coefficient);
-      dbg_printf("math of constant is\n");
+      TRACE(("math of constant is\n"));
       check_math(algEq->constant);
     }
     if(algEq->num_of_algebraic_rules > 1){

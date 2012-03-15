@@ -21,6 +21,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   create_calc_object_list.c
   create_myResult_content.c
   create_mySBML_objects.c
+  dbg_printf.c
   ev_alter_tree_structure.c
   forwarding_value.c
   free_mySBML_objects.c
@@ -33,6 +34,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   output_result.c
   prepare_algebraic.c
   prepare_reversible_fast_reaction.c
+  prg_printf.c
   print_node_type.c
   print_result_list.c
   set_local_para_as_value.c

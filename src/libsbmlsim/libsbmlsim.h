@@ -339,6 +339,12 @@ void initialize_delay_val(mySpecies *sp[], int num_of_species, myParameter *para
 /* substitute delay val */
 void substitute_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, int cycle);
 
+/* Debug print */
+void dbg_printf(const char *fmt, ...);
+
+/* Progress print */
+void prg_printf(const char *fmt, ...);
+
 /* Run Simulation and output CSV */
 myResult* simulateSBMLModel(Model_t *m, myResult *result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 

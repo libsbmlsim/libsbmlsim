@@ -95,7 +95,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   double reactants_numerator, products_numerator;
   double min_value;
 
-  prg_printf("Simulation for [%s] Starts!\n", Model_getId(m));
+  PRG_TRACE(("Simulation for [%s] Starts!\n", Model_getId(m)));
   cycle = 0;
 
   /* initialize delay_val */
@@ -139,7 +139,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   for(i=0; i<num_of_initialAssignments; i++){
     for(j=0; j<initAssign[i]->eq->math_length; j++){
       if(initAssign[i]->eq->number[j] == time){
-        dbg_printf("time is replaced with reverse time\n");
+        TRACE(("time is replaced with reverse time\n"));
         initAssign[i]->eq->number[j] = &reverse_time;
       }else if(initAssign[i]->eq->number[j] != NULL){
         init_val = (double*)malloc(sizeof(double));
@@ -152,7 +152,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   for(i=0; i<timeVarAssign->num_of_time_variant_assignments; i++){
     for(j=0; j<timeVarAssign->eq[i]->math_length; j++){
       if(timeVarAssign->eq[i]->number[j] == time){
-        dbg_printf("time is replaced with reverse time\n");
+        TRACE(("time is replaced with reverse time\n"));
         timeVarAssign->eq[i]->number[j] = &reverse_time;
       }else if(timeVarAssign->eq[i]->number[j] != NULL){
         init_val = (double*)malloc(sizeof(double));
@@ -203,12 +203,12 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       for(i=0; i<algEq->num_of_algebraic_variables; i++){
         for(j=0; j<algEq->num_of_algebraic_variables; j++){
           coefficient_matrix[i][j] = calc(algEq->coefficient_matrix[i][j], dt, cycle, &reverse_time, 0);
-          /* dbg_printf("coefficient matrix[%d][%d] = %lf\n", i, j, coefficient_matrix[i][j]); */
+          /* TRACE(("coefficient matrix[%d][%d] = %lf\n", i, j, coefficient_matrix[i][j])); */
         }
       }
       for(i=0; i<algEq->num_of_algebraic_variables; i++){
         constant_vector[i] = -calc(algEq->constant_vector[i], dt, cycle, &reverse_time, 0);
-        /* dbg_printf("constant vector[%d] = %lf\n", i, constant_vector[i]); */
+        /* TRACE(("constant vector[%d] = %lf\n", i, constant_vector[i])); */
       }
       /* LU decompostion */
       error = lu_decomposition(coefficient_matrix, alg_pivot, algEq->num_of_algebraic_variables);
@@ -218,7 +218,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       /* forward substitution & backward substitution */
       lu_solve(coefficient_matrix, alg_pivot, algEq->num_of_algebraic_variables, constant_vector);
       /*       for(i=0; i<algEq->num_of_algebraic_variables; i++){ */
-      /*  dbg_printf("ans[%d] = %lf\n", i, constant_vector[i]); */
+      /*  TRACE(("ans[%d] = %lf\n", i, constant_vector[i])); */
       /*       } */
       for(i=0; i<algEq->num_of_alg_target_sp; i++){
         algEq->alg_target_species[i]->target_species->temp_value = constant_vector[algEq->alg_target_species[i]->order];
@@ -321,9 +321,9 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
 
     /* progress */
     if(cycle%(int)(end_cycle/10) == 0){
-      prg_printf("%3d %%\n", (int)(100*((double)cycle/(double)end_cycle)));
-      prg_printf("\x1b[1A");
-      prg_printf("\x1b[5D");
+      PRG_TRACE(("%3d %%\n", (int)(100*((double)cycle/(double)end_cycle))));
+      PRG_TRACE(("\x1b[1A"));
+      PRG_TRACE(("\x1b[5D"));
     }
     /* print result */
     if(cycle%print_interval == 0){
@@ -625,7 +625,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     /* forwarding value */
     forwarding_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference);
   }
-  prg_printf("Simulation for [%s] Ends!\n", Model_getId(m));
+  PRG_TRACE(("Simulation for [%s] Ends!\n", Model_getId(m)));
   if(algEq != NULL){
     for(i=0; i<algEq->num_of_algebraic_variables; i++){
       free(coefficient_matrix[i]);

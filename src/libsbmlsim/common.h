@@ -3,17 +3,21 @@
 
 /* debug print */
 #ifdef DEBUG_PRINT
-#define dbg_printf printf
+#define DEBUG_PRINT_FLAG 1
 #else
-#define dbg_printf 1 ? (void) 0 : printf
+#define DEBUG_PRINT_FLAG 0
 #endif
+
+#define TRACE(x) do { if (DEBUG_PRINT_FLAG) dbg_printf x; } while (0)
 
 /* progress print */
 #ifdef PROGRESS_PRINT
-#define prg_printf printf
+#define PROGRESS_PRINT_FLAG 1
 #else
-#define prg_printf 1 ? (void) 0 : printf
+#define PROGRESS_PRINT_FLAG 0
 #endif
+
+#define PRG_TRACE(x) do { if (PROGRESS_PRINT_FLAG) prg_printf x; } while (0)
 
 /* defined variables */
 #define MAX_MATH_LENGTH 256

@@ -59,199 +59,199 @@ void check_myAST(myASTNode *myNode){
   type = ASTNode_getType(myNode->origin);
   switch(type){
     case AST_PLUS:
-      dbg_printf("+ ");
+      TRACE(("+ "));
       break;
     case AST_MINUS:
-      dbg_printf("- ");
+      TRACE(("- "));
       break;
     case AST_TIMES:
-      dbg_printf("* ");
+      TRACE(("* "));
       break;
     case AST_DIVIDE:
-      dbg_printf("/ ");
+      TRACE(("/ "));
       break;
     case AST_POWER:
-      dbg_printf("pow ");
+      TRACE(("pow "));
       break;
     case AST_INTEGER:
-      dbg_printf("integer(%ld) ", ASTNode_getInteger(myNode->origin));
+      TRACE(("integer(%ld) ", ASTNode_getInteger(myNode->origin)));
       break;
     case AST_REAL:
-      dbg_printf("real(%lf) ", ASTNode_getReal(myNode->origin));
+      TRACE(("real(%lf) ", ASTNode_getReal(myNode->origin)));
       break;
     case AST_REAL_E:
-      dbg_printf("real_E ");
+      TRACE(("real_E "));
       break;
     case AST_RATIONAL:
-      dbg_printf("rational ");
+      TRACE(("rational "));
       break;
     case AST_NAME:
-      dbg_printf("name(%s) ", ASTNode_getName(myNode->origin));
+      TRACE(("name(%s) ", ASTNode_getName(myNode->origin)));
       break;
     case AST_NAME_AVOGADRO:
-      dbg_printf("avogadro ");
+      TRACE(("avogadro "));
       break;
     case AST_NAME_TIME:
-      dbg_printf("time ");
+      TRACE(("time "));
       break;
     case AST_CONSTANT_E:
-      dbg_printf("constant ");
+      TRACE(("constant "));
       break;
     case AST_CONSTANT_FALSE:
-      dbg_printf("constant_false ");
+      TRACE(("constant_false "));
       break;
     case AST_CONSTANT_PI:
-      dbg_printf("pi ");
+      TRACE(("pi "));
       break;
     case AST_CONSTANT_TRUE:
-      dbg_printf("constant_true ");
+      TRACE(("constant_true "));
       break;
     case AST_LAMBDA:
-      dbg_printf("lambda ");
+      TRACE(("lambda "));
       break;
     case AST_FUNCTION:
-      dbg_printf("function(%s) ", ASTNode_getName(myNode->origin));
+      TRACE(("function(%s) ", ASTNode_getName(myNode->origin)));
       break;
     case AST_FUNCTION_ABS:
-      dbg_printf("abs ");
+      TRACE(("abs "));
       break;
     case AST_FUNCTION_ARCCOS:
-      dbg_printf("arccos ");
+      TRACE(("arccos "));
       break;
     case AST_FUNCTION_ARCCOSH:
-      dbg_printf("arccosh ");
+      TRACE(("arccosh "));
       break;
     case AST_FUNCTION_ARCCOT:
-      dbg_printf("arccot ");
+      TRACE(("arccot "));
       break;
     case AST_FUNCTION_ARCCOTH:
-      dbg_printf("arccoth ");
+      TRACE(("arccoth "));
       break;
     case AST_FUNCTION_ARCCSC:
-      dbg_printf("arccsc ");
+      TRACE(("arccsc "));
       break;
     case AST_FUNCTION_ARCCSCH:
-      dbg_printf("arccsch ");
+      TRACE(("arccsch "));
       break;
     case AST_FUNCTION_ARCSEC:
-      dbg_printf("arcsec ");
+      TRACE(("arcsec "));
       break;
     case AST_FUNCTION_ARCSECH:
-      dbg_printf("arcsech ");
+      TRACE(("arcsech "));
       break;
     case AST_FUNCTION_ARCSIN:
-      dbg_printf("arcsin ");
+      TRACE(("arcsin "));
       break;
     case AST_FUNCTION_ARCSINH:
-      dbg_printf("arcsinh ");
+      TRACE(("arcsinh "));
       break;
     case AST_FUNCTION_ARCTAN:
-      dbg_printf("arctan ");
+      TRACE(("arctan "));
       break;
     case AST_FUNCTION_ARCTANH:
-      dbg_printf("arctanh ");
+      TRACE(("arctanh "));
       break;
     case AST_FUNCTION_CEILING:
-      dbg_printf("ceil ");
+      TRACE(("ceil "));
       break;
     case AST_FUNCTION_COS:
-      dbg_printf("cos ");
+      TRACE(("cos "));
       break;
     case AST_FUNCTION_COSH:
-      dbg_printf("cosh ");
+      TRACE(("cosh "));
       break;
     case AST_FUNCTION_COT:
-      dbg_printf("cot ");
+      TRACE(("cot "));
       break;
     case AST_FUNCTION_COTH:
-      dbg_printf("coth ");
+      TRACE(("coth "));
       break;
     case AST_FUNCTION_CSC:
-      dbg_printf("csc ");
+      TRACE(("csc "));
       break;
     case AST_FUNCTION_CSCH:
-      dbg_printf("csch ");
+      TRACE(("csch "));
       break;
     case AST_FUNCTION_DELAY:
-      dbg_printf("delay ");
+      TRACE(("delay "));
       break;
     case AST_FUNCTION_EXP:
-      dbg_printf("exp ");
+      TRACE(("exp "));
       break;
     case AST_FUNCTION_FACTORIAL:
-      dbg_printf("! ");
+      TRACE(("! "));
       break;
     case AST_FUNCTION_FLOOR:
-      dbg_printf("floor ");
+      TRACE(("floor "));
       break;
     case AST_FUNCTION_LN:
-      dbg_printf("ln ");
+      TRACE(("ln "));
       break;
     case AST_FUNCTION_LOG:
-      dbg_printf("log10 ");
+      TRACE(("log10 "));
       break;
     case AST_FUNCTION_PIECEWISE:
-      dbg_printf("piecewise ");
+      TRACE(("piecewise "));
       break;
     case AST_FUNCTION_POWER:
-      dbg_printf("f_pow ");
+      TRACE(("f_pow "));
       break;
     case AST_FUNCTION_ROOT:
-      dbg_printf("sqrt ");
+      TRACE(("sqrt "));
       break;
     case AST_FUNCTION_SEC:
-      dbg_printf("sec ");
+      TRACE(("sec "));
       break;
     case AST_FUNCTION_SECH:
-      dbg_printf("sech ");
+      TRACE(("sech "));
       break;
     case AST_FUNCTION_SIN:
-      dbg_printf("sin ");
+      TRACE(("sin "));
       break;
     case AST_FUNCTION_SINH:
-      dbg_printf("sinh ");
+      TRACE(("sinh "));
       break;
     case AST_FUNCTION_TAN:
-      dbg_printf("tan ");
+      TRACE(("tan "));
       break;
     case AST_FUNCTION_TANH:
-      dbg_printf("tanh ");
+      TRACE(("tanh "));
       break;
     case AST_LOGICAL_AND:
-      dbg_printf("and ");
+      TRACE(("and "));
       break;
     case AST_LOGICAL_NOT:
-      dbg_printf("not ");
+      TRACE(("not "));
       break;
     case AST_LOGICAL_OR:
-      dbg_printf("or ");
+      TRACE(("or "));
       break;
     case AST_LOGICAL_XOR:
-      dbg_printf("xor ");
+      TRACE(("xor "));
       break;
     case AST_RELATIONAL_EQ:
-      dbg_printf("eq ");
+      TRACE(("eq "));
       break;
     case AST_RELATIONAL_GEQ:
-      dbg_printf("geq ");
+      TRACE(("geq "));
       break;
     case AST_RELATIONAL_GT:
-      dbg_printf("gt ");
+      TRACE(("gt "));
       break;
     case AST_RELATIONAL_LEQ:
-      dbg_printf("leq ");
+      TRACE(("leq "));
       break;
     case AST_RELATIONAL_LT:
-      dbg_printf("lt ");
+      TRACE(("lt "));
       break;
     case AST_RELATIONAL_NEQ:
-      dbg_printf("neq ");
+      TRACE(("neq "));
       break;
     case AST_UNKNOWN:
-      dbg_printf("unknown ");
+      TRACE(("unknown "));
       break;
   }
   if(myNode->parent == NULL){
-    dbg_printf("\n\n");
+    TRACE(("\n\n"));
   }
 }

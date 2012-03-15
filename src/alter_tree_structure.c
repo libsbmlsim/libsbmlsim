@@ -41,7 +41,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       ASTNode_replaceChild(node, 0, zero_node);
       ASTNode_addChild(*node_p, next_node);
     }else{
-      /* dbg_printf("down to %d th child from\n", i); */
+      /* TRACE(("down to %d th child from\n", i)); */
       /* print_node_type(node); */
       alter_tree_structure(m, &next_node, *node_p, i, cp_AST);
     }
@@ -99,7 +99,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
         /* test */
         /* 	for(i=0; i<ASTNode_getNumChildren(fd_body); i++){ */
         /* 	  next_node = ASTNode_getChild(fd_body, i); */
-        /* 	  dbg_printf("down to %d th child from\n", i); */
+        /* 	  TRACE(("down to %d th child from\n", i)); */
         /* 	  print_node_type(node); */
         /* 	  alter_tree_structure(m, &next_node, fd_body, i, cp_AST); */
         /* 	} */
@@ -150,6 +150,6 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     ASTNode_reduceToBinary(node);
   }
   /* print_node_type(node); */
-  /* dbg_printf("is proccessed\n"); */
+  /* TRACE(("is proccessed\n")); */
   return;
 }

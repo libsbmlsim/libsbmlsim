@@ -173,7 +173,7 @@ int main(int argc, char *argv[]){
   /* prepare return value */
   myResult* rtn;
   if(myAlgEq == NULL){
-    dbg_printf("myAlgEq is NULL\n");
+    TRACE(("myAlgEq is NULL\n"));
   }
   /* CUI */
   if (method_key == -1) {
@@ -258,7 +258,7 @@ int main(int argc, char *argv[]){
   }
   order = method / 10;
   is_explicit = method % 10;
-  dbg_printf("simulate with %s\n", method_name);
+  TRACE(("simulate with %s\n", method_name));
 
   /* simulation */
   if (is_explicit == 1) {

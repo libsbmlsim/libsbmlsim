@@ -123,5 +123,5 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   /*     ASTNode_free(cp_AST->ast[i]); */
   /*   } */
   /*   free(cp_AST); */
-  dbg_printf("all allocated memory is freeed\n");
+  TRACE(("all allocated memory is freeed\n"));
 }

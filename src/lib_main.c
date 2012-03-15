@@ -5,13 +5,11 @@
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
   SBMLDocument_t* d;
   Model_t* m;
-  //myResult result;
   myResult *result = (myResult *)malloc(sizeof(myResult));
   myResult *rtn;
   d = readSBMLFromString(str);
   m = SBMLDocument_getModel(d);
   printf("simulation start\n");
-  //rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   rtn = simulateSBMLModel(m, result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   printf("simulation end\n");
   SBMLDocument_free(d);
@@ -130,7 +128,7 @@ myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, doubl
   }
   order = method / 10;
   is_explicit = method % 10;
-  dbg_printf("simulate with %s\n", method_name);
+  TRACE(("simulate with %s\n", method_name));
 
   /* simulation */
   if (is_explicit == 1) {
