@@ -6,6 +6,7 @@
 %}
 
 /* %include "src/libsbmlsim/myResult.h" */
+typedef _myResult myResult;
 struct _myResult{
   int num_of_rows;
   int num_of_columns_sp;
