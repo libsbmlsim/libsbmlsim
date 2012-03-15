@@ -12,7 +12,7 @@ void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], my
   result->num_of_columns_param = num_of_parameters;
   result->num_of_columns_comp = num_of_compartments;
   result->num_of_rows = end_cycle / print_interval + 1;
-  result->column_name_time  = "time";
+  result->column_name_time  = strdup("time");
   result->column_name_sp    = (const char **)malloc(sizeof(char *) * num_of_species);
   result->column_name_param = (const char **)malloc(sizeof(char *) * num_of_parameters);
   result->column_name_comp  = (const char **)malloc(sizeof(char *) * num_of_compartments);
