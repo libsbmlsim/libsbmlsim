@@ -7,10 +7,10 @@
  *                    at the same time, p[4] = 0.
  */
 int lu_decomposition(double **A, int *p, int N){
-  float Eps;
+  double Eps;
   int i, j, t;
   int mj;
-  float tmp;
+  double tmp;
   int   tmp2;
   Eps = 1e-10;
 

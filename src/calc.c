@@ -228,11 +228,11 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_FUNCTION_CEILING:
           /* dbg_printf("operate ceiling\n"); */
-          stack[pos-1] = ceilf((float)stack[pos-1]);
+          stack[pos-1] = ceil(stack[pos-1]);
           break;
         case AST_FUNCTION_FLOOR:
           /* dbg_printf("operate floor\n"); */
-          stack[pos-1] = floorf((float)stack[pos-1]);
+          stack[pos-1] = floor(stack[pos-1]);
           break;
         case AST_FUNCTION_DELAY:
           /* dbg_printf("operate delay\n"); */

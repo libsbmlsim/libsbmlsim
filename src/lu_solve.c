@@ -8,9 +8,9 @@
  *                    at the same time, p[4] = 0.
  */
 int lu_solve(double **A, int *p, int N, double *b){
-  float sum;
+  double sum;
   int i, j;
-  float tmp;
+  double tmp;
 
   for(j=0; j<N; j++){
     if(j != p[j] && j < p[j]){
