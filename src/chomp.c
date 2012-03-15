@@ -1,13 +1,13 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void chomp(char *str){
-  int i;
-  i = 0;
-  while(1){
-    if(str[i] == '\n' || str[i] == '\0'){
-      str[i] = '\0';
+void chomp(char *str)
+{
+  size_t pos = strlen(str);
+  while (pos--) {
+    if (str[pos] == '\n' || str[pos] == '\r')
+      str[pos] = '\0';
+    else
       break;
-    }
-    i++;
   }
 }
+
