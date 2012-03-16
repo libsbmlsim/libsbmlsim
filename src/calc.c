@@ -11,8 +11,8 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
   equation *explicit_delay_eq_preserver = NULL;
   /* double stack[eq->math_length]; */
   double *stack;
+  double rtn_val;
 
-  /* XXX must free? */
   stack = (double*)malloc(sizeof(double) * eq->math_length);
 
   for(i=0; i<eq->math_length; i++){
@@ -377,6 +377,8 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
       }
     }
   }
+  rtn_val = stack[0];
+  free(stack);
 
-  return stack[0];
+  return rtn_val;
 }
