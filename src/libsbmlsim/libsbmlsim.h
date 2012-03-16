@@ -4,13 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#define M_PI        3.14159265358979323846264338327950288
+#endif /* M_PI */
+#ifndef M_E
+#define M_E 2.71828182845904523536028747135266250
+#endif /* M_E */
+
 #include <float.h>
 #include <sbml/SBMLTypes.h>
 
@@ -252,8 +257,15 @@ int lu_solve(double **A, int *p, int N, double *b);
 /* numerical integration by implicit method(Adams-Moulton and Backward-Difference) */
 myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int use_lazy_method, int print_amount, allocated_memory *mem);
 
+/* util.c */
 /* get end_cycle */
 int get_end_cycle(double sim_time, double dt);
+
+/* set seed for random */
+void set_seed(void);
+
+/* strdup is not supported in C89, so I reimplement it. */
+char* dupstr(const char *str);
 
 /* create contents of myResult object */
 void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);

@@ -16,18 +16,40 @@ double calc_implicit_formula(int order, double x1, double x2, double x3, double 
   return c_i[order][0]*x1 + c_i[order][1]*x2 + c_i[order][2]*x3 + c_i[order][3]*x4 + c_i[order][4]*x5 + dt*(c_i[order][5]*k1 + c_i[order][6]*k2 + c_i[order][7]*k3 + c_i[order][8]*k4);
 }
 
-void seed_set_imp(){
+/* void seed_set_imp(){
   srand((unsigned)time(NULL));
-}
+} */
 
 myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int use_lazy_method, int print_amount, allocated_memory *mem){
   int i, j, cycle;
+  int error;
+  int end_cycle = get_end_cycle(sim_time, dt);
   double reverse_time;
   double *value_time_p = result->values_time;
   double *value_sp_p = result->values_sp;
   double *value_param_p = result->values_param;
   double *value_comp_p = result->values_comp;
-  int end_cycle = get_end_cycle(sim_time, dt);
+  double **coefficient_matrix = NULL;
+  double *constant_vector = NULL;
+  int *alg_pivot = NULL;
+  double reactants_numerator, products_numerator;
+  double min_value;
+  double *init_val;
+  /* for implicit */
+  double **jacobian;
+  int is_convergence = 0;
+  double *b;
+  double *pre_b;
+  int    *p; /* for pivot selection */
+  boolean flag;
+  double delta = 1.0e-8;
+  double tolerance = 1.0e-4; /* error tolerance of neuton method */
+  int loop;
+  double *delta_value;
+  double k_next; /* speculated k value : k(t+1) */
+  double *k_t;   /* k(t) */
+
+  /* num of SBase objects */
   int num_of_species = Model_getNumSpecies(m);
   int num_of_parameters = Model_getNumParameters(m);
   int num_of_compartments = Model_getNumCompartments(m);
@@ -36,53 +58,73 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   int num_of_events = Model_getNumEvents(m);
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
 
-  int num_of_all_var_species = 0; /* num of species whose quantity is not constant */
-  int num_of_all_var_parameters = 0; /* num of parameters whose value is not constant */
-  int num_of_all_var_compartments = 0; /* num of compartment whose value is not constant */
+  /* num of variables whose quantity is not a constant */
+  int num_of_all_var_species = 0;
+  int num_of_all_var_parameters = 0;
+  int num_of_all_var_compartments = 0;
   int num_of_all_var_species_reference = 0;
-  int num_of_var_species = 0; /* num of species whose quantity changes, but not by assignment, algebraic rule */
-  int num_of_var_parameters = 0; /* num of parameters whose value changes, but not by assignment, algebraic rule */
-  int num_of_var_compartments = 0; /* num of compartments whose value changes, but not by assignment, algebraic rule */
+  /* num of variables (which is NOT changed by assignment nor algebraic rule) */
+  int num_of_var_species = 0;
+  int num_of_var_parameters = 0;
+  int num_of_var_compartments = 0;
   int num_of_var_species_reference = 0;
+  int sum_num_of_vars;
+  /* All variables (whose quantity is not a constant) */
+  mySpecies **all_var_sp;           /* all variable species */
+  myParameter **all_var_param;      /* all variable parameters */
+  myCompartment **all_var_comp;     /* all variable compartments */
+  mySpeciesReference **all_var_spr; /* all varialbe SpeciesReferences */
+  /* variables (which is NOT changed by assignment nor algebraic rule) */
+  mySpecies **var_sp;
+  myParameter **var_param;
+  myCompartment **var_comp;
+  mySpeciesReference **var_spr;
 
-  seed_set_imp();
+  set_seed();
 
   check_num(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, &num_of_all_var_species, &num_of_all_var_parameters, &num_of_all_var_compartments, &num_of_all_var_species_reference, &num_of_var_species, &num_of_var_parameters, &num_of_var_compartments, &num_of_var_species_reference, sp, param, comp, re);
 
-  mySpecies *all_var_sp[num_of_all_var_species]; /* all variable species */
-  myParameter *all_var_param[num_of_all_var_parameters]; /* all variable parameters */
-  myCompartment *all_var_comp[num_of_all_var_compartments]; /* all variable compartments */
-  mySpeciesReference *all_var_spr[num_of_all_var_species_reference];
-  mySpecies *var_sp[num_of_var_species]; /* variable species (species which change their value with assignment and algebraic rule are excluded) */
-  myParameter *var_param[num_of_var_parameters]; /* variable parameters (parameters which change their value with assignment and algebraic rule are excluded) */
-  myCompartment *var_comp[num_of_var_compartments]; /* variable compartments (parameters which change their value with assignment and algebraic rule are excluded) */
-  mySpeciesReference *var_spr[num_of_var_species_reference];
+  /* create objects */
+  all_var_sp = (mySpecies **)malloc(sizeof(mySpecies *) * num_of_all_var_species);
+  all_var_param = (myParameter **)malloc(sizeof(myParameter *) * num_of_all_var_parameters);
+  all_var_comp = (myCompartment **)malloc(sizeof(myCompartment *) * num_of_all_var_compartments);
+  all_var_spr = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_all_var_species_reference);
+  var_sp = (mySpecies **)malloc(sizeof(mySpecies *) * num_of_var_species);
+  var_param = (myParameter **)malloc(sizeof(myParameter *) * num_of_var_parameters);
+  var_comp = (myCompartment **)malloc(sizeof(myCompartment *) * num_of_var_compartments);
+  var_spr = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_var_species_reference);
+  /* mySpecies *all_var_sp[num_of_all_var_species]; */
+  /* myParameter *all_var_param[num_of_all_var_parameters]; */
+  /* myCompartment *all_var_comp[num_of_all_var_compartments]; */
+  /* mySpeciesReference *all_var_spr[num_of_all_var_species_reference]; */
+  /* mySpecies *var_sp[num_of_var_species]; */
+  /* myParameter *var_param[num_of_var_parameters]; */
+  /* myCompartment *var_comp[num_of_var_compartments]; */
+  /* mySpeciesReference *var_spr[num_of_var_species_reference]; */
 
   create_calc_object_list(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, num_of_all_var_species, num_of_all_var_parameters, num_of_all_var_compartments, num_of_all_var_species_reference, num_of_var_species, num_of_var_parameters, num_of_var_compartments, num_of_var_species_reference, all_var_sp, all_var_param, all_var_comp, all_var_spr, var_sp, var_param, var_comp, var_spr, sp, param, comp, re);
 
-  double **jacobian;
-  jacobian = (double**)malloc(sizeof(double*)*(num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference));
-  for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
-    jacobian[i] = (double*)malloc(sizeof(double)*(num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference));
+  sum_num_of_vars = num_of_var_species + num_of_var_parameters +
+                    num_of_var_compartments + num_of_var_species_reference;
+
+  jacobian = (double**)malloc(sizeof(double*)*(sum_num_of_vars));
+  for(i=0; i<sum_num_of_vars; i++){
+    jacobian[i] = (double*)malloc(sizeof(double)*(sum_num_of_vars));
   }
 
-  double b[num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference];
-  double pre_b[num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference];
-  int is_convergence = 0;
-  int p[num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference]; /* for pivot selection */
-  int flag;
-  double delta = 1.0e-8;
-  double tolerance = 1.0e-4; /* error tolerance of neuton method */
-  int loop;
-  double delta_value[num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference];
-  int error;
+  b = (double *)malloc(sizeof(double) * (sum_num_of_vars));
+  pre_b = (double *)malloc(sizeof(double) * (sum_num_of_vars));
+  p = (int *)malloc(sizeof(int) * (sum_num_of_vars));
+  delta_value = (double *)malloc(sizeof(double) * (sum_num_of_vars));
+  k_t = (double *)malloc(sizeof(double) * (sum_num_of_vars));
+  /*
+  double b[sum_num_of_vars];
+  double pre_b[sum_num_of_vars];
+  int p[sum_num_of_vars];
+  double delta_value[sum_num_of_vars];
+  double k_t[sum_num_of_vars];
+  */
 
-  double k_next; /* speculated k value : k(t+1) */
-  double k_t[num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference]; /* k(t) */
-
-  double **coefficient_matrix = NULL;
-  double *constant_vector = NULL;
-  int *alg_pivot = NULL;
   if(algEq != NULL){
     coefficient_matrix = (double**)malloc(sizeof(double*)*(algEq->num_of_algebraic_variables));
     for(i=0; i<algEq->num_of_algebraic_variables; i++){
@@ -91,9 +133,6 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     constant_vector = (double*)malloc(sizeof(double)*(algEq->num_of_algebraic_variables));
     alg_pivot = (int*)malloc(sizeof(int)*(algEq->num_of_algebraic_variables));
   }
-
-  double reactants_numerator, products_numerator;
-  double min_value;
 
   PRG_TRACE(("Simulation for [%s] Starts!\n", Model_getId(m)));
   cycle = 0;
@@ -135,7 +174,6 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   initialize_delay_val(sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, sim_time, dt, 0);
 
   /* rewriting for explicit delay */
-  double *init_val;
   for(i=0; i<num_of_initialAssignments; i++){
     for(j=0; j<initAssign[i]->eq->math_length; j++){
       if(initAssign[i]->eq->number[j] == time){
@@ -373,7 +411,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     calc_k(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference, re, num_of_reactions, rule, num_of_rules, cycle, dt, &reverse_time, 0, 1);
 
     /* preserve k(t) value */
-    for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+    for(i=0; i<sum_num_of_vars; i++){
       if(i < num_of_var_species){
         k_t[i] = var_sp[i]->k[0];
       }else if(i < num_of_var_species+num_of_var_parameters){
@@ -391,7 +429,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     /* newton method */
     if(use_lazy_method){
       is_convergence = 0;
-      for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+      for(i=0; i<sum_num_of_vars; i++){
         pre_b[i] = 0;
       }
     }
@@ -415,7 +453,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
 
       if(!use_lazy_method || !is_convergence){
         /* calc jacobian by numerical differentiation */
-        for(loop=0; loop<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; loop++){
+        for(loop=0; loop<sum_num_of_vars; loop++){
           if(loop < num_of_var_species){
             var_sp[loop]->temp_value += delta;
           }else if(loop < num_of_var_species+num_of_var_parameters){
@@ -460,21 +498,21 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
 
       /* initialize p */
-      for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+      for(i=0; i<sum_num_of_vars; i++){
         p[i] = i;
       }
 
       /* LU decomposition */
-      error = lu_decomposition(jacobian, p, num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference);
+      error = lu_decomposition(jacobian, p, sum_num_of_vars);
       if(error == 0){/* failure in LU decomposition */
         return NULL;
       }
 
       /* forward substitution & backward substitution */
-      lu_solve(jacobian, p, num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference, b);
+      lu_solve(jacobian, p, sum_num_of_vars, b);
 
       /* calculate next temp value */
-      for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+      for(i=0; i<sum_num_of_vars; i++){
         if(i < num_of_var_species){
           var_sp[i]->temp_value -= b[i];
         }else if(i < num_of_var_species+num_of_var_parameters){
@@ -489,19 +527,19 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       /* convergence judgement */
       if(use_lazy_method){
         is_convergence = 1;
-        for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+        for(i=0; i<sum_num_of_vars; i++){
           if(fabs(b[i]) > fabs(pre_b[i])){
             is_convergence = 0;
           }
         }
-        for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+        for(i=0; i<sum_num_of_vars; i++){
           pre_b[i] = b[i];
         }
       }
 
       /* error judgement */
       flag = 0;
-      for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+      for(i=0; i<sum_num_of_vars; i++){
         if(fabs(b[i]) > tolerance){
           flag = 1;
         }
@@ -634,9 +672,18 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
     free(constant_vector);
     free(alg_pivot);
   }
-  for(i=0; i<num_of_var_species+num_of_var_parameters+num_of_var_compartments+num_of_var_species_reference; i++){
+  for(i=0; i<sum_num_of_vars; i++){
     free(jacobian[i]);
   }
+  free(all_var_sp);
+  free(all_var_param);
+  free(all_var_comp);
+  free(all_var_spr);
+  free(var_sp);
+  free(var_param);
+  free(var_comp);
+  free(var_spr);
+  /* for implicit */
   free(jacobian);
   return result;
 }

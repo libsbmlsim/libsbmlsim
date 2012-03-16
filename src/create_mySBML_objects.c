@@ -32,10 +32,25 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   int num_of_rules = Model_getNumRules(m);
   int num_of_events = Model_getNumEvents(m);
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
+  int num_of_time_variant_targets;
+  int num_of_algebraic_rules;
+
+  /* Prepare objects */
   ASTNode_t *node;
+  Species_t *sp;
+  Parameter_t *param;
+  Compartment_t *comp;
+  Reaction_t *re;
+  InitialAssignment_t *initAssign;
+  Rule_t *rule;
+  ASTNode_t *times_node, *conv_factor_node;
+  Event_t *event;
+
+  const char *product_id, *reactant_id;
+  myAlgebraicEquations *algEq;
+  char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
   /* create mySpecies   */
-  Species_t *sp;
   for(i=0; i<num_of_species; i++){
     sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
     mySp[i] = (mySpecies*)malloc(sizeof(mySpecies));
@@ -75,7 +90,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myParameters */
-  Parameter_t *param;
   for(i=0; i<num_of_parameters; i++){
     param = (Parameter_t*)ListOf_get(Model_getListOfParameters(m), i);
     myParam[i] = (myParameter*)malloc(sizeof(myParameter));
@@ -101,7 +115,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myCompartment */
-  Compartment_t *comp;
   for(i=0; i<num_of_compartments; i++){
     comp = (Compartment_t*)ListOf_get(Model_getListOfCompartments(m), i);
     myComp[i] = (myCompartment*)malloc(sizeof(myCompartment));
@@ -139,8 +152,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myReaction & mySpeciseReference without equation */
-  Reaction_t *re;
-  const char *product_id, *reactant_id;
   for(i=0; i<num_of_reactions; i++){
     re = (Reaction_t*)ListOf_get(Model_getListOfReactions(m), i);
     myRe[i] = (myReaction*)malloc(sizeof(myReaction));
@@ -184,9 +195,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myInitialAssignments */
-  InitialAssignment_t *initAssign;
-  char *time_variant_target_id[MAX_DELAY_REACTION_NUM];
-  int num_of_time_variant_targets = 0;
+  num_of_time_variant_targets = 0;
   for(i=0; i<num_of_initialAssignments; i++){
     initAssign = (InitialAssignment_t*)ListOf_get(Model_getListOfInitialAssignments(m), i);
     myInitAssign[i] = (myInitialAssignment*)malloc(sizeof(myInitialAssignment));
@@ -252,7 +261,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* find time variant target of assignment rule */
-  Rule_t *rule;
   *timeVarAssign = (timeVariantAssignments*)malloc(sizeof(timeVariantAssignments));
   (*timeVarAssign)->num_of_time_variant_assignments = 0;
   for(i=0; i<num_of_rules; i++){
@@ -288,7 +296,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myReaction & mySpeciseReference equation */
-  ASTNode_t *times_node, *conv_factor_node;
   for(i=0; i<num_of_reactions; i++){
     re = (Reaction_t*)ListOf_get(Model_getListOfReactions(m), i);
     node = (ASTNode_t*)KineticLaw_getMath(Reaction_getKineticLaw(re));
@@ -602,7 +609,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* create myEvents & myEventAssignments */
-  Event_t *event;
   for(i=0; i<num_of_events; i++){
     event = (Event_t*)ListOf_get(Model_getListOfEvents(m), i);
     myEv[i] = (myEvent*)malloc(sizeof(myEvent));
@@ -762,8 +768,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   }
 
   /* prepare Algebraic */
-  int num_of_algebraic_rules = 0;
-  myAlgebraicEquations *algEq;
+  num_of_algebraic_rules = 0;
   for(i=0; i<num_of_rules; i++){
     if(myRu[i]->is_algebraic){
       num_of_algebraic_rules++;

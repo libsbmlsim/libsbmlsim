@@ -375,7 +375,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
     eq->number[index] = (double*)malloc(sizeof(double));
     mem->memory[mem->num_of_allocated_memory++] = eq->number[index];
     if(ASTNode_getType(node) == AST_CONSTANT_E){
-      value = 2.718281828459045235360287471352;
+      /* value = 2.718281828459045235360287471352; */
+      value = M_E;
     }else{
       value = M_PI;
     }

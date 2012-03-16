@@ -26,7 +26,7 @@ void print_node_type(ASTNode_t *node){
       printf("integer(%ld)\n", ASTNode_getInteger(node));
       break;
     case AST_REAL:
-      printf("real(%lf)\n", ASTNode_getReal(node));
+      printf("real(%f)\n", ASTNode_getReal(node));
       break;
     case AST_REAL_E:
       printf("real_E\n");

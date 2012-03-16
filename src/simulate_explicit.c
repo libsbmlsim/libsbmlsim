@@ -11,19 +11,23 @@ double calc_explicit_formula(int order, double k1, double k2, double k3, double 
   return c_e[order][0]*k1 + c_e[order][1]*k2 + c_e[order][2]*k3 + c_e[order][3]*k4;
 }
 
-void seed_set_ex(){
-  srand((unsigned)time(NULL));
-}
-
 myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem){
   int i, j, cycle;
+  int error;
+  int end_cycle = get_end_cycle(sim_time, dt);
   double reverse_time;
   double *value_time_p = result->values_time;
   double *value_sp_p = result->values_sp;
   double *value_param_p = result->values_param;
   double *value_comp_p = result->values_comp;
-  int error;
-  int end_cycle = get_end_cycle(sim_time, dt);
+  double **coefficient_matrix = NULL;
+  double *constant_vector = NULL;
+  int *alg_pivot = NULL;
+  double reactants_numerator, products_numerator;
+  double min_value;
+  double *init_val;
+
+  /* num of SBase objects */
   int num_of_species = Model_getNumSpecies(m);
   int num_of_parameters = Model_getNumParameters(m);
   int num_of_compartments = Model_getNumCompartments(m);
@@ -31,34 +35,51 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   int num_of_rules = Model_getNumRules(m);
   int num_of_events = Model_getNumEvents(m);
   int num_of_initialAssignments = Model_getNumInitialAssignments(m);
-
-  int num_of_all_var_species = 0; /* num of species whose quantity is not constant */
-  int num_of_all_var_parameters = 0; /* num of parameters whose value is not constant */
-  int num_of_all_var_compartments = 0; /* num of compartment whose value is not constant */
+  /* num of variables whose quantity is not a constant */
+  int num_of_all_var_species = 0;
+  int num_of_all_var_parameters = 0;
+  int num_of_all_var_compartments = 0;
   int num_of_all_var_species_reference = 0;
-  int num_of_var_species = 0; /* num of species whose quantity changes, but not by assignment, algebraic rule */
-  int num_of_var_parameters = 0; /* num of parameters whose value changes, but not by assignment, algebraic rule */
-  int num_of_var_compartments = 0; /* num of compartments whose value changes, but not by assignment, algebraic rule */
+  /* num of variables (which is NOT changed by assignment nor algebraic rule) */
+  int num_of_var_species = 0;
+  int num_of_var_parameters = 0;
+  int num_of_var_compartments = 0;
   int num_of_var_species_reference = 0;
+  /* All variables (whose quantity is not a constant) */
+  mySpecies **all_var_sp;           /* all variable species */
+  myParameter **all_var_param;      /* all variable parameters */
+  myCompartment **all_var_comp;     /* all variable compartments */
+  mySpeciesReference **all_var_spr; /* all varialbe SpeciesReferences */
+  /* variables (which is NOT changed by assignment nor algebraic rule) */
+  mySpecies **var_sp; 
+  myParameter **var_param;
+  myCompartment **var_comp;
+  mySpeciesReference **var_spr;
 
-  seed_set_ex();
+  set_seed();
 
   check_num(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, &num_of_all_var_species, &num_of_all_var_parameters, &num_of_all_var_compartments, &num_of_all_var_species_reference, &num_of_var_species, &num_of_var_parameters, &num_of_var_compartments, &num_of_var_species_reference, sp, param, comp, re);
 
-  mySpecies *all_var_sp[num_of_all_var_species]; /* all variable species */
-  myParameter *all_var_param[num_of_all_var_parameters]; /* all variable parameters */
-  myCompartment *all_var_comp[num_of_all_var_compartments]; /* all variable compartments */
-  mySpeciesReference *all_var_spr[num_of_all_var_species_reference];
-  mySpecies *var_sp[num_of_var_species]; /* variable species (species which change their value with assignment and algebraic rule are excluded) */
-  myParameter *var_param[num_of_var_parameters]; /* variable parameters (parameters which change their value with assignment and algebraic rule are excluded) */
-  myCompartment *var_comp[num_of_var_compartments]; /* variable compartments (parameters which change their value with assignment and algebraic rule are excluded) */
-  mySpeciesReference *var_spr[num_of_var_species_reference];
+  /* create objects */
+  all_var_sp = (mySpecies **)malloc(sizeof(mySpecies *) * num_of_all_var_species);
+  all_var_param = (myParameter **)malloc(sizeof(myParameter *) * num_of_all_var_parameters);
+  all_var_comp = (myCompartment **)malloc(sizeof(myCompartment *) * num_of_all_var_compartments);
+  all_var_spr = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_all_var_species_reference);
+  var_sp = (mySpecies **)malloc(sizeof(mySpecies *) * num_of_var_species);
+  var_param = (myParameter **)malloc(sizeof(myParameter *) * num_of_var_parameters);
+  var_comp = (myCompartment **)malloc(sizeof(myCompartment *) * num_of_var_compartments);
+  var_spr = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_var_species_reference);
+  /* mySpecies *all_var_sp[num_of_all_var_species]; */
+  /* myParameter *all_var_param[num_of_all_var_parameters]; */
+  /* myCompartment *all_var_comp[num_of_all_var_compartments]; */
+  /* mySpeciesReference *all_var_spr[num_of_all_var_species_reference]; */
+  /* mySpecies *var_sp[num_of_var_species]; */
+  /* myParameter *var_param[num_of_var_parameters]; */
+  /* myCompartment *var_comp[num_of_var_compartments]; */
+  /* mySpeciesReference *var_spr[num_of_var_species_reference]; */
 
   create_calc_object_list(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, num_of_all_var_species, num_of_all_var_parameters, num_of_all_var_compartments, num_of_all_var_species_reference, num_of_var_species, num_of_var_parameters, num_of_var_compartments, num_of_var_species_reference, all_var_sp, all_var_param, all_var_comp, all_var_spr, var_sp, var_param, var_comp, var_spr, sp, param, comp, re);
 
-  double **coefficient_matrix = NULL;
-  double *constant_vector = NULL;
-  int *alg_pivot = NULL;
   if(algEq != NULL){
     coefficient_matrix = (double**)malloc(sizeof(double*)*(algEq->num_of_algebraic_variables));
     for(i=0; i<algEq->num_of_algebraic_variables; i++){
@@ -67,9 +88,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
     constant_vector = (double*)malloc(sizeof(double)*(algEq->num_of_algebraic_variables));
     alg_pivot = (int*)malloc(sizeof(int)*(algEq->num_of_algebraic_variables));
   }
-
-  double reactants_numerator, products_numerator;
-  double min_value;
 
   PRG_TRACE(("Simulation for [%s] Starts!\n", Model_getId(m)));
   cycle = 0;
@@ -111,7 +129,6 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   initialize_delay_val(sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, sim_time, dt, 0);
 
   /* rewriting for explicit delay */
-  double *init_val;
   for(i=0; i<num_of_initialAssignments; i++){
     for(j=0; j<initAssign[i]->eq->math_length; j++){
       if(initAssign[i]->eq->number[j] == time){
@@ -490,5 +507,13 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
     free(constant_vector);
     free(alg_pivot);
   }
+  free(all_var_sp);
+  free(all_var_param);
+  free(all_var_comp);
+  free(all_var_spr);
+  free(var_sp);
+  free(var_param);
+  free(var_comp);
+  free(var_spr);
   return result;
 }
