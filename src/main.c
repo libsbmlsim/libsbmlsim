@@ -26,9 +26,6 @@ void usage(char *str) {
   exit(1);
 }
 
-/* Extended SBML_simulator_1028  */
-/* improved in main.c optget */
-/* processing for compartment is added */
 int main(int argc, char *argv[]){
   SBMLDocument_t *d;
   Model_t *m;
@@ -37,6 +34,7 @@ int main(int argc, char *argv[]){
   int ch;
   extern char *optarg;
   extern int optind, opterr;
+  unsigned int error_num;
 
   char *myname;
   boolean use_lazy_method = -1;
@@ -50,18 +48,12 @@ int main(int argc, char *argv[]){
 
   char buf1[256], buf2[256], buf3[256];
   int method;
-  int order = 0;
-  int is_explicit;
+  boolean is_explicit;
   char *method_name;
   int method_key = -1;
 
-  allocated_memory *mem;
-  mem = (allocated_memory*)malloc(sizeof(allocated_memory));
-  mem->num_of_allocated_memory = 0;
-
-  copied_AST *cp_AST;
-  cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
-  cp_AST->num_of_copied_AST = 0;
+  myResult result;
+  myResult *rtn;
 
   myname = argv[0];
   while ((ch = getopt(argc, argv, "t:s:d:m:lna")) != -1){
@@ -99,10 +91,18 @@ int main(int argc, char *argv[]){
     usage(myname);
   }
   d = readSBML(argv[0]);
-  /*   if(SBMLDocument_getNumErrors(d) > 0){ */
-  /*     printf("Input file [%s] is not an appropriate SBML file\n", argv[0]); */
-  /*     exit(1); */
-  /*   } */
+
+  error_num = SBMLDocument_getNumErrors(d);
+  if (error_num > 0) {
+    unsigned int i;
+    for (i = 0; i < error_num; i++) {
+      const SBMLError_t *err = SBMLDocument_getError(d, i);
+      if (XMLError_isError((XMLError_t *)err) || XMLError_isFatal((XMLError_t *)err)) {
+        printf("Input file [%s] is not an appropriate SBML file\n", argv[0]);
+        exit(1);
+      }
+    }
+  }
   m = SBMLDocument_getModel(d);
 
   /* determine sim_time */
@@ -135,46 +135,8 @@ int main(int argc, char *argv[]){
   /* calculate simulation condition */
   dt = delta*(sim_time/step);
   print_interval = (int)(1/delta);
-  printf("  time:%g step:%d dt:%lf\n", sim_time, step, dt);
+  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
 
-  /* time in simulation */
-  double time = 0;
-  /* prepare mySpecies */
-  int num_of_species = Model_getNumSpecies(m);
-  mySpecies *mySp[num_of_species];
-  /* prepare myParameters */
-  int num_of_parameters = Model_getNumParameters(m);
-  myParameter *myParam[num_of_parameters];
-  /* prepare myCompartments */
-  int num_of_compartments = Model_getNumCompartments(m);
-  myCompartment *myComp[num_of_compartments];
-  /* prepare myReactions */
-  int num_of_reactions = Model_getNumReactions(m);
-  myReaction *myRe[num_of_reactions];
-  /* prepare myRules */
-  int num_of_rules = Model_getNumRules(m);
-  myRule *myRu[num_of_rules];
-  /* prepare myEvents */
-  int num_of_events = Model_getNumEvents(m);  
-  myEvent *myEv[num_of_events];
-  /* prepare myInitial Assignments */
-  int num_of_initialAssignments = Model_getNumInitialAssignments(m);
-  myInitialAssignment *myInitAssign[num_of_initialAssignments];
-  /* prepare myAlgebraicEquations */
-  myAlgebraicEquations *myAlgEq = NULL;
-  /* prepare timeVariantAssignments */
-  timeVariantAssignments *timeVarAssign = NULL;
-  /* create myObjects */
-  create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
-  /* prepare myResult */
-  myResult result;
-  /* create myResult */
-  create_myResult_content(m, &result, mySp, myParam, myComp, sim_time, dt, print_interval);
-  /* prepare return value */
-  myResult* rtn;
-  if(myAlgEq == NULL){
-    TRACE(("myAlgEq is NULL\n"));
-  }
   /* CUI */
   if (method_key == -1) {
     while(1){
@@ -256,14 +218,10 @@ int main(int argc, char *argv[]){
       method_name = MTHD_NAME_RUNGE_KUTTA;
       break;
   }
-  order = method / 10;
   is_explicit = method % 10;
-  TRACE(("simulate with %s\n", method_name));
 
   /* simulation */
-  if (is_explicit == 1) {
-    rtn = simulate_explicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
-  }else{
+  if (!is_explicit) {
     if (use_lazy_method == -1) {
       while(1){
         printf("use lazy mode?\nlazy mode:using jacobian continuously while the solutions of equations are converging in newton method.\nyes(y) or no(n)\n");
@@ -281,8 +239,10 @@ int main(int argc, char *argv[]){
     if(use_lazy_method == true) {
       printf("  simulate with lazy mode\n");
     }
-    rtn = simulate_implicit(m, &result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
   }
+
+  /* Run simulation */
+  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
 
   /* write CSV */
   if (rtn == NULL) {
@@ -301,8 +261,6 @@ int main(int argc, char *argv[]){
   /* print_result_list(m, mySp, myParam, myComp); */
 
   /* free */
-  printf("  free all allocated memory\n");
-  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
   SBMLDocument_free(d);
   return 0;
 }

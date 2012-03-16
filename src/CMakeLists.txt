@@ -63,3 +63,7 @@ target_link_libraries(sbmlsim sbml)
 add_executable(test ${SOURCES_TEST})
 target_link_libraries(test sbmlsim sbml)
 
+# Simulator for test suiteprogram
+add_executable(../sim ${SOURCES_MAIN})
+target_link_libraries(../sim sbmlsim sbml)
+

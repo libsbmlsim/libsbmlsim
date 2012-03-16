@@ -33,10 +33,14 @@ int assign_ok(ASTNode_t *assignment_math, char *target_list[], int num_of_target
 
 void calc_initial_assignment(myInitialAssignment *initAssign[], int num_of_initialAssignments, double dt, int cycle, double *reverse_time){
   int i;
-  char *target_list[num_of_initialAssignments];
-  char *assigned_target_list[num_of_initialAssignments];
+  char **target_list;
+  char **assigned_target_list;
+  ASTNode_t **assignment_math_list;
   int num_of_assigned_targets = 0;
-  ASTNode_t *assignment_math_list[num_of_initialAssignments];
+
+  target_list = (char **)malloc(sizeof(char *) * num_of_initialAssignments);
+  assigned_target_list = (char **)malloc(sizeof(char *) * num_of_initialAssignments);
+  assignment_math_list = (ASTNode_t **)malloc(sizeof(ASTNode_t *) * num_of_initialAssignments);
 
   for(i=0; i<num_of_initialAssignments; i++){
     if(initAssign[i]->target_species != NULL){
@@ -80,4 +84,7 @@ void calc_initial_assignment(myInitialAssignment *initAssign[], int num_of_initi
       }
     }
   }
+  free(target_list);
+  free(assigned_target_list);
+  free(assignment_math_list);
 }
