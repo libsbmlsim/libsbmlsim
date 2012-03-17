@@ -9,3 +9,18 @@ int64_t factorial(int n){
   }
   return ans;
 }
+
+double _asinh(double x) {
+#if defined(WIN32) || (__STRICT_ANSI__)
+  if(x == 0.0) {
+    return 0.0;
+  }
+  if (x > 0.0) {
+    return log(x + sqrt(x * x + 1));
+  } else {
+    return -log(-x + sqrt(x * x + 1));
+  }
+#else
+  return asinh(x);
+#endif
+}

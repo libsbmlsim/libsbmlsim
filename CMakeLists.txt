@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(libsbmlsim)
 
 # cmake variables
-set(CMAKE_C_FLAGS "-O2 -Wall -ansi -pedantic")
+set(CMAKE_C_FLAGS "-g -O2 -Wall -ansi -pedantic")
 # language bindings
 option(WITH_JAVA     "Generate Java language bindings."   OFF)
 option(WITH_PYTHON   "Generate Python language bindings." OFF)

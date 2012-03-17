@@ -172,7 +172,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_FUNCTION_ARCSINH:
           /* TRACE(("operate arcsinh\n")); */
-          stack[pos-1] = asinh(stack[pos-1]);
+          stack[pos-1] = _asinh(stack[pos-1]);
           break;
         case AST_FUNCTION_ARCCOSH:
           /* TRACE(("operate arccosh\n")); */
@@ -190,7 +190,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_FUNCTION_ARCCSCH:
           /* TRACE(("operate arccsch\n")); */
-          stack[pos-1] = asinh(1.0/stack[pos-1]);
+          stack[pos-1] = _asinh(1.0/stack[pos-1]);
           break;
         case AST_FUNCTION_ARCSECH:
           /* TRACE(("operate arcsech\n")); */

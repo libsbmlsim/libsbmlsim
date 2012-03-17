@@ -21,6 +21,7 @@ fine_delta="00952 00953 00962 00963 00964 00965 00966 00967"
 
 foreach i ({00001..00980}) 
 #foreach i ({00952..00980}) 
+#foreach i (00957 00958 00959) 
   head="$BaseDir/$i/$i"
   # 00926 and 00927 contains '\r' before '\n' on each line (DOS format),
   # so we have to call tr -d '\r' before parsing the settings file...

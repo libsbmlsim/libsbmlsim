@@ -257,7 +257,7 @@ int lu_solve(double **A, int *p, int N, double *b);
 /* numerical integration by implicit method(Adams-Moulton and Backward-Difference) */
 myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int use_lazy_method, int print_amount, allocated_memory *mem);
 
-/* util.c */
+/** util.c **/
 /* get end_cycle */
 int get_end_cycle(double sim_time, double dt);
 
@@ -366,7 +366,8 @@ myResult* simulateSBMLModel(Model_t *m, myResult *result, double sim_time, doubl
 /* Run Simulation from SBML string */
 myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
-/* following functions are defined in math_functions.c */
+/** math_functions.c **/
 int64_t factorial(int n);
+double _asinh(double x);
 
 #endif  /* LibSBMLSim_h */
