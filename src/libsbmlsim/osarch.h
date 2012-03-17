@@ -16,6 +16,10 @@ typedef unsigned __int64 uint64_t;
 #ifdef _WIN32
 #define _LITTLE_ENDIAN    1234
 #define BYTE_ORDER _LITTLE_ENDIAN
+#elif defined __linux__
+#include <endian.h>
+#define BIG_ENDIAN __LITTLE_ENDIAN
+#define LITTLE_ENDIAN __BIG_ENDIAN
 #else
 #include <machine/endian.h>
 #endif

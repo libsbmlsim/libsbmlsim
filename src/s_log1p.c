@@ -10,7 +10,7 @@
  */
 
 
-/* double log1p(double x)
+/* double s_log1p(double x)
  *
  * Method :
  *   1. Argument Reduction: find k and f such that
@@ -93,7 +93,7 @@ Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
 static const double zero = 0.0;
 
 double
-log1p(double x)
+s_log1p(double x)
 {
 	double hfsq,f,c,s,z,R,u;
 	int32_t k,hx,hu,ax;

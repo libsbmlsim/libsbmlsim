@@ -11,7 +11,7 @@ int64_t factorial(int n){
 }
 
 double my_asinh(double x) {
-#if defined(_MSC_VER) || (__STRICT_ANSI__)
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
   if(x == 0.0) {
     return 0.0;
   }
