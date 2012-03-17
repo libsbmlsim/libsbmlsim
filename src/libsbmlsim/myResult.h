@@ -1,5 +1,5 @@
-#ifndef MyResult_h
-#define MyResult_h
+#ifndef LibSBMLSim_MyResult_h
+#define LibSBMLSim_MyResult_h
 
 typedef struct _myResult myResult;
 
@@ -18,4 +18,4 @@ struct _myResult{
   double *values_comp;
 };
 
-#endif /* MyResult_h */
+#endif /* LibSBMLSim_MyResult_h */

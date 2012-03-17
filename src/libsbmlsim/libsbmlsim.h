@@ -22,8 +22,8 @@
 #include "osarch.h"
 #include "common.h"
 #include "methods.h"
-#include "version.h"
 #include "myResult.h"
+#include "version.h"
 
 /* Boolean */
 typedef enum _boolean { false, true } boolean;
@@ -369,6 +369,11 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
 /** math_functions.c **/
 int64_t factorial(int n);
 double my_asinh(double x);
+double my_acosh(double x);
 int my_isnan(double x);
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
+double __ieee754_acosh(double x);
+double s_log1p(double x);
+#endif
 
 #endif  /* LibSBMLSim_h */

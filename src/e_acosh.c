@@ -1,3 +1,4 @@
+#include "libsbmlsim/libsbmlsim.h"
 /*
  * ====================================================
  * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
@@ -10,7 +11,15 @@
  *
  */
 
+double my_acosh(double x) {
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
+  return __ieee754_acosh(x);
+#else
+  return acosh(x);
+#endif
+}
 
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
 /* __ieee754_acosh(x)
  * Method :
  *	Based on 
@@ -25,34 +34,31 @@
  *	acosh(NaN) is NaN without signal.
  */
 
-#include "libsbmlsim/libsbmlsim.h"
-#include "libsbmlsim/math_private.h"
-
 static const double
 one	= 1.0,
-ln2	= 6.93147180559945286227e-01;  /* 0x3FE62E42, 0xFEFA39EF */
+    ln2	= 6.93147180559945286227e-01;  /* 0x3FE62E42, 0xFEFA39EF */
 
-double
-__ieee754_acosh(double x)
+double __ieee754_acosh(double x)
 {
-	double t;
-	int32_t hx;
-	u_int32_t lx;
-	EXTRACT_WORDS(hx,lx,x);
-	if(hx<0x3ff00000) {		/* x < 1 */
-	    return (x-x)/(x-x);
-	} else if(hx >=0x41b00000) {	/* x > 2**28 */
-	    if(hx >=0x7ff00000) {	/* x is inf of NaN */
-	        return x+x;
-	    } else 
-		return log(x)+ln2;	/* acosh(huge)=log(2x) */
-	} else if(((hx-0x3ff00000)|lx)==0) {
-	    return 0.0;			/* acosh(1) = 0 */
-	} else if (hx > 0x40000000) {	/* 2**28 > x > 2 */
-	    t=x*x;
-	    return log(2.0*x-one/(x+sqrt(t-one)));
-	} else {			/* 1<x<2 */
-	    t = x-one;
-	    return s_log1p(t+sqrt(2.0*t+t*t));
-	}
+  double t;
+  int32_t hx;
+  u_int32_t lx;
+  EXTRACT_WORDS(hx,lx,x);
+  if(hx<0x3ff00000) {		/* x < 1 */
+    return (x-x)/(x-x);
+  } else if(hx >=0x41b00000) {	/* x > 2**28 */
+    if(hx >=0x7ff00000) {	/* x is inf of NaN */
+      return x+x;
+    } else 
+      return log(x)+ln2;	/* acosh(huge)=log(2x) */
+  } else if(((hx-0x3ff00000)|lx)==0) {
+    return 0.0;			/* acosh(1) = 0 */
+  } else if (hx > 0x40000000) {	/* 2**28 > x > 2 */
+    t=x*x;
+    return log(2.0*x-one/(x+sqrt(t-one)));
+  } else {			/* 1<x<2 */
+    t = x-one;
+    return s_log1p(t+sqrt(2.0*t+t*t));
+  }
 }
+#endif

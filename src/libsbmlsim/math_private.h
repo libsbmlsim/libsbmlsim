@@ -41,7 +41,6 @@
 #endif
 
 #if IEEE_WORD_ORDER == BIG_ENDIAN
-
 typedef union
 {
   double value;
@@ -51,11 +50,7 @@ typedef union
     u_int32_t lsw;
   } parts;
 } ieee_double_shape_type;
-
-#endif
-
-#if IEEE_WORD_ORDER == LITTLE_ENDIAN
-
+#elif IEEE_WORD_ORDER == LITTLE_ENDIAN
 typedef union
 {
   double value;
@@ -65,7 +60,6 @@ typedef union
     u_int32_t msw;
   } parts;
 } ieee_double_shape_type;
-
 #endif
 
 /* Get two 32 bit ints from a double.  */
@@ -126,7 +120,6 @@ do {								\
   (d) = sl_u.value;						\
 } while (0)
 
-/* #ifdef FLT_EVAL_METHOD */
 /*
  * Attempt to get strict C99 semantics for assignment with non-C99 compilers.
  */
@@ -144,5 +137,4 @@ do {								\
   }                                             \
 } while (0)
 #endif
-/* #endif */
 #endif /* !_MATH_PRIVATE_H_ */

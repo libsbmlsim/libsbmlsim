@@ -1,3 +1,4 @@
+#include "libsbmlsim/libsbmlsim.h"
 /*
  * ====================================================
  * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
@@ -75,9 +76,8 @@
  *	 See HP-15C Advanced Functions Handbook, p.193.
  */
 
-#include "libsbmlsim/libsbmlsim.h"
-#include "libsbmlsim/math_private.h"
 
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
 static const double
 ln2_hi  =  6.93147180369123816490e-01,	/* 3fe62e42 fee00000 */
 ln2_lo  =  1.90821492927058770002e-10,	/* 3dea39ef 35793c76 */
@@ -97,6 +97,7 @@ s_log1p(double x)
 {
 	double hfsq,f,c,s,z,R,u;
 	int32_t k,hx,hu,ax;
+	c = 0.0;  /* to avoid warning... */
 
 	GET_HIGH_WORD(hx,x);
 	ax = hx&0x7fffffff;
@@ -168,3 +169,4 @@ s_log1p(double x)
 	if(k==0) return f-(hfsq-s*(hfsq+R)); else
 		 return k*ln2_hi-((hfsq-(s*(hfsq+R)+(k*ln2_lo+c)))-f);
 }
+#endif

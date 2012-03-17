@@ -176,7 +176,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_FUNCTION_ARCCOSH:
           /* TRACE(("operate arccosh\n")); */
-          stack[pos-1] = acosh(stack[pos-1]);
+          stack[pos-1] = my_acosh(stack[pos-1]);
           break;
         case AST_FUNCTION_ARCTANH:
           /* TRACE(("operate arctanh\n")); */
@@ -199,7 +199,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           }else if(stack[pos-1] > 1){
             stack[pos-1] = 0;
           }else{
-            stack[pos-1] = acosh(1.0/stack[pos-1]);
+            stack[pos-1] = my_acosh(1.0/stack[pos-1]);
           }
           break;
         case AST_FUNCTION_ARCCOTH:
