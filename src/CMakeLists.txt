@@ -22,6 +22,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   create_myResult_content.c
   create_mySBML_objects.c
   dbg_printf.c
+  e_acosh.c
   ev_alter_tree_structure.c
   forwarding_value.c
   free_mySBML_objects.c
@@ -37,6 +38,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   prg_printf.c
   print_node_type.c
   print_result_list.c
+  s_log1p.c
   set_local_para_as_value.c
   simulate_explicit.c
   simulate_implicit.c
