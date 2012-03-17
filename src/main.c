@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
   /*  Valuables for getopt() */
   int ch;
   extern char *optarg;
-  extern int optind, opterr;
+  extern int optind;
   unsigned int error_num;
 
   char *myname;
