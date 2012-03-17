@@ -1,4 +1,3 @@
-#include "libsbmlsim/libsbmlsim.h"
 /*
  * ====================================================
  * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
@@ -10,6 +9,8 @@
  * ====================================================
  *
  */
+
+#include "libsbmlsim/libsbmlsim.h"
 
 double my_acosh(double x) {
 #if defined(_MSC_VER) || defined(__STRICT_ANSI__)

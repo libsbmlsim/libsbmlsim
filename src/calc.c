@@ -185,7 +185,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           }else if(stack[pos-1] <= -1){
             stack[pos-1] = -DBL_MAX;
           }else{
-            stack[pos-1] = atanh(stack[pos-1]);
+            stack[pos-1] = my_atanh(stack[pos-1]);
           }
           break;
         case AST_FUNCTION_ARCCSCH:
@@ -209,7 +209,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           }else if(1.0/stack[pos-1] <= -1){
             stack[pos-1] = -DBL_MAX;
           }else{
-            stack[pos-1] = atanh(1.0/stack[pos-1]);
+            stack[pos-1] = my_atanh(1.0/stack[pos-1]);
           }
           break;
         case AST_FUNCTION_EXP:

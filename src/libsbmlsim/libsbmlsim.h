@@ -370,10 +370,12 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
 int64_t factorial(int n);
 double my_asinh(double x);
 double my_acosh(double x);
+double my_atanh(double x);
 int my_isnan(double x);
 #if defined(_MSC_VER) || defined(__STRICT_ANSI__)
-double __ieee754_acosh(double x);
 double s_log1p(double x);
+double __ieee754_acosh(double x);
+double __ieee754_atanh(double x);
 #endif
 
 #endif  /* LibSBMLSim_h */

@@ -23,6 +23,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   create_mySBML_objects.c
   dbg_printf.c
   e_acosh.c
+  e_atanh.c
   ev_alter_tree_structure.c
   forwarding_value.c
   free_mySBML_objects.c
