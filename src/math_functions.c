@@ -10,8 +10,8 @@ int64_t factorial(int n){
   return ans;
 }
 
-double _asinh(double x) {
-#if defined(WIN32) || (__STRICT_ANSI__)
+double my_asinh(double x) {
+#if defined(_MSC_VER) || (__STRICT_ANSI__)
   if(x == 0.0) {
     return 0.0;
   }
@@ -22,5 +22,13 @@ double _asinh(double x) {
   }
 #else
   return asinh(x);
+#endif
+}
+
+int my_isnan(double x) {
+#if defined(_MSC_VER)
+  return _isnan(x);
+#else
+  return isnan(x);
 #endif
 }

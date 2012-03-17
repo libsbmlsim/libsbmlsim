@@ -332,12 +332,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
       }
       if(node == NULL){
-        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin)) && SpeciesReference_isSetId(myRe[i]->products[j]->origin)){/* l3v1 */
+        if(my_isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin)) && SpeciesReference_isSetId(myRe[i]->products[j]->origin)){/* l3v1 */
           node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(node, SpeciesReference_getId(myRe[i]->products[j]->origin));
           myRe[i]->products[j]->value = 1.0;
           myRe[i]->products[j]->temp_value = myRe[i]->products[j]->value;
-        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin))){/* l3v1 */
+        }else if(my_isnan(SpeciesReference_getStoichiometry(myRe[i]->products[j]->origin))){/* l3v1 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, 1.0);
           myRe[i]->products[j]->value = 1.0;
@@ -414,12 +414,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
       }
       if(node == NULL){
-        if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin)) && SpeciesReference_isSetId(myRe[i]->reactants[j]->origin)){/* l3v1 */
+        if(my_isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin)) && SpeciesReference_isSetId(myRe[i]->reactants[j]->origin)){/* l3v1 */
           node = ASTNode_createWithType(AST_NAME);
           ASTNode_setName(node, SpeciesReference_getId(myRe[i]->reactants[j]->origin));
           myRe[i]->reactants[j]->value = 1.0;
           myRe[i]->reactants[j]->temp_value = myRe[i]->reactants[j]->value;
-        }else if(isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin))){/* l3v1 */
+        }else if(my_isnan(SpeciesReference_getStoichiometry(myRe[i]->reactants[j]->origin))){/* l3v1 */
           node = ASTNode_createWithType(AST_REAL);
           ASTNode_setReal(node, 1.0);
           myRe[i]->reactants[j]->value = 1.0;

@@ -368,6 +368,7 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
 
 /** math_functions.c **/
 int64_t factorial(int n);
-double _asinh(double x);
+double my_asinh(double x);
+int my_isnan(double x);
 
 #endif  /* LibSBMLSim_h */
