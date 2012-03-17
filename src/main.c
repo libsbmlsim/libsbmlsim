@@ -5,7 +5,7 @@ void usage(char *str) {
   printf("Usage : %s [option] filename(SBML file only)\n", str);
   printf(" -t # : specify simulation time (ex. -t 100 )\n");
   printf(" -s # : specify simulation step (ex. -s 100 )\n");
-  printf(" -d # : specify simulation delta (ex. -d 0.01 [default:1/4092])");
+  printf(" -d # : specify simulation delta (ex. -d 0.01 [default:1/4096])\n");
   printf("        dt is calculated in (delta)*(time)/(step)\n");
   printf(" -l   : use lazy method for integration\n");
   printf(" -n   : do not use lazy method\n");
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 
   double sim_time = 0;
   int step = 0;
-  double delta = 1.0/4092;
+  double delta = 1.0/4096;
   double dt = 0;
   int print_interval = 0;
 
