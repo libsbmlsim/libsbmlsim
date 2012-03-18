@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, int cycle, double dt, int use_rk){
-  int i, j;
+void calc_temp_value(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int use_rk){
+  unsigned int i, j;
 
   if(use_rk){
     /* species */

@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_order){
-  int i;
+  unsigned int i;
   int pos = 0;
   int dummy = 0;
   double **delay_preserver = NULL;

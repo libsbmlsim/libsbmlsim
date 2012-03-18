@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, myReaction *re[], int re_num, myRule *rule[], int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle){
-  int i, j;
+void calc_k(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle){
+  unsigned int i, j;
   double k = 0;
   double rk_cef[4] = {0.5, 0.5, 1, 0};
   int step;

@@ -55,7 +55,7 @@ struct _equation{
   double **delay_number[MAX_MATH_LENGTH];
   double **delay_comp_size[MAX_MATH_LENGTH];
   equation *explicit_delay_eq[MAX_MATH_LENGTH];
-  int math_length;
+  unsigned int math_length;
 };
 
 struct _mySpecies{
@@ -107,16 +107,16 @@ struct _myCompartment{
   double prev_val[3]; /* previous values for multistep solution */
   double prev_k[3]; /* previous values for multistep solution */
   mySpecies *including_species[MAX_INCLUDING_SPECIES];
-  int num_of_including_species;
+  unsigned int num_of_including_species;
 };
 
 struct _myReaction{
   Reaction_t *origin;
   equation *eq;
   mySpeciesReference **products;
-  int num_of_products;
+  unsigned int num_of_products;
   mySpeciesReference **reactants;
-  int num_of_reactants;
+  unsigned int num_of_reactants;
   boolean is_fast;
   boolean is_reversible;
   equation *products_equili_numerator;
@@ -136,7 +136,7 @@ struct _myRule{
 };
 
 struct _timeVariantAssignments{
-  int num_of_time_variant_assignments;
+  unsigned int num_of_time_variant_assignments;
   equation *eq[MAX_TIME_VARIANT_ASSIGNMENT];
   char *target_id[MAX_TIME_VARIANT_ASSIGNMENT];
 };
@@ -148,7 +148,7 @@ struct _myEvent{
   boolean is_able_to_fire;
   myDelay *event_delay;
   double *firing_times;
-  int num_of_delayed_events_que;
+  unsigned int num_of_delayed_events_que;
   int next_firing_index;
   boolean is_persistent;
   equation *priority_eq;
@@ -189,8 +189,8 @@ struct _myASTNode{
  * coefficinet matrix size must be regular matrix and the size of this is
  * num_of_algebraic_variables * num_of_algebraic_variables)  */
 struct _myAlgebraicEquations{
-  int num_of_algebraic_rules;
-  int num_of_algebraic_variables;
+  unsigned int num_of_algebraic_rules;
+  unsigned int num_of_algebraic_variables;
   char *variables_id[MAX_ALGEBRAIC_VARIABLES];
   equation ***coefficient_matrix; /* use num_of_algebraic_equations > 1 */
   equation **constant_vector; /* use num_of_algebraic_equations > 1 */
@@ -199,9 +199,9 @@ struct _myAlgebraicEquations{
   myAlgTargetSp *alg_target_species[MAX_ALGEBRAIC_VARIABLES];
   myAlgTargetParam *alg_target_parameter[MAX_ALGEBRAIC_VARIABLES];
   myAlgTargetComp *alg_target_compartment[MAX_ALGEBRAIC_VARIABLES];
-  int num_of_alg_target_sp;
-  int num_of_alg_target_param;
-  int num_of_alg_target_comp;
+  unsigned int num_of_alg_target_sp;
+  unsigned int num_of_alg_target_param;
+  unsigned int num_of_alg_target_comp;
   mySpecies *target_species;
   myParameter *target_parameter;
   myCompartment *target_compartment;
@@ -224,12 +224,12 @@ struct _myAlgTargetComp{
 
 struct _allocated_memory{
   double *memory[MAX_ALLOCATED_MEMORY];
-  int num_of_allocated_memory;
+  unsigned int num_of_allocated_memory;
 };
 
 struct _copied_AST{
   ASTNode_t *ast[MAX_COPIED_AST];
-  int num_of_copied_AST;
+  unsigned int num_of_copied_AST;
 };
 
 /* Substitute kineticlaw local parameter node to simple Real value node in AST Tree
@@ -237,13 +237,15 @@ struct _copied_AST{
 void set_local_para_as_value(ASTNode_t *node, KineticLaw_t *kl);
 
 /* Get mathematical equations for calculation in reverse polish Notation */
-int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem);
+unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem);
 
 /* Calculate equations wrriten in reverse polish notation */
 double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_order);
 
 /* Calculate event equations wrriten in reverse polish notation */
-void calc_event(myEvent *event[], int num_of_events, double dt, double time, int cycle, double *reverse_time);
+void calc_event(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time);
+
+void recursive_calc_event(myEvent *event[], unsigned int num_of_events, myEvent *event_buf[], unsigned int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time);
 
 /* numerical integration by explicit method(Runge Kutta and Adams-Bashforth) */
 myResult* simulate_explicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem);
@@ -288,19 +290,19 @@ void output_result(myResult* result, FILE* fp, char delimiter);
 void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c); 
 
 /* calc k(gradient or value of algebraic or assignment rule) */
-void calc_k(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, myReaction *re[], int re_num, myRule *rule[], int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);
+void calc_k(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);
 
 /* calculate temp_value using k */
-void calc_temp_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num, int cycle, double dt, int use_rk);
+void calc_temp_value(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int use_rk);
 
 /* forwarding value(substitute calculated temp value to value) */
 void forwarding_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num);
 
 /* check the number of object for culculation */
-void check_num(int num_of_species, int num_of_parameters, int num_of_compartments, int num_of_reactions, int *num_of_all_var_species, int *num_of_all_var_parameters, int *num_of_all_var_compartments, int *num_of_all_var_species_reference, int *num_of_var_species, int *num_of_var_parameters, int *num_of_var_compartments, int *num_of_var_species_reference, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
+void check_num(unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int *num_of_all_var_species, unsigned int *num_of_all_var_parameters, unsigned int *num_of_all_var_compartments, unsigned int *num_of_all_var_species_reference, unsigned int *num_of_var_species, unsigned int *num_of_var_parameters, unsigned int *num_of_var_compartments, unsigned int *num_of_var_species_reference, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
 
 /* create list of object for calculation */
-void create_calc_object_list(int num_of_species, int num_of_parameters, int num_of_compartments, int num_of_reactions, int num_of_all_var_species, int num_of_all_var_parameters, int num_of_all_var_compartments, int num_of_all_var_species_reference, int num_of_var_species, int num_of_var_parameters, int num_of_var_compartments, int num_of_var_species_reference, mySpecies *all_var_sp[], myParameter *all_var_param[], myCompartment *all_var_comp[], mySpeciesReference *all_var_spr[], mySpecies *var_sp[], myParameter *var_param[], myCompartment *var_comp[], mySpeciesReference *var_spr[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
+void create_calc_object_list(unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, mySpecies *all_var_sp[], myParameter *all_var_param[], myCompartment *all_var_comp[], mySpeciesReference *all_var_spr[], mySpecies *var_sp[], myParameter *var_param[], myCompartment *var_comp[], mySpeciesReference *var_spr[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
 
 /* function for checking whether string is number */
 boolean str_is_number(const char *str);
@@ -321,7 +323,7 @@ void check_AST(ASTNode_t *node, ASTNode_t *parent);
 void print_node_type(ASTNode_t *node);
 
 /* function for algebraic preparation */
-void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
+void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
 
 void alg_alter_tree_structure(ASTNode_t **node_p, ASTNode_t *parent, int child_order);
 
@@ -334,25 +336,25 @@ void post_ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *par
 void assignment_alter_tree_structure(ASTNode_t **node_p, char* comp_name, int sw);
 
 /* myASTNode_func */
-void myASTNode_create(myASTNode *myNode, ASTNode_t *node, myASTNode *copied_myAST[], int *num_of_copied_myAST);
+void myASTNode_create(myASTNode *myNode, ASTNode_t *node, myASTNode *copied_myAST[], unsigned int *num_of_copied_myAST);
 
 void ASTNode_recreate(myASTNode *myNode, ASTNode_t *node);
 
-void myASTNode_free(myASTNode *copied_myAST[], int num_of_copied_myAST);
+void myASTNode_free(myASTNode *copied_myAST[], unsigned int num_of_copied_myAST);
 
 void check_myAST(myASTNode *myNode);
 
 /* prepare reversible fast reaction */
-void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
+void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
 
 /* calculate initial assignment */
-void calc_initial_assignment(myInitialAssignment *initAssign[], int num_of_initialAssignments, double dt, int cycle, double *reverse_time);
+void calc_initial_assignment(myInitialAssignment *initAssign[], unsigned int num_of_initialAssignments, double dt, int cycle, double *reverse_time);
 
 /* initialize delay val */
-void initialize_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, double sim_time, double dt, int last_call);
+void initialize_delay_val(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, double sim_time, double dt, int last_call);
 
 /* substitute delay val */
-void substitute_delay_val(mySpecies *sp[], int num_of_species, myParameter *param[], int num_of_parameters, myCompartment *comp[], int num_of_compartments, myReaction *re[], int num_of_reactions, int cycle);
+void substitute_delay_val(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, int cycle);
 
 /* Debug print */
 void dbg_printf(const char *fmt, ...);

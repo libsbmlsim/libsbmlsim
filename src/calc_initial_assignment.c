@@ -11,7 +11,7 @@ int list_has_element(char *list[], int list_length, char *element){
   return flag;
 }
 
-int assign_ok(ASTNode_t *assignment_math, char *target_list[], int num_of_targets, char* assigned_target_list[], int num_of_assigned_targets, int flag){
+int assign_ok(ASTNode_t *assignment_math, char *target_list[], int num_of_targets, char* assigned_target_list[], unsigned int num_of_assigned_targets, int flag){
   ASTNode_t *left, *right;
   char *name;
   if((left=ASTNode_getLeftChild(assignment_math)) != NULL){
@@ -31,12 +31,12 @@ int assign_ok(ASTNode_t *assignment_math, char *target_list[], int num_of_target
   return flag;
 }
 
-void calc_initial_assignment(myInitialAssignment *initAssign[], int num_of_initialAssignments, double dt, int cycle, double *reverse_time){
-  int i;
+void calc_initial_assignment(myInitialAssignment *initAssign[], unsigned int num_of_initialAssignments, double dt, int cycle, double *reverse_time){
+  unsigned int i;
   char **target_list;
   char **assigned_target_list;
   ASTNode_t **assignment_math_list;
-  int num_of_assigned_targets = 0;
+  unsigned int num_of_assigned_targets = 0;
 
   target_list = (char **)malloc(sizeof(char *) * num_of_initialAssignments);
   assigned_target_list = (char **)malloc(sizeof(char *) * num_of_initialAssignments);

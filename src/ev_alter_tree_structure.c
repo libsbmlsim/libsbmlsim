@@ -27,7 +27,7 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
   ASTNode_t *pc_eq, *pc_cd, *times_node, *and_node, *not_node;
   unsigned int i, j;
   ASTNode_t *arg_node_list[MAX_ARG_NUM];
-  int arg_node_num;
+  unsigned int arg_node_num;
   FunctionDefinition_t *fd;
   ASTNode_t *fd_arg;
   ASTNode_t *fd_body;

@@ -21,7 +21,8 @@ double calc_implicit_formula(int order, double x1, double x2, double x3, double 
 } */
 
 myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int use_lazy_method, int print_amount, allocated_memory *mem){
-  int i, j, cycle;
+  unsigned int i, j;
+  int cycle;
   int error;
   int end_cycle = get_end_cycle(sim_time, dt);
   double reverse_time;
@@ -44,31 +45,31 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   boolean flag;
   double delta = 1.0e-8;
   double tolerance = 1.0e-4; /* error tolerance of neuton method */
-  int loop;
+  unsigned int loop;
   double *delta_value;
   double k_next; /* speculated k value : k(t+1) */
   double *k_t;   /* k(t) */
 
   /* num of SBase objects */
-  int num_of_species = Model_getNumSpecies(m);
-  int num_of_parameters = Model_getNumParameters(m);
-  int num_of_compartments = Model_getNumCompartments(m);
-  int num_of_reactions = Model_getNumReactions(m);
-  int num_of_rules = Model_getNumRules(m);
-  int num_of_events = Model_getNumEvents(m);
-  int num_of_initialAssignments = Model_getNumInitialAssignments(m);
+  unsigned int num_of_species = Model_getNumSpecies(m);
+  unsigned int num_of_parameters = Model_getNumParameters(m);
+  unsigned int num_of_compartments = Model_getNumCompartments(m);
+  unsigned int num_of_reactions = Model_getNumReactions(m);
+  unsigned int num_of_rules = Model_getNumRules(m);
+  unsigned int num_of_events = Model_getNumEvents(m);
+  unsigned int num_of_initialAssignments = Model_getNumInitialAssignments(m);
 
   /* num of variables whose quantity is not a constant */
-  int num_of_all_var_species = 0;
-  int num_of_all_var_parameters = 0;
-  int num_of_all_var_compartments = 0;
-  int num_of_all_var_species_reference = 0;
+  unsigned int num_of_all_var_species = 0;
+  unsigned int num_of_all_var_parameters = 0;
+  unsigned int num_of_all_var_compartments = 0;
+  unsigned int num_of_all_var_species_reference = 0;
   /* num of variables (which is NOT changed by assignment nor algebraic rule) */
-  int num_of_var_species = 0;
-  int num_of_var_parameters = 0;
-  int num_of_var_compartments = 0;
-  int num_of_var_species_reference = 0;
-  int sum_num_of_vars;
+  unsigned int num_of_var_species = 0;
+  unsigned int num_of_var_parameters = 0;
+  unsigned int num_of_var_compartments = 0;
+  unsigned int num_of_var_species_reference = 0;
+  unsigned int sum_num_of_vars;
   /* All variables (whose quantity is not a constant) */
   mySpecies **all_var_sp;           /* all variable species */
   myParameter **all_var_param;      /* all variable parameters */
@@ -102,7 +103,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
   /* myCompartment *var_comp[num_of_var_compartments]; */
   /* mySpeciesReference *var_spr[num_of_var_species_reference]; */
 
-  create_calc_object_list(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, num_of_all_var_species, num_of_all_var_parameters, num_of_all_var_compartments, num_of_all_var_species_reference, num_of_var_species, num_of_var_parameters, num_of_var_compartments, num_of_var_species_reference, all_var_sp, all_var_param, all_var_comp, all_var_spr, var_sp, var_param, var_comp, var_spr, sp, param, comp, re);
+  create_calc_object_list(num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, all_var_sp, all_var_param, all_var_comp, all_var_spr, var_sp, var_param, var_comp, var_spr, sp, param, comp, re);
 
   sum_num_of_vars = num_of_var_species + num_of_var_parameters +
                     num_of_var_compartments + num_of_var_species_reference;
@@ -423,7 +424,7 @@ myResult* simulate_implicit(Model_t *m, myResult *result, mySpecies *sp[], myPar
       }
     }
 
-    calc_temp_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference, cycle, dt, 0);
+    calc_temp_value(all_var_sp, num_of_all_var_species, all_var_param, num_of_all_var_parameters, all_var_comp, num_of_all_var_compartments, all_var_spr, num_of_all_var_species_reference, dt, 0);
     /* define init value by Euler end */
 
     /* newton method */

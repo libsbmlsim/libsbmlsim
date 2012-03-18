@@ -1,6 +1,6 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void myASTNode_create(myASTNode *myNode, ASTNode_t *node, myASTNode *copied_myAST[], int *num_of_copied_myAST){
+void myASTNode_create(myASTNode *myNode, ASTNode_t *node, myASTNode *copied_myAST[], unsigned int *num_of_copied_myAST){
   ASTNode_t *left, *right;
   myASTNode *myLeft, *myRight;
   if((left=ASTNode_getLeftChild(node)) != NULL){
@@ -38,8 +38,8 @@ void ASTNode_recreate(myASTNode *myNode, ASTNode_t *node){
   }
 }
 
-void myASTNode_free(myASTNode *copied_myAST[], int num_of_copied_myAST){
-  int i;
+void myASTNode_free(myASTNode *copied_myAST[], unsigned int num_of_copied_myAST){
+  unsigned int i;
   for(i=0; i<num_of_copied_myAST; i++){
     free(copied_myAST[i]);
   }

@@ -1,13 +1,16 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], int *num_of_included_id_in_alg);
-void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem);
-void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem);
+void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], unsigned int *num_of_included_id_in_alg);
+
+void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem);
+
+void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem);
+
 void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq);
 
 /* find included id(species, parameter, compartment) in algebraic rule */
-void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], int *num_of_included_id_in_alg){
-  int i;
+void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], unsigned int *num_of_included_id_in_alg){
+  unsigned int i;
   ASTNode_t *left, *right;
   int flag;
   left = ASTNode_getLeftChild(node);
@@ -32,7 +35,7 @@ void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], int *num_o
 }
 
 /* find coefficient tree */
-void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem){
+void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem){
   ASTNode_t *minus_node, *zero_node, *final_eq_node;
   myASTNode *eq_root_node;
   int minus_sign;
@@ -97,7 +100,7 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
 }
 
 /* find constant vector */
-void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem){
+void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem){
   _prepare_algebraic4(node, algEq);
   if(algEq->num_of_algebraic_variables > 1){
     TRACE(("math AST of constant vector[%d] is\n", alg_order));
@@ -113,7 +116,7 @@ void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParamet
 
 /* recursive function in _prepare_algebraic3 */
 void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq){
-  int i;
+  unsigned int i;
   ASTNode_t *left, *right;
   int flag;
 
@@ -138,12 +141,12 @@ void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq){
   return;
 }
 
-void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
-  int i, j, k;
+void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
+  unsigned int i, j, k;
   char *constants_in_alg[MAX_ALGEBRAIC_CONSTANTS];
   char *included_id_in_alg[MAX_ALGEBRAIC_CONSTANTS];
-  int num_of_constants_in_alg = 0;
-  int num_of_included_id_in_alg = 0;
+  unsigned int num_of_constants_in_alg = 0;
+  unsigned int num_of_included_id_in_alg = 0;
   int flag;
   Species_t *local_sp;
   Parameter_t *local_param;
@@ -151,7 +154,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
   ASTNode_t *node;
   myASTNode *myNode = NULL;
   myASTNode *copied_myAST[MAX_COPIED_AST];
-  int num_of_copied_myAST = 0;
+  unsigned int num_of_copied_myAST = 0;
   /* find constant in calculation algebraic rule */
   /* reaction target(reactants and products) */
   TRACE(("Reaction\n"));

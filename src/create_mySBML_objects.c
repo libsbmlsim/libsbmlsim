@@ -25,15 +25,15 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   unsigned int i, j, k, l;
   int flag;
   /* num of each objects */
-  int num_of_species = Model_getNumSpecies(m);
-  int num_of_parameters = Model_getNumParameters(m);
-  int num_of_compartments = Model_getNumCompartments(m);
-  int num_of_reactions = Model_getNumReactions(m);
-  int num_of_rules = Model_getNumRules(m);
-  int num_of_events = Model_getNumEvents(m);
-  int num_of_initialAssignments = Model_getNumInitialAssignments(m);
-  int num_of_time_variant_targets;
-  int num_of_algebraic_rules;
+  unsigned int num_of_species = Model_getNumSpecies(m);
+  unsigned int num_of_parameters = Model_getNumParameters(m);
+  unsigned int num_of_compartments = Model_getNumCompartments(m);
+  unsigned int num_of_reactions = Model_getNumReactions(m);
+  unsigned int num_of_rules = Model_getNumRules(m);
+  unsigned int num_of_events = Model_getNumEvents(m);
+  unsigned int num_of_initialAssignments = Model_getNumInitialAssignments(m);
+  unsigned int num_of_time_variant_targets;
+  unsigned int num_of_algebraic_rules;
 
   /* Prepare objects */
   ASTNode_t *node;
@@ -751,7 +751,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       TRACE(("math\n"));
       check_math(myEv[i]->event_delay->eq);
       myEv[i]->firing_times = (double*)malloc(sizeof(double)*(int)(sim_time/dt));
-      for(j=0; j<(int)(sim_time/dt); j++){
+      for(j=0; j<(unsigned int)(sim_time/dt); j++){
         myEv[i]->firing_times[j] = sim_time+1;
       }
       myEv[i]->num_of_delayed_events_que = 0;

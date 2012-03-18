@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void check_math(equation *eq){
-  int i;
+  unsigned int i;
   TRACE(("value:"));
   for(i=0; i<eq->math_length; i++){
     if(eq->number[i] != NULL){

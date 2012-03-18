@@ -1,6 +1,6 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re_whole[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r, allocated_memory *mem){
+void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re_whole[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r, allocated_memory *mem){
   ASTNode_t *minus_node, *zero_node, *final_eq_node;
   myASTNode *eq_root_node;
   int minus_sign;
@@ -70,13 +70,13 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
   }
 }
 
-void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
-  int i;
-  int num_of_reactions = Model_getNumReactions(m);
+void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
+  unsigned int i;
+  unsigned int num_of_reactions = Model_getNumReactions(m);
   ASTNode_t *node, *cp_node1, *cp_node2;
   myASTNode *myNode = NULL;
   myASTNode *copied_myAST[MAX_COPIED_AST];
-  int num_of_copied_myAST = 0;
+  unsigned int num_of_copied_myAST = 0;
   for(i=0; i<num_of_reactions; i++){
     if(re[i]->is_fast && re[i]->is_reversible){
       node = (ASTNode_t*)KineticLaw_getMath(Reaction_getKineticLaw(re[i]->origin));

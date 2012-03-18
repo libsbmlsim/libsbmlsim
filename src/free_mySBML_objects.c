@@ -6,7 +6,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   /* free */
   for(i=0; i<Model_getNumSpecies(m); i++){
     if(mySp[i]->delay_val != NULL){
-      for(j=0; j<(int)(sim_time/dt+1); j++){
+      for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
         free(mySp[i]->delay_val[j]);
       }
       free(mySp[i]->delay_val);
@@ -16,7 +16,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   free(mySp);
   for(i=0; i<Model_getNumParameters(m); i++){
     if(myParam[i]->delay_val != NULL){
-      for(j=0; j<(int)(sim_time/dt+1); j++){
+      for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
         free(myParam[i]->delay_val[j]);
       }
       free(myParam[i]->delay_val);
@@ -26,7 +26,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   free(myParam);
   for(i=0; i<Model_getNumCompartments(m); i++){
     if(myComp[i]->delay_val != NULL){
-      for(j=0; j<(int)(sim_time/dt+1); j++){
+      for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
         free(myComp[i]->delay_val[j]);
       }
       free(myComp[i]->delay_val);

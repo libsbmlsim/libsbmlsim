@@ -1,8 +1,8 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void check_num(int num_of_species, int num_of_parameters, int num_of_compartments, int num_of_reactions, int *num_of_all_var_species, int *num_of_all_var_parameters, int *num_of_all_var_compartments, int *num_of_all_var_species_reference, int *num_of_var_species, int *num_of_var_parameters, int *num_of_var_compartments, int *num_of_var_species_reference, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]){
+void check_num(unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int *num_of_all_var_species, unsigned int *num_of_all_var_parameters, unsigned int *num_of_all_var_compartments, unsigned int *num_of_all_var_species_reference, unsigned int *num_of_var_species, unsigned int *num_of_var_parameters, unsigned int *num_of_var_compartments, unsigned int *num_of_var_species_reference, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]){
 
-  int i, j, index;
+  unsigned int i, j, index;
   int is_included_in_reaction;
 
   for(i=0; i<num_of_species; i++){

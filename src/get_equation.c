@@ -1,6 +1,6 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem){
+unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem){
   unsigned int i, j, k;
   int flag;
   int op;
@@ -27,8 +27,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
       if(strcmp(name, Species_getId(sp[i]->origin)) == 0){
         /* create delay */
         if(sp[i]->delay_val == NULL){
-          sp[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-          for(j=0; j<(int)(sim_time/dt+1); j++){
+          sp[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+          for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
             sp[i]->delay_val[j] = (double*)malloc(sizeof(double)*4);
           }
         }
@@ -37,8 +37,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
           for(j=0; j<Model_getNumCompartments(m); j++){
             if(strcmp(ASTNode_getName(comp_node), Compartment_getId(comp[j]->origin)) == 0){
               if(comp[j]->delay_val == NULL){
-                comp[j]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-                for(k=0; k<(int)(sim_time/dt+1); k++){
+                comp[j]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+                for(k=0; k<(unsigned int)(sim_time/dt+1); k++){
                   comp[j]->delay_val[k] = (double*)malloc(sizeof(double)*4);
                 }
               }
@@ -88,8 +88,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
         if(strcmp(name, Parameter_getId(param[i]->origin)) == 0){
           /* create delay */
           if(param[i]->delay_val == NULL){
-            param[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-            for(j=0; j<(int)(sim_time/dt+1); j++){
+            param[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+            for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
               param[i]->delay_val[j] = (double*)malloc(sizeof(double)*4);
             }
           }
@@ -127,8 +127,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
         if(strcmp(name, Compartment_getId(comp[i]->origin)) == 0){
           /* create delay */
           if(comp[i]->delay_val == NULL){
-            comp[i]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-            for(j=0; j<(int)(sim_time/dt+1); j++){
+            comp[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+            for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
               comp[i]->delay_val[j] = (double*)malloc(sizeof(double)*4);
             }
           }
@@ -168,8 +168,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
               && strcmp(name, SpeciesReference_getId(re[i]->products[j]->origin)) == 0){
             /* create delay */
             if(re[i]->products[j]->delay_val == NULL){
-              re[i]->products[j]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-              for(k=0; k<(int)(sim_time/dt+1); k++){
+              re[i]->products[j]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+              for(k=0; k<(unsigned int)(sim_time/dt+1); k++){
                 re[i]->products[j]->delay_val[k] = (double*)malloc(sizeof(double)*4);
               }
             }
@@ -209,8 +209,8 @@ int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[]
               && strcmp(name, SpeciesReference_getId(re[i]->reactants[j]->origin)) == 0){
             /* create delay */
             if(re[i]->reactants[j]->delay_val == NULL){
-              re[i]->reactants[j]->delay_val = (double**)malloc(sizeof(double*)*(int)(sim_time/dt+1));
-              for(k=0; k<(int)(sim_time/dt+1); k++){
+              re[i]->reactants[j]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
+              for(k=0; k<(unsigned int)(sim_time/dt+1); k++){
                 re[i]->reactants[j]->delay_val[k] = (double*)malloc(sizeof(double)*4);
               }
             }

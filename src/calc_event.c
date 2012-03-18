@@ -1,6 +1,6 @@
 #include "libsbmlsim/libsbmlsim.h"
 
-void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_buf[], int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time){
+void recursive_calc_event(myEvent *event[], unsigned int num_of_events, myEvent *event_buf[], unsigned int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time){
   unsigned int i, j, k;
   int is_condition_satisfied;
   int flag;
@@ -110,12 +110,12 @@ void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_bu
   assignment_values_from_trigger_time[selected_order] = temp_assignment_values_from_trigger_time;
 }
 
-void calc_event(myEvent *event[], int num_of_events, double dt, double time, int cycle, double *reverse_time){
-  int i, j;
+void calc_event(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time){
+  unsigned int i, j;
   myEvent *event_buf[MAX_IDENTICAL_EVENTS];
   static double sub_assignment_values_from_trigger_time[MAX_IDENTICAL_EVENTS][MAX_EVENTASSIGNMENTS];
   static double *assignment_values_from_trigger_time[MAX_IDENTICAL_EVENTS];
-  int num_of_remained_events = 0;
+  unsigned int num_of_remained_events = 0;
   myEventAssignment* assignment;
 
   if(cycle == 0){
