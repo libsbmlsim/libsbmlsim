@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void minus_func(ASTNode_t *node){
-  int i;
+  unsigned int i;
   ASTNode_t *next_node, *zero_node;
   for(i=0; i<ASTNode_getNumChildren(node); i++){
     next_node = ASTNode_getChild(node, i);
@@ -23,9 +23,9 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
   ASTNode_t *compartment_node;
   ASTNode_t *node, *next_node;
   ASTNode_t *pc_eq, *pc_cd, *times_node, *and_node, *not_node, *divide_node;
-  int i, j;
+  unsigned int i, j;
   ASTNode_t *arg_node_list[MAX_ARG_NUM];
-  int arg_node_num;
+  unsigned int arg_node_num;
   FunctionDefinition_t *fd;
   ASTNode_t *fd_arg;
   ASTNode_t *fd_body;

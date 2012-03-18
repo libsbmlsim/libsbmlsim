@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void recursive_calc_event(myEvent *event[], int num_of_events, myEvent *event_buf[], int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time){
-  int i, j, k;
+  unsigned int i, j, k;
   int is_condition_satisfied;
   int flag;
   myEvent *temp_event;

@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, allocated_memory *mem, copied_AST *cp_AST){
-  int i, j;
+  unsigned int i, j;
 
   /* free */
   for(i=0; i<Model_getNumSpecies(m); i++){

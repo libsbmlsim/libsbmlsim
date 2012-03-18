@@ -2,7 +2,7 @@
 
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]){
   FILE *fp;
-  int i;
+  unsigned int i;
   int column = 2;
 
   fp = fopen("./simulation_results/result_list.dat", "w");

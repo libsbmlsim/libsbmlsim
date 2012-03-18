@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void pre_ev_alter_tree_structure(ASTNode_t **node_p, ASTNode_t *parent, int child_order, ASTNode_t *delay_math){
-  int i;
+  unsigned int i;
   ASTNode_t *node, *next_node, *delay_node;
 
   node = *node_p;
@@ -25,7 +25,7 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
   ASTNode_t *zero_node;
   ASTNode_t *node, *next_node;
   ASTNode_t *pc_eq, *pc_cd, *times_node, *and_node, *not_node;
-  int i, j;
+  unsigned int i, j;
   ASTNode_t *arg_node_list[MAX_ARG_NUM];
   int arg_node_num;
   FunctionDefinition_t *fd;
@@ -112,7 +112,7 @@ void post_ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *par
   ASTNode_t *divide_node, *times_node;
   ASTNode_t *compartment_node;
   ASTNode_t *node, *next_node;
-  int i;
+  unsigned int i;
   Species_t *sp;
 
   node = *node_p;

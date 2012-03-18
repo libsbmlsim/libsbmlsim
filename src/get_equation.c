@@ -1,7 +1,8 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem){
-  int i, j, k, flag;
+  unsigned int i, j, k;
+  int flag;
   int op;
   const char *name;
   double value;

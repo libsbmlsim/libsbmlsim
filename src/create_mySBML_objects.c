@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 int include_time(ASTNode_t *node, int flag){
-  int i;
+  unsigned int i;
   char *name;
 
   for(i=0; i<ASTNode_getNumChildren(node); i++){
@@ -22,7 +22,7 @@ int include_time(ASTNode_t *node, int flag){
 
 /* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST){
-  int i, j, k, l;
+  unsigned int i, j, k, l;
   int flag;
   /* num of each objects */
   int num_of_species = Model_getNumSpecies(m);

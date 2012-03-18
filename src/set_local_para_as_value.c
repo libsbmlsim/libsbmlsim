@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void set_local_para_as_value(ASTNode_t *node, KineticLaw_t *kl){
-  int i;
+  unsigned int i;
   double value;
   ASTNode_t *left, *right;
   const char *name, *id;

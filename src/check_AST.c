@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void check_AST(ASTNode_t* node, ASTNode_t* parent){
-  int i;
+  unsigned int i;
   int type;
   ASTNode_t *checker;
   if(node == NULL){
