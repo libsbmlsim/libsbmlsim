@@ -16,8 +16,9 @@ typedef unsigned __int64 uint64_t;
 /* Endian for Windows */
 /* (IA-64 is bi-endian, but Windows use it in little endian) */
 #ifdef _WIN32
-#define _LITTLE_ENDIAN    1234
-#define BYTE_ORDER _LITTLE_ENDIAN
+#define LITTLE_ENDIAN    1234
+#define BIG_ENDIAN    4321
+#define BYTE_ORDER LITTLE_ENDIAN
 #elif defined(__linux__)
 #include <endian.h>
 #else    /* __linux__ */
