@@ -1,16 +1,16 @@
 #include <errno.h> 
 #include "libsbmlsim/libsbmlsim.h"
 
-void print_result(myResult* result){
+SBMLSIM_EXPORT void print_result(myResult* result){
   output_result(result, stdout, ' ');
 }
 
-void write_result(myResult* result, char* file) {
+SBMLSIM_EXPORT void write_result(myResult* result, char* file) {
   char delimiter = ' ';
   print_result_to_file(result, file, delimiter);
 }
 
-void write_csv(myResult* result, char* file) {
+SBMLSIM_EXPORT void write_csv(myResult* result, char* file) {
   char delimiter = ',';
   print_result_to_file(result, file, delimiter);
 }
@@ -85,7 +85,7 @@ void output_result(myResult* result, FILE* fp, char delimiter){
   }
 }
 
-void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c) {
+SBMLSIM_EXPORT void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c) {
   FILE *fp_s = NULL;
   FILE *fp_p = NULL;
   FILE *fp_c = NULL;

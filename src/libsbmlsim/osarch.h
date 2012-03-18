@@ -31,4 +31,11 @@ typedef unsigned __int64 uint64_t;
 #include "math_private.h"
 #endif
 
+/* DLL export */
+#ifdef _WIN32
+#define SBMLSIM_EXPORT __declspec(dllexport)
+#else
+#define SBMLSIM_EXPORT
+#endif
+
 #endif  /* LibSBMLSim_OsArch_h */

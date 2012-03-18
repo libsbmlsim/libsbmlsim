@@ -17,7 +17,7 @@ char* dupstr(const char *str)
     copy = malloc(strlen(str)+1);
     if (copy) {
 #ifdef _MSC_VER
-      strcpy_s(copy, _countof(copy), str);
+      strcpy_s(copy, strlen(str)+1, str);
 #else
       strcpy(copy, str);
 #endif

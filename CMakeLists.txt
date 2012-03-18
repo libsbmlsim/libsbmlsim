@@ -3,18 +3,18 @@ project(libsbmlsim)
 
 # cmake variables
 if(MSVC)
-  add_definitions(/W4)
+  add_definitions(/W3)
 else(MSVC)
   add_definitions(-Wall -Wextra -ansi -pedantic)
 endif(MSVC)
 set(CMAKE_C_FLAGS "-O2")
 
 # build mode
-if(not CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING
     "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
     FORCE)
-endif(not CMAKE_BUILD_TYPE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 # language bindings
 option(WITH_JAVA     "Generate Java language bindings."   OFF)

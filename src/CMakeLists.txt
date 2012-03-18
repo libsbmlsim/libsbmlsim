@@ -54,9 +54,11 @@ set (SOURCES_TEST test.c)
 
 include_directories("./libsbmlsim" ${LIBSBML_INCLUDE_DIR})
 
-# Static library
-add_library(sbmlsim-static STATIC ${SOURCES_LIB})
-target_link_libraries(sbmlsim-static ${LIBSBML_LIBRARIES})
+# Static library (only for UNIX)
+if(NOT MSVC)
+  add_library(sbmlsim-static STATIC ${SOURCES_LIB})
+  target_link_libraries(sbmlsim-static ${LIBSBML_LIBRARIES})
+endif()
 
 # Shared library
 add_library(sbmlsim SHARED ${SOURCES_LIB})

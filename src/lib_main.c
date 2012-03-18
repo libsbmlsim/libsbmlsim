@@ -2,7 +2,7 @@
 
 /* libSBMLSimulator API */
 
-myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
+SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
   SBMLDocument_t* d;
   Model_t* m;
   myResult *result = (myResult *)malloc(sizeof(myResult));
@@ -16,7 +16,7 @@ myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, in
   return rtn;
 }
 
-myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method){
+SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method){
   double time = 0;
   int order = 0;
   int is_explicit = 0;
