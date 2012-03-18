@@ -1,7 +1,7 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]){
-  FILE *fp;
+  FILE *fp = NULL;
   unsigned int i;
   int column = 2;
 
