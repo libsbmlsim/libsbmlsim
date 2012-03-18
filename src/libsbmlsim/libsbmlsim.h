@@ -282,6 +282,7 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]);
 
 /* print result */
+FILE* my_fopen(FILE* fp, char* file, char* mode);
 void print_result(myResult* result);
 void write_result(myResult* result, char* file);
 void write_csv(myResult* result, char* file);

@@ -15,13 +15,26 @@ void write_csv(myResult* result, char* file) {
   print_result_to_file(result, file, delimiter);
 }
 
+FILE* my_fopen(FILE* fp, char* file, char* mode) {
+#ifdef _MSC_VER
+  errno_t error;
+  char buffer[255];
+  if ((error = fopen_s(&fp, file, mode)) != 0) {
+    fprintf(stderr, "Failed to open %s: %s\n", file, strerror_s(buffer, sizeof(buffer), error));
+    return NULL;
+  }
+#else
+  if ((fp = fopen(file, mode)) == NULL ) {
+    fprintf(stderr, "Failed to open %s: %s\n", file, strerror(errno));
+    return NULL;
+  }
+#endif
+  return fp;
+}
+
 void print_result_to_file(myResult* result, char* file, char delimiter){
   FILE *fp;
-
-  fp = fopen(file, "w");
-  if (fp == NULL) {
-    fprintf(stderr, "File %s open failed.\n", file);
-  } else {
+  if ((fp = my_fopen(fp, file, "w")) != NULL) {
     output_result(result, fp, delimiter);
     fclose(fp);
   }
@@ -81,16 +94,13 @@ void write_separate_result(myResult* result, char* file_s, char* file_p, char* f
   double *value_param_p = result->values_param;
   double *value_comp_p  = result->values_comp;
 
-  if ((fp_s = fopen(file_s, "w")) == NULL ) {
-    fprintf(stderr, "Failed to open %s: %s\n", file_s, strerror(errno));
+  if ((fp_s = my_fopen(fp_s, file_s, "w")) == NULL) {
     return;
   }
-  if ((fp_p = fopen(file_p, "w")) == NULL ) {
-    fprintf(stderr, "Failed to open %s: %s\n", file_p, strerror(errno));
+  if ((fp_p = my_fopen(fp_p, file_p, "w")) == NULL) {
     return;
   }
-  if ((fp_c = fopen(file_c, "w")) == NULL ) {
-    fprintf(stderr, "Failed to open %s: %s\n", file_c, strerror(errno));
+  if ((fp_c = my_fopen(fp_c, file_c, "w")) == NULL ) {
     return;
   }
 
