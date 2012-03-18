@@ -7,43 +7,66 @@ public class Test {
     System.loadLibrary("sbmlsim");
     System.loadLibrary("sbmlj");
 
-    _myResult result = new _myResult();
     SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
     String docstr = d.toSBML();
-    //System.out.println(docstr);
-    result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
-    int numOfRows = result.getNum_of_rows();
+    myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
+
+    int numOfRows = result.getNumOfRows();
     System.out.println("numOfRows: " + numOfRows);
-    doubleArray darr = doubleArray.frompointer(result.getValues_time());
-    for (int i = 0; i < numOfRows; i++) {
-      double da = darr.getitem(i);
-      System.out.println(da);
+
+    int numOfSp = result.getNumOfSpecies();
+    System.out.println("numOfSpecies: " + numOfSp);
+    
+    int numOfParam = result.getNumOfParameters();
+    System.out.println("numOfParameters: " + numOfParam);
+
+    int numOfComp = result.getNumOfCompartments();
+    System.out.println("numOfCompartments: " + numOfComp);
+
+    String timeName = result.getTimeName();
+    System.out.println("TimeName: " + timeName);
+
+    System.out.println("Species Name:");
+    for (int i = 0; i < numOfSp; i++) {
+      String sname = result.getSpeciesNameAtIndex(i);
+      System.out.println("  " + sname);
     }
         
-        
-    /*
-    SWIGTYPE_p_double dd = result.getValues_time();
-    for (int i = 0; i < numOfRows; i++) {
-      double val = libsbmlsim.doubleArray_getitem(dd, i);
-      System.out.println(val);
+    System.out.println("Parameter Name:");
+    for (int i = 0; i < numOfParam; i++) {
+      String pname = result.getParameterNameAtIndex(i);
+      System.out.println("  " + pname);
     }
-    */
-    /*
-    double[] dd = result.getValues_time();
-    System.out.println(dd.length);
-    */
+
+    System.out.println("Compartment Name:");
+    for (int i = 0; i < numOfComp; i++) {
+      String cname = result.getCompartmentNameAtIndex(i);
+      System.out.println("  " + cname);
+    }
+
+    System.out.println("Values:");
+    for (int i = 0; i < numOfRows; i++) {
+      double t = result.getTimeValueAtIndex(i);
+      System.out.print(t);
+      for (int j = 0; j < numOfSp; j++) {
+        int index = i * numOfSp + j;
+        double sp = result.getSpeciesValueAtIndex(index);
+        System.out.print(" " + sp);
+      }
+      System.out.println();
+
+      if (i == 10)
+        break;
+    }
 
     /*
-    String[] ss = result.getColumn_name_sp();
-    System.out.println(ss.length);
-    System.out.println(ss[0]);
-    */
     SWIGTYPE_p_p_char pp = result.getColumn_name_sp();
     int numOfSp = result.getNum_of_columns_sp();
     for (int i = 0; i < numOfSp; i++) {
       String ssp = libsbmlsim.stringArray_getitem(pp, i);
-    System.out.println(ssp);
+      System.out.println(ssp);
     }
     System.out.println(result.getColumn_name_time());
+    */
   }
 }
