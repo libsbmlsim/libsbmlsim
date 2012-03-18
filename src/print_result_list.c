@@ -6,6 +6,9 @@ void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], my
   int column = 2;
 
   fp = fopen("./simulation_results/result_list.dat", "w");
+  if ((fp = my_fopen(fp, file, "w")) != NULL) {
+    return;
+  }
   TRACE(("Result : Species List\n"));
   fprintf(fp, "Result : Species List\n");
   for(i=0; i<Model_getNumSpecies(m); i++){
