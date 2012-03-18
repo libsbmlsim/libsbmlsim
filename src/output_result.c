@@ -33,7 +33,7 @@ FILE* my_fopen(FILE* fp, char* file, char* mode) {
 }
 
 void print_result_to_file(myResult* result, char* file, char delimiter){
-  FILE *fp;
+  FILE *fp = NULL;
   if ((fp = my_fopen(fp, file, "w")) != NULL) {
     output_result(result, fp, delimiter);
     fclose(fp);
@@ -86,7 +86,9 @@ void output_result(myResult* result, FILE* fp, char delimiter){
 }
 
 void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c) {
-  FILE *fp_s, *fp_p, *fp_c;
+  FILE *fp_s = NULL;
+  FILE *fp_p = NULL;
+  FILE *fp_c = NULL;
   int i, j;
   char delimiter = ' ';
   double *value_time_p  = result->values_time;
