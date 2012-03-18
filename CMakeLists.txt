@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 2.6)
 project(libsbmlsim)
 
 # cmake variables
-set(CMAKE_C_FLAGS "-g -O2 -Wall -ansi -pedantic")
+if(MSVC)
+  add_definitions(/W4)
+else(MSVC)
+  add_definitions(-Wall -Wextra -ansi -pedantic)
+endif(MSVC)
+set(CMAKE_C_FLAGS "-O2")
+
 # language bindings
 option(WITH_JAVA     "Generate Java language bindings."   OFF)
 option(WITH_PYTHON   "Generate Python language bindings." OFF)
@@ -19,14 +25,25 @@ find_package(PkgConfig)
 pkg_check_modules(PC_LIBSBML QUIET libsbml)
 set(LIBSBML_DEFINITIONS ${PC_LIBSBML_CFLAGS_OTHER})
 
-find_path(LIBSBML_INCLUDE_DIR sbml/SBMLTypes.h
-  HINTS ${PC_LIBSBML_INCLUDEDIR} ${PC_LIBSBML_INCLUDE_DIRS}
-  PATH_SUFFIXES sbml )
+find_path(LIBSBML_INCLUDE_DIR
+  NAMES sbml/SBMLTypes.h
+  PATHS /usr/include /usr/local/include /opt/local/include
+        ${CMAKE_SOURCE_DIR}/depend/include
+  HINTS ${PC_LIBSBML_INCLUDEDIR} ${PC_LIBSBML_INCLUDE_DIRS} )
 
-find_library(LIBSBML_LIBRARY NAMES libsbml.lib sbml
+find_library(LIBSBML_LIBRARY
+  NAMES libsbml.lib sbml
+  PATHS /usr/lib /usr/local/lib /opt/local/lib
+        ${CMAKE_SOURCE_DIR}/depend/lib
   HINTS ${PC_LIBSBML_LIBDIR} ${PC_LIBSBML_LIBRARY_DIRS} )
 
-set(LIBSBML_LIBRARIES ${LIBSBML_LIBRARY} )
+find_library(LIBBZIP2_LIBRARY
+  NAMES bzip2.lib bz2 libbz2.lib
+  PATHS /usr/lib /usr/local/lib /opt/local/lib
+        ${CMAKE_SOURCE_DIR}/depend/lib
+  HINTS ${PC_LIBBZIP2} ${PC_LIBBZIP2_LIBRARY_DIRS} )
+
+set(LIBSBML_LIBRARIES ${LIBSBML_LIBRARY} ${LIBBZIP2_LIBRARY} )
 set(LIBSBML_INCLUDE_DIRS ${LIBSBML_INCLUDE_DIR} )
 
 include(FindPackageHandleStandardArgs)
