@@ -46,8 +46,8 @@ typedef union
   double value;
   struct
   {
-    u_int32_t msw;
-    u_int32_t lsw;
+    uint32_t msw;
+    uint32_t lsw;
   } parts;
 } ieee_double_shape_type;
 #elif IEEE_WORD_ORDER == LITTLE_ENDIAN
@@ -56,8 +56,8 @@ typedef union
   double value;
   struct
   {
-    u_int32_t lsw;
-    u_int32_t msw;
+    uint32_t lsw;
+    uint32_t msw;
   } parts;
 } ieee_double_shape_type;
 #endif
