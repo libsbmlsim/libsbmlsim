@@ -6,9 +6,9 @@ void check_num(unsigned int num_of_species, unsigned int num_of_parameters, unsi
   int is_included_in_reaction;
 
   for(i=0; i<num_of_species; i++){
-    if(!Species_getConstant(sp[i]->origin)){
+/*    if(!Species_getConstant(sp[i]->origin)){ */
       (*num_of_all_var_species)++;
-    }
+/*    } */
   }
   for(i=0; i<num_of_parameters; i++){
     if(!Parameter_getConstant(param[i]->origin)){

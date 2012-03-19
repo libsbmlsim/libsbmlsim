@@ -7,9 +7,9 @@ void create_calc_object_list(unsigned int num_of_species, unsigned int num_of_pa
 
   index1 = 0;
   for(i=0; i<num_of_species; i++){
-    if(!Species_getConstant(sp[i]->origin)){
+/*    if(!Species_getConstant(sp[i]->origin)){ */
       all_var_sp[index1++] = sp[i];
-    }
+/*    } */
   }
   index1 = 0;
   for(i=0; i<num_of_parameters; i++){
