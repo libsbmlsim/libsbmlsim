@@ -25,8 +25,8 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
   ASTNode_t *zero_node;
   ASTNode_t *node, *next_node;
   ASTNode_t *pc_eq, *pc_cd, *times_node, *and_node, *not_node;
-  /*unsigned int i, j;*/
-  int i, j;
+  unsigned int i, j;
+  int p;
   ASTNode_t *arg_node_list[MAX_ARG_NUM];
   unsigned int arg_node_num;
   FunctionDefinition_t *fd;
@@ -81,8 +81,8 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
     if(ASTNode_getNumChildren(node) > 3){
       and_node = ASTNode_createWithType(AST_LOGICAL_AND);
       ASTNode_addChild(times_node, and_node);
-      for(i=ASTNode_getNumChildren(node)-2; i >= 1; i = i-2){
-        pc_cd = ASTNode_getChild(node, i);
+      for(p=(int)ASTNode_getNumChildren(node)-2; p >= 1; p = p-2){
+        pc_cd = ASTNode_getChild(node, p);
         not_node = ASTNode_createWithType(AST_LOGICAL_NOT);
         ASTNode_addChild(not_node, pc_cd);
         ASTNode_addChild(and_node, not_node);
@@ -95,14 +95,14 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
       ASTNode_addChild(times_node, not_node);
     }
     ASTNode_replaceChild(node, ASTNode_getNumChildren(node)-1, times_node);
-    for(i=ASTNode_getNumChildren(node)-2; i >= 1; i = i-2){
+    for(p=ASTNode_getNumChildren(node)-2; p >= 1; p = p-2){
       times_node = ASTNode_createWithType(AST_TIMES);
-      pc_eq = ASTNode_getChild(node, i-1);
-      pc_cd = ASTNode_getChild(node, i);
+      pc_eq = ASTNode_getChild(node, p-1);
+      pc_cd = ASTNode_getChild(node, p);
       ASTNode_addChild(times_node, pc_eq);
-      ASTNode_addChild(times_node, pc_cd);
-      ASTNode_removeChild(node, i);
-      ASTNode_replaceChild(node ,i-1, times_node);
+      ASTNode_addChild(times_node, ASTNode_deepCopy(pc_cd));
+      ASTNode_removeChild(node, p);
+      ASTNode_replaceChild(node ,p-1, times_node);
     }
     ASTNode_reduceToBinary(node);
   }
