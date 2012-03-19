@@ -6,160 +6,16 @@
 
 %{
 #include "src/libsbmlsim/myResult.h"
+#include "src/libsbmlsim/libsbmlsim.h"
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+extern void print_result(myResult* result);
+extern void write_result(myResult* result, char* file);
+extern void write_csv(myResult* result, char* file);
+extern void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c);
 %}
 
 //%array_class(double,doubleArray);
 //%array_functions(char*,stringArray);
-
-/* Java */
-#ifdef SWIGJAVA
-/*
-%pragma(java) jniclasscode=%{
-  static {
-    try {
-      System.loadLibrary("sbmlsim");
-      System.loadLibrary("sbmlj");
-    } catch (UnsatisfiedLinkError e) {
-      System.err.println("Native code library failed to load.\n" + e);
-      System.exit(1);
-    }
-  }
-%}
-*/
-/*
-//////////////////////////////////////////////////////////////////////
-// (Java) double[] <->  (C) double*
-//////////////////////////////////////////////////////////////////////
-%typemap(jni) double* "jdoubleArray" 
-%typemap(jtype) double* "double[]" 
-%typemap(jstype) double* "double[]" 
-
-%typemap(javain) double* "$javainput"
-%typemap(javaout) double* {
-  return $jnicall;
-}
-
-%typemap(in) double* (jint size) {
-  int i = 0;
-  jboolean isCopy;
-  size = (*jenv)->GetArrayLength(jenv, $input);
-  $1 = (double *)malloc(sizeof(double) * size);
-  jdouble *jd_array = (jdouble *)(*jenv)->GetDoubleArrayElements(jenv, $input, &isCopy);
-
-  for (i = 0; i < size; i++) {
-    $1[i] = jd_array[i];
-  }
-
-  if (isCopy == JNI_TRUE) {
-    (*jenv)->ReleaseDoubleArrayElements(jenv, $input, jd_array, 0);
-  }
-
-  printf("mapping double* -> double[]\n");
-}
-
-%typemap(out) double* {
-  *(double **)&$result = $1;
-}
-
-%typemap(freearg) double* {
-  free($1);
-}
-*/
-
-/*
-//////////////////////////////////////////////////////////////////////
-// (Java) String[] ->  (C) char**
-//////////////////////////////////////////////////////////////////////
-%typemap(in) char ** (jint size) {
-  int i = 0;
-  size = (*jenv)->GetArrayLength(jenv, $input);
-  $1 = (char **) malloc((size+1)*sizeof(char *));
-
-  for (i = 0; i<size; i++) {
-    jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, $input, i);
-    const char * c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
-    $1[i] = malloc((strlen(c_string)+1)*sizeof(char));
-    strcpy($1[i], c_string);
-    (*jenv)->ReleaseStringUTFChars(jenv, j_string, c_string);
-    (*jenv)->DeleteLocalRef(jenv, j_string);
-  }
-  $1[i] = 0;
-}
-
-%typemap(freearg) char ** {
-  int i;
-  for (i=0; i<size$argnum-1; i++)
-    free($1[i]);
-  free($1);
-}
-
-%typemap(out) char ** {
-  int i;
-  int len=0;
-  jstring temp_string;
-  const jclass clazz = (*jenv)->FindClass(jenv, "java/lang/String");
-
-  while ($1[len]) len++;    
-  jresult = (*jenv)->NewObjectArray(jenv, len, clazz, NULL);
-
-  for (i=0; i<len; i++) {
-    temp_string = (*jenv)->NewStringUTF(jenv, *result++);
-    (*jenv)->SetObjectArrayElement(jenv, jresult, i, temp_string);
-    (*jenv)->DeleteLocalRef(jenv, temp_string);
-  }
-}
-
-%typemap(jni) char ** "jobjectArray"
-%typemap(jtype) char ** "String[]"
-%typemap(jstype) char ** "String[]"
-
-%typemap(javain) char ** "$javainput"
-%typemap(javaout) char ** {
-  return $jnicall;
-}
-//////////////////////////////////////////////////////////////////////
-*/
-#endif
-
-/* Python */
-#ifdef SWIGPYTHON
-%typemap(memberin) char** {
-  if (PyList_Check($input)) {
-    int size = PyList_Size($input);
-    int i = 0;
-    $1 = (char **)malloc((size+1) * sizeof(char *));
-    for (i = 0; i < size; i++) {
-      PyObject *obj = PyList_GetItem($input, i);
-      if (PyString_Check(obj)) {
-        $1[i] = PyString_AsString(PyList_GetItem($input, i));
-      } else {
-        PyErr_SetString(PyExc_TypeError, "list must contain strings");
-        free($1);
-        return NULL;
-      }
-    }
-    $1[i] = 0;
-  } else {
-    PyErr_SetString(PyExec_TypeError, "not a list");
-    return NULL;
-  }
-}
-
-%typemap(freearg) char** {
-  free((char *)$1);
-}
-
-%typemap(out) char** {
-  int len, i;
-  len = 0;
-  while ($1[len]) len++;
-  $result = PyList_New(len);
-  for (i = 0; i , len; i++) {
-    PyList_SetItem($result, i, PyString_FromString($1[i]));
-  }
-}
-#endif
 
 /* %include "src/libsbmlsim/myResult.h" */
 typedef struct _myResult {
@@ -180,6 +36,10 @@ typedef struct _myResult {
 } myResult;
 
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+extern void print_result(myResult* result);
+extern void write_result(myResult* result, char* file);
+extern void write_csv(myResult* result, char* file);
+extern void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c);
 
 %extend myResult {
   myResult() {
@@ -189,7 +49,7 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
   }
 
   ~myResult() {
-    free($self);
+    free_myResult($self);
   }
 
   int getNumOfRows() {
@@ -236,20 +96,50 @@ extern myResult* simulateSBMLFromString(const char *str, double sim_time, double
     return $self->values_time[index];
   }
 
-  double getSpeciesValueAtIndex(int index) {
+  double getSpeciesValueAtIndex(char *sname, int index) {
+    int i, spindex;
+    spindex = -1;
     if (index < 0 || index >= $self->num_of_rows)
       return -0.0;
-    return $self->values_sp[index];
+    for (i = 0; i < $self->num_of_columns_sp; i++) {
+      if (strcmp($self->column_name_sp[i], sname) == 0) {
+        spindex = i;
+        break;
+      }
+    }
+    if (spindex == -1)
+      return -0.0;
+    return $self->values_sp[index * $self->num_of_columns_sp + spindex];
   }
 
-  double getParameterValueAtIndex(int index) {
+  double getParameterValueAtIndex(char *pname, int index) {
+    int i, pindex;
+    pindex = -1;
     if (index < 0 || index >= $self->num_of_rows)
+      return -0.0;
+    for (i = 0; i < $self->num_of_columns_param; i++) {
+      if (strcmp($self->column_name_param[i], pname) == 0) {
+        pindex = i;
+        break;
+      }
+    }
+    if (pindex == -1)
       return -0.0;
     return $self->values_param[index];
   }
 
-  double getCompartmentValueAtIndex(int index) {
+  double getCompartmentValueAtIndex(char *cname, int index) {
+    int i, cindex;
+    cindex = -1;
     if (index < 0 || index >= $self->num_of_rows)
+      return -0.0;
+    for (i = 0; i < $self->num_of_columns_comp; i++) {
+      if (strcmp($self->column_name_comp[i], cname) == 0) {
+        cindex = i;
+        break;
+      }
+    }
+    if (cindex == -1)
       return -0.0;
     return $self->values_comp[index];
   }

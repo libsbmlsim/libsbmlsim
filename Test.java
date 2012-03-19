@@ -11,6 +11,10 @@ public class Test {
     String docstr = d.toSBML();
     myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
 
+    //libsbmlsim.print_result(result);
+    //libsbmlsim.write_csv(result, "result.csv");
+    //libsbmlsim.write_result(result, "result.dat");
+
     int numOfRows = result.getNumOfRows();
     System.out.println("numOfRows: " + numOfRows);
 
@@ -49,24 +53,13 @@ public class Test {
       double t = result.getTimeValueAtIndex(i);
       System.out.print(t);
       for (int j = 0; j < numOfSp; j++) {
-        int index = i * numOfSp + j;
-        double sp = result.getSpeciesValueAtIndex(index);
-        System.out.print(" " + sp);
+        String sname = result.getSpeciesNameAtIndex(j);
+        double val = result.getSpeciesValueAtIndex(sname, i);
+        System.out.print(" " + val);
       }
       System.out.println();
-
       if (i == 10)
         break;
     }
-
-    /*
-    SWIGTYPE_p_p_char pp = result.getColumn_name_sp();
-    int numOfSp = result.getNum_of_columns_sp();
-    for (int i = 0; i < numOfSp; i++) {
-      String ssp = libsbmlsim.stringArray_getitem(pp, i);
-      System.out.println(ssp);
-    }
-    System.out.println(result.getColumn_name_time());
-    */
   }
 }
