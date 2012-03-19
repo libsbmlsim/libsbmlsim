@@ -7,6 +7,7 @@
 %{
 #include "src/libsbmlsim/myResult.h"
 #include "src/libsbmlsim/libsbmlsim.h"
+extern myResult* simulateSBMLFromFile(const char *file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern void print_result(myResult* result);
 extern void write_result(myResult* result, char* file);
@@ -35,6 +36,7 @@ typedef struct _myResult {
   double *values_comp;
 } myResult;
 
+extern myResult* simulateSBMLFromFile(const char *file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern void print_result(myResult* result);
 extern void write_result(myResult* result, char* file);

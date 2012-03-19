@@ -3,11 +3,12 @@
 from libsbmlsim import *
 
 def main():
-  f = open('./src/MAPK.xml')
-  xml = f.read()
-  f.close()
+#  f = open('./src/MAPK.xml')
+#  xml = f.read()
+#  f.close()
 
-  result = simulateSBMLFromString(xml, 4000.0, 0.1, 100, 1, 41, 0)
+#  result = simulateSBMLFromString(xml, 4000.0, 0.1, 100, 1, 41, 0)
+  result = simulateSBMLFromFile('./src/MAPK.xml', 4000.0, 0.1, 100, 1, 41, 0)
 
   numOfRows = result.getNumOfRows()
   print "numOfRows: " + str(numOfRows)
