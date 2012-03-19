@@ -1,5 +1,10 @@
-#include <unistd.h>
 #include "libsbmlsim/libsbmlsim.h"
+
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
+#include "libsbmlsim/my_getopt.h"
+#else
+#include <unistd.h>
+#endif
 
 void usage(char *str) {
   printf("Usage : %s [option] filename(SBML file only)\n", str);
