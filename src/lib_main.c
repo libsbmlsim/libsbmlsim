@@ -2,6 +2,17 @@
 
 /* libSBMLSimulator API */
 
+SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
+  SBMLDocument_t* d;
+  Model_t* m;
+  myResult *rtn;
+  d = readSBMLFromFile(file);
+  m = SBMLDocument_getModel(d);
+  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  SBMLDocument_free(d);
+  return rtn;
+}
+
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
   SBMLDocument_t* d;
   Model_t* m;

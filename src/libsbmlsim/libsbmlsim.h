@@ -366,11 +366,14 @@ void dbg_printf(const char *fmt, ...);
 /* Progress print */
 void prg_printf(const char *fmt, ...);
 
-/* Run Simulation and output CSV */
+/* Run Simulation from SBML Model */
 SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 /* Run Simulation from SBML string */
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+
+/* Run Simulation from SBML file */
+SBMLSIM_EXPORT myResult* simulateSBMLFromFile(  const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 /** math_functions.c **/
 int64_t factorial(int n);
