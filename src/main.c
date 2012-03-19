@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
   unsigned int error_num;
 
   char *myname;
-  boolean use_lazy_method = -1;
+  boolean use_lazy_method = 2;
   int print_amount = 0;
 
   double sim_time = 0;
@@ -57,7 +57,6 @@ int main(int argc, char *argv[]){
   char *method_name;
   int method_key = -1;
 
-  myResult result;
   myResult *rtn;
 
   myname = argv[0];
@@ -227,7 +226,7 @@ int main(int argc, char *argv[]){
 
   /* simulation */
   if (!is_explicit) {
-    if (use_lazy_method == -1) {
+    if (use_lazy_method == 2) {
       while(1){
         printf("use lazy mode?\nlazy mode:using jacobian continuously while the solutions of equations are converging in newton method.\nyes(y) or no(n)\n");
         fgets(buf3, 256, stdin);
@@ -247,7 +246,7 @@ int main(int argc, char *argv[]){
   }
 
   /* Run simulation */
-  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
 
   /* write CSV */
   if (rtn == NULL) {
@@ -267,5 +266,6 @@ int main(int argc, char *argv[]){
 
   /* free */
   SBMLDocument_free(d);
+  free_myResult(rtn);
   return 0;
 }

@@ -23,7 +23,8 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
   ASTNode_t *compartment_node;
   ASTNode_t *node, *next_node;
   ASTNode_t *pc_eq, *pc_cd, *times_node, *and_node, *not_node, *divide_node;
-  unsigned int i, j;
+  /*unsigned int i, j;*/
+  int i, j;
   ASTNode_t *arg_node_list[MAX_ARG_NUM];
   unsigned int arg_node_num;
   FunctionDefinition_t *fd;

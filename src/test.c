@@ -3,7 +3,6 @@
 int main(int argc, char *argv[]) {
   SBMLDocument_t *d;
   Model_t *m;
-  myResult result;
   myResult *rtn;
 
   double sim_time = 4000;
@@ -32,15 +31,16 @@ int main(int argc, char *argv[]) {
     }
   }
   m = SBMLDocument_getModel(d);
-  rtn = simulateSBMLModel(m, &result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
     /*  print_result(rtn); */
-    /*  write_csv(rtn, "test.csv"); */
+    write_csv(rtn, "cresult.csv");
     write_result(rtn, "test.dat");
   }
 
   SBMLDocument_free(d);
+  free_myResult(rtn);
   return 0;
 }

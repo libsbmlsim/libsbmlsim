@@ -5,18 +5,17 @@
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method) {
   SBMLDocument_t* d;
   Model_t* m;
-  myResult *result = (myResult *)malloc(sizeof(myResult));
   myResult *rtn;
   d = readSBMLFromString(str);
   m = SBMLDocument_getModel(d);
   printf("simulation start\n");
-  rtn = simulateSBMLModel(m, result, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   printf("simulation end\n");
   SBMLDocument_free(d);
   return rtn;
 }
 
-SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult* result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method){
+SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method){
   double time = 0;
   int order = 0;
   int is_explicit = 0;
@@ -40,7 +39,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult* result, double 
   /* prepare timeVariantAssignments */
   timeVariantAssignments *timeVarAssign = NULL;
   /* prepare return value */
-  myResult* rtn;
+  myResult *result, *rtn;
 
   allocated_memory *mem;
   copied_AST *cp_AST;
@@ -82,7 +81,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult* result, double 
   /* create myObjects */
   create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
   /* create myResult */
-  create_myResult_content(m, result, mySp, myParam, myComp, sim_time, dt, print_interval);
+  result = create_myResult(m, mySp, myParam, myComp, sim_time, dt, print_interval);
 
   switch(method) {
     case MTHD_RUNGE_KUTTA: /*  Runge-Kutta */
@@ -139,5 +138,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult* result, double 
 
   /* free */
   free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+  if (rtn == NULL)
+    free_myResult(result);
   return rtn;
 }
