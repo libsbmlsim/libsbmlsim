@@ -269,8 +269,11 @@ void set_seed(void);
 /* strdup is not supported in C89, so I reimplement it. */
 char* dupstr(const char *str);
 
-/* create contents of myResult object */
-void create_myResult_content(Model_t *m, myResult* result, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);
+/* create myResult object (and contents) */
+myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);
+
+/* deallocate myResult */
+void free_myResult(myResult *res);
 
 /* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST);
@@ -364,7 +367,7 @@ void dbg_printf(const char *fmt, ...);
 void prg_printf(const char *fmt, ...);
 
 /* Run Simulation and output CSV */
-SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, myResult *result, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 /* Run Simulation from SBML string */
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
