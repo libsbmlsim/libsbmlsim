@@ -135,7 +135,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     }else{
       pc_cd = ASTNode_getChild(node, 1);
       not_node = ASTNode_createWithType(AST_LOGICAL_NOT);
-      ASTNode_addChild(not_node, pc_cd);
+      ASTNode_addChild(not_node, ASTNode_deepCopy(pc_cd));
       ASTNode_addChild(times_node, not_node);
     }
     ASTNode_replaceChild(node, ASTNode_getNumChildren(node)-1, times_node);
