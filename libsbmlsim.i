@@ -36,6 +36,8 @@ typedef struct _myResult {
   double *values_comp;
 } myResult;
 
+%newobject simulateSBMLFromFile;
+%newobject simulateSBMLFromString;
 extern myResult* simulateSBMLFromFile(const char *file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern void print_result(myResult* result);
