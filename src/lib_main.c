@@ -8,9 +8,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time
   myResult *rtn;
   d = readSBMLFromString(str);
   m = SBMLDocument_getModel(d);
-  printf("simulation start\n");
   rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
-  printf("simulation end\n");
   SBMLDocument_free(d);
   return rtn;
 }
