@@ -26,7 +26,15 @@
 #include "version.h"
 
 /* Boolean */
+#define true 1
+#define false 0
+#ifdef boolean
+#undef boolean
+#endif
+#define boolean int
+/*
 typedef enum _boolean { false, true } boolean;
+*/
 
 /* structures for efficient simulation */
 typedef struct _equation equation;
