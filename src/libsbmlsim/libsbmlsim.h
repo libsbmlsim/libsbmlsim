@@ -281,7 +281,7 @@ char* dupstr(const char *str);
 myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);
 
 /* deallocate myResult */
-void free_myResult(myResult *res);
+SBMLSIM_EXPORT void free_myResult(myResult *res);
 
 /* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST);

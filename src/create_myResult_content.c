@@ -34,7 +34,7 @@ myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
   return result;
 }
 
-void free_myResult(myResult *res)
+SBMLSIM_EXPORT void free_myResult(myResult *res)
 {
   int i;
   free((void *)res->column_name_time);
