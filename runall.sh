@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 ### directories and files
 # ~/Downloads/SBML-testcases/cases/semantic/00980/
@@ -7,7 +7,7 @@
 #   00980-results.csv
 
 BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic"
-#BaseDir="$HOME/Downloads/sbml-test-cases-2/cases/semantic"
+#BaseDir="$HOME/work/cases/semantic"
 
 ### 00001-settings.txt
 # duration: 5
@@ -19,9 +19,8 @@ BaseDir="$HOME/Downloads/SBML-testcases/cases/semantic"
 # Simulate following models with small dt
 fine_delta="00952 00953 00962 00963 00964 00965 00966 00967"
 
-foreach i ({00001..00980}) 
-#foreach i ({00952..00980}) 
-#foreach i (00957 00958 00959) 
+for i in {0000{1..9},000{10..99},00{100..980}}; do
+#for i in 00957 00958 00959; do
   head="$BaseDir/$i/$i"
   # 00926 and 00927 contains '\r' before '\n' on each line (DOS format),
   # so we have to call tr -d '\r' before parsing the settings file...
@@ -36,7 +35,7 @@ foreach i ({00001..00980})
   opt_delta=""
   opt_amount=""
   echo "$i: $duration : $steps : [$variables] : [$amount] : [$concentration]"
-  if expr $fine_delta : ".*$i.*" >/dev/null; then
+  if [[ "$fine_delta" == *"$i"* ]]; then
     echo "  simulate with fine delta"
     opt_delta="-d 0.00001"
   fi
@@ -47,7 +46,7 @@ foreach i ({00001..00980})
 	  echo "  print concentration"
   fi
   ./sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
-  ./genresult.pl out.csv $variables $steps >! $result
+  ./genresult.pl out.csv $variables $steps > $result
   ./compare.pl $i
   
   unset head
@@ -58,7 +57,8 @@ foreach i ({00001..00980})
   unset result
   unset opt_delta
   unset opt_amount
-end
+# end
+done
 unset BaseDir
 unset fine_delta
 rm -f out.csv
