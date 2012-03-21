@@ -16,27 +16,30 @@ my @nameArray;
 my $linenum = 0;
 
 while(<>) {
-    $linenum++;
-	s/\s+//g;
-	if (/time/) {  # if it is first line
-		@nameArray = split(/,/);
-	} else {
-	    if ($linenum > ($steps+2) ) {
-		exit;
-	    }
-		my $n = 0;
-		foreach my $i (split(/,/)) {
-			$hash{$nameArray[$n]} = $i;
-			$n++;
-		}
-		my $m = 0;
-		foreach my $j (split(/,/, $vars)) {
-			if ($m > 0) {
-				print ",";
-			}
-			print "$hash{$j}";
-			$m++;
-		}
-		print "\n";
-	}
+  $linenum++;
+  s/\s+//g;
+  if (/time/) {  # if it is first line
+    @nameArray = split(/,/);
+  } else {
+    if ($linenum > ($steps+2) ) {
+      exit;
+    }
+    my $n = 0;
+    foreach my $i (split(/,/)) {
+      $i =~ s/1.#INF/inf/;
+      $i =~ s/-1.#INF/-inf/;
+      $i =~ s/1.#QNAN/nan/;
+      $hash{$nameArray[$n]} = $i;
+      $n++;
+    }
+    my $m = 0;
+    foreach my $j (split(/,/, $vars)) {
+      if ($m > 0) {
+        print ",";
+      }
+      print "$hash{$j}";
+      $m++;
+    }
+    print "\n";
+  }
 }
