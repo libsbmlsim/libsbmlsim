@@ -3,9 +3,8 @@ use warnings;
 use utf8;
 use 5.010;
 
-use blib './blib';
+use lib '.';
 use libsbmlsim;
-use Data::Dumper;
 
 my $xml;
 open my $fh, "<src/MAPK.xml";
