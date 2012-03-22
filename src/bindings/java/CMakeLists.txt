@@ -7,29 +7,29 @@ FIND_PACKAGE(Java REQUIRED)
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 
-INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH2})
+SET (CLASS_DIR "class")
+
+INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS})
+#INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH})
+#INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH2})
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/libsbmlsim ${LIBSBML_INCLUDE_DIR})
-
-SET(JAVA_RUNTIME2  $ENV{JAVA_HOME}/bin/java)
-SET(JAVA_ARCHIVE2  $ENV{JAVA_HOME}/bin/jar)
-SET(JAVA_COMPILE2  $ENV{JAVA_HOME}/bin/javac)
 
 SET(CMAKE_SWIG_FLAGS "")
 
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES CPLUSPLUS OFF)
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
 SWIG_ADD_MODULE(sbmlsimj java libsbmlsim.i ${SOURCES_LIB})
-SWIG_LINK_LIBRARIES(sbmlsimj ${JAVA_LIBRARIES} sbml)
+SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} sbml)
+#SWIG_LINK_LIBRARIES(sbmlsimj ${JAVA_LIBRARIES} sbml)
 
 ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   POST_BUILD
   COMMAND cmake -E echo "Compiling Java files..."
-  COMMAND cmake -E make_directory ./classes
-  COMMAND ${JAVA_COMPILE2} -cp .:libsbmlj.jar *.java -d ./classes 
+  COMMAND cmake -E make_directory ${CLASS_DIR}
+  COMMAND ${Java_JAVAC_EXECUTABLE} -cp .:libsbmlj.jar *.java -d ${CLASS_DIR} 
   COMMAND cmake -E echo "Creating jar file..."
-  COMMAND ${JAVA_ARCHIVE2} cvf libsbmlsimj.jar -C classes/ .
-  #  COMMAND ${JAVA_RUNTIME2} -cp .:libsbmlj.jar:libsbmlsimj.jar Test
+  COMMAND ${Java_JAR_EXECUTABLE} cvf libsbmlsimj.jar -C ${CLASS_DIR} .
+  #COMMAND ${Java_JAVA_EXECUTABLE} -cp .:libsbmlj.jar:libsbmlsimj.jar Test
   )

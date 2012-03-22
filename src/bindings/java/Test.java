@@ -4,7 +4,7 @@ import org.sbml.libsbml.libsbml;
 
 public class Test {
   public static void main(String[] args) {
-    System.loadLibrary("sbmlsim");
+    System.loadLibrary("sbmlsimj");
     System.loadLibrary("sbmlj");
 
     /*
