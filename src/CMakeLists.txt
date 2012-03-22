@@ -74,4 +74,6 @@ add_executable(../sim ${SOURCES_MAIN})
 target_link_libraries(../sim sbmlsim ${LIBSBML_LIBRARIES})
 
 # Bindings
+add_subdirectory(bindings/perl)
 add_subdirectory(bindings/python)
+add_subdirectory(bindings/java)
