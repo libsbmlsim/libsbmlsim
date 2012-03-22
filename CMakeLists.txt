@@ -64,16 +64,8 @@ add_subdirectory(src)
 
 message(STATUS "
 ----------------------------------------------------------------------
-libSBML version ${PACKAGE_VERSION}
+libSBMLSim version ${PACKAGE_VERSION}
 ----------------------------------------------------------------------
-
-More information and the latest version are available online at
-http://sbml.org/Software/libSBML
-
-Please report problems using the issue tracker at
-http://sbml.org/Software/libsbml/issue-tracker
-
-To contact the developers directly, email libsbml-team@caltech.edu
 
 Configured on host "$ENV{COMPUTERNAME}" ${HOSTNAME}
   host type                     = ${CMAKE_SYSTEM_NAME}
