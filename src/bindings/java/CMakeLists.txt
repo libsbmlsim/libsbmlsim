@@ -1,4 +1,4 @@
-# This is a CMake example for Python
+# This is a CMake example for Java
 
 cmake_minimum_required(VERSION 2.8)
 
