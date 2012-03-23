@@ -74,9 +74,20 @@ add_executable(../sim ${SOURCES_MAIN})
 target_link_libraries(../sim sbmlsim ${LIBSBML_LIBRARIES})
 
 # Bindings
-if(NOT MSVC)
-add_subdirectory(bindings/perl)
+if(WITH_JAVA)
+add_subdirectory(bindings/java)
+endif()
+
+if(WITH_PYTHON)
 add_subdirectory(bindings/python)
+endif()
+
+if(WITH_PERL)
+add_subdirectory(bindings/perl)
+endif()
+
+if(WITH_RUBY)
 add_subdirectory(bindings/ruby)
 endif()
-add_subdirectory(bindings/java)
+
+
