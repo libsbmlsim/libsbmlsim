@@ -6,7 +6,21 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time,
   SBMLDocument_t* d;
   Model_t* m;
   myResult *rtn;
+  unsigned int err_num;
   d = readSBMLFromFile(file);
+  if (d == NULL)
+    return NULL;
+  err_num = SBMLDocument_getNumErrors(d);
+  if (err_num > 0) {
+    unsigned int i;
+    for (i = 0; i < err_num; i++) {
+      const XMLError_t *err = (const XMLError_t *)SBMLDocument_getError(d, i);
+      if (XMLError_isError(err) || XMLError_isFatal(err)) {
+        SBMLDocument_free(d);
+        return NULL;
+      }
+    }
+  }
   m = SBMLDocument_getModel(d);
   rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   SBMLDocument_free(d);

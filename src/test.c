@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
     write_csv(rtn, "cresult.csv");
     write_result(rtn, "test.dat");
   }
-  free_myResult(rtn);
+  if (rtn != NULL)
+    free_myResult(rtn);
   return 0;
 }
