@@ -34,6 +34,11 @@ myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
   return result;
 }
 
+SBMLSIM_EXPORT void __free_myResult(myResult *res)
+{
+  free_myResult(res);
+}
+
 SBMLSIM_EXPORT void free_myResult(myResult *res)
 {
   int i;

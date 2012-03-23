@@ -6,13 +6,14 @@
 
 %{
 #include "../../src/libsbmlsim/myResult.h"
-#include "../../src/libsbmlsim/libsbmlsim.h"
+//#include "../../src/libsbmlsim/libsbmlsim.h"
 extern myResult* simulateSBMLFromFile(const char *file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern myResult* simulateSBMLFromString(const char *str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 extern void print_result(myResult* result);
 extern void write_result(myResult* result, char* file);
 extern void write_csv(myResult* result, char* file);
 extern void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c);
+extern void __free_myResult(myResult *result);
 %}
 
 //%array_class(double,doubleArray);
@@ -53,7 +54,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
   }
 
   ~myResult() {
-    free_myResult($self);
+    __free_myResult($self);
   }
 
   int getNumOfRows() {
