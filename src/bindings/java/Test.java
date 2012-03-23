@@ -1,11 +1,8 @@
-import org.sbml.libsbml.SBMLDocument;
-import org.sbml.libsbml.SBMLReader;
-import org.sbml.libsbml.libsbml;
 
 public class Test {
   public static void main(String[] args) {
     System.loadLibrary("sbmlsimj");
-    System.loadLibrary("sbmlj");
+    //System.loadLibrary("sbmlj");
 
     /*
     SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
