@@ -20,6 +20,7 @@ SET(CMAKE_SWIG_FLAGS "")
 
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES CPLUSPLUS OFF)
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
+SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -package jp.ac.keio.bio.fun.libsbmlsim)
 SWIG_ADD_MODULE(sbmlsimj java libsbmlsim.i ${SOURCES_LIB})
 SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} ${LIBSBML_LIBRARIES})
 #SWIG_LINK_LIBRARIES(sbmlsimj ${JAVA_LIBRARIES} sbml)
@@ -28,8 +29,8 @@ ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   POST_BUILD
   COMMAND cmake -E echo "Compiling Java files..."
   COMMAND cmake -E make_directory ${CLASS_DIR}
-  COMMAND ${Java_JAVAC_EXECUTABLE} -cp .:libsbmlj.jar *.java -d ${CLASS_DIR} 
+  COMMAND ${Java_JAVAC_EXECUTABLE} *.java -d ${CLASS_DIR} 
   COMMAND cmake -E echo "Creating jar file..."
-  COMMAND ${Java_JAR_EXECUTABLE} cvf libsbmlsimj.jar -C ${CLASS_DIR} .
+  COMMAND ${Java_JAR_EXECUTABLE} cvf libsbmlsimj.jar -C ${CLASS_DIR} jp
   #COMMAND ${Java_JAVA_EXECUTABLE} -cp .:libsbmlj.jar:libsbmlsimj.jar Test
   )
