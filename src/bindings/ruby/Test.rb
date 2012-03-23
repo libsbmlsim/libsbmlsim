@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), ".")
 require 'libsbmlsim'
 
-res = Libsbmlsim::simulateSBMLFromFile('../../MAPK.xml', 4000.0, 0.1, 100, 1, 41, 0)
+res = Libsbmlsim::simulateSBMLFromFile('../../MAPK.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
 
 numOfRows = res.getNumOfRows
 puts "numOfRows: #{numOfRows}"

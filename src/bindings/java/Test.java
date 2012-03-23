@@ -2,7 +2,6 @@
 public class Test {
   public static void main(String[] args) {
     System.loadLibrary("sbmlsimj");
-    //System.loadLibrary("sbmlj");
 
     /*
     SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
@@ -10,7 +9,7 @@ public class Test {
     myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
     */
     System.out.println("Simulate SBML model from File");
-    myResult result = libsbmlsim.simulateSBMLFromFile("../../MAPK.xml", 4000.0, 0.1, 100, 1, 41, 0);
+    myResult result = libsbmlsim.simulateSBMLFromFile("../../MAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);
     //libsbmlsim.write_csv(result, "result.csv");

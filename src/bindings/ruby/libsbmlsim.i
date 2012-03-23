@@ -1,9 +1,6 @@
 /* libsbmlsim.i */
 %module libsbmlsim
 
-//%include "enumsimple.swg"
-//%include "carrays.i"
-
 %{
 #include "../../src/libsbmlsim/myResult.h"
 //#include "../../src/libsbmlsim/libsbmlsim.h"
@@ -16,8 +13,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
 extern void __free_myResult(myResult *result);
 %}
 
-//%array_class(double,doubleArray);
-//%array_functions(char*,stringArray);
+%include "../../src/libsbmlsim/methods.h"
 
 /* %include "src/libsbmlsim/myResult.h" */
 typedef struct _myResult {

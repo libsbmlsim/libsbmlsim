@@ -8,7 +8,7 @@ def main():
 #  f.close()
 
 #  result = simulateSBMLFromString(xml, 4000.0, 0.1, 100, 1, 41, 0)
-  result = simulateSBMLFromFile('../../MAPK.xml', 4000.0, 0.1, 100, 1, 41, 0)
+  result = simulateSBMLFromFile('../../MAPK.xml', 4000.0, 0.1, 100, 1, MTHD_RUNGE_KUTTA, 0)
 
   numOfRows = result.getNumOfRows()
   print "numOfRows: " + str(numOfRows)
