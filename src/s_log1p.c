@@ -90,9 +90,7 @@ ln2_hi  =  6.93147180369123816490e-01,	/* 3fe62e42 fee00000 */
 
 static const double zero = 0.0;
 
-  double
-s_log1p(double x)
-{
+double s_log1p(double x) {
   double hfsq,f,c,s,z,R,u;
   int32_t k,hx,hu,ax;
   c = 0.0;  /* to avoid warning... */
@@ -166,5 +164,10 @@ s_log1p(double x)
   R = z*(Lp1+z*(Lp2+z*(Lp3+z*(Lp4+z*(Lp5+z*(Lp6+z*Lp7))))));
   if(k==0) return f-(hfsq-s*(hfsq+R)); else
     return k*ln2_hi-((hfsq-(s*(hfsq+R)+(k*ln2_lo+c)))-f);
+}
+#else
+/* Never called. Just to avoid warning on link */
+double s_log1p(double x) {
+  return log1p(x);
 }
 #endif
