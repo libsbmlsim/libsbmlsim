@@ -22,6 +22,7 @@
 #include "osarch.h"
 #include "common.h"
 #include "methods.h"
+#include "errorcodes.h"
 #include "myResult.h"
 #include "version.h"
 
@@ -279,6 +280,17 @@ char* dupstr(const char *str);
 
 /* create myResult object (and contents) */
 myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);
+
+/* create myResult object with error. */
+/* create_myResult_with_errorCode insert default error_message */
+myResult *create_myResult_with_error(LibsbmlsimErrorCode code, const char *message);
+myResult *create_myResult_with_errorCode(LibsbmlsimErrorCode code);
+
+/* return 1 if error */
+int myResult_isError(myResult *result);
+
+/* get error message */
+const char *myResult_getErrorMessage(myResult *result);
 
 /* deallocate myResult */
 SBMLSIM_EXPORT void free_myResult(myResult *res);

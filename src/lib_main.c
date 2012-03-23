@@ -9,20 +9,44 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time,
   unsigned int err_num;
   d = readSBMLFromFile(file);
   if (d == NULL)
-    return NULL;
+    return create_myResult_with_errorCode(Unknown);
   err_num = SBMLDocument_getNumErrors(d);
   if (err_num > 0) {
-    unsigned int i;
-    for (i = 0; i < err_num; i++) {
-      const XMLError_t *err = (const XMLError_t *)SBMLDocument_getError(d, i);
-      if (XMLError_isError(err) || XMLError_isFatal(err)) {
-        SBMLDocument_free(d);
-        return NULL;
+    const XMLError_t *err = (const XMLError_t *)SBMLDocument_getError(d, 0);
+    if (XMLError_isError(err) || XMLError_isFatal(err)) {
+      XMLErrorCode_t errcode = XMLError_getErrorId(err);
+      switch (errcode) {
+        case XMLFileUnreadable:
+          rtn = create_myResult_with_errorCode(FileNotFound);
+          break;
+        case XMLFileUnwritable:
+        case XMLFileOperationError:
+        case XMLNetworkAccessError:
+          rtn = create_myResult_with_errorCode(SBMLOperationFailed);
+          break;
+        case InternalXMLParserError:
+        case UnrecognizedXMLParserCode:
+        case XMLTranscoderError:
+          rtn = create_myResult_with_errorCode(InternalParserError);
+          break;
+        case XMLOutOfMemory:
+          rtn = create_myResult_with_errorCode(OutOfMemory);
+          break;
+        case XMLUnknownError:
+          rtn = create_myResult_with_errorCode(Unknown);
+          break;
+        default:
+          rtn = create_myResult_with_errorCode(InvalidSBML);
+          break;
       }
+      SBMLDocument_free(d);
+      return rtn;
     }
   }
   m = SBMLDocument_getModel(d);
   rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  if (rtn == NULL)
+    rtn = create_myResult_with_errorCode(SimulationFailed);
   SBMLDocument_free(d);
   return rtn;
 }
@@ -31,9 +55,47 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time
   SBMLDocument_t* d;
   Model_t* m;
   myResult *rtn;
+  unsigned int err_num;
   d = readSBMLFromString(str);
+  if (d == NULL)
+    return create_myResult_with_errorCode(Unknown);
+  err_num = SBMLDocument_getNumErrors(d);
+  if (err_num > 0) {
+    const XMLError_t *err = (const XMLError_t *)SBMLDocument_getError(d, 0);
+    if (XMLError_isError(err) || XMLError_isFatal(err)) {
+      XMLErrorCode_t errcode = XMLError_getErrorId(err);
+      switch (errcode) {
+        case XMLFileUnreadable:
+          rtn = create_myResult_with_errorCode(FileNotFound);
+          break;
+        case XMLFileUnwritable:
+        case XMLFileOperationError:
+        case XMLNetworkAccessError:
+          rtn = create_myResult_with_errorCode(SBMLOperationFailed);
+          break;
+        case InternalXMLParserError:
+        case UnrecognizedXMLParserCode:
+        case XMLTranscoderError:
+          rtn = create_myResult_with_errorCode(InternalParserError);
+          break;
+        case XMLOutOfMemory:
+          rtn = create_myResult_with_errorCode(OutOfMemory);
+          break;
+        case XMLUnknownError:
+          rtn = create_myResult_with_errorCode(Unknown);
+          break;
+        default:
+          rtn = create_myResult_with_errorCode(InvalidSBML);
+          break;
+      }
+      SBMLDocument_free(d);
+      return rtn;
+    }
+  }
   m = SBMLDocument_getModel(d);
   rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  if (rtn == NULL)
+    rtn = create_myResult_with_errorCode(SimulationFailed);
   SBMLDocument_free(d);
   return rtn;
 }

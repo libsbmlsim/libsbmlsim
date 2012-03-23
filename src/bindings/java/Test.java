@@ -9,6 +9,13 @@ public class Test {
     myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
     */
     System.out.println("Simulate SBML model from File");
+    System.out.println("Intentionally loading file not exists");
+    myResult result_with_error = libsbmlsim.simulateSBMLFromFile("../../hogehogeMAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+    if (result_with_error.getNumOfErrors() > 0) {
+      System.out.println(result_with_error.getErrorMessageAtIndex(0));
+    }
+
+    System.out.println("Loading existing and valid SBML file");
     myResult result = libsbmlsim.simulateSBMLFromFile("../../MAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);

@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
   rtn = simulateSBMLFromFile(argv[1], sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
+  } else if (myResult_isError(rtn)) {
+    printf("ERROR: %s\n", myResult_getErrorMessage(rtn));
   } else {
     /*  print_result(rtn); */
     write_csv(rtn, "cresult.csv");

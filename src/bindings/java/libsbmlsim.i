@@ -14,9 +14,14 @@ extern void __free_myResult(myResult *result);
 %}
 
 %include "../../src/libsbmlsim/methods.h"
+%include "../../src/libsbmlsim/errorcodes.h"
 
 /* %include "src/libsbmlsim/myResult.h" */
 typedef struct _myResult {
+  LibsbmlsimErrorCode error_code;
+%immutable;
+  char *error_message;
+%mutable;
   int num_of_rows;
   int num_of_columns_sp;
   int num_of_columns_param;
@@ -53,6 +58,28 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
     __free_myResult($self);
   }
 
+  int getNumOfErrors() {
+    if ($self->error_code == NoError)
+      return 0;
+    return 1;
+  }
+
+  LibsbmlsimErrorCode getErrorCode() {
+    return $self->error_code;
+  }
+
+  LibsbmlsimErrorCode getErrorCodeAtIndex(int n) {
+    return $self->error_code;
+  }
+
+  const char *getErrorMessage() {
+    return $self->error_message;
+  }
+
+  const char *getErrorMessageAtIndex(int n) {
+    return $self->error_message;
+  }
+
   int getNumOfRows() {
     return $self->num_of_rows;
   }
@@ -74,25 +101,25 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
   }
 
   const char *getSpeciesNameAtIndex(int index) {
-    if (index < 0 || index >= $self->num_of_columns_sp)
+    if (index < 0 || index >= $self->num_of_columns_sp || $self->error_code != NoError)
       return NULL;
     return $self->column_name_sp[index];
   }
 
   const char *getParameterNameAtIndex(int index) {
-    if (index < 0 || index >= $self->num_of_columns_param)
+    if (index < 0 || index >= $self->num_of_columns_param || $self->error_code != NoError)
       return NULL;
     return $self->column_name_param[index];
   }
 
   const char *getCompartmentNameAtIndex(int index) {
-    if (index < 0 || index >= $self->num_of_columns_comp)
+    if (index < 0 || index >= $self->num_of_columns_comp || $self->error_code != NoError)
       return NULL;
     return $self->column_name_comp[index];
   }
 
   double getTimeValueAtIndex(int index) {
-    if (index < 0 || index >= $self->num_of_rows)
+    if (index < 0 || index >= $self->num_of_rows || $self->error_code != NoError)
       return -0.0;
     return $self->values_time[index];
   }
@@ -100,7 +127,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
   double getSpeciesValueAtIndex(char *sname, int index) {
     int i, spindex;
     spindex = -1;
-    if (index < 0 || index >= $self->num_of_rows)
+    if (index < 0 || index >= $self->num_of_rows || $self->error_code != NoError)
       return -0.0;
     for (i = 0; i < $self->num_of_columns_sp; i++) {
       if (strcmp($self->column_name_sp[i], sname) == 0) {
@@ -116,7 +143,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
   double getParameterValueAtIndex(char *pname, int index) {
     int i, pindex;
     pindex = -1;
-    if (index < 0 || index >= $self->num_of_rows)
+    if (index < 0 || index >= $self->num_of_rows || $self->error_code != NoError)
       return -0.0;
     for (i = 0; i < $self->num_of_columns_param; i++) {
       if (strcmp($self->column_name_param[i], pname) == 0) {
@@ -132,7 +159,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
   double getCompartmentValueAtIndex(char *cname, int index) {
     int i, cindex;
     cindex = -1;
-    if (index < 0 || index >= $self->num_of_rows)
+    if (index < 0 || index >= $self->num_of_rows || $self->error_code != NoError)
       return -0.0;
     for (i = 0; i < $self->num_of_columns_comp; i++) {
       if (strcmp($self->column_name_comp[i], cname) == 0) {

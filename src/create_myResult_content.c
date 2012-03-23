@@ -10,6 +10,8 @@ myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
   int end_cycle = get_end_cycle(sim_time, dt);
 
   result = (myResult *)malloc(sizeof(myResult));
+  result->error_code = NoError;
+  result->error_message = NULL;
   result->num_of_columns_sp = num_of_species;
   result->num_of_columns_param = num_of_parameters;
   result->num_of_columns_comp = num_of_compartments;
@@ -34,6 +36,64 @@ myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
   return result;
 }
 
+/* create myResult object with errorcode and errormessage */
+myResult *create_myResult_with_error(LibsbmlsimErrorCode code, const char *message)
+{
+  myResult *result;
+  result = (myResult *)malloc(sizeof(myResult));
+  result->error_code = code;
+  result->error_message = dupstr(message);
+
+  result->num_of_columns_sp = 0;
+  result->num_of_columns_param = 0;
+  result->num_of_columns_comp = 0;
+  result->num_of_rows = 0;
+  result->column_name_time = NULL;
+  result->column_name_sp = NULL;
+  result->column_name_param = NULL;
+  result->column_name_comp = NULL;
+  result->values_time = NULL;
+  result->values_sp = NULL;
+  result->values_param = NULL;
+  result->values_comp = NULL;
+
+  return result;
+}
+
+/* create myResult object with error and default errormessage */
+myResult *create_myResult_with_errorCode(LibsbmlsimErrorCode code)
+{
+  switch (code) {
+    case FileNotFound:
+      return create_myResult_with_error(code, "File Not Found");
+    case InvalidSBML:
+      return create_myResult_with_error(code, "Invalid SBML File");
+    case SBMLOperationFailed:
+      return create_myResult_with_error(code, "SBML Operation Failed");
+    case OutOfMemory:
+      return create_myResult_with_error(code, "Out Of Memory");
+    case InternalParserError:
+      return create_myResult_with_error(code, "Internal SBML Parser Error");
+    case SimulationFailed:
+      return create_myResult_with_error(code, "Simulation Failed");
+    default:
+      break;
+  }
+  return create_myResult_with_error(code, "Unknown Error");
+}
+
+int myResult_isError(myResult *result)
+{
+  if (result->error_code == NoError)
+    return 0;
+  return 1;
+}
+
+const char *myResult_getErrorMessage(myResult *result)
+{
+  return result->error_message;
+}
+
 SBMLSIM_EXPORT void __free_myResult(myResult *res)
 {
   free_myResult(res);
@@ -42,19 +102,38 @@ SBMLSIM_EXPORT void __free_myResult(myResult *res)
 SBMLSIM_EXPORT void free_myResult(myResult *res)
 {
   int i;
-  free((void *)res->column_name_time);
-  for (i = 0; i < res->num_of_columns_sp; i++)
-    free((void *)res->column_name_sp[i]);
-  free(res->column_name_sp);
-  for (i = 0; i < res->num_of_columns_param; i++)
-    free((void *)res->column_name_param[i]);
-  free(res->column_name_param);
-  for (i = 0; i < res->num_of_columns_comp; i++)
-    free((void *)res->column_name_comp[i]);
-  free(res->column_name_comp);
-  free(res->values_time);
-  free(res->values_sp);
-  free(res->values_param);
-  free(res->values_comp);
+
+  if (res->column_name_time != NULL)
+    free((void *)res->column_name_time);
+
+  if (res->column_name_sp != NULL) {
+    for (i = 0; i < res->num_of_columns_sp; i++)
+      free((void *)res->column_name_sp[i]);
+    free(res->column_name_sp);
+  }
+
+  if (res->column_name_param != NULL) {
+    for (i = 0; i < res->num_of_columns_param; i++)
+      free((void *)res->column_name_param[i]);
+    free(res->column_name_param);
+  }
+
+  if (res->column_name_comp != NULL) {
+    for (i = 0; i < res->num_of_columns_comp; i++)
+      free((void *)res->column_name_comp[i]);
+    free(res->column_name_comp);
+  }
+
+  if (res->values_time != NULL)
+    free(res->values_time);
+  if (res->values_sp != NULL)
+    free(res->values_sp);
+  if (res->values_param != NULL)
+    free(res->values_param);
+  if (res->values_comp != NULL)
+    free(res->values_comp);
+  if (res->error_message != NULL)
+    free((void *)res->error_message);
+
   free(res);
 }

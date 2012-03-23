@@ -1,9 +1,13 @@
 #ifndef LibSBMLSim_MyResult_h
 #define LibSBMLSim_MyResult_h
 
+#include "errorcodes.h"
+
 typedef struct _myResult myResult;
 
 struct _myResult{
+  LibsbmlsimErrorCode error_code;
+  const char *error_message;
   int num_of_rows;
   int num_of_columns_sp;
   int num_of_columns_param;
