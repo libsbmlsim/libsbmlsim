@@ -44,7 +44,7 @@ for i in {0000{1..9},000{10..99},00{100..980}}; do
   else
 	  echo "  print concentration"
   fi
-  ./sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
+  ./simulateSBML -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
   ./genresult.pl out.csv $variables $steps > $result
   ./compare.pl $i
   
