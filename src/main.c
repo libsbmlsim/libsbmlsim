@@ -52,6 +52,7 @@ int main(int argc, char *argv[]){
   int print_interval = 0;
 
   char buf1[256], buf2[256], buf3[256];
+  char *tmp;
   int method;
   boolean is_explicit;
   char *method_name;
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]){
   if(sim_time == 0){
     while(1){
       printf("Simulation time : ");
-      fgets(buf1, 256, stdin);
+      tmp = fgets(buf1, 256, stdin);
       chomp(buf1);
       if(str_is_number(buf1)){
         break;
@@ -126,7 +127,7 @@ int main(int argc, char *argv[]){
   if(step == 0){
     while(1){
       printf("simulation step : ");
-      fgets(buf1, 256, stdin);
+      tmp = fgets(buf1, 256, stdin);
       chomp(buf1);
       if(str_is_number(buf1)){
         break;
@@ -159,7 +160,7 @@ int main(int argc, char *argv[]){
       printf("AB3 : press \"11\"\n");
       printf("AB4 : press \"12\"\n");
 
-      fgets(buf2, 256, stdin);
+      tmp = fgets(buf2, 256, stdin);
       method_key = atoi(buf2);
       if (method_key < 1 || method_key > 12) {
         printf("Invalid Input!\nSelect and input the number \"1~12\"");
@@ -229,7 +230,7 @@ int main(int argc, char *argv[]){
     if (use_lazy_method == 2) {
       while(1){
         printf("use lazy mode?\nlazy mode:using jacobian continuously while the solutions of equations are converging in newton method.\nyes(y) or no(n)\n");
-        fgets(buf3, 256, stdin);
+        tmp = fgets(buf3, 256, stdin);
         if(strcmp(buf3, "y\n") == 0 || strcmp(buf3, "yes\n") == 0) {
           use_lazy_method = true;
           break;
