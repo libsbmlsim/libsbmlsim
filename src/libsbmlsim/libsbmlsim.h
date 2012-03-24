@@ -60,7 +60,7 @@ typedef struct _copied_AST copied_AST;
 
 struct _equation{
   double *number[MAX_MATH_LENGTH];
-  int operator[MAX_MATH_LENGTH];
+  int op[MAX_MATH_LENGTH];
   double **delay_number[MAX_MATH_LENGTH];
   double **delay_comp_size[MAX_MATH_LENGTH];
   equation *explicit_delay_eq[MAX_MATH_LENGTH];

@@ -29,7 +29,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
       }
       pos++;
     }else{
-      switch(eq->operator[i]){
+      switch(eq->op[i]){
         case AST_PLUS: 
           /* TRACE(("operate +\n")); */
           stack[pos-2] += stack[pos-1];
@@ -138,7 +138,7 @@ double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_ord
           break;
         case AST_FUNCTION_ARCCOT:
           /* TRACE(("operate arccot\n")); */
-          if(eq->operator[i-1] == AST_MINUS
+          if(eq->op[i-1] == AST_MINUS
               && DOUBLE_EQ(*eq->number[i-2], 0)
               && DOUBLE_EQ(*eq->number[i-3], 0)){
             stack[pos-1] = atan(-1.0/stack[pos-1]);

@@ -47,7 +47,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
         }
         TRACE(("comp delay creation for species finish\n"));
         eq->number[index] = NULL;
-        eq->operator[index] = 0;
+        eq->op[index] = 0;
         eq->delay_number[index] = sp[i]->delay_val;
         if(comp_node != NULL){
           for(j=0; j<Model_getNumCompartments(m); j++){
@@ -94,7 +94,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
             }
           }
           eq->number[index] = NULL;
-          eq->operator[index] = 0;
+          eq->op[index] = 0;
           eq->delay_number[index] = param[i]->delay_val;
           eq->delay_comp_size[index] = NULL;
           eq->explicit_delay_eq[index] = NULL;
@@ -133,7 +133,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
             }
           }
           eq->number[index] = NULL;
-          eq->operator[index] = 0;
+          eq->op[index] = 0;
           eq->delay_number[index] = comp[i]->delay_val;
           eq->delay_comp_size[index] = NULL;
           eq->explicit_delay_eq[index] = NULL;
@@ -174,7 +174,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
               }
             }
             eq->number[index] = NULL;
-            eq->operator[index] = 0;
+            eq->op[index] = 0;
             eq->delay_number[index] = re[i]->products[j]->delay_val;
             eq->delay_comp_size[index] = NULL;
             eq->explicit_delay_eq[index] = NULL;
@@ -215,7 +215,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
               }
             }
             eq->number[index] = NULL;
-            eq->operator[index] = 0;
+            eq->op[index] = 0;
             eq->delay_number[index] = re[i]->reactants[j]->delay_val;
             eq->delay_comp_size[index] = NULL;
             eq->explicit_delay_eq[index] = NULL;
@@ -258,7 +258,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       || ASTNode_isBoolean(node)){
     op = ASTNode_getType(node);
     eq->number[index] = NULL;
-    eq->operator[index] = op;
+    eq->op[index] = op;
     eq->delay_number[index] = NULL;
     eq->delay_comp_size[index] = NULL;
     eq->explicit_delay_eq[index] = NULL;
@@ -269,7 +269,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
     for(i=0; i<Model_getNumSpecies(m); i++){
       if(strcmp(name, Species_getId(sp[i]->origin)) == 0){
         eq->number[index] = &sp[i]->temp_value;
-        eq->operator[index] = 0;
+        eq->op[index] = 0;
         eq->delay_number[index] = NULL;
         eq->delay_comp_size[index] = NULL;
         eq->explicit_delay_eq[index] = NULL;
@@ -282,7 +282,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       for(i=0; i<Model_getNumParameters(m); i++){
         if(strcmp(name, Parameter_getId(param[i]->origin)) == 0){
           eq->number[index] = &param[i]->temp_value;
-          eq->operator[index] = 0;
+          eq->op[index] = 0;
           eq->delay_number[index] = NULL;
           eq->delay_comp_size[index] = NULL;
           eq->explicit_delay_eq[index] = NULL;
@@ -296,7 +296,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       for(i=0; i<Model_getNumCompartments(m); i++){
         if(strcmp(name, Compartment_getId(comp[i]->origin)) == 0){
           eq->number[index] = &comp[i]->temp_value;
-          eq->operator[index] = 0;
+          eq->op[index] = 0;
           eq->delay_number[index] = NULL;
           eq->delay_comp_size[index] = NULL;
           eq->explicit_delay_eq[index] = NULL;
@@ -312,7 +312,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
           if(SpeciesReference_isSetId(re[i]->products[j]->origin)
               && strcmp(name, SpeciesReference_getId(re[i]->products[j]->origin)) == 0){
             eq->number[index] = &re[i]->products[j]->temp_value;
-            eq->operator[index] = 0;
+            eq->op[index] = 0;
             eq->delay_number[index] = NULL;
             eq->delay_comp_size[index] = NULL;
             eq->explicit_delay_eq[index] = NULL;
@@ -328,7 +328,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
           if(SpeciesReference_isSetId(re[i]->reactants[j]->origin)
               && strcmp(name, SpeciesReference_getId(re[i]->reactants[j]->origin)) == 0){
             eq->number[index] = &re[i]->reactants[j]->temp_value;
-            eq->operator[index] = 0;
+            eq->op[index] = 0;
             eq->delay_number[index] = NULL;
             eq->delay_comp_size[index] = NULL;
             eq->explicit_delay_eq[index] = NULL;
@@ -347,7 +347,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
           || strcmp(name, "t") == 0
           || strcmp(name, "s") == 0){
         eq->number[index] = time;
-        eq->operator[index] = 0;
+        eq->op[index] = 0;
         eq->delay_number[index] = NULL;
         eq->delay_comp_size[index] = NULL;
         eq->explicit_delay_eq[index] = NULL;
@@ -356,7 +356,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
     }
   }else if(ASTNode_getType(node) == AST_NAME_TIME){
     eq->number[index] = time;
-    eq->operator[index] = 0;
+    eq->op[index] = 0;
     eq->delay_number[index] = NULL;
     eq->delay_comp_size[index] = NULL;
     eq->explicit_delay_eq[index] = NULL;
@@ -366,7 +366,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
     mem->memory[mem->num_of_allocated_memory++] = eq->number[index];
     value = 6.02214179e23;
     *eq->number[index] = value;
-    eq->operator[index] = 0;
+    eq->op[index] = 0;
     eq->delay_number[index] = NULL;
     eq->delay_comp_size[index] = NULL;
     eq->explicit_delay_eq[index] = NULL;
@@ -382,7 +382,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       value = M_PI;
     }
     *eq->number[index] = value;
-    eq->operator[index] = 0;
+    eq->op[index] = 0;
     eq->delay_number[index] = NULL;
     eq->delay_comp_size[index] = NULL;
     eq->explicit_delay_eq[index] = NULL;
@@ -396,7 +396,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       value = ASTNode_getReal(node);
     }
     *eq->number[index] = value;
-    eq->operator[index] = 0;
+    eq->op[index] = 0;
     eq->delay_number[index] = NULL;
     eq->delay_comp_size[index] = NULL;
     eq->explicit_delay_eq[index] = NULL;

@@ -13,7 +13,7 @@ void check_math(equation *eq){
   TRACE(("\n"));
   TRACE(("operator:"));
   for(i=0; i<eq->math_length; i++){
-    switch(eq->operator[i]){
+    switch(eq->op[i]){
       case AST_PLUS:
         TRACE(("+ "));
         break;
