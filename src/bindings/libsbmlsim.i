@@ -10,10 +10,39 @@ extern void write_result(myResult* result, char* file);
 extern void write_csv(myResult* result, char* file);
 extern void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c);
 extern void __free_myResult(myResult *result);
+typedef int BOOLEAN;
 %}
 
 %include "../../src/libsbmlsim/methods.h"
 %include "../../src/libsbmlsim/errorcodes.h"
+
+#ifdef SWIGJAVA
+%apply bool { BOOLEAN };
+#endif
+
+#ifdef SWIGPYTHON
+%typemap(out) BOOLEAN %{
+  if ($1)
+    $result = Py_True;
+  else
+    $result = Py_False;
+%}
+#endif
+
+#ifdef SWIGRUBY
+%typemap(out) BOOLEAN %{
+  if ($1)
+    $result = Qtrue;
+  else
+    $result = Qfalse;
+%}
+#endif
+
+#ifdef SWIGPERL
+%typemap(out) BOOLEAN %{
+  $result = boolSV($1);
+%}
+#endif
 
 /* %include "src/libsbmlsim/myResult.h" */
 typedef struct _myResult {
@@ -57,26 +86,15 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
     __free_myResult($self);
   }
 
-  int getNumOfErrors() {
-    if ($self->error_code == NoError)
-      return 0;
-    return 1;
+  BOOLEAN isError() {
+    return $self->error_code != NoError;
   }
 
   LibsbmlsimErrorCode getErrorCode() {
     return $self->error_code;
   }
 
-  LibsbmlsimErrorCode getErrorCodeAtIndex(int n) {
-    n = 0; /* avoid warning */
-    return $self->error_code;
-  }
-
   const char *getErrorMessage() {
-    return $self->error_message;
-  }
-
-  const char *getErrorMessageAtIndex(int n) {
     return $self->error_message;
   }
 

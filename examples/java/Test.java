@@ -1,4 +1,5 @@
-package jp.ac.keio.bio.fun.libsbmlsim;
+//package jp.ac.keio.bio.fun.libsbmlsim;
+import jp.ac.keio.bio.fun.libsbmlsim.*;
 
 public class Test {
   public static void main(String[] args) {
@@ -11,13 +12,13 @@ public class Test {
     */
     System.out.println("Simulate SBML model from File");
     System.out.println("Intentionally loading file not exists");
-    myResult result_with_error = libsbmlsim.simulateSBMLFromFile("../../hogehogeMAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
-    if (result_with_error.getNumOfErrors() > 0) {
-      System.out.println(result_with_error.getErrorMessageAtIndex(0));
+    myResult result_with_error = libsbmlsim.simulateSBMLFromFile("hogehogeMAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+    if (result_with_error.isError()) {
+      System.out.println(result_with_error.getErrorMessage());
     }
 
     System.out.println("Loading existing and valid SBML file");
-    myResult result = libsbmlsim.simulateSBMLFromFile("../../MAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+    myResult result = libsbmlsim.simulateSBMLFromFile("../MAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);
     //libsbmlsim.write_csv(result, "result.csv");
