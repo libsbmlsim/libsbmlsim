@@ -1,6 +1,6 @@
 # This is a CMake example for Java
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.7)
 
 FIND_PACKAGE(SWIG 2.0 REQUIRED)
 FIND_PACKAGE(Java REQUIRED)
