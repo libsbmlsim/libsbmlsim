@@ -82,14 +82,14 @@ myResult *create_myResult_with_errorCode(LibsbmlsimErrorCode code)
   return create_myResult_with_error(code, "Unknown Error");
 }
 
-int myResult_isError(myResult *result)
+SBMLSIM_EXPORT int myResult_isError(myResult *result)
 {
   if (result->error_code == NoError)
     return 0;
   return 1;
 }
 
-const char *myResult_getErrorMessage(myResult *result)
+SBMLSIM_EXPORT const char *myResult_getErrorMessage(myResult *result)
 {
   return result->error_message;
 }

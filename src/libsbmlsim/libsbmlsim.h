@@ -292,10 +292,10 @@ myResult *create_myResult_with_error(LibsbmlsimErrorCode code, const char *messa
 myResult *create_myResult_with_errorCode(LibsbmlsimErrorCode code);
 
 /* return 1 if error */
-int myResult_isError(myResult *result);
+SBMLSIM_EXPORT int myResult_isError(myResult *result);
 
 /* get error message */
-const char *myResult_getErrorMessage(myResult *result);
+SBMLSIM_EXPORT const char *myResult_getErrorMessage(myResult *result);
 
 /* deallocate myResult */
 SBMLSIM_EXPORT void free_myResult(myResult *res);
