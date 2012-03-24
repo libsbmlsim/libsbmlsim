@@ -1,6 +1,12 @@
 #ifndef LibSBMLSim_h
 #define LibSBMLSim_h
 
+#include <sbml/SBMLTypes.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +23,6 @@
 #endif /* M_E */
 
 #include <float.h>
-#include <sbml/SBMLTypes.h>
 
 #include "osarch.h"
 #include "common.h"
@@ -406,6 +411,10 @@ int my_isnan(double x);
 double s_log1p(double x);
 double __ieee754_acosh(double x);
 double __ieee754_atanh(double x);
+#endif
+
+#ifdef __cplusplus
+} /* extern "C" */
 #endif
 
 #endif  /* LibSBMLSim_h */
