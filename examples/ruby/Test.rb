@@ -3,7 +3,7 @@ require 'libsbmlsim'
 
 res = Libsbmlsim::simulateSBMLFromFile('hogeMAPK.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
 puts res.getErrorMessage if res.isError
-res = Libsbmlsim::simulateSBMLFromFile('../MAPK.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
+res = Libsbmlsim::simulateSBMLFromFile('../sample.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
 
 numOfRows = res.getNumOfRows
 puts "numOfRows: #{numOfRows}"

@@ -25,6 +25,8 @@ SWIG_ADD_MODULE(sbmlsimj java libsbmlsim.i ${SOURCES_LIB})
 SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} ${LIBSBML_LIBRARIES})
 #SWIG_LINK_LIBRARIES(sbmlsimj ${JAVA_LIBRARIES} sbml)
 
+file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
+
 ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   POST_BUILD
   COMMAND cmake -E echo "Compiling Java files..."
@@ -32,5 +34,7 @@ ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   COMMAND ${Java_JAVAC_EXECUTABLE} *.java -d ${CLASS_DIR} 
   COMMAND cmake -E echo "Creating jar file..."
   COMMAND ${Java_JAR_EXECUTABLE} cvf libsbmlsimj.jar -C ${CLASS_DIR} jp
-  #COMMAND ${Java_JAVA_EXECUTABLE} -cp .:libsbmlj.jar:libsbmlsimj.jar Test
+  COMMAND cmake -E echo "Copying test file..."
+  COMMAND cmake -E copy ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}
   )
+

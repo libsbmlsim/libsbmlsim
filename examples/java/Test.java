@@ -18,7 +18,7 @@ public class Test {
     }
 
     System.out.println("Loading existing and valid SBML file");
-    myResult result = libsbmlsim.simulateSBMLFromFile("../MAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+    myResult result = libsbmlsim.simulateSBMLFromFile("../sample.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);
     //libsbmlsim.write_csv(result, "result.csv");

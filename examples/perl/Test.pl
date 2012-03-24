@@ -7,7 +7,7 @@ use lib '.';
 use libsbmlsim;
 
 my $xml;
-open my $fh, "<src/MAPK.xml";
+open my $fh, "<../sample.xml";
 for (<$fh>) {
   $xml .= $_;
 }
