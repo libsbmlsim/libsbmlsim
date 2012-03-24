@@ -71,12 +71,14 @@ target_link_libraries(test sbmlsim ${LIBSBML_LIBRARIES})
 
 # Simulator for test suiteprogram
 add_executable(simulateSBML ${SOURCES_MAIN})
-target_link_libraries(simulateSBML sbmlsim ${LIBSBML_LIBRARIES})
+target_link_libraries(simulateSBML sbmlsim-static ${LIBSBML_LIBRARIES})
+if(NOT MSVC)
 ADD_CUSTOM_COMMAND(TARGET simulateSBML
   POST_BUILD
   COMMAND cmake -E echo "Copying simulator to testcase directory..."
   COMMAND cmake -E copy simulateSBML ${PROJECT_SOURCE_DIR}/testcases
   )
+endif()
 
 # Install targets
 INSTALL(TARGETS simulateSBML sbmlsim-static sbmlsim
