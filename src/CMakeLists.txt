@@ -70,8 +70,26 @@ add_executable(test ${SOURCES_TEST})
 target_link_libraries(test sbmlsim ${LIBSBML_LIBRARIES})
 
 # Simulator for test suiteprogram
-add_executable(../sim ${SOURCES_MAIN})
-target_link_libraries(../sim sbmlsim ${LIBSBML_LIBRARIES})
+add_executable(simulateSBML ${SOURCES_MAIN})
+target_link_libraries(simulateSBML sbmlsim ${LIBSBML_LIBRARIES})
+ADD_CUSTOM_COMMAND(TARGET simulateSBML
+  POST_BUILD
+  COMMAND cmake -E echo "Copying simulator to testcase directory..."
+  COMMAND cmake -E copy simulateSBML ${PROJECT_SOURCE_DIR}/testcases
+  )
+
+# Install targets
+INSTALL(TARGETS simulateSBML sbmlsim-static sbmlsim
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  )
+
+# Install include files
+FILE(GLOB include_files "${PROJECT_SOURCE_DIR}/src/libsbmlsim/*.h")
+INSTALL(FILES ${include_files} DESTINATION include/libsbmlsim)
+FILE(GLOB text_files "${PROJECT_SOURCE_DIR}/*.txt")
+INSTALL(FILES ${text_files} DESTINATION share/libsbmlsim)
 
 # Bindings
 if(WITH_JAVA)

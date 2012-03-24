@@ -23,9 +23,16 @@ SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
 SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -package jp.ac.keio.bio.fun.libsbmlsim)
 SWIG_ADD_MODULE(sbmlsimj java libsbmlsim.i ${SOURCES_LIB})
 SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} ${LIBSBML_LIBRARIES})
-#SWIG_LINK_LIBRARIES(sbmlsimj ${JAVA_LIBRARIES} sbml)
 
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
+
+# Install targets
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION share/libsbmlsim)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsimj.jar DESTINATION share/libsbmlsim/java)
+INSTALL(TARGETS sbmlsimj
+  LIBRARY DESTINATION share/libsbmlsim/java
+  ARCHIVE DESTINATION share/libsbmlsim/java
+  )
 
 ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   POST_BUILD
@@ -34,7 +41,7 @@ ADD_CUSTOM_COMMAND(TARGET sbmlsimj
   COMMAND ${Java_JAVAC_EXECUTABLE} *.java -d ${CLASS_DIR} 
   COMMAND cmake -E echo "Creating jar file..."
   COMMAND ${Java_JAR_EXECUTABLE} cvf libsbmlsimj.jar -C ${CLASS_DIR} jp
-  COMMAND cmake -E echo "Copying test file..."
-  COMMAND cmake -E copy ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}
+  #  COMMAND cmake -E echo "Copying test file..."
+  #  COMMAND cmake -E copy ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}
   )
 

@@ -21,7 +21,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 option(WITH_JAVA     "Generate Java language bindings."   OFF)
 option(WITH_PYTHON   "Generate Python language bindings." OFF)
 if(NOT WIN32)
-  option(WITH_PERL   "Generate Perl language bindings."   OFF)
+  #  option(WITH_PERL   "Generate Perl language bindings."   OFF)
   option(WITH_RUBY   "Generate Ruby language bindings."   OFF)
 endif(NOT WIN32)
 
