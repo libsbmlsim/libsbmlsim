@@ -5,17 +5,17 @@ SBMLSIM_EXPORT void print_result(myResult* result){
   output_result(result, stdout, ' ');
 }
 
-SBMLSIM_EXPORT void write_result(myResult* result, char* file) {
+SBMLSIM_EXPORT void write_result(myResult* result, const char* file) {
   char delimiter = ' ';
   print_result_to_file(result, file, delimiter);
 }
 
-SBMLSIM_EXPORT void write_csv(myResult* result, char* file) {
+SBMLSIM_EXPORT void write_csv(myResult* result, const char* file) {
   char delimiter = ',';
   print_result_to_file(result, file, delimiter);
 }
 
-FILE* my_fopen(FILE* fp, char* file, char* mode) {
+FILE* my_fopen(FILE* fp, const char* file, char* mode) {
 #ifdef _MSC_VER
   errno_t error;
   char buffer[255];
@@ -32,7 +32,7 @@ FILE* my_fopen(FILE* fp, char* file, char* mode) {
   return fp;
 }
 
-void print_result_to_file(myResult* result, char* file, char delimiter){
+void print_result_to_file(myResult* result, const char* file, char delimiter){
   FILE *fp = NULL;
   if ((fp = my_fopen(fp, file, "w")) != NULL) {
     output_result(result, fp, delimiter);
@@ -85,7 +85,7 @@ void output_result(myResult* result, FILE* fp, char delimiter){
   }
 }
 
-SBMLSIM_EXPORT void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c) {
+SBMLSIM_EXPORT void write_separate_result(myResult* result, const char* file_s, const char* file_p, const char* file_c) {
   FILE *fp_s = NULL;
   FILE *fp_p = NULL;
   FILE *fp_c = NULL;

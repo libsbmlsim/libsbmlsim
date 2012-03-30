@@ -311,13 +311,13 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]);
 
 /* print result */
-FILE* my_fopen(FILE* fp, char* file, char* mode);
+FILE* my_fopen(FILE* fp, const char* file, char* mode);
 SBMLSIM_EXPORT void print_result(myResult* result);
-SBMLSIM_EXPORT void write_result(myResult* result, char* file);
-SBMLSIM_EXPORT void write_csv(myResult* result, char* file);
-void print_result_to_file(myResult* result, char* file, char delimiter);
+SBMLSIM_EXPORT void write_result(myResult* result, const char* file);
+SBMLSIM_EXPORT void write_csv(myResult* result, const char* file);
+void print_result_to_file(myResult* result, const char* file, char delimiter);
 void output_result(myResult* result, FILE* fp, char delimiter);
-SBMLSIM_EXPORT void write_separate_result(myResult* result, char* file_s, char* file_p, char* file_c); 
+SBMLSIM_EXPORT void write_separate_result(myResult* result, const char* file_s, const char* file_p, const char* file_c); 
 
 /* calc k(gradient or value of algebraic or assignment rule) */
 void calc_k(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);
