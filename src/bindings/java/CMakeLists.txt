@@ -27,7 +27,6 @@ SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} ${LIBSBML_LIBRARIES})
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
 # Install targets
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION share/libsbmlsim)
 INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsimj.jar DESTINATION share/libsbmlsim/java)
 INSTALL(TARGETS sbmlsimj
   LIBRARY DESTINATION share/libsbmlsim/java

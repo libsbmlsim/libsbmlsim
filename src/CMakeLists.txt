@@ -90,8 +90,15 @@ INSTALL(TARGETS simulateSBML sbmlsim-static sbmlsim
 # Install include files
 FILE(GLOB include_files "${PROJECT_SOURCE_DIR}/src/libsbmlsim/*.h")
 INSTALL(FILES ${include_files} DESTINATION include/libsbmlsim)
+# Install documents
 FILE(GLOB text_files "${PROJECT_SOURCE_DIR}/*.txt")
 INSTALL(FILES ${text_files} DESTINATION share/libsbmlsim)
+# Install sample SBML, result files
+FILE(GLOB sample_files "${PROJECT_SOURCE_DIR}/examples/sample.*")
+INSTALL(FILES ${sample_files} DESTINATION share/libsbmlsim)
+# Install C and C++ code
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/c/test.c ${PROJECT_SOURCE_DIR}/examples/c/Makefile DESTINATION share/libsbmlsim/c)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/cpp/test.cpp ${PROJECT_SOURCE_DIR}/examples/cpp/Makefile DESTINATION share/libsbmlsim/cpp)
 
 # Bindings
 if(WITH_JAVA)
