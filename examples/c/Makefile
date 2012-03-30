@@ -1,14 +1,14 @@
 PROG = test
 OBJS = test.o
-CC = g++
+CC = gcc
 CFLAGS = -Wall -I/usr/local -I../../src
 LDFLAGS = -L/usr/local -L../../build/src -lsbmlsim
 
 .PHONY: all
 all: $(PROG)
 
-.SUFFIXES: .o .cpp
-.cpp.o:
+.SUFFIXES: .o .c
+.c.o:
 	$(CC) $(CFLAGS) -c $<
 
 $(PROG): $(OBJS)

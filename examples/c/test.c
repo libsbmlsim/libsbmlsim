@@ -1,7 +1,4 @@
 #include "libsbmlsim/libsbmlsim.h"
-#include <iostream>
-
-using namespace std;
 
 int main(int argc, char *argv[]) {
   myResult *rtn;
@@ -21,7 +18,7 @@ int main(int argc, char *argv[]) {
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else if (myResult_isError(rtn)) {
-    cout << "ERROR: " <<  myResult_getErrorMessage(rtn) << endl;
+    printf("ERROR: %s\n", myResult_getErrorMessage(rtn));
   } else {
     /*  print_result(rtn); */
     /* write_csv(rtn, "cresult.csv"); */
