@@ -3,9 +3,9 @@
 int main(int argc, char *argv[]) {
   myResult *rtn;
 
-  double sim_time = 4000;
-  double dt = 0.1;
-  int print_interval = 100;
+  double sim_time = 25;
+  double dt = 0.01;
+  int print_interval = 10;
   int print_amount = 1;
   int method = MTHD_RUNGE_KUTTA;
   boolean use_lazy_method = false;
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     printf("ERROR: %s\n", myResult_getErrorMessage(rtn));
   } else {
     /*  print_result(rtn); */
-    write_csv(rtn, "cresult.csv");
+    /* write_csv(rtn, "cresult.csv"); */
     write_result(rtn, "test.dat");
   }
   if (rtn != NULL)
