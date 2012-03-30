@@ -1,8 +1,8 @@
 PROG = test
 OBJS = test.o
 CC = g++
-CFLAGS = -Wall -I/usr/local -I../../src
-LDFLAGS = -L/usr/local -L../../build/src -lsbmlsim
+CFLAGS = -Wall -I/usr/local/include -I../../src
+LDFLAGS = -L/usr/local/lib -L../../build/src -lsbmlsim
 
 .PHONY: all
 all: $(PROG)
