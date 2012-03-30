@@ -3,15 +3,17 @@
 from libsbmlsim import *
 
 def main():
+## readSBMLFromString example
 #  f = open('./src/MAPK.xml')
 #  xml = f.read()
 #  f.close()
-
 #  result = simulateSBMLFromString(xml, 4000.0, 0.1, 100, 1, 41, 0)
-  result = simulateSBMLFromFile('hogeMAPK.xml', 4000.0, 0.1, 100, 1, MTHD_RUNGE_KUTTA, 0)
-  if result.isError():
-    print result.getErrorMessage()
-  result = simulateSBMLFromFile('../sample.xml', 4000.0, 0.1, 100, 1, MTHD_RUNGE_KUTTA, 0)
+
+## error handling
+#  result = simulateSBMLFromFile('hogeMAPK.xml', 4000.0, 0.1, 100, 1, MTHD_RUNGE_KUTTA, 0)
+#  if result.isError():
+#    print result.getErrorMessage()
+  result = simulateSBMLFromFile('../sample.xml', 25.0, 0.01, 100, 1, MTHD_RUNGE_KUTTA, 0)
 
   numOfRows = result.getNumOfRows()
   print "numOfRows: " + str(numOfRows)
@@ -52,7 +54,7 @@ def main():
       v = result.getSpeciesValueAtIndex(sname, i)
       print str(v),
     print
-    if i == 10:
+    if i == 25:
       break
 
 if __name__ == "__main__":

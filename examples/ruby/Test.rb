@@ -1,9 +1,9 @@
 $:.unshift File.join(File.dirname(__FILE__), ".")
 require 'libsbmlsim'
 
-res = Libsbmlsim::simulateSBMLFromFile('hogeMAPK.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
-puts res.getErrorMessage if res.isError
-res = Libsbmlsim::simulateSBMLFromFile('../sample.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
+#res = Libsbmlsim::simulateSBMLFromFile('hogeMAPK.xml', 4000.0, 0.1, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
+#puts res.getErrorMessage if res.isError
+res = Libsbmlsim::simulateSBMLFromFile('../sample.xml', 25.0, 0.01, 100, 1, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
 
 numOfRows = res.getNumOfRows
 puts "numOfRows: #{numOfRows}"
@@ -48,6 +48,6 @@ numOfRows.times do |i|
     print " #{v}"
   end
   print "\n"
-  break if i == 10;
+  break if i == 25;
 end
 

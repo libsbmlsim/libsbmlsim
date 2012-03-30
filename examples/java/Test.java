@@ -6,19 +6,20 @@ public class Test {
     System.loadLibrary("sbmlsimj");
 
     /*
-    SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
-    String docstr = d.toSBML();
-    myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
+       SBMLDocument d = libsbml.readSBML("./src/MAPK.xml");
+       String docstr = d.toSBML();
+       myResult result = libsbmlsim.simulateSBMLFromString(docstr, 4000.0, 0.1, 100, 1, 41, 0);
     */
     System.out.println("Simulate SBML model from File");
-    System.out.println("Intentionally loading file not exists");
-    myResult result_with_error = libsbmlsim.simulateSBMLFromFile("hogehogeMAPK.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
-    if (result_with_error.isError()) {
-      System.out.println(result_with_error.getErrorMessage());
-    }
-
+    /*
+       System.out.println("Intentionally loading file not exists");
+       myResult result_with_error = libsbmlsim.simulateSBMLFromFile("does_not_Exists.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+       if (result_with_error.isError()) {
+         System.out.println(result_with_error.getErrorMessage());
+       }
+    */
     System.out.println("Loading existing and valid SBML file");
-    myResult result = libsbmlsim.simulateSBMLFromFile("../sample.xml", 4000.0, 0.1, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+    myResult result = libsbmlsim.simulateSBMLFromFile("../sample.xml", 25.0, 0.01, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);
     //libsbmlsim.write_csv(result, "result.csv");
@@ -29,7 +30,7 @@ public class Test {
 
     int numOfSp = result.getNumOfSpecies();
     System.out.println("numOfSpecies: " + numOfSp);
-    
+
     int numOfParam = result.getNumOfParameters();
     System.out.println("numOfParameters: " + numOfParam);
 
@@ -44,7 +45,7 @@ public class Test {
       String sname = result.getSpeciesNameAtIndex(i);
       System.out.println("  " + sname);
     }
-        
+
     System.out.println("Parameter Name:");
     for (int i = 0; i < numOfParam; i++) {
       String pname = result.getParameterNameAtIndex(i);
@@ -67,7 +68,7 @@ public class Test {
         System.out.print(" " + val);
       }
       System.out.println();
-      if (i == 10)
+      if (i == 25)
         break;
     }
   }
