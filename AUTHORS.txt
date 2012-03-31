@@ -3,6 +3,8 @@ LibSBMLSim - A reference implementation of fully functional SBML simulator.
 Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
 http://fun.bio.keio.ac.jp/Software/libsbmlsim/
 
+Last modified: Sat, 31 Mar 2012 20:24:41 +0900
+
 * Primary developed by
   - Hiromu Takizawa
   - Akito Tabira
