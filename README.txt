@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/Software/libsbmlsim
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Sun, 01 Apr 2012 01:14:27 +0900
+-- Last modified: Sun, 01 Apr 2012 01:17:04 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -214,7 +214,7 @@
   (*5 SBML-test-cases-2.0.2 : http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/sbml-test-cases-2.0.2.zip/download)
 
 * LibSBMLSim API and its language bindings
-  Here, a brief description and example usage of libSBMLSim API are shown.
+  Example usage of libSBMLSim APIs are as follows.
   Please see the 'API.txt' and 'examples' directory for further information
   on libSBMLSim APIs.
 
