@@ -1,3 +1,16 @@
+/**
+ * <!--------------------------------------------------------------------------
+ * This file is part of libSBMLSim.  Please visit
+ * http://fun.bio.keio.ac.jp/Software/libsbmlsim/ for more
+ * information about libSBMLSim and its latest version.
+ *
+ * Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation.  A copy of the license agreement is provided
+ * in the file named "LICENSE.txt" included with this software distribution.
+ * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
 unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem){

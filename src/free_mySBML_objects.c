@@ -1,3 +1,16 @@
+/**
+ * <!--------------------------------------------------------------------------
+ * This file is part of libSBMLSim.  Please visit
+ * http://fun.bio.keio.ac.jp/Software/libsbmlsim/ for more
+ * information about libSBMLSim and its latest version.
+ *
+ * Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation.  A copy of the license agreement is provided
+ * in the file named "LICENSE.txt" included with this software distribution.
+ * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
 void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, allocated_memory *mem, copied_AST *cp_AST){

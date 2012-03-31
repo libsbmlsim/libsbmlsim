@@ -1,3 +1,16 @@
+/**
+ * <!--------------------------------------------------------------------------
+ * This file is part of libSBMLSim.  Please visit
+ * http://fun.bio.keio.ac.jp/Software/libsbmlsim/ for more
+ * information about libSBMLSim and its latest version.
+ *
+ * Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation.  A copy of the license agreement is provided
+ * in the file named "LICENSE.txt" included with this software distribution.
+ * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
 void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re_whole[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r, allocated_memory *mem){
