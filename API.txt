@@ -1,0 +1,113 @@
+                    API Documentation of LibSBMLSim
+
+                     LibSBMLSim development team
+             http://fun.bio.keio.ac.jp/Software/libsbmlsim
+                  mailto:sbmlsim@fun.bio.keio.ac.jp
+
+-- Last modified: Sun, 01 Apr 2012 01:00:44 +0900
+
+* Overview
+  LibSBMLSim is a library for simulating an SBML model which contains
+  Ordinary Differential Equations (ODEs). LibSBMLSim provides simple
+
+  LibSBMLSim can be used to create your own SBML supported simulator,
+  plug-in, web based application and web services. The API is quite
+  straight forward. You can run a simulation and generate a result
+  file in Comma Separated Values (CSV) with few lines of codes.
+  === Python ============================
+    from libsbmlsim import *
+    r = simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0)
+    write_csv(r, 'result.csv')
+  =======================================
+  
+* LibSBMLSim API and its language bindings
+LibSBMLSim provides following functions as libSBMLSim C API.
+  = 3 functions for simulation
+  = 3 functions for exporting / printing results
+  = 2 functions for error handling
+  = 1 function  for freeing result object.
+
+- C, C++ API
+  = Simulation
+    myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+    myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+    myResult* simulateSBMLFromFile(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+
+  = Results
+    void print_result(myResult*);
+    void write_result(myResult*, const char*);
+    void write_csv(myResult*, const char*);
+
+  = Error handling
+    int myResult_isError(myResult*);
+    const char *myResult_getErrorMessage(myResult*);
+
+  = Freeing result object
+    void free_myResult(myResult*);
+
+  === C code ============================
+  #include "libsbmlsim/libsbmlsim.h"
+  ...
+  /*
+   * Simulate sbml.xml to time=20 with dt=0.1, print_interval=10
+   * by 4th-order Runge-Kutta Method.
+   */
+  myResult *r = simulateSBMLFromFile("sbml.xml", 20, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0);
+  /*
+   * Export simulation result as CSV file
+   */
+  write_csv(r, "result.csv"); 
+  /*
+   * Free Result object
+   */
+  free_myResult(r);
+  =====================================
+  The arguments of simulateSBMLFromFile() is as follows:
+    arg0 ... SBML file to simulate
+    arg1 ... Simulation time
+    arg2 ... dt for each integration
+    arg3 ... print interval
+    arg4 ... will print species' value as 'amount' or not (1 == yes).
+    arg5 ... Integration method.
+             Please see libsbmlsim/libsbmlsim.h for further information.
+    arg6 ... will use lazy method for newton method or not (1 == yes).
+
+    For example, following code will run a simulation
+    === C code ============================
+    myResult *r = simulateSBMLFromFile("sbml.xml", 20, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0);
+    =======================================
+    for a model 'sbml.xml' to time=20 with dt=0.1, print_interval=10
+    by "4th-order Runge-Kutta Method". The result will be stored as
+    "concentration" for each species, and won't use lazy method during
+    the integration. Please call free_myResult() function when you
+    finished using myResult object and free it.
+
+- Java, Python, Ruby bindings
+  LibSBMLSim API is also provided for several language bindings.
+  === Python ============================
+  from libsbmlsim import *
+  r = simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0)
+  write_csv(r, 'result.csv')
+  =======================================
+  
+  === Java ==============================
+  import jp.ac.keio.bio.fun.libsbmlsim.*;
+  ...
+  System.loadLibrary("sbmlsimj");
+  myResult r = libsbmlsim.simulateSBMLFromFile("sbml.xml", 20.0, 0.1, 10, 0, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+  libsbmlsim.write_csv(r, "result.csv");
+  =======================================
+  
+  === Ruby ==============================
+  require 'libsbmlsim'
+  r = Libsbmlsim::simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
+  Libsbmlsim::write_csv(res, 'result.csv')
+  =======================================
+  
+  Please see the 'examples' directory for further information.
+  The 'examples' directory contains sample code for test application
+  in several programming languages (C, C++, Java, Python, Ruby and Perl).
+
+Have fun!
+-- 
+LibSBMLSim development team <sbmlsim@fun.bio.keio.ac.jp>
