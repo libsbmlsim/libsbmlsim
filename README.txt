@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/Software/libsbmlsim
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Sun, 01 Apr 2012 00:54:25 +0900
+-- Last modified: Sun, 01 Apr 2012 01:14:27 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -177,7 +177,7 @@
   functions called from runall.sh.
   The SBML test cases are not included in this distribution, so please
   download them from (*5). After downloading sbml-test-cases-X.Y.Z.zip,
-  unzip the archive and move (or copy) "caeses/" directory to 
+  unzip the archive and move (or copy) "cases/" directory to 
   libsbmlsim/testcases directory. The directory structure will be:
 
     libsbmlsim/testcases/simulateSBML  ... SBML simulator
@@ -189,7 +189,7 @@
                         /cases/semantic/00003 ... Test case 3
                         /cases/semantic/...
 
-  Following command will test all 980 tests and prints out the
+  Following command will test all 980 tests and print out the
   results, whether the simulation result matches with the result
   with the one from SBML test cases.
 
@@ -211,10 +211,12 @@
   SBML test cases, then the result will be marked as "[NG]".
 
   (*4 Online SBML Test Suite: http://sbml.org/Facilities/Online_SBML_Test_Suite)
-  (*5 SBML-test-cases-2.0.2: http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/sbml-test-cases-2.0.2.zip/download)
+  (*5 SBML-test-cases-2.0.2 : http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/sbml-test-cases-2.0.2.zip/download)
 
 * LibSBMLSim API and its language bindings
-LibSBMLSim provides
+  Here, a brief description and example usage of libSBMLSim API are shown.
+  Please see the 'API.txt' and 'examples' directory for further information
+  on libSBMLSim APIs.
 
 - C, C++ API
   === C code ============================
@@ -234,25 +236,6 @@ LibSBMLSim provides
    */
   free_myResult(r);
   =====================================
-  The arguments of simulateSBMLFromFile() is as follows:
-    arg0 ... SBML file to simulate
-    arg1 ... Simulation time
-    arg2 ... dt for each integration
-    arg3 ... print interval
-    arg4 ... will print species' value as 'amount' or not (1 == yes).
-    arg5 ... Integration method.
-             Please see libsbmlsim/libsbmlsim.h for further information.
-    arg6 ... will use lazy method for newton method or not (1 == yes).
-
-    For example, following code will run a simulation
-    === C code ============================
-    myResult *r = simulateSBMLFromFile("sbml.xml", 20, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0);
-    =======================================
-    for a model 'sbml.xml' to time=20 with dt=0.1, print_interval=10
-    by "4th-order Runge-Kutta Method". The result will be stored as
-    "concentration" for each species, and won't use lazy method during
-    the integration. Please call free_myResult() function when you
-    finished using myResult object and free it.
 
 - Java, Python, Ruby bindings
   LibSBMLSim API is also provided for several language bindings.

@@ -1,10 +1,10 @@
-                    API Documentation of LibSBMLSim
+                    LibSBMLSim API Documentation
 
                      LibSBMLSim development team
              http://fun.bio.keio.ac.jp/Software/libsbmlsim
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Sun, 01 Apr 2012 01:00:44 +0900
+-- Last modified: Sun, 01 Apr 2012 01:05:06 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
