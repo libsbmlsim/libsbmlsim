@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/Software/libsbmlsim
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Sun, 01 Apr 2012 01:17:04 +0900
+-- Last modified: Sun, 01 Apr 2012 04:24:37 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -256,7 +256,7 @@
   === Ruby ==============================
   require 'libsbmlsim'
   r = Libsbmlsim::simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
-  Libsbmlsim::write_csv(res, 'result.csv')
+  Libsbmlsim::write_csv(r, 'result.csv')
   =======================================
   
   Please see the 'API.txt' and 'examples' directory for further information.
