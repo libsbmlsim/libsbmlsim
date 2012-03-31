@@ -53,6 +53,18 @@ set (SOURCES_LIB ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/lib_main.c)
 set (SOURCES_MAIN ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/main.c)
 set (SOURCES_TEST test.c)
 
+set (INSTALL_DOCS)
+set (INSTALL_DOCS ${INSTALL_DOCS}
+  ${PROJECT_SOURCE_DIR}/API.txt
+  ${PROJECT_SOURCE_DIR}/AUTHORS.txt
+  ${PROJECT_SOURCE_DIR}/COPYING.txt
+  ${PROJECT_SOURCE_DIR}/FUNDING.txt
+  ${PROJECT_SOURCE_DIR}/LICENSE.txt
+  ${PROJECT_SOURCE_DIR}/NEWS.txt
+  ${PROJECT_SOURCE_DIR}/README.txt
+  ${PROJECT_SOURCE_DIR}/VERSION.txt
+  )
+
 include_directories ("${PROJECT_SOURCE_DIR}/src/libsbmlsim" ${LIBSBML_INCLUDE_DIR})
 
 # Static library (only for UNIX)
@@ -91,8 +103,7 @@ INSTALL(TARGETS simulateSBML sbmlsim-static sbmlsim
 FILE(GLOB include_files "${PROJECT_SOURCE_DIR}/src/libsbmlsim/*.h")
 INSTALL(FILES ${include_files} DESTINATION include/libsbmlsim)
 # Install documents
-FILE(GLOB text_files "${PROJECT_SOURCE_DIR}/*.txt")
-INSTALL(FILES ${text_files} DESTINATION share/libsbmlsim)
+INSTALL(FILES ${INSTALL_DOCS} DESTINATION share/libsbmlsim)
 # Install sample SBML, result files
 FILE(GLOB sample_files "${PROJECT_SOURCE_DIR}/examples/sample.*")
 INSTALL(FILES ${sample_files} DESTINATION share/libsbmlsim)
