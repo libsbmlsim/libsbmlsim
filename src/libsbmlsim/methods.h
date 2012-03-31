@@ -19,9 +19,9 @@
 #define MTHD_ADAMS_MOULTON_2 10
 #define MTHD_ADAMS_MOULTON_3 20
 #define MTHD_ADAMS_MOULTON_4 30
-#define MTHD_BACKWARD_DIFFERENTIATION_2 40
-#define MTHD_BACKWARD_DIFFERENTIATION_3 50
-#define MTHD_BACKWARD_DIFFERENTIATION_4 60
+#define MTHD_BACKWARD_DIFFERENCE_2 40
+#define MTHD_BACKWARD_DIFFERENCE_3 50
+#define MTHD_BACKWARD_DIFFERENCE_4 60
 
 /* Name for explicit methods */
 #define MTHD_NAME_EULER "Euler"
@@ -37,8 +37,8 @@
 #define MTHD_NAME_ADAMS_MOULTON_2 "2nd order Adams-Moulton"
 #define MTHD_NAME_ADAMS_MOULTON_3 "3rd order Adams-Moulton"
 #define MTHD_NAME_ADAMS_MOULTON_4 "4th order Adams-Moulton"
-#define MTHD_NAME_BACKWARD_DIFFERENTIATION_2 "2nd order Backward Differentiation"
-#define MTHD_NAME_BACKWARD_DIFFERENTIATION_3 "3rd order Backward Differentiation"
-#define MTHD_NAME_BACKWARD_DIFFERENTIATION_4 "4th order Backward Differentiation"
+#define MTHD_NAME_BACKWARD_DIFFERENCE_2 "2nd order Backward Difference"
+#define MTHD_NAME_BACKWARD_DIFFERENCE_3 "3rd order Backward Difference"
+#define MTHD_NAME_BACKWARD_DIFFERENCE_4 "4th order Backward Difference"
 
 #endif  /* LibSBMLSim_Methods_h */

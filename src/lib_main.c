@@ -184,14 +184,14 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
     case MTHD_ADAMS_MOULTON_4: /*  Adams-Moulton 4 */
       method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_2: /*  Backward-Differentiation 2 */
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
+    case MTHD_BACKWARD_DIFFERENCE_2: /*  Backward-Difference 2 */
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_2;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_3: /*  Backward-Differentiation 3 */
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
+    case MTHD_BACKWARD_DIFFERENCE_3: /*  Backward-Difference 3 */
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_3;
       break;
-    case MTHD_BACKWARD_DIFFERENTIATION_4: /*  Backward-Differentiation 4 */
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
+    case MTHD_BACKWARD_DIFFERENCE_4: /*  Backward-Difference 4 */
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_4;
       break;
     case MTHD_EULER: /*  Euler (Adams-Bashforth) */
       method_name = MTHD_NAME_EULER;

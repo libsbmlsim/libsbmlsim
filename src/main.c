@@ -190,17 +190,17 @@ int main(int argc, char *argv[]){
       method = MTHD_ADAMS_MOULTON_4;
       method_name = MTHD_NAME_ADAMS_MOULTON_4;
       break;
-    case 6: /*  Backward-Differentiation 2 */
-      method = MTHD_BACKWARD_DIFFERENTIATION_2;
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_2;
+    case 6: /*  Backward-Difference 2 */
+      method = MTHD_BACKWARD_DIFFERENCE_2;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_2;
       break;
-    case 7: /*  Backward-Differentiation 3 */
-      method = MTHD_BACKWARD_DIFFERENTIATION_3;
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_3;
+    case 7: /*  Backward-Difference 3 */
+      method = MTHD_BACKWARD_DIFFERENCE_3;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_3;
       break;
-    case 8: /*  Backward-Differentiation 4 */
-      method = MTHD_BACKWARD_DIFFERENTIATION_4;
-      method_name = MTHD_NAME_BACKWARD_DIFFERENTIATION_4;
+    case 8: /*  Backward-Difference 4 */
+      method = MTHD_BACKWARD_DIFFERENCE_4;
+      method_name = MTHD_NAME_BACKWARD_DIFFERENCE_4;
       break;
     case 9: /*  Euler (Adams-Bashforth) */
       method = MTHD_EULER;
