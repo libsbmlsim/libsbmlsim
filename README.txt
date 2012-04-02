@@ -115,9 +115,8 @@
 
   = Windows
     $prefix\bin\simulateSBML.exe     ... SBML simulator
-    $prefix\bin\sbmlsim-static.a     ... Static library
     $prefix\bin\sbmlsim.dll          ... Dynamic library
-    $prefix\lib\sbmlsim-static.lib   ... Lib file for static library
+    $prefix\lib\sbmlsim-static.lib   ... Static library
                \sbmlsim.lib          ... Lib file for dynamic library
     $prefix\include\libsbmlsim       ... Header files
     $prefix\share\libsbmlsim\        ... Sample files (SBML, results)
