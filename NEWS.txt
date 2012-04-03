@@ -1,10 +1,10 @@
            libSBMLSim NEWS -- History of user-visible changes
 
-- Last modified: Sat, 31 Mar 2012 19:53:18 +0900
+- Last modified: Wed, 04 Apr 2012 02:44:19 +0900
 
 ======================================================================
-Version 1.0.0 (2012-03-31)
+Version 1.0.0 (2012-04-04)
 ======================================================================
 
-* Initial release, March 31, 2012.
+* Initial release, 4 April 2012.
 
