@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 04 Apr 2012 02:40:53 +0900
+-- Last modified: Wed, 04 Apr 2012 02:53:48 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -60,8 +60,8 @@
 
 - How to build libSBMLSim
   1. Extract the archive file
-   % tar xvzf libSBMLSim_1.0.0.tar.gz (for tar ball)
-   % unzip libSBMLSim_1.0.0.zip       (for zip archive)
+   % tar xvzf libsbmlsim-1.0.0.tar.gz (for tar ball)
+   % unzip libsbmlsim-1.0.0.zip       (for zip archive)
   2. Compile
    % cd libsbmlsim-1.0.0/build
    % cmake ..
