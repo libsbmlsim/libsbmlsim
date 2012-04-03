@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Tue, 03 Apr 2012 23:37:27 +0900
+-- Last modified: Wed, 04 Apr 2012 00:59:55 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -12,7 +12,7 @@
   command-line tool and several APIs to load an SBML model, perform
   numerical integration (simulate) and export its results.
   Both explicit and implicit methods are supported on libSBMLSim.
-  LibSBMLSim confirmed to pass all SBML Level-2 Version 4 and Level-3
+  LibSBMLSim is confirmed to pass all SBML Level-2 Version 4 and Level-3
   Version 1 test cases (sbml-test-cases-2.0.2.zip, available from
   http://sourceforget.net/projects/sbml/files/test-suite/2.0.2/).
   LibSBMLSim is written in C programming language (ANSI C89) and it has
@@ -31,7 +31,7 @@
   LibSBMLSim can be used to create your own SBML-compatible simulator,
   plug-in, web based application and web services. The API is quite
   straight forward. You can run a simulation and generate a result
-  file in Comma Separated Values (CSV) with few lines of codes.
+  file in Comma Separated Values (CSV) with a few lines of codes.
   === Python ============================
     from libsbmlsim import *
     r = simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0)

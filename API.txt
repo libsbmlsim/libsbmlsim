@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Tue, 03 Apr 2012 23:37:18 +0900
+-- Last modified: Wed, 04 Apr 2012 00:15:36 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -13,7 +13,7 @@
   LibSBMLSim can be used to create your own SBML supported simulator,
   plug-in, web based application and web services. The API is quite
   straight forward. You can run a simulation and generate a result
-  file in Comma Separated Values (CSV) with few lines of codes.
+  file in Comma Separated Values (CSV) with a few lines of codes.
   === Python ============================
     from libsbmlsim import *
     r = simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0)
