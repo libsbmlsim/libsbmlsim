@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 04 Apr 2012 00:59:55 +0900
+-- Last modified: Wed, 04 Apr 2012 01:24:24 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -15,9 +15,9 @@
   LibSBMLSim is confirmed to pass all SBML Level-2 Version 4 and Level-3
   Version 1 test cases (sbml-test-cases-2.0.2.zip, available from
   http://sourceforget.net/projects/sbml/files/test-suite/2.0.2/).
-  LibSBMLSim is written in C programming language (ANSI C89) and it has
-  minimal third-party requirements (only libSBML(*1) is required for
-  its build) to provide a portable library.
+  The libSBMLSim code is portable. It is written in C programming language
+  (ANSI C89) and it does not depend on other third-party libraries
+  except libSBML(*1).
   The library should build and work without serious troubles on Unix
   based operating systems (Linux, MacOSX and FreeBSD) and on Windows
   (with Visual C++).
@@ -81,7 +81,7 @@
      corresponding compile option.
        WITH_JAVA     ... build with Java bindings
        WITH_PYTHON   ... build with Python bindings
-       WITH_RUBY     ... build with Perl bindings
+       WITH_RUBY     ... build with Ruby bindings
 
      Once you press [c] key, cmake will run the configure procedure
      and tries to detect SWIG, Java, Python and Ruby (depending on
