@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 04 Apr 2012 01:26:05 +0900
+-- Last modified: Wed, 04 Apr 2012 02:39:47 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -109,9 +109,9 @@
     $prefix/share/libsbmlsim/        ... Sample files (SBML, results)
                             /c       ... Sample C code
                             /cpp     ... Sample C++ code
-                            /java    ... Sample Java code
-                            /python  ... Sample Python code
-                            /ruby    ... Sample Ruby code
+                            /java    ... Sample Java code and language bingings
+                            /python  ... Sample Python code and language bingings
+                            /ruby    ... Sample Ruby code and language bingings
 
   = Windows
     $prefix\bin\simulateSBML.exe     ... SBML simulator
@@ -122,8 +122,8 @@
     $prefix\share\libsbmlsim\        ... Sample files (SBML, results)
                             \c       ... Sample C code
                             \cpp     ... Sample C++ code
-                            \java    ... Sample Java code
-                            \python  ... Sample Python code
+                            \java    ... Sample Java code and language bingings
+                            \python  ... Sample Python code and language bingings
     (Note: Ruby binding is not supported on Windows)
 
 * Usage
