@@ -1,4 +1,4 @@
-# run this script before making a release tar ball.
+# Run this script before making a release tar ball.
 # ./00remove.sh
 # rm 00remove.sh
 rm -rf **/CVS
