@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 04 Apr 2012 01:24:24 +0900
+-- Last modified: Wed, 04 Apr 2012 01:26:05 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -28,7 +28,7 @@
 
   (*1 libSBML: http://sbml.org/Software/libSBML)
 
-  LibSBMLSim can be used to create your own SBML-compatible simulator,
+  LibSBMLSim can be used to create your own SBML capable simulator,
   plug-in, web based application and web services. The API is quite
   straight forward. You can run a simulation and generate a result
   file in Comma Separated Values (CSV) with a few lines of codes.
