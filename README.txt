@@ -1,10 +1,10 @@
            LibSBMLSim: The library for simulating SBML models
 
                      LibSBMLSim development team
-             http://fun.bio.keio.ac.jp/Software/libsbmlsim/
+             http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Sun, 01 Apr 2012 06:09:31 +0900
+-- Last modified: Tue, 03 Apr 2012 23:37:27 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains

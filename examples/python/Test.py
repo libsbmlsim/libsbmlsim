@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #  <!--------------------------------------------------------------------------
 #  This file is part of libSBMLSim.  Please visit
-#  http://fun.bio.keio.ac.jp/Software/libsbmlsim/ for more
+#  http://fun.bio.keio.ac.jp/software/libsbmlsim/ for more
 #  information about libSBMLSim and its latest version.
 # 
 #  Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
