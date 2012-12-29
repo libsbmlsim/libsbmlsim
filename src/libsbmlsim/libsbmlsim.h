@@ -36,7 +36,7 @@ extern "C" {
 #endif /* M_E */
 
 #include <float.h>
-#include <sys/time.h>
+#include <time.h>
 
 #include "osarch.h"
 #include "common.h"
