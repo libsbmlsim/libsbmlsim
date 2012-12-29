@@ -16,8 +16,7 @@
 void reallocate_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, myRule *rule[], myEvent *ev[], unsigned int num_of_events, myInitialAssignment *myInitAssign[], timeVariantAssignments **timeVarAssign, copied_AST *cp_AST, double sim_time, int max_index) {
 	unsigned int i, j, l;
 	int k;
-	int new_max_index;
-	new_max_index = (max_index - 1) * 2 + 1;
+	int new_max_index = (max_index - 1) * 2 + 1;
 	/* for substitution of reallocated address */
 	int flag = 0;
 	ASTNode_t* node;

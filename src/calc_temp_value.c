@@ -129,14 +129,14 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
   double sum_error = 0.0;
   double rk_ce[2][6];
 
-  double sp_dxdt[sp_num];
-  double sp_dxdt4[sp_num];
-  double param_dxdt[param_num];
-  double param_dxdt4[param_num];
-  double comp_dxdt[comp_num];
-  double comp_dxdt4[comp_num];
-  double spr_dxdt[spr_num];
-  double spr_dxdt4[spr_num];
+  double *sp_dxdt;
+  double *sp_dxdt4;
+  double *param_dxdt;
+  double *param_dxdt4;
+  double *comp_dxdt;
+  double *comp_dxdt4;
+  double *spr_dxdt;
+  double *spr_dxdt4;
 
   /* Runge-Kutta-Fehlberg table */
   double rk_ce_f[2][6] = {{16.0/135.0, 0.0, 6656.0/12825.0, 28561.0/56430.0, -9.0/50.0, 2.0/55.0},
@@ -144,6 +144,17 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
   /* Cash-Karp table */
   double rk_ce_c[2][6] = {{2825.0/27648.0, 0.0, 18575.0/48384.0, 13525.0/55296.0, 277.0/14336.0, 1.0/4.0},
 						  {37.0/378.0, 0.0, 250.0/621.0, 125.0/594.0, 0.0, 512.0/1771.0}};
+
+  /* allocate memory */
+  sp_dxdt  = (double *)malloc(sizeof(double) * sp_num);
+  sp_dxdt4 = (double *)malloc(sizeof(double) * sp_num);
+  param_dxdt  = (double *)malloc(sizeof(double) * param_num);
+  param_dxdt4 = (double *)malloc(sizeof(double) * param_num);
+  comp_dxdt  = (double *)malloc(sizeof(double) * comp_num);
+  comp_dxdt4 = (double *)malloc(sizeof(double) * comp_num);
+  spr_dxdt  = (double *)malloc(sizeof(double) * spr_num);
+  spr_dxdt4 = (double *)malloc(sizeof(double) * spr_num);
+
 
   /* prepare Butcher tableau */
   if(order == 5){
@@ -268,6 +279,16 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
 		  }
 	  }
   }
+  /* free */
+  free(sp_dxdt);
+  free(sp_dxdt4);
+  free(param_dxdt);
+  free(param_dxdt4);
+  free(comp_dxdt);
+  free(comp_dxdt4);
+  free(spr_dxdt);
+  free(spr_dxdt4);
+
   return sum_error;
 }
 

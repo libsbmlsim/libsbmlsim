@@ -551,19 +551,13 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
   double sum_error = 0.0;
   int max_index = end_cycle + 1;
   int max_result_index = end_cycle * print_interval + 1;
-  *(err_zero_flag) = 0;
   int err_zero_flag2 = 0;
   int ode_num = 0;
   double fixed_dt = dt;
-  double* value_fixed_time_p;
-  value_fixed_time_p = (double*)malloc(sizeof(double) * (end_cycle + 2));
+  double* value_fixed_time_p = (double*)malloc(sizeof(double) * (end_cycle + 2));
   double* value_fixed_time_h1 = value_fixed_time_p;
   double* value_fixed_time_h2 = value_fixed_time_p;
-  /* make fixed time step array */
-  for(cycle=0; cycle<=end_cycle+1; cycle++){
-	  *value_fixed_time_p = cycle * dt;
-	  value_fixed_time_p++;
-  }
+  int* ode_check;
 
   /* num of SBase objects */
   unsigned int num_of_species = Model_getNumSpecies(m);
@@ -594,11 +588,17 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
   myCompartment **var_comp;
   mySpeciesReference **var_spr;
   /* adjustment of tolerance*/
-  /* atol *= 1e-10; */
-  /* rtol *= 1e-07; */
+  atol *= 1e-10;
+  rtol *= 1e-07;
+
+  *(err_zero_flag) = 0;
+  /* make fixed time step array */
+  for(cycle=0; cycle<=end_cycle+1; cycle++){
+	  *value_fixed_time_p = cycle * dt;
+	  value_fixed_time_p++;
+  }
 
   /* to count the number of ODE */
-  int* ode_check;
   ode_check = (int*)malloc(sizeof(int) * num_of_species);
   for(i=0; i<num_of_species; i++){
 	  *(ode_check + i) = 0;

@@ -14,6 +14,10 @@
 #ifndef LibSBMLSim_h
 #define LibSBMLSim_h
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_DEPRECATE
+#endif /* _MSC_VER */
+
 #include <sbml/SBMLTypes.h>
 
 #ifdef __cplusplus
@@ -26,7 +30,7 @@ extern "C" {
 
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
-#endif
+#endif /* _MSC_VER */
 #include <math.h>
 #ifndef M_PI
 #define M_PI        3.14159265358979323846264338327950288

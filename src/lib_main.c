@@ -447,22 +447,23 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   double bif_param_min = 0;
   double bif_param_max = 0;
   double bif_param_stepsize = 0.01;
+  char* tmp;
+  unsigned int i, a, b;
   /* to exclude the transition state */
   double transition_time = 0;
+  /* for variable stepsize */
+  int err_zero_flag = 0;
+  
+
+  allocated_memory *mem;
+  copied_AST *cp_AST;
   
   /* This code is not called from library, but just avoid warnigns,
    * we will asign a value to unused variable
    */
   use_lazy_method = 0;
 
-  char* tmp;
-  unsigned int i, a, b;
 
-  /*for variable stepsize*/
-  int err_zero_flag = 0;
-
-  allocated_memory *mem;
-  copied_AST *cp_AST;
 
   mem = (allocated_memory*)malloc(sizeof(allocated_memory));
   mem->num_of_allocated_memory = 0;
