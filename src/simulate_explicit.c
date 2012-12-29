@@ -588,8 +588,8 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
   myCompartment **var_comp;
   mySpeciesReference **var_spr;
   /* adjustment of tolerance*/
-  atol *= 1e-10;
-  rtol *= 1e-07;
+  /* atol *= 1e-10; */
+  /* rtol *= 1e-07; */
 
   *(err_zero_flag) = 0;
   /* make fixed time step array */
