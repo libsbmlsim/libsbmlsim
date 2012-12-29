@@ -20,11 +20,14 @@ use lib '.';
 use libsbmlsim;
 
 my $xml;
+my $resfile = "test.dat";
 open my $fh, "<../sample.xml";
 for (<$fh>) {
   $xml .= $_;
 }
 close $fh;
 
-my $result = libsbmlsim::simulateSBMLFromString($xml, 4000.0, 0.1, 100, 1, 41, 0);
-say $result->getNumOfRows;
+my $result = libsbmlsim::simulateSBMLFromString($xml, 25.0, 0.01, 10, 1, libsbmlsim::MTHD_RUNGE_KUTTA, 0);
+#say $result->getNumOfRows;
+libsbmlsim::write_result($result, $resfile);
+say "Simulation result is written to $resfile.";
