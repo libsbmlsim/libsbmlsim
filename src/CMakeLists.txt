@@ -2,6 +2,10 @@ set (SOURCES_COMMON)
 set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/common.h
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/libsbmlsim.h
+  ${PROJECT_SOURCE_DIR}/src/libsbmlsim/dSFMT-common.h
+  ${PROJECT_SOURCE_DIR}/src/libsbmlsim/dSFMT-params.h
+  ${PROJECT_SOURCE_DIR}/src/libsbmlsim/dSFMT-params19937.h
+  ${PROJECT_SOURCE_DIR}/src/libsbmlsim/dSFMT.h
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/methods.h
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/myResult.h
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/my_getopt.h
@@ -10,6 +14,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/alg_alter_tree_structure.c
   ${PROJECT_SOURCE_DIR}/src/alter_tree_structure.c
   ${PROJECT_SOURCE_DIR}/src/assignment_alter_tree_structure.c
+  ${PROJECT_SOURCE_DIR}/src/bifurcation_analysis.c
   ${PROJECT_SOURCE_DIR}/src/calc.c
   ${PROJECT_SOURCE_DIR}/src/calc_event.c
   ${PROJECT_SOURCE_DIR}/src/calc_initial_assignment.c
@@ -19,10 +24,12 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/check_math.c
   ${PROJECT_SOURCE_DIR}/src/check_num.c
   ${PROJECT_SOURCE_DIR}/src/chomp.c
+  ${PROJECT_SOURCE_DIR}/src/count_ode.c
   ${PROJECT_SOURCE_DIR}/src/create_calc_object_list.c
   ${PROJECT_SOURCE_DIR}/src/create_myResult_content.c
   ${PROJECT_SOURCE_DIR}/src/create_mySBML_objects.c
   ${PROJECT_SOURCE_DIR}/src/dbg_printf.c
+  ${PROJECT_SOURCE_DIR}/src/dSFMT.c
   ${PROJECT_SOURCE_DIR}/src/e_acosh.c
   ${PROJECT_SOURCE_DIR}/src/e_atanh.c
   ${PROJECT_SOURCE_DIR}/src/ev_alter_tree_structure.c
@@ -30,6 +37,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/free_mySBML_objects.c
   ${PROJECT_SOURCE_DIR}/src/get_equation.c
   ${PROJECT_SOURCE_DIR}/src/initialize_delay_val.c
+  ${PROJECT_SOURCE_DIR}/src/linear_approximation.c
   ${PROJECT_SOURCE_DIR}/src/lu_decomposition.c
   ${PROJECT_SOURCE_DIR}/src/lu_solve.c
   ${PROJECT_SOURCE_DIR}/src/math_functions.c
@@ -40,8 +48,11 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/prg_printf.c
   ${PROJECT_SOURCE_DIR}/src/print_node_type.c
   ${PROJECT_SOURCE_DIR}/src/print_result_list.c
+  ${PROJECT_SOURCE_DIR}/src/reallocate_objects.c
   ${PROJECT_SOURCE_DIR}/src/s_log1p.c
+  ${PROJECT_SOURCE_DIR}/src/search_max.c
   ${PROJECT_SOURCE_DIR}/src/set_local_para_as_value.c
+  ${PROJECT_SOURCE_DIR}/src/show_sp_para.c
   ${PROJECT_SOURCE_DIR}/src/simulate_explicit.c
   ${PROJECT_SOURCE_DIR}/src/simulate_implicit.c
   ${PROJECT_SOURCE_DIR}/src/str_is_number.c

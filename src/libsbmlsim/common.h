@@ -47,6 +47,9 @@
 #define MAX_MTHD_NAME_LENGTH 256
 
 #define EPSIRON 1.0e-8
+#define ABSOLUTE_ERROR_TOLERANCE 1.0e-9
+#define RELATIVE_ERROR_TOLERANCE 1.0e-4
+#define DEFAULT_FACMAX 2.0
 #define DOUBLE_EQ(x, v) (((v - EPSIRON) < x) && (x < (v + EPSIRON)))
 
 #endif  /* LibSBMLSim_Common_h */

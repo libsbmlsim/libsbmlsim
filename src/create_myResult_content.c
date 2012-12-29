@@ -49,6 +49,46 @@ myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
   return result;
 }
 
+/* create contents of myResult object */
+myResult *create_myResultf(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt) {
+  int i;
+  myResult *result;
+  int num_of_species = Model_getNumSpecies(m);
+  int num_of_parameters = Model_getNumParameters(m);
+  int num_of_compartments = Model_getNumCompartments(m);
+  int end_cycle = get_end_cycle(sim_time, dt);
+
+  result = (myResult *)malloc(sizeof(myResult));
+  result->error_code = NoError;
+  result->error_message = NULL;
+  result->num_of_columns_sp = num_of_species;
+  result->num_of_columns_param = num_of_parameters;
+  result->num_of_columns_comp = num_of_compartments;
+  /* new code */
+  result->num_of_rows = end_cycle + 1;
+
+  /* new code end */
+  result->column_name_time  = dupstr("time");
+  result->column_name_sp    = (const char **)malloc(sizeof(char *) * num_of_species);
+  result->column_name_param = (const char **)malloc(sizeof(char *) * num_of_parameters);
+  result->column_name_comp  = (const char **)malloc(sizeof(char *) * num_of_compartments);
+  result->values_time = (double *)malloc(sizeof(double) * result->num_of_rows);
+  result->values_sp = (double *)malloc(sizeof(double) * num_of_species * result->num_of_rows);
+  result->values_param = (double *)malloc(sizeof(double) * num_of_parameters * result->num_of_rows);
+  result->values_comp = (double *)malloc(sizeof(double) * num_of_compartments * result->num_of_rows);
+  for(i=0; i<num_of_species; i++){
+    result->column_name_sp[i] = dupstr(Species_getId(mySp[i]->origin));
+  }
+  for(i=0; i<num_of_parameters; i++){
+    result->column_name_param[i] = dupstr(Parameter_getId(myParam[i]->origin));
+  }
+  for(i=0; i<num_of_compartments; i++){
+    result->column_name_comp[i] = dupstr(Compartment_getId(myComp[i]->origin));
+  }
+  return result;
+}
+
+
 /* create myResult object with errorcode and errormessage */
 myResult *create_myResult_with_error(LibsbmlsimErrorCode code, const char *message)
 {
@@ -130,13 +170,12 @@ SBMLSIM_EXPORT void free_myResult(myResult *res)
       free((void *)res->column_name_param[i]);
     free(res->column_name_param);
   }
-
   if (res->column_name_comp != NULL) {
-    for (i = 0; i < res->num_of_columns_comp; i++)
+	  for (i = 0; i < res->num_of_columns_comp; i++) {
       free((void *)res->column_name_comp[i]);
+	  }
     free(res->column_name_comp);
   }
-
   if (res->values_time != NULL)
     free(res->values_time);
   if (res->values_sp != NULL)

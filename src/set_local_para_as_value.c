@@ -41,3 +41,38 @@ void set_local_para_as_value(ASTNode_t *node, KineticLaw_t *kl){
     ASTNode_setReal(node, value);
   }
 } 
+
+void set_local_para_as_value_forBA(ASTNode_t *node, KineticLaw_t *kl, char* bif_param_id, double bif_param_value){
+  unsigned int i;
+  double value;
+  ASTNode_t *left, *right;
+  const char *name, *id;
+  if((left=ASTNode_getLeftChild(node)) != NULL){
+	  set_local_para_as_value_forBA(left, kl, bif_param_id, bif_param_value);
+  }
+  if((right=ASTNode_getRightChild(node)) != NULL){
+	  set_local_para_as_value_forBA(right, kl, bif_param_id, bif_param_value);
+  }
+  if(ASTNode_getType(node) == AST_NAME){
+	  name = ASTNode_getName(node);
+	  for(i=0;i<KineticLaw_getNumParameters(kl);i++){
+		  id = Parameter_getId((Parameter_t*)ListOf_get(KineticLaw_getListOfParameters(kl), i));
+		  if(strcmp(name, id) == 0){
+			  if (strcmp(bif_param_id, id) == 0) {
+				  value = bif_param_value;
+				  ASTNode_setType(node, AST_REAL);
+				  ASTNode_setReal(node, value);
+			  }
+			  else {
+				  value = Parameter_getValue((Parameter_t*)ListOf_get(KineticLaw_getListOfParameters(kl), i));
+				  ASTNode_setType(node, AST_REAL);
+				  ASTNode_setReal(node, value);
+			  }
+		  }
+	  }
+  }else if(ASTNode_getType(node) == AST_INTEGER){
+	  value = (double)ASTNode_getInteger(node);
+	  ASTNode_setType(node, AST_REAL);
+	  ASTNode_setReal(node, value);
+  }
+}

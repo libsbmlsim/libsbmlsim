@@ -36,6 +36,7 @@ extern "C" {
 #endif /* M_E */
 
 #include <float.h>
+#include <sys/time.h>
 
 #include "osarch.h"
 #include "common.h"
@@ -43,6 +44,12 @@ extern "C" {
 #include "errorcodes.h"
 #include "myResult.h"
 #include "version.h"
+
+#define DSFMT_MEXP 19937
+#include "dSFMT-params19937.h"
+#include "dSFMT.h"
+#include "dSFMT-params.h"
+
 
 /* Boolean */
 #define true 1
@@ -83,6 +90,10 @@ struct _equation{
   double **delay_comp_size[MAX_MATH_LENGTH];
   equation *explicit_delay_eq[MAX_MATH_LENGTH];
   unsigned int math_length;
+  /* new code */
+  boolean time_reverse_flag;
+  double *reverse_time;
+  /* new code end */
 };
 
 struct _mySpecies{
@@ -93,7 +104,7 @@ struct _mySpecies{
   boolean is_concentration;
   int has_only_substance_units;
   myCompartment *locating_compartment;
-  double k[4]; /* for runge kutta */
+  double k[6]; /* for runge kutta */
   double **delay_val;
   myRule *depending_rule;
   double prev_val[3]; /* previous values for multistep solution */
@@ -106,7 +117,7 @@ struct _mySpeciesReference{
   equation *eq; /* for l2v4 */
   double value;
   double temp_value;
-  double k[4]; /* for runge kutta */
+  double k[6]; /* for runge kutta */
   double **delay_val;
   myRule *depending_rule;
   double prev_val[3];
@@ -117,7 +128,7 @@ struct _myParameter{
   Parameter_t* origin;
   double value;
   double temp_value;
-  double k[4]; /* for runge kutta */
+  double k[6]; /* for runge kutta */
   double **delay_val;
   myRule *depending_rule;
   double prev_val[3]; /* previous values for multistep solution */
@@ -128,7 +139,7 @@ struct _myCompartment{
   Compartment_t* origin;
   double value; /* compartment "size" value */
   double temp_value;
-  double k[4]; /* for runge kutta */
+  double k[6]; /* for runge kutta */
   double **delay_val;
   myRule *depending_rule;
   double prev_val[3]; /* previous values for multistep solution */
@@ -262,20 +273,41 @@ struct _copied_AST{
 /* Substitute kineticlaw local parameter node to simple Real value node in AST Tree
  * for efficient calculation) */
 void set_local_para_as_value(ASTNode_t *node, KineticLaw_t *kl);
+void set_local_para_as_value_forBA(ASTNode_t *node, KineticLaw_t *kl, char* bif_param_id, double bif_param_value);
+
 
 /* Get mathematical equations for calculation in reverse polish Notation */
 unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem);
 
+unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, int print_interval);
+
+
 /* Calculate equations wrriten in reverse polish notation */
 double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_order);
+
+double calcf(equation *eq, double dt, int cycle, double *reverse_time, int rk_order, double* time, double* stage_time, myResult* res, int print_interval, int* err_zero_flag);
+
+
+
 
 /* Calculate event equations wrriten in reverse polish notation */
 void calc_event(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time);
 
+void calc_eventf(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time, myResult* res, int print_interval, int* err_zero_flag);
+
 void recursive_calc_event(myEvent *event[], unsigned int num_of_events, myEvent *event_buf[], unsigned int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time);
+
+void recursive_calc_eventf(myEvent *event[], unsigned int num_of_events, myEvent *event_buf[], unsigned int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time, myResult* res, int print_interval, int* err_zero_flag);
 
 /* numerical integration by explicit method(Runge Kutta and Adams-Bashforth) */
 myResult* simulate_explicit(Model_t *m, myResult *result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem);
+
+myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, double atol, double rtol, double facmax, copied_AST *cp_AST, int* err_zero_flag);
+
+/* count the number of ODE [for variable stepsize] */
+int count_ode(mySpecies* sp[], unsigned int num_of_species, int* ode_check, Species_t* s);
+
+
 
 /* LU decomposition */
 int lu_decomposition(double **A, int *p, int N);
@@ -293,11 +325,16 @@ int get_end_cycle(double sim_time, double dt);
 /* set seed for random */
 void set_seed(void);
 
+/* my_time function. We created this function because we can't use time() and variable time in the same file. Argh... */
+time_t my_time(time_t* tloc);
+
 /* strdup is not supported in C89, so I reimplement it. */
 char* dupstr(const char *str);
 
 /* create myResult object (and contents) */
 myResult *create_myResult(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt, int print_interval);
+
+myResult *create_myResultf(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], double sim_time, double dt);
 
 /* create myResult object with error. */
 /* create_myResult_with_errorCode insert default error_message */
@@ -317,12 +354,26 @@ SBMLSIM_EXPORT void __free_myResult(myResult *res);
 /* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST);
 
+void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, char* bif_param_id, double bif_param_value);
+
+void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, int print_interval);
+
+
 /* free all created my SBML objects */
 void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, allocated_memory *mem, copied_AST *cp_AST);
 
 /* print result column list */
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]);
 
+/* show species (parameter) list [for bifurcation analysis]*/
+void show_sp(Model_t *m);
+void show_para(Model_t *m);
+
+/* return the maximum of state variable [for bifurcation analysis]*/
+ double search_max(myResult* result, int sta_var_column);
+/* return the local maximum or minimum of state variable [for bifurcation analysis]*/
+double search_local_max(myResult* result, int sta_var_column, double transition_time, double sim_time);
+double search_local_min(myResult* result, int sta_var_column, double transition_time, double sim_time);
 /* print result */
 FILE* my_fopen(FILE* fp, const char* file, char* mode);
 SBMLSIM_EXPORT void print_result(myResult* result);
@@ -335,8 +386,21 @@ SBMLSIM_EXPORT void write_separate_result(myResult* result, const char* file_s, 
 /* calc k(gradient or value of algebraic or assignment rule) */
 void calc_k(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle);
 
+void calc_kf(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle, double* time, myResult* res, myAlgebraicEquations *algEq, int print_interval, int* err_zero_flag, int order);
+
+int calc_by_algebraic(myAlgebraicEquations *algEq, int cycle, double dt, double reverse_time, double* time, myResult* result, int print_interval, int* err_zero_flag);
+
+void calc_by_assignment(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int cycle, double reverse_time, double* time, myResult* result, int print_interval, int* err_zero_flag);
+
+
 /* calculate temp_value using k */
 void calc_temp_value(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int use_rk);
+
+double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int use_rk, double atol, double rtol, int* ode_num, int time_progressed_flag, int order);
+
+double calc_error(double dxdt, double dxdt4, double cur_value, double next_value, double atol, double rtol);
+
+double calc_eps(double value);
 
 /* forwarding value(substitute calculated temp value to value) */
 void forwarding_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num);
@@ -393,11 +457,18 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
 /* calculate initial assignment */
 void calc_initial_assignment(myInitialAssignment *initAssign[], unsigned int num_of_initialAssignments, double dt, int cycle, double *reverse_time);
 
+void calc_initial_assignmentf(myInitialAssignment *initAssign[], unsigned int num_of_initialAssignments, double dt, int cycle, double *reverse_time, double* time, myResult* result, int print_interval, int* err_zero_flag);
+
 /* initialize delay val */
 void initialize_delay_val(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, double sim_time, double dt, int last_call);
 
+void initialize_delay_valf(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, double sim_time, double dt, int last_call);
+
+
 /* substitute delay val */
 void substitute_delay_val(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, int cycle);
+
+void substitute_delay_valf(mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, int cycle);
 
 /* Debug print */
 void dbg_printf(const char *fmt, ...);
@@ -406,16 +477,40 @@ void dbg_printf(const char *fmt, ...);
 void prg_printf(const char *fmt, ...);
 
 /* Run Simulation from SBML Model */
-SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax);
+
+SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax, int use_bifurcation_analysis);
 
 /* Run Simulation from SBML string */
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 /* Run Simulation from SBML file */
-SBMLSIM_EXPORT myResult* simulateSBMLFromFile(  const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
+
+/* Bifurcation Analysis mode */
+myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print_interval, double time, int order, int print_amount, int use_lazy_method, int is_explicit, unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int num_of_rules, unsigned int num_of_events, unsigned int num_of_initialAssignments, mySpecies* mySp[], myParameter* myParam[], myCompartment* myComp[], myReaction* myRe[], myRule* myRu[], myEvent* myEv[], myInitialAssignment* myInitAssign[], myAlgebraicEquations* myAlgEq, timeVariantAssignments* timeVarAssign, allocated_memory* mem, copied_AST* cp_AST, myResult* result, myResult* rtn, boolean bif_param_is_local, char* sta_var_id, char* bif_param_id, double bif_param_min, double bif_param_max, double bif_param_stepsize, double transition_time);
+
+/*for vaariable step-size integration */
+/* calculate the solution in the past by linear approximation */
+double approximate_delay_linearly(double* stack, int pos, double** delay_preserver, double* time, int rk_order, myResult* res, int cycle, int print_interval, int* err_zero_flag);
+
+/* rearrange calculation result by linear approximation*/
+double approximate_printresult_linearly(double value, double temp_value, double value_time, double tempvalue_time, double fixed_time);
+
+/* reallocate objects (for variable step-size)*/
+void reallocate_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, myRule *rule[], myEvent *ev[], unsigned int num_of_events, myInitialAssignment *myInitAssign[], timeVariantAssignments **timeVarAssign, copied_AST *cp_AST, double sim_time, int max_index);
+
+unsigned int connect_delayval_with_eq(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, int index);
+
+void reallocate_result_objects(myResult* res, double** value_time_p_fordelay, unsigned  int max_result_index);
+
+int include_time(ASTNode_t *node, int flag);
+
 
 /** math_functions.c **/
 int64_t factorial(int n);
+double my_fmax(double a, double b);
+double my_fmin(double a, double b);
 double my_asinh(double x);
 double my_acosh(double x);
 double my_atanh(double x);

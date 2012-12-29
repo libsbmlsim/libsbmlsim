@@ -15,12 +15,16 @@
 #include "libsbmlsim/libsbmlsim.h"
 
 int get_end_cycle(double sim_time, double dt) {
-  int r = (int)(sim_time / dt);
+  int r = (int)(sim_time / dt + 0.5);
   return r;
 }
 
 void set_seed(void){
   srand((unsigned)time(NULL));
+}
+
+time_t my_time(time_t* tloc) {
+  return time(tloc);
 }
 
 char* dupstr(const char *str)

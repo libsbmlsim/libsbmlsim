@@ -63,7 +63,7 @@ int getopt(int argc, char **argv, char *opts)
       ERR(": option requires an argument -- ", c);
       sp = 1;
       return('?');
-    } else
+    } else {
       optarg = argv[optind++];
     sp = 1;
   } else {

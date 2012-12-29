@@ -1,6 +1,6 @@
 #!/bin/sh
 
-swig -perl libsbmlsim.i && \
+swig -const -perl libsbmlsim.i && \
 /opt/local/bin/perl Makefile.PL && \
 make
 #gcc -fPIC -c libsbmlsim_wrap.c -I`perl -e 'use Config; print $Config{archlib};'`/CORE && \

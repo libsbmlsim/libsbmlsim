@@ -1,4 +1,4 @@
-/**
+/*
  * <!--------------------------------------------------------------------------
  * This file is part of libSBMLSim.  Please visit
  * http://fun.bio.keio.ac.jp/software/libsbmlsim/ for more
@@ -28,6 +28,10 @@ void usage(char *str) {
   printf(" -l   : use lazy method for integration\n");
   printf(" -n   : do not use lazy method\n");
   printf(" -a   : print Species Value in Amount\n");
+  printf(" -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-04])\n");
+  printf(" -R # : specify relative tolerance for variable stepsize (ex. -R 0.1 [default:1e-04])\n");
+  printf(" -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
+  printf(" -B   : use bifurcation analysis \n");
   printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
   printf("        1: Runge-Kutta\n");
   printf("        2: AM1 & BD1 (implicit Euler)\n");
@@ -41,14 +45,15 @@ void usage(char *str) {
   printf("       10: AB2\n");
   printf("       11: AB3\n");
   printf("       12: AB4\n");
+  printf("       13: Runge-Kutta-Fehlberg\n");
+  printf("       14: Cash-Karp\n");
   exit(1);
 }
 
 int main(int argc, char *argv[]){
   SBMLDocument_t *d;
   Model_t *m;
-
-  /*  Valuables for getopt() */
+  /*  Variables for getopt() */
   int ch;
   extern char *optarg;
   extern int optind;
@@ -64,6 +69,9 @@ int main(int argc, char *argv[]){
   double dt = 0;
   int print_interval = 0;
 
+  double atol = ABSOLUTE_ERROR_TOLERANCE;
+  double rtol = RELATIVE_ERROR_TOLERANCE;
+
   char buf1[256], buf2[256], buf3[256];
   char *tmp;
   int method;
@@ -71,10 +79,17 @@ int main(int argc, char *argv[]){
   char *method_name;
   int method_key = -1;
 
+  /*for bifurcation analysis*/
+  boolean use_bifurcation_analysis = false;
+
+  /*for variable step-size numerical integration*/
+  boolean use_variable_stepsize = false;
+  double facmax = DEFAULT_FACMAX;
+
   myResult *rtn;
 
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "t:s:d:m:lna")) != -1){
+  while ((ch = getopt(argc, argv, "t:s:d:m:A:R:M:lnaB")) != -1){
     switch (ch) {
       case 't':
         sim_time = atof(optarg);
@@ -97,6 +112,18 @@ int main(int argc, char *argv[]){
       case 'a':
         print_amount = 1;
         break;
+      case 'A':
+		  atol = atof(optarg);
+		  break;
+      case 'R':
+		  rtol = atof(optarg);
+		  break;
+      case 'B':
+		  use_bifurcation_analysis = 1;
+		  break;
+      case 'M':
+		  facmax = atof(optarg);
+		  break;
       default:
         usage(myname);
     }
@@ -150,11 +177,6 @@ int main(int argc, char *argv[]){
     sscanf(buf1, "%d", &step);
   }
 
-  /* calculate simulation condition */
-  dt = delta*(sim_time/step);
-  print_interval = (int)(1/delta);
-  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
-
   /* CUI */
   if (method_key == -1) {
     while(1){
@@ -172,10 +194,11 @@ int main(int argc, char *argv[]){
       printf("AB2 : press \"10\"\n");
       printf("AB3 : press \"11\"\n");
       printf("AB4 : press \"12\"\n");
-
+	  printf("RKF : press \"13\"\n");
+	  printf("CK  : press \"14\"\n");
       tmp = fgets(buf2, 256, stdin);
       method_key = atoi(buf2);
-      if (method_key < 1 || method_key > 12) {
+      if (method_key < 1 || method_key > 14) {
         printf("Invalid Input!\nSelect and input the number \"1~12\"");
       } else {
         break;
@@ -231,6 +254,16 @@ int main(int argc, char *argv[]){
       method = MTHD_ADAMS_BASHFORTH_4;
       method_name = MTHD_NAME_ADAMS_BASHFORTH_4;
       break;
+    case 13: /*  Runge-Kutta-Fehlberg 5 */
+      method = MTHD_RUNGE_KUTTA_FEHLBERG_5;
+      method_name = MTHD_NAME_RUNGE_KUTTA_FEHLBERG_5;
+      use_variable_stepsize = 1;
+      break;
+    case 14: /*  Cash-Karp */
+      method = MTHD_CASH_KARP;
+      method_name = MTHD_NAME_CASH_KARP;
+      use_variable_stepsize = 1;
+      break;
     default:
       method = MTHD_RUNGE_KUTTA;
       method_name = MTHD_NAME_RUNGE_KUTTA;
@@ -239,6 +272,7 @@ int main(int argc, char *argv[]){
   is_explicit = method % 10;
 
   /* simulation */
+  if (!use_variable_stepsize) {
   if (!is_explicit) {
     if (use_lazy_method == 2) {
       while(1){
@@ -258,9 +292,18 @@ int main(int argc, char *argv[]){
       printf("  simulate with lazy mode\n");
     }
   }
-
+  }
   /* Run simulation */
-  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method);
+  if (!use_variable_stepsize) {
+	  /* calculate simulation condition */
+	  dt = delta*(sim_time/step);
+  }else{
+	  /* calculate simulation condition */
+	  dt = sim_time/step;
+  }
+	  print_interval = (int)(1/delta);
+	  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
+	  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax);
 
   /* write CSV */
   if (rtn == NULL) {
@@ -274,9 +317,6 @@ int main(int argc, char *argv[]){
        "./simulation_results/compartment_result.dat");
        */
   }
-
-  /* print result list */
-  /* print_result_list(m, mySp, myParam, myComp); */
 
   /* free */
   SBMLDocument_free(d);

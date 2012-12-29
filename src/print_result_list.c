@@ -17,8 +17,7 @@ void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], my
   FILE *fp = NULL;
   unsigned int i;
   int column = 2;
-
-  if ((fp = my_fopen(fp, "./simulation_results/result_list.dat", "w")) != NULL) {
+  if ((fp = my_fopen(fp, "./simulation_results/result_list.dat", "w")) == NULL) {
     return;
   }
   TRACE(("Result : Species List\n"));

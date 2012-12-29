@@ -25,6 +25,9 @@
 #define MTHD_ADAMS_BASHFORTH_3 21
 #define MTHD_ADAMS_BASHFORTH_4 31
 #define MTHD_RUNGE_KUTTA 41
+#define MTHD_RUNGE_KUTTA_FEHLBERG_5 51
+#define MTHD_CASH_KARP 61
+
 
 /* Implicit methods */
 #define MTHD_BACKWARD_EULER 0
@@ -43,6 +46,8 @@
 #define MTHD_NAME_ADAMS_BASHFORTH_3 "3rd order Adams-Bashforth"
 #define MTHD_NAME_ADAMS_BASHFORTH_4 "4th order Adams-Bashforth"
 #define MTHD_NAME_RUNGE_KUTTA "4th order Runge-Kutta"
+#define MTHD_NAME_RUNGE_KUTTA_FEHLBERG_5 "5th order Runge-Kutta-Fehlberg"
+#define MTHD_NAME_CASH_KARP "5th order Cash-Karp"
 
 /* Name for implicit methods */
 #define MTHD_NAME_BACKWARD_EULER "Backward-Euler"

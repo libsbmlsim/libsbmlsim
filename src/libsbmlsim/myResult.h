@@ -33,6 +33,9 @@ struct _myResult{
   double *values_sp;
   double *values_param;
   double *values_comp;
+	/* new code*/
+  double* values_time_fordelay;
+  int num_of_delay_rows;
 };
 
 #endif /* LibSBMLSim_MyResult_h */
