@@ -50,7 +50,7 @@ for i in {0000{1..9},000{10..99},00{100..980}}; do
   amount=`tr -d '\r' < "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
   concentration=`tr -d '\r' < "$head-settings.txt" | grep amount | cut -d":" -f 2 | sed -e "s/ //g"`
   atol='1e-16'
-  rtol='1e-08'
+  rtol='1e-10'
   #sbml="$head-sbml-l2v4.xml"
   sbml="$head-sbml-l3v1.xml"
   result="$i-results.csv"
