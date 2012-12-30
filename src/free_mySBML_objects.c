@@ -49,10 +49,12 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   free(myComp);
   for(i=0; i<Model_getNumReactions(m); i++){
     for(j=0; j<myRe[i]->num_of_products; j++){
+      free(myRe[i]->products[j]->eq); /* TABIRA */
       free(myRe[i]->products[j]);
     }
     free(myRe[i]->products);
     for(j=0; j<myRe[i]->num_of_reactants; j++){
+      free(myRe[i]->reactants[j]->eq); /* TABIRA */
       free(myRe[i]->reactants[j]);
     }
     free(myRe[i]->reactants);
