@@ -129,15 +129,6 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
   double sum_error = 0.0;
   double rk_ce[2][6];
 
-  double *sp_dxdt;
-  double *sp_dxdt4;
-  double *param_dxdt;
-  double *param_dxdt4;
-  double *comp_dxdt;
-  double *comp_dxdt4;
-  double *spr_dxdt;
-  double *spr_dxdt4;
-
   /* Runge-Kutta-Fehlberg table */
   double rk_ce_f[2][6] = {{16.0/135.0, 0.0, 6656.0/12825.0, 28561.0/56430.0, -9.0/50.0, 2.0/55.0},
 						  {25.0/216.0, 0.0, 1408.0/2565.0, 2197.0/4104.0, -1.0/5.0, 0.0}};
@@ -146,15 +137,14 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
 						  {37.0/378.0, 0.0, 250.0/621.0, 125.0/594.0, 0.0, 512.0/1771.0}};
 
   /* allocate memory */
-  sp_dxdt  = (double *)malloc(sizeof(double) * sp_num);
-  sp_dxdt4 = (double *)malloc(sizeof(double) * sp_num);
-  param_dxdt  = (double *)malloc(sizeof(double) * param_num);
-  param_dxdt4 = (double *)malloc(sizeof(double) * param_num);
-  comp_dxdt  = (double *)malloc(sizeof(double) * comp_num);
-  comp_dxdt4 = (double *)malloc(sizeof(double) * comp_num);
-  spr_dxdt  = (double *)malloc(sizeof(double) * spr_num);
-  spr_dxdt4 = (double *)malloc(sizeof(double) * spr_num);
-
+  double *sp_dxdt  = (double *)malloc(sizeof(double) * sp_num);
+  double *sp_dxdt4 = (double *)malloc(sizeof(double) * sp_num);
+  double *param_dxdt  = (double *)malloc(sizeof(double) * param_num);
+  double *param_dxdt4 = (double *)malloc(sizeof(double) * param_num);
+  double *comp_dxdt  = (double *)malloc(sizeof(double) * comp_num);
+  double *comp_dxdt4 = (double *)malloc(sizeof(double) * comp_num);
+  double *spr_dxdt  = (double *)malloc(sizeof(double) * spr_num);
+  double *spr_dxdt4 = (double *)malloc(sizeof(double) * spr_num);
 
   /* prepare Butcher tableau */
   if(order == 5){
@@ -217,7 +207,9 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
 	  }
 
 	  if (*(ode_num) == 0){
-		  return 0;
+      /* Don't forget to free allocated memory before return! */
+      free_dxdt(sp_dxdt, sp_dxdt4, param_dxdt, param_dxdt4, comp_dxdt, comp_dxdt4, spr_dxdt, spr_dxdt4);
+      return 0;
 	  }else {
 		  sum_error = sqrt(sum_error / *(ode_num));
 	  }
@@ -279,7 +271,12 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
 		  }
 	  }
   }
-  /* free */
+  /* Don't forget to free allocated memory before return! */
+  free_dxdt(sp_dxdt, sp_dxdt4, param_dxdt, param_dxdt4, comp_dxdt, comp_dxdt4, spr_dxdt, spr_dxdt4);
+  return sum_error;
+}
+
+void free_dxdt(double *sp_dxdt, double *sp_dxdt4, double *param_dxdt, double *param_dxdt4, double *comp_dxdt, double *comp_dxdt4, double *spr_dxdt, double *spr_dxdt4) { 
   free(sp_dxdt);
   free(sp_dxdt4);
   free(param_dxdt);
@@ -288,7 +285,4 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
   free(comp_dxdt4);
   free(spr_dxdt);
   free(spr_dxdt4);
-
-  return sum_error;
 }
-

@@ -404,6 +404,8 @@ double calc_sum_error(mySpecies *sp[], unsigned int sp_num, myParameter *param[]
 
 double calc_error(double dxdt, double dxdt4, double cur_value, double next_value, double atol, double rtol);
 
+void free_dxdt(double *sp_dxdt, double *sp_dxdt4, double *param_dxdt, double *param_dxdt4, double *comp_dxdt, double *comp_dxdt4, double *spr_dxdt, double *spr_dxdt4);
+
 double calc_eps(double value);
 
 /* forwarding value(substitute calculated temp value to value) */
