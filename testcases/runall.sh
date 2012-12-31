@@ -64,7 +64,7 @@ for i in {0000{1..9},000{10..99},00{100..980}}; do
   fi
   if [[ "$fine_atol" == *"$i"* ]]; then
     echo "  simulate with fine absolute tolerance"
-    atol="1e-21"
+    atol="1e-22"
   fi
   if [[ "$fine_facmax" == *"$i"* ]]; then
     echo "  simulate with very fine facmax"
