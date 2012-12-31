@@ -4,7 +4,7 @@
       % cp ../../build/src/bindings/python/_libsbmlsim.so .
       % python Test.py
 
-  (2) If you are in installed directory (ex. /usr/local/share/libsbml/ruby)
+  (2) If you are in installed directory (ex. /usr/local/share/libsbml/python)
       % python Test.py
 
 * Output from this test program will be:

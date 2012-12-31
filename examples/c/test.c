@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
     /*  print_result(rtn); */
     /* write_csv(rtn, "cresult.csv"); */
     write_result(rtn, "test.dat");
+    printf("Simulation result is written to test.dat.\n");
   }
   if (rtn != NULL)
     free_myResult(rtn);

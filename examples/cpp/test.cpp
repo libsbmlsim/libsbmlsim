@@ -27,18 +27,19 @@ int main(int argc, char *argv[]) {
   boolean use_lazy_method = false;
 
   if (argc < 2) {
-    printf("Input SBML file is not specified.\n  Usage: %s sbml.xml\n", argv[0]);
+    cout << "Input SBML file is not specified.\n  Usage: " << argv[0] << "sbml.xml\n" << endl;
     exit(1);
   }
   rtn = simulateSBMLFromFile(argv[1], sim_time, dt, print_interval, print_amount, method, use_lazy_method);
   if (rtn == NULL) {
-    printf("Returned result is NULL\n");
+    cout << "Returned result is NULL" << endl;
   } else if (myResult_isError(rtn)) {
     cout << "ERROR: " <<  myResult_getErrorMessage(rtn) << endl;
   } else {
     /*  print_result(rtn); */
     /* write_csv(rtn, "cresult.csv"); */
     write_result(rtn, "test.dat");
+    cout << "Simulation result is written to test.dat." << endl;
   }
   if (rtn != NULL)
     free_myResult(rtn);

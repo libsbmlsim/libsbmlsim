@@ -35,8 +35,8 @@ public class Test {
     myResult result = libsbmlsim.simulateSBMLFromFile("../sample.xml", 25.0, 0.01, 100, 1, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
 
     //libsbmlsim.print_result(result);
-    //libsbmlsim.write_csv(result, "result.csv");
-    //libsbmlsim.write_result(result, "result.dat");
+    //libsbmlsim.write_csv(result, "result.csv"); // Output result to a csv file
+    //libsbmlsim.write_result(result, "result.dat"); // Output result to a file
 
     int numOfRows = result.getNumOfRows();
     System.out.println("numOfRows: " + numOfRows);
