@@ -11,4 +11,4 @@ rm -f src/Makefile.dist
 rm -f src/bindings/java/build_java.sh
 rm -rf src/bindings/java/bin
 rm -f src/bindings/python/build_python.sh
-rm -f **/.DS_Store
+rm -f **/.DS_Store(N)
