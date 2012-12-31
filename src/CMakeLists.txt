@@ -139,4 +139,8 @@ if(WITH_RUBY)
 add_subdirectory(bindings/ruby)
 endif()
 
+if(WITH_CSHARP)
+add_subdirectory(bindings/csharp)
+endif()
+
 
