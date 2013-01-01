@@ -64,6 +64,8 @@ typedef struct _myResult {
   double *values_sp;
   double *values_param;
   double *values_comp;
+  double *values_time_fordelay;
+  int num_of_delay_rows;
 } myResult;
 
 %newobject simulateSBMLFromFile;
