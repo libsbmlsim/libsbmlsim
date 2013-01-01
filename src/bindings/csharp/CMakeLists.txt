@@ -8,7 +8,7 @@ FIND_PACKAGE(SWIG 2.0 REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 
 # Only 32bit for this release
-set(CSHARP_PLATFORM "x86")
+set(CSHARP_PLATFORM "x86" CACHE STRING "C# target platfomr: x86, x64, anycpu, or itanium")
 
 # Find C#
 FIND_PACKAGE(CSharp REQUIRED)
