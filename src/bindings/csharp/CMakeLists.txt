@@ -7,8 +7,10 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}")
 FIND_PACKAGE(SWIG 2.0 REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 
-# Only 32bit for this release
-set(CSHARP_PLATFORM "x86" CACHE STRING "C# target platfomr: x86, x64, anycpu, or itanium")
+# Only 32bit build on Windows
+if (WIN32)
+  set(CSHARP_PLATFORM "x86" CACHE STRING "C# target platfomr: x86, x64, anycpu, or itanium")
+endif (WIN32)
 
 # Find C#
 FIND_PACKAGE(CSharp REQUIRED)
