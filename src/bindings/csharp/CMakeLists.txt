@@ -77,10 +77,11 @@ csharp_add_library(
 add_dependencies(libsbmlsimcsP libsbmlsimcs)
 
 file(COPY ${PROJECT_SOURCE_DIR}/examples/csharp/Test.cs DESTINATION ${CSHARP_BINARY_DIRECTORY})
+file(COPY ${PROJECT_SOURCE_DIR}/examples/csharp/README.txt DESTINATION ${CSHARP_BINARY_DIRECTORY})
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
 # Install targets
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/csharp/Test.cs ${CSHARP_BINARY_DIRECTORY}/libsbmlsimcsP.dll DESTINATION share/libsbmlsim/csharp)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/csharp/Test.cs ${PROJECT_SOURCE_DIR}/examples/csharp/README.txt ${CSHARP_BINARY_DIRECTORY}/libsbmlsimcsP.dll DESTINATION share/libsbmlsim/csharp)
 INSTALL(TARGETS libsbmlsimcs 
   LIBRARY DESTINATION share/libsbmlsim/csharp
   ARCHIVE DESTINATION share/libsbmlsim/csharp

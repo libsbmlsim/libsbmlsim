@@ -24,10 +24,11 @@ SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -package jp.ac.keio.bio.fun.libsbmlsim)
 SWIG_ADD_MODULE(sbmlsimj java libsbmlsim.i ${SOURCES_LIB})
 SWIG_LINK_LIBRARIES(sbmlsimj ${JNI_LIBRARIES} ${LIBSBML_LIBRARIES})
 
+file(COPY ${PROJECT_SOURCE_DIR}/examples/java/README.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
 # Install targets
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsimj.jar DESTINATION share/libsbmlsim/java)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/java/Test.java ${PROJECT_SOURCE_DIR}/examples/java/README.txt ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsimj.jar DESTINATION share/libsbmlsim/java)
 INSTALL(TARGETS sbmlsimj
   LIBRARY DESTINATION share/libsbmlsim/java
   ARCHIVE DESTINATION share/libsbmlsim/java

@@ -19,10 +19,11 @@ SWIG_ADD_MODULE(libsbmlsim python libsbmlsim.i ${SOURCES_LIB})
 SWIG_LINK_LIBRARIES(libsbmlsim ${PYTHON_LIBRARIES} ${LIBSBML_LIBRARIES})
 
 file(COPY ${PROJECT_SOURCE_DIR}/examples/python/Test.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${PROJECT_SOURCE_DIR}/examples/python/README.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
 # Install targets
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/python/Test.py ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION share/libsbmlsim/python)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/python/Test.py ${PROJECT_SOURCE_DIR}/examples/python/README.txt ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION share/libsbmlsim/python)
 INSTALL(TARGETS _libsbmlsim
   LIBRARY DESTINATION share/libsbmlsim/python
   ARCHIVE DESTINATION share/libsbmlsim/python

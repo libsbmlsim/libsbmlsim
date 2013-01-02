@@ -40,10 +40,11 @@ IF (RBCONFIG_MAJOR EQUAL 1 AND RBCONFIG_MINOR EQUAL 8)
   endif()
 
   file(COPY ${PROJECT_SOURCE_DIR}/examples/ruby/Test.rb DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  file(COPY ${PROJECT_SOURCE_DIR}/examples/ruby/README.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
   # Install targets
-  INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/ruby/Test.rb DESTINATION share/libsbmlsim/ruby)
+  INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/ruby/Test.rb ${PROJECT_SOURCE_DIR}/examples/ruby/README.txt DESTINATION share/libsbmlsim/ruby)
   INSTALL(TARGETS libsbmlsim_ruby
     LIBRARY DESTINATION share/libsbmlsim/ruby
     ARCHIVE DESTINATION share/libsbmlsim/ruby
@@ -54,4 +55,3 @@ ELSE()
   MESSAGE(STATUS "only ruby-1.8.* is supported")
 
 ENDIF()
-
