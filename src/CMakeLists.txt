@@ -71,6 +71,7 @@ set (INSTALL_DOCS ${INSTALL_DOCS}
   ${PROJECT_SOURCE_DIR}/COPYING.txt
   ${PROJECT_SOURCE_DIR}/FUNDING.txt
   ${PROJECT_SOURCE_DIR}/LICENSE.txt
+  ${PROJECT_SOURCE_DIR}/LICENSE-dSFMT.txt
   ${PROJECT_SOURCE_DIR}/NEWS.txt
   ${PROJECT_SOURCE_DIR}/README.txt
   ${PROJECT_SOURCE_DIR}/VERSION.txt
@@ -148,4 +149,49 @@ if(WITH_CSHARP)
 add_subdirectory(bindings/csharp)
 endif()
 
+# for installer
+INCLUDE(InstallRequiredSystemLibraries)                                                                                                                                           
 
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LibSBMLSim: The library for simulating SBML models")
+SET(CPACK_PACKAGE_NAME "libsbmlsim")
+SET(CPACK_PACKAGE_VENDOR "LibSBMLSim development team")
+SET(CPACK_PACKAGE_CONTACT "LibSBMLSim development Team <sbmlsim@fun.bio.keio.ac.jp>")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE.txt")
+SET(CPACK_PACKAGE_VERSION_MAJOR "1")
+SET(CPACK_PACKAGE_VERSION_MINOR "1")
+SET(CPACK_PACKAGE_VERSION_PATCH "0")
+SET(CPACK_RPM_PACKAGE_LICENSE "LGPL")
+SET(CPACK_RPM_PACKAGE_GROUP "Libraries/Development")
+SET(CPACK_DEBIAN_PACKAGE_SECTION "Libraries")
+
+IF(WIN32 AND NOT UNIX)
+  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "libsbmlsim-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
+  # There is a bug in NSI that does not handle full unix paths properly. Make
+  # sure there is at least one set of four (4) backlasshes.
+  #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+  #SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
+  SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
+  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\fun.bio.keio.ac.jp\\\\software\\\\libsbmlsim")
+  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\bio.keio.ac.jp\\\\software\\\\libsbmlsim")
+  SET(CPACK_NSIS_CONTACT "sbmlsim@fun.bio.keio.ac.jp")
+  SET(CPACK_NSIS_MODIFY_PATH ON)
+ELSE(WIN32 AND NOT UNIX)
+  SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
+  SET(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  SET(CPACK_SET_DESTDIR "ON")
+  #SET(CPACK_STRIP_FILES "bin/MyExecutable")
+  #SET(CPACK_SOURCE_STRIP_FILES "")
+ENDIF(WIN32 AND NOT UNIX)
+
+# 32bit or 64bit
+IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
+  SET(CPACK_RPM_PACKAGE_ARCHITECTURE "i386")
+ELSE()
+  SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+  SET(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+ENDIF()
+
+#SET(CPACK_PACKAGE_EXECUTABLES "MyExecutable" "My Executable")
+INCLUDE(CPack)
