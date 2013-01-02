@@ -12,4 +12,5 @@ rm -f src/bindings/java/build_java.sh
 rm -rf src/bindings/java/bin
 rm -f src/bindings/python/build_python.sh
 rm -f src/bindings/csharp/build_csharp.sh
+rm -f depend-win32.zip depend-win64-VS11.zip
 rm -f **/.DS_Store(N)

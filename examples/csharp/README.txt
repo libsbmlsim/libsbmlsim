@@ -1,10 +1,40 @@
 * How to compile & run a test program:
+  [Windows]
+    1. Copy following files under "C:\Program Files\libsbmlsim\share\libsbmlsim\csharp"
+       to your temporary directory (say, your Desktop\temp).
+        - Test.cs
+        - libsbmlsimcs.dll
+        - libsbmlsimcsP.dll
+    2. Copy following .dll files under "C:\Program Files\libsbmlsim\bin" to
+       your temporary directory (Desktop\temp). These DLLs are required to be
+       placed in the same directory of above DLLs.
+        - libbz2.dll
+        - libiconv.dll
+        - libsbml.dll
+        - libxml2.dll
+        - zlib1.dll
+    3. Copy sample SBML model (sample.xml) files under "C:\Program Files\libsbmlsim\share\libsbmlsim"
+       to your Desktop (not Desktop\temp).
+    4. Open cmd.exe and navigate to Desktop\temp like:
+       cd Desktop\temp
+    5. Compile Test.cs with following commandline:
+       csc.exe /reference:libsbmlsimcsP.dll Test.cs
+       (csc.exe is usually located under C:\Windows\Microsoft.NET\Framework\v2.0.50727)
+    6. Run "Test.exe".
+       Test.exe
+  Note: If you have VisualStudio installed, you can compile the test code on VisualStudio.
+        Create a new Project and add Test.cs to your project as a source code,
+        add libsbmlsimP.dll as a reference file, and then "Build".
+        To run your compiled C# binary, above DLLs should have to be
+        placed on the same directory of Test.exe.
+
+  [Unix (Linux and MacOSX) systems]
   (1) If you are in a example directory under libsbml distirbution:
       % cp ../../build/src/bindings/csharp/CSharpBinaries/libsbmlsimcs.bundle .
       % cp ../../build/src/bindings/csharp/CSharpBinaries/libsbmlsimcsP.dll .
       % gmcs -reference:libsbmlsimcsP.dll Test.cs
       % mono Test.exe
-
+      
   (2) If you are in installed directory (ex. /usr/local/share/libsbml/java)
       % gmcs -reference:libsbmlsimcsP.dll Test.cs
       % mono Test.exe

@@ -1,6 +1,42 @@
            libSBMLSim NEWS -- History of user-visible changes
 
-- Last modified: Wed, 04 Apr 2012 02:48:43 +0900
+- Last modified: Wed, 02 Jan 2013 23:21:00 +0900
+
+======================================================================
+Version 1.1.0 (2013-01-08)
+======================================================================
+
+* New features
+
+  - New integrators (5th order Runge-Kutta Fehlberg, 5th order Cash-Karp)
+    are included in this release. Both new integrators support variable
+    step size integration.
+     = 5th order Runge-Kutta Fehlberg : MTHD_RUNGE_KUTTA_FEHLBERG_5
+     = 5th order Cash-Karp : MTHD_NAME_CASH_KARP
+
+  - The C# bindings functions are include in this release. Please see
+    examples/csharp/Test.cs for the sample code.
+    
+  - Both 32bit(x86) and 64bit(x86_64) build for Windows are available.
+
+* Bug fixes
+
+  - Memory leaks in free_mySBML_objects() have been fixed.
+
+* API changes
+
+  - myResult* simulateSBMLModel() now requires 3 additional parameters for
+    variable step integration. 
+    myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt,
+                                int print_interval, int print_amount,
+                                int method, int use_lazy_method,
+                                double atol, double rtol, double facmax);
+     = double atol;  Absolute error tolernace
+     = double rtol;  Relative error tolerance
+     = double facmax; Maximum acceptable increasing factor
+    If you don't know the exact value for above 3 values, please just assign
+    "0.0" for all 3 values, then libsbmlsim will use the default values for
+    the integration.
 
 ======================================================================
 Version 1.0.0 (2012-04-04)

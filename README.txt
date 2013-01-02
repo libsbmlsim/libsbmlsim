@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 04 Apr 2012 02:53:48 +0900
+-- Last modified: Wed, 02 Jan 2013 23:03:21 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -21,8 +21,8 @@
   The library should build and work without serious troubles on Unix
   based operating systems (Linux, MacOSX and FreeBSD) and on Windows
   (with Visual C++).
-  LibSBMLSim also provides several language bindings like Java, Python
-  and Ruby. Perl binding is already included in the source tree, but
+  LibSBMLSim also provides several language bindings like Java, Python,
+  C# and Ruby. Perl binding is already included in the source tree, but
   is not able to create through the single build process (see the
   description below).
 
@@ -52,7 +52,7 @@
   If you want to use language bindings of libSBMLSim, please
   download and install SWIG-2.0.4 or above from (*3).
   (Note: If you installed SWIG from MacPorts, please install
-         swig-java, swig-python, swig-ruby which are required
+         swig-java, swig-python, swig-ruby, swig-csharp which are required
          to compile language bindings for libSBMLSim.)
 
   (*2 CMake: http://cmake.org/)
@@ -60,10 +60,10 @@
 
 - How to build libSBMLSim
   1. Extract the archive file
-   % tar xvzf libsbmlsim-1.0.0.tar.gz (for tar ball)
-   % unzip libsbmlsim-1.0.0.zip       (for zip archive)
+   % tar xvzf libsbmlsim-1.1.0.tar.gz (for tar ball)
+   % unzip libsbmlsim-1.1.0.zip       (for zip archive)
   2. Compile
-   % cd libsbmlsim-1.0.0/build
+   % cd libsbmlsim-1.1.0/build
    % cmake ..
    % ccmake .
      CUI from cmake will be launched. Please confirm that
@@ -82,9 +82,10 @@
        WITH_JAVA     ... build with Java bindings
        WITH_PYTHON   ... build with Python bindings
        WITH_RUBY     ... build with Ruby bindings
+       WITH_CSHARP   ... build with C# bindings
 
      Once you press [c] key, cmake will run the configure procedure
-     and tries to detect SWIG, Java, Python and Ruby (depending on
+     and tries to detect SWIG, Java, Python, C# and Ruby (depending on
      which language bindings you enabled). Once the configuration
      is done, press [g] key and cmake will generate Makefile.
      After Makefile is generated, just run
@@ -109,6 +110,7 @@
     $prefix/share/libsbmlsim/        ... Sample files (SBML, results)
                             /c       ... Sample C code
                             /cpp     ... Sample C++ code
+                            /csharp  ... Sample C# code and language bindings
                             /java    ... Sample Java code and language bingings
                             /python  ... Sample Python code and language bingings
                             /ruby    ... Sample Ruby code and language bingings
@@ -122,6 +124,8 @@
     $prefix\share\libsbmlsim\        ... Sample files (SBML, results)
                             \c       ... Sample C code
                             \cpp     ... Sample C++ code
+                            \cpp     ... Sample C++ code
+                            \csharp  ... Sample C# code and language bindings
                             \java    ... Sample Java code and language bingings
                             \python  ... Sample Python code and language bingings
     (Note: Ruby binding is not supported on Windows)
@@ -138,6 +142,9 @@
     -l   : use lazy method for integration
     -n   : do not use lazy method
     -a   : print Species Value in Amount
+    -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-04])
+    -R # : specify relative tolerance for variable stepsize (ex. -R 0.1 [default:1e-04])
+    -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])
     -m # : specify numerical integration algorithm (ex. -m 3 )
         1: Runge-Kutta
         2: AM1 & BD1 (implicit Euler)
@@ -151,6 +158,8 @@
        10: AB2
        11: AB3
        12: AB4
+       13: Runge-Kutta-Fehlberg
+       14: Cash-Karp
        (AM: Adams-Moulton, BD: Backward-Difference, AB: Adams-Bashforth.
         Number after synonim specifies the order of integration.
         For example, AM2 is "2nd order Adams-Moulton" method)
@@ -258,9 +267,21 @@
   Libsbmlsim::write_csv(r, 'result.csv')
   =======================================
   
+  === C# ================================
+  using System;
+  public class Test
+  {
+    static void Main()
+      {
+        myResult result = libsbmlsim.simulateSBMLFromFile("sbml.xml", 20.0, 0.1, 10, 0, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
+        libsbmlsim.write_csv(result, "test.csv");
+      }
+  }
+  =======================================
+  
   Please see the 'API.txt' and 'examples' directory for further information.
   The 'examples' directory contains sample code for test application
-  in several programming languages (C, C++, Java, Python, Ruby and Perl).
+  in several programming languages (C, C++, Java, Python, Ruby, C# and Perl).
 
 Have fun!
 -- 
