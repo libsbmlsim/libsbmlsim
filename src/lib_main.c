@@ -4,7 +4,7 @@
  * http://fun.bio.keio.ac.jp/software/libsbmlsim/ for more
  * information about libSBMLSim and its latest version.
  *
- * Copyright (C) 2011-2012 by the Keio University, Yokohama, Japan
+ * Copyright (C) 2011-2013 by the Keio University, Yokohama, Japan
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,9 +20,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time,
   Model_t* m;
   myResult *rtn;
   unsigned int err_num;
-  double atol = ABSOLUTE_ERROR_TOLERANCE;
-  double rtol = RELATIVE_ERROR_TOLERANCE;
-  double facmax = DEFAULT_FACMAX;
+  double atol = 0.0;
+  double rtol = 0.0;
+  double facmax = 0.0;
   d = readSBMLFromFile(file);
   if (d == NULL)
     return create_myResult_with_errorCode(Unknown);
@@ -72,9 +72,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time
   Model_t* m;
   myResult *rtn;
   unsigned int err_num;
-  double atol = ABSOLUTE_ERROR_TOLERANCE;
-  double rtol = RELATIVE_ERROR_TOLERANCE;
-  double facmax = DEFAULT_FACMAX;
+  double atol = 0.0;
+  double rtol = 0.0;
+  double facmax = 0.0;
   d = readSBMLFromString(str);
   if (d == NULL)
     return create_myResult_with_errorCode(Unknown);
@@ -176,6 +176,17 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
   cp_AST->num_of_copied_AST = 0;
 
+  /* Check atol, rtol and facmax, whether it is set to 0.0 */
+  if (atol == 0.0) {
+    atol = ABSOLUTE_ERROR_TOLERANCE;
+  }
+  if (rtol == 0.0) {
+    rtol = RELATIVE_ERROR_TOLERANCE;
+  }
+  if (facmax == 0.0) {
+    facmax = DEFAULT_FACMAX;
+  }
+  
   /* determin bifurcation analysis condition */
   if (use_bifurcation_analysis) {
 	  while(1) {
