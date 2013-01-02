@@ -38,3 +38,10 @@ Microsystems, Inc., copyright (C) 1993 by Sun Microsystems, Inc.
 Please see the files src/e_acosh.c, src/e_atanh.c, src/s_log1p.c,
 src/libsbmlsim/math_private.h for more information and its
 license terms.
+LibSBMLSim also incorporates some source codes written by
+Mutsuo Saito and Makoto Matsumoto, copyright (C) 2006,2007 by
+Mutsuo Saito, Makoto Matsumoto and Hiroshima University, and
+copyright (C) 2012 Mutsuo Saito, Makoto Matsumoto, Hiroshima
+University and The University of Tokyo. Please see the files
+src/dSFMT.c, src/libsbmlsim/dSFMT-*.h and LICENSE-dSFMT.txt
+for more information and its license terms.
