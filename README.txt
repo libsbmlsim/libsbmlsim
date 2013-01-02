@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Wed, 02 Jan 2013 23:03:21 +0900
+-- Last modified: Thu, 03 Jan 2013 07:57:39 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -65,11 +65,11 @@
     and follow the instructions. It will install libSBMLSim to /usr/local .
 
   = Linux  (64bit)
-    Download Debian / RedHat package of libSBMLSim, and type following command
-    in your terminal.
-      $ apt-get instsall libsbmlsim-1.1.0-
-      $ yum instsall libsbmlsim-1.1.0-
-    It will install libSBMLSim to /usr/local .
+    Download libsbmlsim-1.1.0-Linux.tar.gz, and extract with the following
+    command in your terminal.
+      $ cd /usr/local
+      $ sudo tar xvzf libsbmlsim-1.1.0-Linux.tar.gz
+    It will extract libSBMLSim to /usr/local .
 
 - Required software packages to compile libSBMLSim
   CMake(*2) is required to compile libSBMLSim. Please download
