@@ -45,7 +45,32 @@
 - Dependencies
   LibSBMLSim requires libSBML to be installed on your system.
   Please follow the instruction on (*1) and install libSBML.
+  LibSBML and its dependent libraries will be automatically installed
+  with Windows version of libSBMLSim Installer.
   
+- Binary install of libSBMLSim
+  We have provided installer for Windows, MacOSX and Linux from libSBMLSim-1.1.
+  = Windows (both 32bit and 64bit)
+    Download libSBMLSim Installer for Windows (libsbmlsim-1.1.0-win{32,64}.exe)
+    and double-click the installer. It will ask few questions, and will
+    install libSBMLSim to
+      "C:\Program Files\libsbmlsim-1.1"       (32bit)
+      "C:\Program Files (x86)\libsbmlsim-1.1" (64bit)
+    by default.
+
+  = MacOSX (64bit)
+    Download libSBMLSim Installer for MacOSX (libsbmlsim-1.1.0-Darwin.dmg) and
+    double-click the .dmg file. You will see libsbmlsim-1.1.0-Darwin.pkg in a
+    Finder window. Double-click the installer (libsbmlsim-1.1.0-Darwin.pkg)
+    and follow the instructions. It will install libSBMLSim to /usr/local .
+
+  = Linux  (64bit)
+    Download Debian / RedHat package of libSBMLSim, and type following command
+    in your terminal.
+      $ apt-get instsall libsbmlsim-1.1.0-
+      $ yum instsall libsbmlsim-1.1.0-
+    It will install libSBMLSim to /usr/local .
+
 - Required software packages to compile libSBMLSim
   CMake(*2) is required to compile libSBMLSim. Please download
   and install CMake-2.8.7 or above from (*2) before building libSBMLSim.
