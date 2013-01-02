@@ -121,6 +121,11 @@ INSTALL(FILES ${sample_files} DESTINATION share/libsbmlsim)
 # Install C and C++ code
 INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/c/test.c ${PROJECT_SOURCE_DIR}/examples/c/Makefile DESTINATION share/libsbmlsim/c)
 INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/cpp/test.cpp ${PROJECT_SOURCE_DIR}/examples/cpp/Makefile DESTINATION share/libsbmlsim/cpp)
+# Install dependent libraries on Windows
+if(MSVC)
+  FILE(GLOB windows_depend_dlls "${PROJECT_SOURCE_DIR}/depend/bin/*.dll")
+  INSTALL(FILES ${windows_depend_dlls} DESTINATION bin)
+endif()
 
 # Bindings
 if(WITH_JAVA)
