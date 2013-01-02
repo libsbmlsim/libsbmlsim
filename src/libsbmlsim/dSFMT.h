@@ -191,7 +191,9 @@ int dsfmt_get_min_array_size(void);
 #  define DSFMT_PRE_INLINE inline static
 #  define DSFMT_PST_INLINE
 #endif
+/*
 DSFMT_PRE_INLINE uint32_t dsfmt_genrand_uint32(dsfmt_t *dsfmt) DSFMT_PST_INLINE;
+*/
 DSFMT_PRE_INLINE double dsfmt_genrand_close1_open2(dsfmt_t *dsfmt)
     DSFMT_PST_INLINE;
 DSFMT_PRE_INLINE double dsfmt_genrand_close_open(dsfmt_t *dsfmt)
@@ -200,7 +202,9 @@ DSFMT_PRE_INLINE double dsfmt_genrand_open_close(dsfmt_t *dsfmt)
     DSFMT_PST_INLINE;
 DSFMT_PRE_INLINE double dsfmt_genrand_open_open(dsfmt_t *dsfmt)
     DSFMT_PST_INLINE;
+/*
 DSFMT_PRE_INLINE uint32_t dsfmt_gv_genrand_uint32(void) DSFMT_PST_INLINE;
+*/
 DSFMT_PRE_INLINE double dsfmt_gv_genrand_close1_open2(void) DSFMT_PST_INLINE;
 DSFMT_PRE_INLINE double dsfmt_gv_genrand_close_open(void) DSFMT_PST_INLINE;
 DSFMT_PRE_INLINE double dsfmt_gv_genrand_open_close(void) DSFMT_PST_INLINE;
@@ -229,6 +233,7 @@ DSFMT_PRE_INLINE void dsfmt_init_by_array(dsfmt_t *dsfmt, uint32_t init_key[],
  * @param dsfmt dsfmt internal state date
  * @return double precision floating point pseudorandom number
  */
+/*
 inline static uint32_t dsfmt_genrand_uint32(dsfmt_t *dsfmt) {
     uint32_t r;
     uint64_t *psfmt64 = &dsfmt->status[0].u[0];
@@ -240,6 +245,7 @@ inline static uint32_t dsfmt_genrand_uint32(dsfmt_t *dsfmt) {
     r = psfmt64[dsfmt->idx++] & 0xffffffffU;
     return r;
 }
+*/
 
 /**
  * This function generates and returns double precision pseudorandom
@@ -269,9 +275,11 @@ inline static double dsfmt_genrand_close1_open2(dsfmt_t *dsfmt) {
  * before this function.  This function uses \b global variables.
  * @return double precision floating point pseudorandom number
  */
+/*
 inline static uint32_t dsfmt_gv_genrand_uint32(void) {
     return dsfmt_genrand_uint32(&dsfmt_global_data);
 }
+*/
 
 /**
  * This function generates and returns double precision pseudorandom
