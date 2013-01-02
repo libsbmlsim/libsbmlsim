@@ -126,6 +126,7 @@ INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/cpp/test.cpp ${PROJECT_SOURCE_DIR}/
 if(MSVC)
   FILE(GLOB windows_depend_dlls "${PROJECT_SOURCE_DIR}/depend/bin/*.dll")
   INSTALL(FILES ${windows_depend_dlls} DESTINATION bin)
+  INSTALL(FILES ${PROJECT_SOURCE_DIR}/README.txt DESTINATION .)
 endif()
 
 # Bindings
