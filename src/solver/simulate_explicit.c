@@ -1033,15 +1033,15 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
 					  *(err_zero_flag) = 1;
 					  dt = fixed_dt / print_interval;
 					  if (sum_error == 0.0 && ode_num == 0){
-						  fprintf(stderr, "no ode model \n");
+						  TRACE(("no ode model \n"));
 					  }else{
-						  fprintf(stderr, "no error model \n");
+						  TRACE(("no error model \n"));
 					  }
 				  }
 				  break;
 			  }else if (sum_error == 0.0 || err_zero_flag2){
 				  if (!err_zero_flag2) {
-					  fprintf(stderr, "in some intervals of integration, the model has no error\n");
+					  TRACE(("in some intervals of integration, the model has no error\n"));
 					  err_zero_flag2 = 1;
 					  dt = fixed_dt / print_interval;
 				  }
@@ -1055,7 +1055,7 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
 			  }
         /*
 			  if (!isfinite(dt) || !isfinite(sum_error)) {
-				  fprintf(stderr, "stepsize ERROR\n");
+				  TRACE(("stepsize ERROR\n"));
 				  //write_csv(result, "variable.csv"); save the result data by variable step-size
 				  exit(1);
           }
