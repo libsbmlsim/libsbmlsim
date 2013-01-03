@@ -43,7 +43,7 @@ LibSBMLSim provides following functions as libSBMLSim C API.
       arg5 ... Integration method.
                Please see libsbmlsim/methods.h for further information.
       arg6 ... will use lazy method for newton method or not (1 == yes).
-      arg7 ... Absolue error tolerance
+      arg7 ... Absolute error tolerance
       arg8 ... Relative error tolerance
       arg9 ... Maximum acceptable increasing factor
     "Absolute / Relative error tolerance" and "maximum acceptable

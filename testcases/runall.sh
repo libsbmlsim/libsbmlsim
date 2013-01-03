@@ -21,8 +21,10 @@ BaseDir="./cases/semantic"
 fine_delta="00952 00953 00962 00963 00964 00965 00966 00967"
 
 # Simulate following models with small atol
-#fine_atol="00430 00431 00863 00893 00945 00946 00947 00948"
 fine_atol="00430 00431 00863 00893 00945 00946 00947 00948"
+
+# Simulate following models with small rtol
+fine_rtol="00944 00945 00946 00947 00948"
 
 # Simulate following models with small facmax
 fine_facmax="00426 00430 00431 00863"
@@ -57,29 +59,39 @@ for i in {0000{1..9},000{10..99},00{100..980}}; do
   opt_delta=""
   opt_amount=""
   opt_facmax=""
-  echo "$i: $duration : $steps : [$variables] : [$amount] : [$concentration] : $atol : $rtol"
+  print_msg=""
+  dbl_sp="\040\040"
   if [[ "$fine_delta" == *"$i"* ]]; then
-    echo "  simulate with fine delta"
+    tmp_msg="${dbl_sp}simulate with fine delta\n"
+    print_msg="${print_msg}${tmp_msg}"
     opt_delta="-d 0.00001"
   fi
   if [[ "$fine_atol" == *"$i"* ]]; then
-    echo "  simulate with fine absolute tolerance"
+    tmp_msg="${dbl_sp}simulate with fine absolute tolerance\n"
+    print_msg=${print_msg}${tmp_msg}
     atol="1e-22"
   fi
+  if [[ "$fine_rtol" == *"$i"* ]]; then
+    print_msg=${print_msg}"${dbl_sp}simulate with fine relative tolerance\n"
+    rtol="1e-11"
+  fi
   if [[ "$fine_facmax" == *"$i"* ]]; then
-    echo "  simulate with very fine facmax"
+    print_msg=${print_msg}"${dbl_sp}simulate with very fine facmax\n"
     opt_facmax="-M 1.0000001"
   fi
   if [ -n "$amount" ] ; then
-	  echo "  print amount"
+    print_msg=${print_msg}"${dbl_sp}print amount\n"
 	  opt_amount="-a"
   else
-	  echo "  print concentration"
+    print_msg=${print_msg}"${dbl_sp}print concentration\n"
   fi
-#./simulateSBML -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
-./simulateSBML -t $duration -s $steps $opt_delta -m 13 -A $atol -R $rtol $opt_facmax -n $opt_amount $sbml && \
-./genresult.pl out.csv $variables $steps > $result 
-./compare.pl $i
+  echo "$i: $duration : $steps : [$variables] : [$amount] : [$concentration] : $atol : $rtol"
+  echo -en $print_msg
+  #./simulateSBML -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
+  ./simulateSBML -t $duration -s $steps $opt_delta -m 13 -A $atol -R $rtol $opt_facmax -n $opt_amount $sbml && \
+  ./genresult.pl out.csv $variables $steps > $result 
+  echo -en $dbl_sp
+  ./compare.pl $i
 
   unset head
   unset duration
@@ -92,11 +104,12 @@ for i in {0000{1..9},000{10..99},00{100..980}}; do
   unset opt_facmax
   unset atol
   unset rtol
+  unset print_msg
+  unset tmp_msg
 # end
 done
 unset BaseDir
 unset fine_delta
 rm -f out.csv
-#zip result.zip 0*-results.csv
-#zip result.zip 00*-results.csv
+zip result.zip 00*-results.csv
 #rm 00*-results.csv

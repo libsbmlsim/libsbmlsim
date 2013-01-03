@@ -9,7 +9,7 @@ Last modified: Wed, 02 Jan 2013 22:45:27 +0900
   - Hiromu Takizawa
   - Akito Tabira
   - Kazushige Nakamura
-  - Youichi Chikahara
+  - Yoichi Chikahara
   - Tatsuhiro Matsui
   - Noriko Hiroi
   - Akira Funahashi

@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Thu, 03 Jan 2013 07:57:39 +0900
+-- Last modified: Fri, 04 Jan 2013 04:37:13 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -14,7 +14,7 @@
   Both explicit and implicit methods are supported on libSBMLSim.
   LibSBMLSim is confirmed to pass all SBML Level-2 Version 4 and Level-3
   Version 1 test cases (sbml-test-cases-2.0.2.zip, available from
-  http://sourceforget.net/projects/sbml/files/test-suite/2.0.2/).
+  http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/).
   The libSBMLSim code is portable. It is written in C programming language
   (ANSI C89) and it does not depend on other third-party libraries
   except libSBML(*1).
@@ -167,8 +167,8 @@
     -l   : use lazy method for integration
     -n   : do not use lazy method
     -a   : print Species Value in Amount
-    -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-04])
-    -R # : specify relative tolerance for variable stepsize (ex. -R 0.1 [default:1e-04])
+    -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])
+    -R # : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-04])
     -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])
     -m # : specify numerical integration algorithm (ex. -m 3 )
         1: Runge-Kutta
@@ -227,17 +227,17 @@
   with the one from SBML test cases.
 
     % ./runall.sh
-    00001: 5 : 50 : [S1,S2] : [S1,S2] : [S1,S2]
+    00001: 5 : 50 : [S1,S2] : [S1,S2] : [S1,S2] : 1e-16 : 1e-10
       print amount
-      time:5 step:50 dt:0.000024
+      time:5 step:50 dt:0.100000
       Model 00001 ... [OK]
-    00002: 5.0 : 50 : [S1,S2] : [S1,S2] : [S1,S2]
+    00002: 5.0 : 50 : [S1,S2] : [S1,S2] : [S1,S2] : 1e-16 : 1e-10
       print amount
-      time:5 step:50 dt:0.000024
+      time:5 step:50 dt:0.100000
       Model 00002 ... [OK]
-    00003: 5.0 : 50 : [S1,S2] : [S1,S2] : [S1,S2]
+    00003: 5.0 : 50 : [S1,S2] : [S1,S2] : [S1,S2] : 1e-16 : 1e-10
       print amount
-      time:5 step:50 dt:0.000024
+      time:5 step:50 dt:0.100000
       Model 00003 ... [OK]
 
   If the simulation result doesn't match with the one from
