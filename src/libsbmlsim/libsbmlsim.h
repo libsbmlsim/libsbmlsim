@@ -504,13 +504,11 @@ double approximate_delay_linearly(double* stack, int pos, double** delay_preserv
 double approximate_printresult_linearly(double value, double temp_value, double value_time, double tempvalue_time, double fixed_time);
 
 /* reallocate objects (for variable step-size)*/
-void reallocate_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, myRule *rule[], myEvent *ev[], unsigned int num_of_events, myInitialAssignment *myInitAssign[], timeVariantAssignments **timeVarAssign, copied_AST *cp_AST, double sim_time, int max_index);
+void realloc_mySBML_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_species, myParameter *param[], unsigned int num_of_parameters, myCompartment *comp[], unsigned int num_of_compartments, myReaction *re[], unsigned int num_of_reactions, myRule *rule[], myEvent *ev[], unsigned int num_of_events, myInitialAssignment *myInitAssign[], timeVariantAssignments **timeVarAssign, copied_AST *cp_AST, double sim_time, int max_index);
 
 unsigned int connect_delayval_with_eq(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, int index);
 
 void reallocate_result_objects(myResult* res, double** value_time_p_fordelay, unsigned  int max_result_index);
-
-int include_time(ASTNode_t *node, int flag);
 
 
 /** math_functions.c **/

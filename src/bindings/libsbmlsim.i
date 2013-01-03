@@ -58,7 +58,7 @@ typedef int BOOLEAN;
 #endif
 
 /* %include "src/libsbmlsim/myResult.h" */
-typedef struct _myResult {
+typedef struct myResult {
   LibsbmlsimErrorCode error_code;
 %immutable;
   char *error_message;

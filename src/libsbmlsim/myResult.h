@@ -16,9 +16,7 @@
 
 #include "errorcodes.h"
 
-typedef struct _myResult myResult;
-
-struct _myResult{
+typedef struct myResult{
   LibsbmlsimErrorCode error_code;
   const char *error_message;
   int num_of_rows;
@@ -36,6 +34,6 @@ struct _myResult{
 	/* new code*/
   double* values_time_fordelay;
   int num_of_delay_rows;
-};
+} myResult;
 
 #endif /* LibSBMLSim_MyResult_h */
