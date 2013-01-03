@@ -11,7 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 void recursive_calc_event(myEvent *event[], unsigned int num_of_events, myEvent *event_buf[], unsigned int *num_of_remained_events, double *assignment_values_from_trigger_time[], double dt, double time, int cycle, double *reverse_time){
   unsigned int i, j, k;

@@ -11,7 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 /* 
  * A = N*N (matrix).

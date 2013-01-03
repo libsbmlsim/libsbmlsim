@@ -11,7 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 void calc_k(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, myReaction *re[], unsigned int re_num, myRule *rule[], unsigned int rule_num, int cycle, double dt, double *reverse_time, int use_rk, int call_first_time_in_cycle){
   unsigned int i, j;

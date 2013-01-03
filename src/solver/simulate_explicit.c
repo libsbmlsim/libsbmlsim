@@ -12,7 +12,7 @@
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
 #include <time.h>
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 /* coefficient matrix for Adams Bashforth */
 double c_e[4][4] = {{1.0, 0, 0, 0}, /* AB1 (Euler) : order = 0 */
@@ -870,7 +870,7 @@ myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myPa
   while(1) {
 	  /* if necessary, reallocate objects */
 	  if (cycle >= max_index && *(err_zero_flag) == 0) {
-		  reallocate_objects(m, sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, rule, event, num_of_events, initAssign, &timeVarAssign, cp_AST, sim_time, max_index);
+		  realloc_mySBML_objects(m, sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, rule, event, num_of_events, initAssign, &timeVarAssign, cp_AST, sim_time, max_index);
 		  max_index = (max_index - 1) * 2 + 1;
 	  }
 	  /* if necessary, reallocate result contents */

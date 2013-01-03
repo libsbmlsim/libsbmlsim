@@ -11,7 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 void calc_temp_value(mySpecies *sp[], unsigned int sp_num, myParameter *param[], unsigned int param_num, myCompartment *comp[], unsigned int comp_num, mySpeciesReference *spr[], unsigned int spr_num, double dt, int use_rk){
   unsigned int i, j;

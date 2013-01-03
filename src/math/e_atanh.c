@@ -10,7 +10,7 @@
  *
  */
 
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 double my_atanh(double x) {
 #if defined(_MSC_VER) || defined(__STRICT_ANSI__)

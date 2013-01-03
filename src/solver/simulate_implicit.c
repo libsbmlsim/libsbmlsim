@@ -12,7 +12,7 @@
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
 #include <time.h>
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 /* coefficient matrix for implicit numerical integration */
 int c_i[7][9] = {{1, -1, 0, 0, 0, -1, 0, 0, 0}, /* AM1 & AM2 (Backward-Euler) : orcer = 0 */

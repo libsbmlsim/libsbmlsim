@@ -11,9 +11,9 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
-int list_has_element(char *list[], int list_length, char *element){
+static int list_has_element(char *list[], int list_length, char *element){
   int i;
   int flag = 0;
   for(i=0; i<list_length; i++){

@@ -8,7 +8,7 @@
  * is preserved.
  * ====================================================
  */
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 /* double s_log1p(double x)
  *

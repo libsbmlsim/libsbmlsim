@@ -11,7 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
 double approximate_delay_linearly(double* stack, int pos, double** delay_preserver, double* time, int rk_order, myResult* res, int cycle, int print_interval, int* err_zero_flag) {
 	int i;

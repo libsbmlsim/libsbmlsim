@@ -11,16 +11,12 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
-void chomp(char *str)
-{
-  size_t pos = strlen(str);
-  while (pos--) {
-    if (str[pos] == '\n' || str[pos] == '\r')
-      str[pos] = '\0';
-    else
-      break;
-  }
+int my_isnan(double x) {
+#if defined(_MSC_VER)
+  return _isnan(x);
+#else
+  return isnan(x);
+#endif
 }
-

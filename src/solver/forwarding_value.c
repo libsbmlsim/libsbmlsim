@@ -11,34 +11,20 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include <time.h>
-#include "libsbmlsim/libsbmlsim.h"
+#include "../libsbmlsim/libsbmlsim.h"
 
-int get_end_cycle(double sim_time, double dt) {
-  int r = (int)(sim_time / dt + 0.5);
-  return r;
-}
-
-void set_seed(void){
-  srand((unsigned)time(NULL));
-}
-
-time_t my_time(time_t* tloc) {
-  return time(tloc);
-}
-
-char* dupstr(const char *str)
-{
-  char *copy = NULL;
-  if (str) {
-    copy = malloc(strlen(str)+1);
-    if (copy) {
-#ifdef _MSC_VER
-      strcpy_s(copy, strlen(str)+1, str);
-#else
-      strcpy(copy, str);
-#endif
-    }
+void forwarding_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num){
+  int i;
+  for(i=0; i<sp_num; i++){
+    sp[i]->value = sp[i]->temp_value;
   }
-  return copy;
+  for(i=0; i<param_num; i++){
+    param[i]->value = param[i]->temp_value;
+  }
+  for(i=0; i<comp_num; i++){
+    comp[i]->value = comp[i]->temp_value;
+  }
+  for(i=0; i<spr_num; i++){
+    spr[i]->value = spr[i]->temp_value;
+  }  
 }
