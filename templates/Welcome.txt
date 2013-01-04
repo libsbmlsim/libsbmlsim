@@ -1,0 +1,5 @@
+Welcome to installation.
+This program will guide you through the installation of LibSBMLSim: The library for simulating SBML models.
+LibSBMLSim will be installed to /usr/local .
+Please see our README file in the next window for further information.
+The README file will be installed to /usr/local/share/libsbmlsim/README.txt.
