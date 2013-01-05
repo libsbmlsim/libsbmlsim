@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Fri, 04 Jan 2013 04:37:13 +0900
+-- Last modified: Sun, 06 Jan 2013 04:47:34 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -59,18 +59,19 @@
     by default.
 
   = MacOSX (64bit)
-    Download libSBMLSim Installer for MacOSX (libsbmlsim-1.1.0-Darwin.dmg) and
-    double-click the .dmg file. You will see libsbmlsim-1.1.0-Darwin.pkg in a
-    Finder window. Double-click the installer (libsbmlsim-1.1.0-Darwin.pkg)
-    and follow the instructions. It will install libSBMLSim to /usr/local .
+    Download libSBMLSim Installer archive for MacOSX
+    (libsbmlsim-1.1.0-macosx-lion-x64.dmg) and double-click the .dmg file.
+    You will see an installer (libsbmlsim-1.1.0-macosx-lion-x64.pkg) in a
+    Finder window. Double-click the installer and follow the instructions.
+    It will install libSBMLSim to /usr/local .
 
-  = Linux  (64bit)
-    Download libsbmlsim-1.1.0-Linux.tar.gz, and extract with the following
+  = Linux (64bit)
+    Download libsbmlsim-1.1.0_amd64.deb, and install with the following
     command in your terminal.
-      $ cd /usr/local
-      $ sudo tar xvzf libsbmlsim-1.1.0-Linux.tar.gz
-    It will extract libSBMLSim to /usr/local .
+      $ sudo dpkg -i libsbmlsim-1.1.0_amd64.deb
+    It will install libSBMLSim to /usr .
 
+* Compile and Install from source code.
 - Required software packages to compile libSBMLSim
   CMake(*2) is required to compile libSBMLSim. Please download
   and install CMake-2.8.7 or above from (*2) before building libSBMLSim.
@@ -111,8 +112,9 @@
 
      Once you press [c] key, cmake will run the configure procedure
      and tries to detect SWIG, Java, Python, C# and Ruby (depending on
-     which language bindings you enabled). Once the configuration
-     is done, press [g] key and cmake will generate Makefile.
+     which language bindings you enabled). Hit [c] several times to
+     complete configuration. Once the configuration is done, 
+     press [g] key and cmake will generate Makefile.
      After Makefile is generated, just run
 
    % make
@@ -123,6 +125,8 @@
        - /usr/local                  ... on Linux and MacOSX
        - C:\Program Files\libsbmlsim ... on Windows
      (Note: You can change the prefix from the UI of ccmake)
+     Also, you can create binary installer by following command.
+   % make package
 
 - Installed files
   Following files are installed on your system.

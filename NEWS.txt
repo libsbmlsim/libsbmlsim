@@ -1,6 +1,6 @@
            libSBMLSim NEWS -- History of user-visible changes
 
-- Last modified: Wed, 02 Jan 2013 23:21:00 +0900
+- Last modified: Sun, 06 Jan 2013 04:48:32 +0900
 
 ======================================================================
 Version 1.1.0 (2013-01-08)
@@ -18,6 +18,8 @@ Version 1.1.0 (2013-01-08)
     examples/csharp/Test.cs for the sample code.
     
   - Both 32bit(x86) and 64bit(x86_64) build for Windows are available.
+  
+  - Binary Installer is available for Windows, MacOSX and Linux.
 
 * Bug fixes
 
