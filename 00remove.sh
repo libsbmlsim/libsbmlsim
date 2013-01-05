@@ -3,9 +3,8 @@
 # ./00remove.sh
 # rm 00remove.sh
 rm -rf **/CVS
-rm -rf bindings diff simulation_results
+rm -rf bindings diff simulation_results templates
 rm -f l?v*
-rm -f header.txt
 rm -f src/ev_func_piece.xml
 rm -f src/Makefile.dist
 rm -f src/bindings/java/build_java.sh
