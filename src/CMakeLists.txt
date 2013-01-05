@@ -173,6 +173,20 @@ SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSIO
 SET(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.txt")
 SET(CPACK_RESOURCE_FILE_WELCOME "${PROJECT_SOURCE_DIR}/templates/Welcome.txt")
 
+# for Source code archive
+SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP") 
+#SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY "1")
+#SET(CPACK_SOURCE_TOPLEVEL_TAG "Source") 
+#SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;\\\\.DS_Store;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;.*~;/templates/;/diff/;/simulation_results/;/bindings/;^l?v*;build_.*\\\\.sh;depend-.*\\\\.zip;ev_func_piece\\\\.xml") 
+SET(CPACK_SOURCE_IGNORE_FILES 
+  "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
+  "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/;/templates/"
+  "testcases/simulateSBML"
+  "build_csharp\\\\.sh;build_java\\\\.sh;build_python\\\\.sh;depend-.*\\\\.zip;result\\\\.zip"
+  "Makefile\\\\.dist;ev_func_piece\\\\.xml;00remove\\\\.sh"
+)
+
 # 32bit or 64bit
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
   SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
@@ -196,7 +210,7 @@ IF(WIN32 AND NOT UNIX)
   SET(CPACK_NSIS_CONTACT "sbmlsim@fun.bio.keio.ac.jp")
   SET(CPACK_NSIS_MODIFY_PATH ON)
 ELSE(WIN32 AND NOT UNIX)
-  SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
+  #  SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
   SET(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
   SET(CPACK_SET_DESTDIR "ON")
   SET(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_VERSION}-${PACKAGE_ARCH_EXT})
