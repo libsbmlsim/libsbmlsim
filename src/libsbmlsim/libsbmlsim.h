@@ -46,8 +46,20 @@ extern "C" {
 #include "common.h"
 #include "methods.h"
 #include "errorcodes.h"
-#include "myResult.h"
+#include "boolean.h"
 #include "version.h"
+
+#include "typedefs.h"
+#include "equation.h"
+#include "myResult.h"
+#include "mySpecies.h"
+#include "mySpeciesReference.h"
+#include "myParameter.h"
+#include "myCompartment.h"
+#include "myReaction.h"
+#include "myEvent.h"
+#include "myEventAssignment.h"
+#include "myRule.h"
 
 #define DSFMT_MEXP 19937
 #include "dSFMT-params19937.h"
@@ -55,154 +67,10 @@ extern "C" {
 #include "dSFMT-params.h"
 
 
-/* Boolean */
-#define true 1
-#define false 0
-#ifdef boolean
-#undef boolean
-#endif
-#define boolean int
-/*
-typedef enum _boolean { false, true } boolean;
-*/
-
-/* structures for efficient simulation */
-typedef struct _equation equation;
-typedef struct _mySpecies mySpecies;
-typedef struct _mySpeciesReference mySpeciesReference;
-typedef struct _myParameter myParameter;
-typedef struct _myCompartment myCompartment;
-typedef struct _myReaction myReaction;
-typedef struct _myRule myRule;
-typedef struct _timeVariantAssignments timeVariantAssignments;
-typedef struct _myEvent myEvent;
-typedef struct _myEventAssignment myEventAssignment;
-typedef struct _myDelay myDelay;
-typedef struct _myInitialAssignment myInitialAssignment;
-typedef struct _myASTNode myASTNode;
-typedef struct _myAlgebraicEquations myAlgebraicEquations;
-typedef struct _myAlgTargetSp myAlgTargetSp;
-typedef struct _myAlgTargetParam myAlgTargetParam;
-typedef struct _myAlgTargetComp myAlgTargetComp;
-typedef struct _allocated_memory allocated_memory;
-typedef struct _copied_AST copied_AST;
-
-struct _equation{
-  double *number[MAX_MATH_LENGTH];
-  int op[MAX_MATH_LENGTH];
-  double **delay_number[MAX_MATH_LENGTH];
-  double **delay_comp_size[MAX_MATH_LENGTH];
-  equation *explicit_delay_eq[MAX_MATH_LENGTH];
-  unsigned int math_length;
-  /* new code */
-  boolean time_reverse_flag;
-  double *reverse_time;
-  /* new code end */
-};
-
-struct _mySpecies{
-  Species_t *origin;
-  double value;
-  double temp_value;
-  boolean is_amount;
-  boolean is_concentration;
-  int has_only_substance_units;
-  myCompartment *locating_compartment;
-  double k[6]; /* for runge kutta */
-  double **delay_val;
-  myRule *depending_rule;
-  double prev_val[3]; /* previous values for multistep solution */
-  double prev_k[3]; /* previous values for multistep solution */
-};
-
-struct _mySpeciesReference{
-  mySpecies *mySp;
-  SpeciesReference_t *origin;
-  equation *eq; /* for l2v4 */
-  double value;
-  double temp_value;
-  double k[6]; /* for runge kutta */
-  double **delay_val;
-  myRule *depending_rule;
-  double prev_val[3];
-  double prev_k[3];
-};
-
-struct _myParameter{
-  Parameter_t* origin;
-  double value;
-  double temp_value;
-  double k[6]; /* for runge kutta */
-  double **delay_val;
-  myRule *depending_rule;
-  double prev_val[3]; /* previous values for multistep solution */
-  double prev_k[3]; /* previous values for multistep solution */
-};
-
-struct _myCompartment{
-  Compartment_t* origin;
-  double value; /* compartment "size" value */
-  double temp_value;
-  double k[6]; /* for runge kutta */
-  double **delay_val;
-  myRule *depending_rule;
-  double prev_val[3]; /* previous values for multistep solution */
-  double prev_k[3]; /* previous values for multistep solution */
-  mySpecies *including_species[MAX_INCLUDING_SPECIES];
-  unsigned int num_of_including_species;
-};
-
-struct _myReaction{
-  Reaction_t *origin;
-  equation *eq;
-  mySpeciesReference **products;
-  unsigned int num_of_products;
-  mySpeciesReference **reactants;
-  unsigned int num_of_reactants;
-  boolean is_fast;
-  boolean is_reversible;
-  equation *products_equili_numerator;
-  equation *reactants_equili_numerator;
-};
-
-struct _myRule{
-  Rule_t *origin;
-  equation *eq;
-  mySpecies *target_species;
-  myParameter *target_parameter;
-  myCompartment *target_compartment;
-  mySpeciesReference *target_species_reference;
-  boolean is_rate;
-  boolean is_assignment;
-  boolean is_algebraic;
-};
-
 struct _timeVariantAssignments{
   unsigned int num_of_time_variant_assignments;
   equation *eq[MAX_TIME_VARIANT_ASSIGNMENT];
   char *target_id[MAX_TIME_VARIANT_ASSIGNMENT];
-};
-
-struct _myEvent{
-  Event_t *origin;
-  equation *eq; /* condition equation */
-  myEventAssignment** assignments;
-  boolean is_able_to_fire;
-  myDelay *event_delay;
-  double *firing_times;
-  unsigned int num_of_delayed_events_que;
-  int next_firing_index;
-  boolean is_persistent;
-  equation *priority_eq;
-};
-
-struct _myEventAssignment{
-  EventAssignment_t *origin;
-  equation *eq; /* assignment equation */
-  mySpecies *target_species;
-  myParameter *target_parameter;
-  myCompartment *target_compartment;
-  mySpeciesReference *target_species_reference;
 };
 
 struct _myDelay{

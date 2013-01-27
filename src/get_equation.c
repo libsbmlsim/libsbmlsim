@@ -17,6 +17,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
   unsigned int i, j, k;
   int flag;
   int op;
+  unsigned int delay_val_length;
   const char *name;
   double value;
   ASTNode_t *left, *right, *comp_node;
@@ -39,21 +40,17 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
     for(i=0; i<Model_getNumSpecies(m); i++){
       if(strcmp(name, Species_getId(sp[i]->origin)) == 0){
         /* create delay */
-        if(sp[i]->delay_val == NULL){
-          sp[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
-          for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
-            sp[i]->delay_val[j] = (double*)malloc(sizeof(double)*4);
-          }
+        if (sp[i]->delay_val == NULL) {
+          delay_val_length = (unsigned int)(sim_time / dt + 1);
+          mySpecies_initDelayVal(sp[i], delay_val_length, 4);
         }
         if(comp_node != NULL){
           TRACE(("comp delay creation for species start\n"));
           for(j=0; j<Model_getNumCompartments(m); j++){
             if(strcmp(ASTNode_getName(comp_node), Compartment_getId(comp[j]->origin)) == 0){
-              if(comp[j]->delay_val == NULL){
-                comp[j]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
-                for(k=0; k<(unsigned int)(sim_time/dt+1); k++){
-                  comp[j]->delay_val[k] = (double*)malloc(sizeof(double)*4);
-                }
+              if (comp[j]->delay_val == NULL) {
+                delay_val_length = (unsigned int)(sim_time / dt + 1);
+                myCompartment_initDelayVal(comp[j], delay_val_length, 4);
               }
             }
           }
@@ -100,11 +97,9 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
       for(i=0; i<Model_getNumParameters(m); i++){
         if(strcmp(name, Parameter_getId(param[i]->origin)) == 0){
           /* create delay */
-          if(param[i]->delay_val == NULL){
-            param[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/dt+1));
-            for(j=0; j<(unsigned int)(sim_time/dt+1); j++){
-              param[i]->delay_val[j] = (double*)malloc(sizeof(double)*4);
-            }
+          if (param[i]->delay_val == NULL) {
+            delay_val_length = (unsigned int)(sim_time / dt + 1);
+            myParameter_initDelayVal(param[i], delay_val_length, 4);
           }
           eq->number[index] = NULL;
           eq->op[index] = 0;
@@ -422,6 +417,7 @@ unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParamete
   unsigned int i, j, k;
   int flag;
   int op;
+  unsigned int delay_val_length;
   const char *name;
   double value;
   ASTNode_t *left, *right, *comp_node;
@@ -448,21 +444,17 @@ unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParamete
     for(i=0; i<Model_getNumSpecies(m); i++){
       if(strcmp(name, Species_getId(sp[i]->origin)) == 0){
         /* create delay */
-        if(sp[i]->delay_val == NULL){
-			sp[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/(dt / print_interval) +1));
-			for(j=0; j<(unsigned int)(sim_time/(dt / print_interval) +1); j++){
-            sp[i]->delay_val[j] = (double*)malloc(sizeof(double)*6);
-          }
+        if (sp[i]->delay_val == NULL) {
+          delay_val_length = (unsigned int)(sim_time / (dt / print_interval) + 1);
+          mySpecies_initDelayVal(sp[i], delay_val_length, 6);
         }
         if(comp_node != NULL){
           TRACE(("comp delay creation for species start\n"));
           for(j=0; j<Model_getNumCompartments(m); j++){
             if(strcmp(ASTNode_getName(comp_node), Compartment_getId(comp[j]->origin)) == 0){
-              if(comp[j]->delay_val == NULL){
-                comp[j]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/(dt / print_interval) +1));
-                for(k=0; k<(unsigned int)(sim_time/(dt / print_interval) +1); k++){
-                  comp[j]->delay_val[k] = (double*)malloc(sizeof(double)*6);
-                }
+              if (comp[j]->delay_val == NULL) {
+                delay_val_length = (unsigned int)(sim_time / (dt / print_interval) + 1);
+                myCompartment_initDelayVal(comp[j], delay_val_length, 6);
               }
             }
           }
@@ -509,11 +501,9 @@ unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParamete
       for(i=0; i<Model_getNumParameters(m); i++){
         if(strcmp(name, Parameter_getId(param[i]->origin)) == 0){
           /* create delay */
-          if(param[i]->delay_val == NULL){
-            param[i]->delay_val = (double**)malloc(sizeof(double*)*(unsigned int)(sim_time/(dt / print_interval) +1));
-            for(j=0; j<(unsigned int)(sim_time/(dt / print_interval)+1); j++){
-              param[i]->delay_val[j] = (double*)malloc(sizeof(double)*6);
-            }
+          if (param[i]->delay_val == NULL) {
+            delay_val_length = (unsigned int)(sim_time / (dt / print_interval) + 1);
+            myParameter_initDelayVal(param[i], delay_val_length, 6);
           }
           eq->number[index] = NULL;
           eq->op[index] = 0;

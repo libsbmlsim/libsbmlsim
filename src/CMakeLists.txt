@@ -21,9 +21,15 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/count_ode.c
   ${PROJECT_SOURCE_DIR}/src/dSFMT.c
   ${PROJECT_SOURCE_DIR}/src/ev_alter_tree_structure.c
+  ${PROJECT_SOURCE_DIR}/src/equation.c
   ${PROJECT_SOURCE_DIR}/src/get_equation.c
   ${PROJECT_SOURCE_DIR}/src/myASTNode.c
+  ${PROJECT_SOURCE_DIR}/src/myCompartment.c
+  ${PROJECT_SOURCE_DIR}/src/myParameter.c
+  ${PROJECT_SOURCE_DIR}/src/myReaction.c
   ${PROJECT_SOURCE_DIR}/src/myResult.c
+  ${PROJECT_SOURCE_DIR}/src/mySpecies.c
+  ${PROJECT_SOURCE_DIR}/src/mySpeciesReference.c
   ${PROJECT_SOURCE_DIR}/src/mySBML_objects.c
   ${PROJECT_SOURCE_DIR}/src/output_result.c
   ${PROJECT_SOURCE_DIR}/src/prepare_algebraic.c
