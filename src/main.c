@@ -29,7 +29,7 @@ void usage(char *str) {
   printf(" -n   : do not use lazy method\n");
   printf(" -a   : print Species Value in Amount\n");
   printf(" -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])\n");
-  printf(" -R # : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-04])\n");
+  printf(" -R # : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])\n");
   printf(" -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
   printf(" -B   : use bifurcation analysis \n");
   printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
