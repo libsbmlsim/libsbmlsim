@@ -412,7 +412,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   }
   /* free */
   if (use_bifurcation_analysis == 0 || (use_bifurcation_analysis == 1 && bif_param_is_local == false)) {
-	  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+	  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
   }
 
   if (rtn == NULL)
@@ -651,7 +651,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   }
   /* free */
   if (use_bifurcation_analysis == 0 || (use_bifurcation_analysis == 1 && bif_param_is_local == false)) {
-  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
   }
   if (rtn == NULL)
     free_myResult(result);

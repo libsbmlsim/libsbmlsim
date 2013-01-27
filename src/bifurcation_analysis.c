@@ -55,7 +55,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print
 		for(a = 0; a < Model_getNumReactions(m); a++) {
 			for(b = 0; b < ListOf_size((ListOf_t*)KineticLaw_getListOfParameters(Reaction_getKineticLaw(myRe[a]->origin))); b++){
 				if (strcmp(bif_param_id, Parameter_getId(KineticLaw_getParameter(Reaction_getKineticLaw(myRe[a]->origin), b))) == 0) {
-					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
 					free_myResult(result);
 					/* mySpecies *mySp[num_of_species]; */
 					mySp = (mySpecies**)malloc(sizeof(mySpecies*) * num_of_species);
@@ -118,7 +118,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print
 					fprintf(BAfp, "%s,%s,%s\n", bif_param_id, sta_var_id, sta_var_id);
 				  }
 				fprintf(BAfp, "%.16g,%.16g,%.16g\n", bif_param_value, local_max, local_min);
-				free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+				free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
 				if (bif_param_value + bif_param_stepsize < bif_param_max) {
 					free_myResult(result);
 				}
@@ -143,7 +143,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print
 				bif_param_value += bif_param_stepsize;
 				create_mySBML_objects_forBA(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST, bif_param_id, bif_param_value);
 				if (bif_param_value > bif_param_max) {
-					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, mem, cp_AST);
+					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
 				}
 			}
 		}

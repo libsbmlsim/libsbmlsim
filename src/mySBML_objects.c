@@ -1704,7 +1704,7 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
   }
 }
 
-void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, allocated_memory *mem, copied_AST *cp_AST){
+void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
   unsigned int i, j;
 
   for (i = 0; i < Model_getNumSpecies(m); i++) {
