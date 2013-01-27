@@ -11,19 +11,19 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/equation.h"
-#include <stdlib.h>
+#ifndef LibSBMLSim_CopiedAST_h
+#define LibSBMLSim_CopiedAST_h
+
+#include "typedefs.h"
+#include "common.h"
 #include <sbml/SBMLTypes.h>
 
-equation *equation_create() {
-  equation *ret = (equation *)malloc(sizeof(equation));
-  ret->math_length = 0;
-  return ret;
-}
+struct _copied_AST {
+  ASTNode_t *ast[MAX_COPIED_AST];
+  unsigned int num_of_copied_AST;
+};
 
-void equation_free(equation *eq) {
-  if (eq == NULL) {
-    return;
-  }
-  free(eq);
-}
+copied_AST *copied_AST_create();
+void copied_AST_free(copied_AST *ast);
+
+#endif /* LibSBMLSim_CopiedAST_h */

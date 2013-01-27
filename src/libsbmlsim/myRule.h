@@ -35,4 +35,22 @@ struct _myRule {
   boolean is_algebraic;
 };
 
+myRule *myRule_create();
+void myRule_initWithModel(myRule *rule, Model_t *model, int index);
+void myRule_free(myRule *rule);
+
+void myRule_initTarget(
+    myRule *rule,
+    mySpecies **species, unsigned int num_of_species,
+    myParameter **parameters, unsigned int num_of_parameters,
+    myCompartment **compartments, unsigned int num_of_compartments,
+    myReaction **reactions, unsigned int num_of_reactions);
+
+Rule_t *myRule_getOrigin(myRule *rule);
+void myRule_setTargetSpecies(myRule *rule, mySpecies *species);
+void myRule_setTargetParameter(myRule *rule, myParameter *parameter);
+void myRule_setTargetCompartment(myRule *rule, myCompartment *compartment);
+void myRule_setTargetSpeciesReference(myRule *rule, mySpeciesReference *ref);
+equation *myRule_getEquation(myRule *rule);
+
 #endif /* LibSBMLSim_MyRule_h */

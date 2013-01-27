@@ -18,12 +18,16 @@ static int include_time(ASTNode_t *node, int flag);
 static void locate_species_in_compartment(
     mySpecies **species, int num_of_species,
     myCompartment **compartments, int num_of_compartments);
+static void create_species(mySpecies *species[], Model_t *model);
+static void create_parameters(myParameter *parameters[], Model_t *model);
+static void create_compartments(myCompartment *compartments[], Model_t *model);
+static void create_reactions(myReaction *reactions[], mySpecies *species[], Model_t *model);
 /*********************/
 
 
 /* create my SBML obejects for efficient simulations */
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST){
-  unsigned int i, j, k, l;
+  unsigned int i, j;
   int flag;
   /* num of each objects */
   unsigned int num_of_species = Model_getNumSpecies(m);
@@ -43,99 +47,33 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   Rule_t *rule;
   ASTNode_t *times_node, *conv_factor_node;
   Event_t *event;
+  Delay_t *delay;
 
-  const char *product_id, *reactant_id;
-  mySpeciesReference *mySpRef;
+  myEventAssignment *myEvAssign;
+  myDelay *evDelay;
   myAlgebraicEquations *algEq;
   char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
-  /* create mySpecies */
-  for (i = 0; i < num_of_species; i++) {
-    mySp[i] = mySpecies_create();
-    mySpecies_initWithModel(mySp[i], m, i);
-  }
-
-  /* create myParameters */
-  for (i = 0; i < num_of_parameters; i++) {
-    myParam[i] = myParameter_create();
-    myParameter_initWithModel(myParam[i], m, i);
-  }
-
-  /* create myCompartment */
-  for (i = 0; i < num_of_compartments; i++) {
-    myComp[i] = myCompartment_create();
-    myCompartment_initWithModel(myComp[i], m, i);
-  }
+  /* create mySpecies, myParameters, myCompartments */
+  create_species(mySp, m);
+  create_parameters(myParam, m);
+  create_compartments(myComp, m);
 
   /* determine species locating compartment */
   locate_species_in_compartment(mySp, num_of_species, myComp, num_of_compartments);
 
   /* create myReaction & mySpeciseReference without equation */
-  for (i = 0; i < num_of_reactions; i++) {
-    myRe[i] = myReaction_create();
-    myReaction_initWithModel(myRe[i], m, i);
-    /* products start */
-    for (j = 0; j < Reaction_getNumProducts(myRe[i]->origin); j++) {
-      product_id = SpeciesReference_getSpecies(Reaction_getProduct(myRe[i]->origin, j));
-      for (k = 0; k < num_of_species; k++) {
-        if (strcmp(product_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsProduct(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addProduct(myRe[i], mySpRef);
-        }
-      }
-    }/* products fin */
-    /* reactants start */
-    for (j = 0; j < Reaction_getNumReactants(myRe[i]->origin); j++) {
-      reactant_id = SpeciesReference_getSpecies(Reaction_getReactant(myRe[i]->origin, j));
-      for (k = 0; k<num_of_species; k++) {
-        if (strcmp(reactant_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsReactant(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addReactant(myRe[i], mySpRef);
-        }
-      }
-    }/* reactants fin */
-  }
+  create_reactions(myRe, mySp, m);
 
   /* create myInitialAssignments */
   num_of_time_variant_targets = 0;
-  for(i=0; i<num_of_initialAssignments; i++){
-    initAssign = (InitialAssignment_t*)ListOf_get(Model_getListOfInitialAssignments(m), i);
-    myInitAssign[i] = (myInitialAssignment*)malloc(sizeof(myInitialAssignment));
-    myInitAssign[i]->origin = initAssign;
-    myInitAssign[i]->target_species = NULL;
-    myInitAssign[i]->target_parameter = NULL;
-    myInitAssign[i]->target_compartment = NULL;
-    myInitAssign[i]->target_species_reference = NULL;
-    flag = 1;
-    for(j=0; j<num_of_species; j++){
-      if(strcmp(InitialAssignment_getSymbol(initAssign), Species_getId(mySp[j]->origin)) == 0){
-        myInitAssign[i]->target_species = mySp[j];
-        flag = 0;
-        break;
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_parameters; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Parameter_getId(myParam[j]->origin)) == 0){
-          myInitAssign[i]->target_parameter = myParam[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_compartments; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Compartment_getId(myComp[j]->origin)) == 0){
-          myInitAssign[i]->target_compartment = myComp[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
+  for (i = 0; i < num_of_initialAssignments; i++) {
+    myInitAssign[i] = myInitialAssignment_create();
+    myInitialAssignment_initWithModel(myInitAssign[i], m, i);
+    myInitialAssignment_initTarget(myInitAssign[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments);
+    myInitialAssignment_initTargetSpeciesReference(myInitAssign[i], myRe, num_of_reactions);
+
+    initAssign = myInitialAssignment_getOrigin(myInitAssign[i]);
     node = (ASTNode_t*)InitialAssignment_getMath(initAssign);
     node = ASTNode_deepCopy(node);
     TRACE(("original math : "));
@@ -159,7 +97,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     if(include_time(node, 0)){
       time_variant_target_id[num_of_time_variant_targets++] = (char*)InitialAssignment_getSymbol(initAssign);
     }
-    myInitAssign[i]->eq = equation_create();
     myInitAssign[i]->eq->math_length = get_equation(m, myInitAssign[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem);
     /* ASTNode_free(node); */
     TRACE(("math\n"));
@@ -212,15 +149,12 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     set_local_para_as_value(node, Reaction_getKineticLaw(re));
     TRACE(("alterated math of %s : ", Reaction_getId(myRe[i]->origin)));
     check_AST(node, NULL);
-    myRe[i]->eq = equation_create();
     myRe[i]->eq->math_length = get_equation(m, myRe[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Reaction_getId(myRe[i]->origin)));
     check_math(myRe[i]->eq);
     /* products start */
     for(j=0; j<myRe[i]->num_of_products; j++){
-      myRe[i]->products[j]->eq = equation_create();
-      myRe[i]->products[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->products[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -301,8 +235,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     /* reactants start */
     for(j=0; j<myRe[i]->num_of_reactants; j++){
       myRe[i]->reactants[j]->depending_rule = NULL;
-      myRe[i]->reactants[j]->eq = equation_create();
-      myRe[i]->reactants[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->reactants[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -382,111 +314,16 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     }
   }
 
-
-  /* Initial Assignment target_species_reference */
-  for(i=0; i<num_of_initialAssignments; i++){
-    flag = 1;
-    if(flag){
-      for(j=0; j<num_of_reactions; j++){
-        for(k=0; k<myRe[j]->num_of_products; k++){
-          if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->products[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-        for(k=0; k<myRe[j]->num_of_reactants; k++){
-          if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->reactants[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-      }
-    }
-  }
-
   /* prepare reversible fast reaction */
   prepare_reversible_fast_reaction(m, myRe, mySp, myParam, myComp, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, cp_AST);
 
   /* create myRules */
-  for(i=0; i<num_of_rules; i++){
-    rule = (Rule_t*)ListOf_get(Model_getListOfRules(m), i);
-    myRu[i] = (myRule*)malloc(sizeof(myRule));
-    myRu[i]->origin = rule;
-    myRu[i]->target_species = NULL;
-    myRu[i]->target_parameter = NULL;
-    myRu[i]->target_compartment = NULL;
-    myRu[i]->target_species_reference = NULL;
-    myRu[i]->is_rate = Rule_isRate(rule);
-    myRu[i]->is_assignment = Rule_isAssignment(rule);
-    myRu[i]->is_algebraic = Rule_isAlgebraic(rule);
-    if(Rule_isRate(rule) || Rule_isAssignment(rule)){
-      flag = 1;
-      for(j=0; j<num_of_species; j++){
-        if(strcmp(Rule_getVariable(rule), Species_getId(mySp[j]->origin)) == 0){
-          myRu[i]->target_species = mySp[j];
-          mySp[j]->depending_rule = myRu[i];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_parameters; j++){
-          if(strcmp(Rule_getVariable(rule), Parameter_getId(myParam[j]->origin)) == 0){
-            myRu[i]->target_parameter = myParam[j];
-            myParam[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_compartments; j++){
-          if(strcmp(Rule_getVariable(rule), Compartment_getId(myComp[j]->origin)) == 0){
-            myRu[i]->target_compartment = myComp[j];
-            myComp[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_reactions; j++){
-          for(k=0; k<myRe[j]->num_of_products; k++){
-            if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->products[k];
-              myRe[j]->products[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(k=0; k<myRe[j]->num_of_reactants; k++){
-            if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->reactants[k];
-              myRe[j]->reactants[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+  for (i = 0; i < num_of_rules; i++) {
+    myRu[i] = myRule_create();
+    myRule_initWithModel(myRu[i], m, i);
+    rule = myRule_getOrigin(myRu[i]);
+    if (Rule_isRate(rule) || Rule_isAssignment(rule)) {
+      myRule_initTarget(myRu[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
       node = (ASTNode_t*)Rule_getMath(rule);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -506,102 +343,36 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myRu[i]->eq = equation_create();
       myRu[i]->eq->math_length = get_equation(m, myRu[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
-      check_math(myRu[i]->eq);
+      check_math(myRule_getEquation(myRu[i]));
     }
   }
 
   /* create myEvents & myEventAssignments */
-  for(i=0; i<num_of_events; i++){
-    event = (Event_t*)ListOf_get(Model_getListOfEvents(m), i);
-    myEv[i] = (myEvent*)malloc(sizeof(myEvent));
-    myEv[i]->origin = event;
-    if(Trigger_isSetPersistent(Event_getTrigger(event))){
-      myEv[i]->is_persistent = Trigger_getPersistent(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_persistent = true;
-    }
+  for (i = 0; i < num_of_events; i++) {
+    myEv[i] = myEvent_create();
+    myEvent_initWithModel(myEv[i], m, i);
+    event = myEvent_getOrigin(myEv[i]);
     node = (ASTNode_t*)Trigger_getMath(Event_getTrigger(event));
     node = ASTNode_deepCopy(node);
     TRACE(("original math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
-    myEv[i]->eq = equation_create();
     myEv[i]->eq->math_length = get_equation(m, myEv[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     TRACE(("altered math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Event_getId(myEv[i]->origin)));
     check_math(myEv[i]->eq);
-    if(Trigger_isSetInitialValue(Event_getTrigger(event))){
-      myEv[i]->is_able_to_fire = !Trigger_getInitialValue(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_able_to_fire = true;
-    }
     myEv[i]->assignments = (myEventAssignment**)malloc(sizeof(myEventAssignment*)*Event_getNumEventAssignments(event));
-    for(j=0; j<Event_getNumEventAssignments(event); j++){
-      myEv[i]->assignments[j] = (myEventAssignment*)malloc(sizeof(myEventAssignment));
-      myEv[i]->assignments[j]->origin = (EventAssignment_t*)ListOf_get(Event_getListOfEventAssignments(event), j);
-      myEv[i]->assignments[j]->target_species = NULL;
-      myEv[i]->assignments[j]->target_parameter = NULL;
-      myEv[i]->assignments[j]->target_compartment = NULL;
-      myEv[i]->assignments[j]->target_species_reference = NULL;
-      flag = 1;
-      for(k=0; k<num_of_species; k++){
-        if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Species_getId(mySp[k]->origin)) == 0){
-          myEv[i]->assignments[j]->target_species = mySp[k];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_parameters; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Parameter_getId(myParam[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_parameter = myParam[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_compartments; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Compartment_getId(myComp[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_compartment = myComp[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_reactions; k++){
-          for(l=0; l<myRe[k]->num_of_products; l++){
-            if(SpeciesReference_isSetId(myRe[k]->products[l]->origin) 
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->products[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->products[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(l=0; l<myRe[k]->num_of_reactants; l++){
-            if(SpeciesReference_isSetId(myRe[k]->reactants[l]->origin) 
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->reactants[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->reactants[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+    for (j = 0; j < Event_getNumEventAssignments(event); j++) {
+      myEvAssign = myEventAssignment_create();
+      myEventAssignment_initWithEvent(myEvAssign, event, j);
+      myEventAssignment_initTarget(myEvAssign, mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
+      myEv[i]->assignments[j] = myEvAssign;
       node = (ASTNode_t*)EventAssignment_getMath(myEv[i]->assignments[j]->origin);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -633,23 +404,28 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myEv[i]->assignments[j]->eq = equation_create();
       myEv[i]->assignments[j]->eq->math_length = get_equation(m, myEv[i]->assignments[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
       check_math(myEv[i]->assignments[j]->eq);
     }
-    myEv[i]->event_delay = NULL;
-    if(Event_getDelay(event) != NULL){
+    //myEv[i]->event_delay = NULL;
+    delay = Event_getDelay(event);
+    if (delay != NULL) {
+      evDelay = myDelay_create();
+      myDelay_initWithOrigin(evDelay, delay);
+      myEv[i]->event_delay = evDelay;
+      /*
       myEv[i]->event_delay = (myDelay*)malloc(sizeof(myDelay));
       myEv[i]->event_delay->origin = Event_getDelay(event);
-      node = (ASTNode_t*)Delay_getMath(myEv[i]->event_delay->origin);
+      */
+      node = (ASTNode_t *)Delay_getMath(delay);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
       check_AST(node, NULL);
       /* alter_tree_structure(m, &node, cp_AST); */
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      myEv[i]->event_delay->eq = equation_create();
+      //myEv[i]->event_delay->eq = equation_create();
       myEv[i]->event_delay->eq->math_length = get_equation(m, myEv[i]->event_delay->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       TRACE(("altered math : "));
       check_AST(node, NULL);
@@ -663,7 +439,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       myEv[i]->num_of_delayed_events_que = 0;
       myEv[i]->next_firing_index = 0;
     }
-    myEv[i]->priority_eq = NULL;
+    //myEv[i]->priority_eq = NULL;
     if(Event_isSetPriority(myEv[i]->origin)){
       myEv[i]->priority_eq = equation_create();
       node = (ASTNode_t*)Priority_getMath(Event_getPriority(myEv[i]->origin));
@@ -812,7 +588,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
 
 /* create my SBML obejects for efficient simulations (for bifurcation analysis, instructions on local parameter in Kinetic Law are a little changed)*/
 void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, char* bif_param_id, double bif_param_value){
-  unsigned int i, j, k, l;
+  unsigned int i, j;
   int flag;
   /* num of each objects */
   unsigned int num_of_species = Model_getNumSpecies(m);
@@ -833,98 +609,30 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
   ASTNode_t *times_node, *conv_factor_node;
   Event_t *event;
 
-  const char *product_id, *reactant_id;
-  mySpeciesReference *mySpRef;
+  myEventAssignment *myEvAssign;
   myAlgebraicEquations *algEq;
   char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
-  /* create mySpecies */
-  for (i = 0; i < num_of_species; i++) {
-    mySp[i] = mySpecies_create();
-    mySpecies_initWithModel(mySp[i], m, i);
-  }
-
-  /* create myParameters */
-  for (i = 0; i < num_of_parameters; i++) {
-    myParam[i] = myParameter_create();
-    myParameter_initWithModel(myParam[i], m, i);
-  }
-
-  /* create myCompartment */
-  for (i = 0; i < num_of_compartments; i++) {
-    myComp[i] = myCompartment_create();
-    myCompartment_initWithModel(myComp[i], m, i);
-  }
+  /* create mySpecies, myParameters, myCompartments */
+  create_species(mySp, m);
+  create_parameters(myParam, m);
+  create_compartments(myComp, m);
 
   /* determine species locating compartment */
   locate_species_in_compartment(mySp, num_of_species, myComp, num_of_compartments);
 
   /* create myReaction & mySpeciseReference without equation */
-  for (i = 0; i < num_of_reactions; i++) {
-    myRe[i] = myReaction_create();
-    myReaction_initWithModel(myRe[i], m, i);
-    /* products start */
-    for (j = 0; j < Reaction_getNumProducts(myRe[i]->origin); j++) {
-      product_id = SpeciesReference_getSpecies(Reaction_getProduct(myRe[i]->origin, j));
-      for (k = 0; k < num_of_species; k++) {
-        if (strcmp(product_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsProduct(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addProduct(myRe[i], mySpRef);
-        }
-      }
-    }/* products fin */
-    /* reactants start */
-    for (j = 0; j < Reaction_getNumReactants(myRe[i]->origin); j++) {
-      reactant_id = SpeciesReference_getSpecies(Reaction_getReactant(myRe[i]->origin, j));
-      for (k = 0; k<num_of_species; k++) {
-        if (strcmp(reactant_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsReactant(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addReactant(myRe[i], mySpRef);
-        }
-      }
-    }/* reactants fin */
-  }
+  create_reactions(myRe, mySp, m);
 
   /* create myInitialAssignments */
   num_of_time_variant_targets = 0;
-  for(i=0; i<num_of_initialAssignments; i++){
-    initAssign = (InitialAssignment_t*)ListOf_get(Model_getListOfInitialAssignments(m), i);
-    myInitAssign[i] = (myInitialAssignment*)malloc(sizeof(myInitialAssignment));
-    myInitAssign[i]->origin = initAssign;
-    myInitAssign[i]->target_species = NULL;
-    myInitAssign[i]->target_parameter = NULL;
-    myInitAssign[i]->target_compartment = NULL;
-    myInitAssign[i]->target_species_reference = NULL;
-    flag = 1;
-    for(j=0; j<num_of_species; j++){
-      if(strcmp(InitialAssignment_getSymbol(initAssign), Species_getId(mySp[j]->origin)) == 0){
-        myInitAssign[i]->target_species = mySp[j];
-        flag = 0;
-        break;
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_parameters; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Parameter_getId(myParam[j]->origin)) == 0){
-          myInitAssign[i]->target_parameter = myParam[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_compartments; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Compartment_getId(myComp[j]->origin)) == 0){
-          myInitAssign[i]->target_compartment = myComp[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
+  for (i = 0; i < num_of_initialAssignments; i++) {
+    myInitAssign[i] = myInitialAssignment_create();
+    myInitialAssignment_initWithModel(myInitAssign[i], m, i);
+    myInitialAssignment_initTarget(myInitAssign[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments);
+    myInitialAssignment_initTargetSpeciesReference(myInitAssign[i], myRe, num_of_reactions);
+
+    initAssign = myInitialAssignment_getOrigin(myInitAssign[i]);
     node = (ASTNode_t*)InitialAssignment_getMath(initAssign);
     node = ASTNode_deepCopy(node);
     TRACE(("original math : "));
@@ -948,7 +656,6 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
     if(include_time(node, 0)){
       time_variant_target_id[num_of_time_variant_targets++] = (char*)InitialAssignment_getSymbol(initAssign);
     }
-    myInitAssign[i]->eq = equation_create();
     myInitAssign[i]->eq->math_length = get_equation(m, myInitAssign[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem);
     /* ASTNode_free(node); */
     TRACE(("math\n"));
@@ -1001,15 +708,12 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
 	set_local_para_as_value_forBA(node, Reaction_getKineticLaw(re), bif_param_id, bif_param_value);
 	TRACE(("alterated math of %s : ", Reaction_getId(myRe[i]->origin)));
     check_AST(node, NULL);
-    myRe[i]->eq = equation_create();
     myRe[i]->eq->math_length = get_equation(m, myRe[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Reaction_getId(myRe[i]->origin)));
     check_math(myRe[i]->eq);
     /* products start */
     for(j=0; j<myRe[i]->num_of_products; j++){
-      myRe[i]->products[j]->eq = equation_create();
-      myRe[i]->products[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->products[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -1091,8 +795,6 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
     /* reactants start */
     for(j=0; j<myRe[i]->num_of_reactants; j++){
       myRe[i]->reactants[j]->depending_rule = NULL;
-      myRe[i]->reactants[j]->eq = equation_create();
-      myRe[i]->reactants[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->reactants[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -1173,111 +875,16 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
     }
   }
 
-
-  /* Initial Assignment target_species_reference */
-  for(i=0; i<num_of_initialAssignments; i++){
-    flag = 1;
-    if(flag){
-      for(j=0; j<num_of_reactions; j++){
-        for(k=0; k<myRe[j]->num_of_products; k++){
-          if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->products[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-        for(k=0; k<myRe[j]->num_of_reactants; k++){
-          if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->reactants[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-      }
-    }
-  }
-
   /* prepare reversible fast reaction */
   prepare_reversible_fast_reaction(m, myRe, mySp, myParam, myComp, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, cp_AST);
 
   /* create myRules */
   for(i=0; i<num_of_rules; i++){
-    rule = (Rule_t*)ListOf_get(Model_getListOfRules(m), i);
-    myRu[i] = (myRule*)malloc(sizeof(myRule));
-    myRu[i]->origin = rule;
-    myRu[i]->target_species = NULL;
-    myRu[i]->target_parameter = NULL;
-    myRu[i]->target_compartment = NULL;
-    myRu[i]->target_species_reference = NULL;
-    myRu[i]->is_rate = Rule_isRate(rule);
-    myRu[i]->is_assignment = Rule_isAssignment(rule);
-    myRu[i]->is_algebraic = Rule_isAlgebraic(rule);
-    if(Rule_isRate(rule) || Rule_isAssignment(rule)){
-      flag = 1;
-      for(j=0; j<num_of_species; j++){
-        if(strcmp(Rule_getVariable(rule), Species_getId(mySp[j]->origin)) == 0){
-          myRu[i]->target_species = mySp[j];
-          mySp[j]->depending_rule = myRu[i];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_parameters; j++){
-          if(strcmp(Rule_getVariable(rule), Parameter_getId(myParam[j]->origin)) == 0){
-            myRu[i]->target_parameter = myParam[j];
-            myParam[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_compartments; j++){
-          if(strcmp(Rule_getVariable(rule), Compartment_getId(myComp[j]->origin)) == 0){
-            myRu[i]->target_compartment = myComp[j];
-            myComp[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_reactions; j++){
-          for(k=0; k<myRe[j]->num_of_products; k++){
-            if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->products[k];
-              myRe[j]->products[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(k=0; k<myRe[j]->num_of_reactants; k++){
-            if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->reactants[k];
-              myRe[j]->reactants[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+    myRu[i] = myRule_create();
+    myRule_initWithModel(myRu[i], m, i);
+    rule = myRule_getOrigin(myRu[i]);
+    if (Rule_isRate(rule) || Rule_isAssignment(rule)) {
+      myRule_initTarget(myRu[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
       node = (ASTNode_t*)Rule_getMath(rule);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -1297,102 +904,36 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myRu[i]->eq = equation_create();
       myRu[i]->eq->math_length = get_equation(m, myRu[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
-      check_math(myRu[i]->eq);
+      check_math(myRule_getEquation(myRu[i]));
     }
   }
 
   /* create myEvents & myEventAssignments */
-  for(i=0; i<num_of_events; i++){
-    event = (Event_t*)ListOf_get(Model_getListOfEvents(m), i);
-    myEv[i] = (myEvent*)malloc(sizeof(myEvent));
-    myEv[i]->origin = event;
-    if(Trigger_isSetPersistent(Event_getTrigger(event))){
-      myEv[i]->is_persistent = Trigger_getPersistent(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_persistent = true;
-    }
+  for (i = 0; i < num_of_events; i++) {
+    myEv[i] = myEvent_create();
+    myEvent_initWithModel(myEv[i], m, i);
+    event = myEvent_getOrigin(myEv[i]);
     node = (ASTNode_t*)Trigger_getMath(Event_getTrigger(event));
     node = ASTNode_deepCopy(node);
     TRACE(("original math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
-    myEv[i]->eq = equation_create();
     myEv[i]->eq->math_length = get_equation(m, myEv[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
     TRACE(("altered math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Event_getId(myEv[i]->origin)));
     check_math(myEv[i]->eq);
-    if(Trigger_isSetInitialValue(Event_getTrigger(event))){
-      myEv[i]->is_able_to_fire = !Trigger_getInitialValue(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_able_to_fire = true;
-    }
     myEv[i]->assignments = (myEventAssignment**)malloc(sizeof(myEventAssignment*)*Event_getNumEventAssignments(event));
-    for(j=0; j<Event_getNumEventAssignments(event); j++){
-      myEv[i]->assignments[j] = (myEventAssignment*)malloc(sizeof(myEventAssignment));
-      myEv[i]->assignments[j]->origin = (EventAssignment_t*)ListOf_get(Event_getListOfEventAssignments(event), j);
-      myEv[i]->assignments[j]->target_species = NULL;
-      myEv[i]->assignments[j]->target_parameter = NULL;
-      myEv[i]->assignments[j]->target_compartment = NULL;
-      myEv[i]->assignments[j]->target_species_reference = NULL;
-      flag = 1;
-      for(k=0; k<num_of_species; k++){
-        if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Species_getId(mySp[k]->origin)) == 0){
-          myEv[i]->assignments[j]->target_species = mySp[k];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_parameters; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Parameter_getId(myParam[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_parameter = myParam[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_compartments; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Compartment_getId(myComp[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_compartment = myComp[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_reactions; k++){
-          for(l=0; l<myRe[k]->num_of_products; l++){
-            if(SpeciesReference_isSetId(myRe[k]->products[l]->origin) 
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->products[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->products[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(l=0; l<myRe[k]->num_of_reactants; l++){
-            if(SpeciesReference_isSetId(myRe[k]->reactants[l]->origin)
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->reactants[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->reactants[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+    for (j = 0; j < Event_getNumEventAssignments(event); j++) {
+      myEvAssign = myEventAssignment_create();
+      myEventAssignment_initWithEvent(myEvAssign, event, j);
+      myEventAssignment_initTarget(myEvAssign, mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
+      myEv[i]->assignments[j] = myEvAssign;
       node = (ASTNode_t*)EventAssignment_getMath(myEv[i]->assignments[j]->origin);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -1424,7 +965,6 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myEv[i]->assignments[j]->eq = equation_create();
       myEv[i]->assignments[j]->eq->math_length = get_equation(m, myEv[i]->assignments[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
@@ -1603,7 +1143,7 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
 
 /* create my SBML obejects for efficient simulations [variable step-size, allocated memory of delay_val is changed (in get_equation), initialize k(for 6 stage)]*/
 void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, int print_interval){
-  unsigned int i, j, k, l;
+  unsigned int i, j;
   int flag;
   /* num of each objects */
   unsigned int num_of_species = Model_getNumSpecies(m);
@@ -1624,98 +1164,30 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
   ASTNode_t *times_node, *conv_factor_node;
   Event_t *event;
 
-  const char *product_id, *reactant_id;
-  mySpeciesReference *mySpRef;
+  myEventAssignment *myEvAssign;
   myAlgebraicEquations *algEq;
   char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
-  /* create mySpecies */
-  for (i = 0; i < num_of_species; i++) {
-    mySp[i] = mySpecies_create();
-    mySpecies_initWithModel(mySp[i], m, i);
-  }
-
-  /* create myParameters */
-  for (i = 0; i < num_of_parameters; i++) {
-    myParam[i] = myParameter_create();
-    myParameter_initWithModel(myParam[i], m, i);
-  }
-
-  /* create myCompartment */
-  for (i = 0; i < num_of_compartments; i++) {
-    myComp[i] = myCompartment_create();
-    myCompartment_initWithModel(myComp[i], m, i);
-  }
+  /* create mySpecies, myParameters, myCompartments */
+  create_species(mySp, m);
+  create_parameters(myParam, m);
+  create_compartments(myComp, m);
 
   /* determine species locating compartment */
   locate_species_in_compartment(mySp, num_of_species, myComp, num_of_compartments);
 
   /* create myReaction & mySpeciseReference without equation */
-  for (i = 0; i < num_of_reactions; i++) {
-    myRe[i] = myReaction_create();
-    myReaction_initWithModel(myRe[i], m, i);
-    /* products start */
-    for (j = 0; j < Reaction_getNumProducts(myRe[i]->origin); j++) {
-      product_id = SpeciesReference_getSpecies(Reaction_getProduct(myRe[i]->origin, j));
-      for (k = 0; k < num_of_species; k++) {
-        if (strcmp(product_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsProduct(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addProduct(myRe[i], mySpRef);
-        }
-      }
-    }/* products fin */
-    /* reactants start */
-    for (j = 0; j < Reaction_getNumReactants(myRe[i]->origin); j++) {
-      reactant_id = SpeciesReference_getSpecies(Reaction_getReactant(myRe[i]->origin, j));
-      for (k = 0; k<num_of_species; k++) {
-        if (strcmp(reactant_id, Species_getId(mySp[k]->origin)) == 0) {
-          mySpRef = mySpeciesReference_create();
-          mySpeciesReference_initAsReactant(mySpRef, myRe[i], j);
-          mySpeciesReference_setSpecies(mySpRef, mySp[k]);
-          myReaction_addReactant(myRe[i], mySpRef);
-        }
-      }
-    }/* reactants fin */
-  }
+  create_reactions(myRe, mySp, m);
 
   /* create myInitialAssignments */
   num_of_time_variant_targets = 0;
-  for(i=0; i<num_of_initialAssignments; i++){
-    initAssign = (InitialAssignment_t*)ListOf_get(Model_getListOfInitialAssignments(m), i);
-    myInitAssign[i] = (myInitialAssignment*)malloc(sizeof(myInitialAssignment));
-    myInitAssign[i]->origin = initAssign;
-    myInitAssign[i]->target_species = NULL;
-    myInitAssign[i]->target_parameter = NULL;
-    myInitAssign[i]->target_compartment = NULL;
-    myInitAssign[i]->target_species_reference = NULL;
-    flag = 1;
-    for(j=0; j<num_of_species; j++){
-      if(strcmp(InitialAssignment_getSymbol(initAssign), Species_getId(mySp[j]->origin)) == 0){
-        myInitAssign[i]->target_species = mySp[j];
-        flag = 0;
-        break;
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_parameters; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Parameter_getId(myParam[j]->origin)) == 0){
-          myInitAssign[i]->target_parameter = myParam[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
-    if(flag){
-      for(j=0; j<num_of_compartments; j++){
-        if(strcmp(InitialAssignment_getSymbol(initAssign), Compartment_getId(myComp[j]->origin)) == 0){
-          myInitAssign[i]->target_compartment = myComp[j];
-          flag = 0;
-          break;
-        }
-      }
-    }
+  for (i = 0; i < num_of_initialAssignments; i++) {
+    myInitAssign[i] = myInitialAssignment_create();
+    myInitialAssignment_initWithModel(myInitAssign[i], m, i);
+    myInitialAssignment_initTarget(myInitAssign[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments);
+    myInitialAssignment_initTargetSpeciesReference(myInitAssign[i], myRe, num_of_reactions);
+
+    initAssign = myInitialAssignment_getOrigin(myInitAssign[i]);
     node = (ASTNode_t*)InitialAssignment_getMath(initAssign);
     node = ASTNode_deepCopy(node);
     TRACE(("original math : "));
@@ -1739,7 +1211,6 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
     if(include_time(node, 0)){
       time_variant_target_id[num_of_time_variant_targets++] = (char*)InitialAssignment_getSymbol(initAssign);
     }
-    myInitAssign[i]->eq = equation_create();
     myInitAssign[i]->eq->math_length = get_equationf(m, myInitAssign[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL, time_variant_target_id, 0, NULL, mem, print_interval);
     /* ASTNode_free(node); */
     TRACE(("math\n"));
@@ -1792,15 +1263,12 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
 	set_local_para_as_value(node, Reaction_getKineticLaw(re));
 	TRACE(("alterated math of %s : ", Reaction_getId(myRe[i]->origin)));
     check_AST(node, NULL);
-    myRe[i]->eq = equation_create();
     myRe[i]->eq->math_length = get_equationf(m, myRe[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, print_interval);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Reaction_getId(myRe[i]->origin)));
     check_math(myRe[i]->eq);
     /* products start */
     for(j=0; j<myRe[i]->num_of_products; j++){
-      myRe[i]->products[j]->eq = equation_create();
-      myRe[i]->products[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->products[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -1886,8 +1354,6 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
     /* reactants start */
     for(j=0; j<myRe[i]->num_of_reactants; j++){
       myRe[i]->reactants[j]->depending_rule = NULL;
-      myRe[i]->reactants[j]->eq = equation_create();
-      myRe[i]->reactants[j]->eq->math_length = 0;
       node = (ASTNode_t*)StoichiometryMath_getMath(SpeciesReference_getStoichiometryMath(myRe[i]->reactants[j]->origin));
       if(node != NULL){/* l2v4 */
         node = ASTNode_deepCopy(node);
@@ -1972,111 +1438,16 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
     }
   }
 
-
-  /* Initial Assignment target_species_reference */
-  for(i=0; i<num_of_initialAssignments; i++){
-    flag = 1;
-    if(flag){
-      for(j=0; j<num_of_reactions; j++){
-        for(k=0; k<myRe[j]->num_of_products; k++){
-          if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->products[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-        for(k=0; k<myRe[j]->num_of_reactants; k++){
-          if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-              && strcmp(InitialAssignment_getSymbol(myInitAssign[i]->origin), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-            myInitAssign[i]->target_species_reference = myRe[j]->reactants[k];
-            flag = 0;
-            break;
-          }
-        }
-        if(!flag){
-          break;
-        }
-      }
-    }
-  }
-
   /* prepare reversible fast reaction */
   prepare_reversible_fast_reaction(m, myRe, mySp, myParam, myComp, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, cp_AST);
 
   /* create myRules */
-  for(i=0; i<num_of_rules; i++){
-    rule = (Rule_t*)ListOf_get(Model_getListOfRules(m), i);
-    myRu[i] = (myRule*)malloc(sizeof(myRule));
-    myRu[i]->origin = rule;
-    myRu[i]->target_species = NULL;
-    myRu[i]->target_parameter = NULL;
-    myRu[i]->target_compartment = NULL;
-    myRu[i]->target_species_reference = NULL;
-    myRu[i]->is_rate = Rule_isRate(rule);
-    myRu[i]->is_assignment = Rule_isAssignment(rule);
-    myRu[i]->is_algebraic = Rule_isAlgebraic(rule);
-    if(Rule_isRate(rule) || Rule_isAssignment(rule)){
-      flag = 1;
-      for(j=0; j<num_of_species; j++){
-        if(strcmp(Rule_getVariable(rule), Species_getId(mySp[j]->origin)) == 0){
-          myRu[i]->target_species = mySp[j];
-          mySp[j]->depending_rule = myRu[i];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_parameters; j++){
-          if(strcmp(Rule_getVariable(rule), Parameter_getId(myParam[j]->origin)) == 0){
-            myRu[i]->target_parameter = myParam[j];
-            myParam[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_compartments; j++){
-          if(strcmp(Rule_getVariable(rule), Compartment_getId(myComp[j]->origin)) == 0){
-            myRu[i]->target_compartment = myComp[j];
-            myComp[j]->depending_rule = myRu[i];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(j=0; j<num_of_reactions; j++){
-          for(k=0; k<myRe[j]->num_of_products; k++){
-            if(SpeciesReference_isSetId(myRe[j]->products[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->products[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->products[k];
-              myRe[j]->products[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(k=0; k<myRe[j]->num_of_reactants; k++){
-            if(SpeciesReference_isSetId(myRe[j]->reactants[k]->origin) 
-                && strcmp(Rule_getVariable(rule), SpeciesReference_getId(myRe[j]->reactants[k]->origin)) == 0){
-              myRu[i]->target_species_reference = myRe[j]->reactants[k];
-              myRe[j]->reactants[k]->depending_rule = myRu[i];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+  for (i = 0; i < num_of_rules; i++) {
+    myRu[i] = myRule_create();
+    myRule_initWithModel(myRu[i], m, i);
+    rule = myRule_getOrigin(myRu[i]);
+    if (Rule_isRate(rule) || Rule_isAssignment(rule)) {
+      myRule_initTarget(myRu[i], mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
       node = (ASTNode_t*)Rule_getMath(rule);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -2096,102 +1467,36 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myRu[i]->eq = equation_create();
       myRu[i]->eq->math_length = get_equationf(m, myRu[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, print_interval);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
-      check_math(myRu[i]->eq);
+      check_math(myRule_getEquation(myRu[i]));
     }
   }
 
   /* create myEvents & myEventAssignments */
   for(i=0; i<num_of_events; i++){
-    event = (Event_t*)ListOf_get(Model_getListOfEvents(m), i);
-    myEv[i] = (myEvent*)malloc(sizeof(myEvent));
-    myEv[i]->origin = event;
-    if(Trigger_isSetPersistent(Event_getTrigger(event))){
-      myEv[i]->is_persistent = Trigger_getPersistent(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_persistent = true;
-    }
+    myEv[i] = myEvent_create();
+    myEvent_initWithModel(myEv[i], m, i);
+    event = myEvent_getOrigin(myEv[i]);
     node = (ASTNode_t*)Trigger_getMath(Event_getTrigger(event));
     node = ASTNode_deepCopy(node);
     TRACE(("original math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* alter_tree_structure(m, &node, cp_AST); */
     alter_tree_structure(m, &node, NULL, 0, cp_AST);
-    myEv[i]->eq = equation_create();
     myEv[i]->eq->math_length = get_equationf(m, myEv[i]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, print_interval);
     TRACE(("altered math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* ASTNode_free(node); */
     TRACE(("math of %s\n", Event_getId(myEv[i]->origin)));
     check_math(myEv[i]->eq);
-    if(Trigger_isSetInitialValue(Event_getTrigger(event))){
-      myEv[i]->is_able_to_fire = !Trigger_getInitialValue(Event_getTrigger(event));
-    }else{
-      myEv[i]->is_able_to_fire = true;
-    }
     myEv[i]->assignments = (myEventAssignment**)malloc(sizeof(myEventAssignment*)*Event_getNumEventAssignments(event));
     for(j=0; j<Event_getNumEventAssignments(event); j++){
-      myEv[i]->assignments[j] = (myEventAssignment*)malloc(sizeof(myEventAssignment));
-      myEv[i]->assignments[j]->origin = (EventAssignment_t*)ListOf_get(Event_getListOfEventAssignments(event), j);
-      myEv[i]->assignments[j]->target_species = NULL;
-      myEv[i]->assignments[j]->target_parameter = NULL;
-      myEv[i]->assignments[j]->target_compartment = NULL;
-      myEv[i]->assignments[j]->target_species_reference = NULL;
-      flag = 1;
-      for(k=0; k<num_of_species; k++){
-        if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Species_getId(mySp[k]->origin)) == 0){
-          myEv[i]->assignments[j]->target_species = mySp[k];
-          flag = 0;
-          break;
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_parameters; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Parameter_getId(myParam[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_parameter = myParam[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_compartments; k++){
-          if(strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), Compartment_getId(myComp[k]->origin)) == 0){
-            myEv[i]->assignments[j]->target_compartment = myComp[k];
-            flag = 0;
-            break;
-          }
-        }
-      }
-      if(flag){
-        for(k=0; k<num_of_reactions; k++){
-          for(l=0; l<myRe[k]->num_of_products; l++){
-            if(SpeciesReference_isSetId(myRe[k]->products[l]->origin) 
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->products[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->products[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-          for(l=0; l<myRe[k]->num_of_reactants; l++){
-            if(SpeciesReference_isSetId(myRe[k]->reactants[l]->origin) 
-                && strcmp(EventAssignment_getVariable(myEv[i]->assignments[j]->origin), SpeciesReference_getId(myRe[k]->reactants[l]->origin)) == 0){
-              myEv[i]->assignments[j]->target_species_reference = myRe[k]->reactants[l];
-              flag = 0;
-              break;
-            }
-          }
-          if(!flag){
-            break;
-          }
-        }
-      }
+      myEvAssign = myEventAssignment_create();
+      myEventAssignment_initWithEvent(myEvAssign, event, j);
+      myEventAssignment_initTarget(myEvAssign, mySp, num_of_species, myParam, num_of_parameters, myComp, num_of_compartments, myRe, num_of_reactions);
+      myEv[i]->assignments[j] = myEvAssign;
       node = (ASTNode_t*)EventAssignment_getMath(myEv[i]->assignments[j]->origin);
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
@@ -2223,7 +1528,6 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
       /* unit */
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      myEv[i]->assignments[j]->eq = equation_create();
       myEv[i]->assignments[j]->eq->math_length = get_equationf(m, myEv[i]->assignments[j]->eq, mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, myInitAssign, time_variant_target_id, num_of_time_variant_targets, *timeVarAssign, mem, print_interval);
       /* ASTNode_free(node); */
       TRACE(("math\n"));
@@ -2403,7 +1707,6 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
 void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, allocated_memory *mem, copied_AST *cp_AST){
   unsigned int i, j;
 
-  /* free */
   for (i = 0; i < Model_getNumSpecies(m); i++) {
     mySpecies_free(mySp[i]);
   }
@@ -2424,35 +1727,21 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
   }
   free(myRe);
 
-  for(i=0; i<Model_getNumRules(m); i++){
-    if(!myRu[i]->is_algebraic){
-      free(myRu[i]->eq);
-    }
-    free(myRu[i]);
+  for (i = 0; i < Model_getNumRules(m); i++) {
+    myRule_free(myRu[i]);
   }
   free(myRu);
-  for(i=0; i<Model_getNumEvents(m); i++){
-    for(j=0; j<Event_getNumEventAssignments(myEv[i]->origin); j++){
-      free(myEv[i]->assignments[j]->eq);
-      free(myEv[i]->assignments[j]);
-    }
-    free(myEv[i]->assignments);
-    if(myEv[i]->event_delay != NULL){
-      free(myEv[i]->event_delay->eq);
-      free(myEv[i]->event_delay);
-      free(myEv[i]->firing_times);
-    }
-    if(myEv[i]->priority_eq != NULL){
-      free(myEv[i]->priority_eq);
-    }
-    free(myEv[i]);
+
+  for (i = 0; i < Model_getNumEvents(m); i++) {
+    myEvent_free(myEv[i]);
   }
   free(myEv);
-  for(i=0; i<Model_getNumInitialAssignments(m); i++){
-    free(myInitAssign[i]->eq);
-    free(myInitAssign[i]);
+
+  for (i = 0; i < Model_getNumInitialAssignments(m); i++) {
+    myInitialAssignment_free(myInitAssign[i]);
   }
   free(myInitAssign);
+
   if(myAlgEq != NULL){
     if(myAlgEq->num_of_algebraic_variables > 1){
       for(i=0; i<myAlgEq->num_of_algebraic_variables; i++){
@@ -2485,14 +1774,10 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     free(timeVarAssign->eq[i]);
   }
   free(timeVarAssign);
-  for(i=0; i<mem->num_of_allocated_memory; i++){
-    free(mem->memory[i]);
-  }
-  free(mem);
-  for(i=0; i<cp_AST->num_of_copied_AST; i++){
-    ASTNode_free(cp_AST->ast[i]);
-  }
-  free(cp_AST);
+
+  allocated_memory_free(mem);
+  copied_AST_free(cp_AST);
+
   TRACE(("all allocated memory is freeed\n"));
 }
 
@@ -2510,18 +1795,6 @@ void realloc_mySBML_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_spe
 	for (i = 0; i < num_of_species; i++) {
 		if (sp[i]->delay_val != NULL) {
       mySpecies_reallocDelayVal(sp[i], new_max_index, 6);
-      /*
-			sp[i]->delay_val = (double**)realloc(sp[i]->delay_val, sizeof(double*) * new_max_index);
-			for(k=0; k<=new_max_index; k++) {
-				if (k <max_index) {
-					sp[i]->delay_val[k] = (double *)realloc(sp[i]->delay_val[k], sizeof(double) * 6);
-				}else {
-					sp[i]->delay_val[k] = (double *)malloc(sizeof(double) * 6);
-				}
-        sp[i]->delay_val_width = 6;
-        sp[i]->delay_val_length = new_max_index;
-			}
-      */
 			flag = 1;
 		}
 	}
@@ -2529,16 +1802,6 @@ void realloc_mySBML_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_spe
 	for(i=0; i<num_of_parameters; i++){
 		if (param[i]->delay_val != NULL) {
       myParameter_reallocDelayVal(param[i], new_max_index, 6);
-      /*
-			param[i]->delay_val = (double**)realloc(param[i]->delay_val, sizeof(double*) * new_max_index);
-			for(k=0; k<=new_max_index; k++) {
-				if (k <max_index) {
-					param[i]->delay_val[k] = (double *)realloc(param[i]->delay_val[k], sizeof(double) * 6);
-				}else {
-					param[i]->delay_val[k] = (double *)malloc(sizeof(double) * 6);
-				}
-			}
-      */
 			flag = 1;
 		}
 	}
@@ -2546,16 +1809,6 @@ void realloc_mySBML_objects(Model_t *m, mySpecies *sp[], unsigned int num_of_spe
 	for (i = 0; i < num_of_compartments; i++) {
 		if (comp[i]->delay_val != NULL) {
       myCompartment_reallocDelayVal(comp[i], new_max_index, 6);
-      /*
-			comp[i]->delay_val = (double**)realloc(comp[i]->delay_val, sizeof(double*) * new_max_index );
-			for(k=0; k<=new_max_index; k++) {
-				if (k <max_index) {
-					comp[i]->delay_val[k] = (double *)realloc(comp[i]->delay_val[k], sizeof(double) * 6);
-				}else {
-					comp[i]->delay_val[k] = (double *)malloc(sizeof(double) * 6);
-				}
-			}
-      */
 			flag = 1;
 		}
 	}
@@ -3108,6 +2361,45 @@ static void locate_species_in_compartment(
         compartments[j]->num_of_including_species++;
       }
     }
+  }
+}
+
+static void create_species(mySpecies *species[], Model_t *model) {
+  unsigned int i;
+  unsigned int num_of_species = Model_getNumSpecies(model);
+  for (i = 0; i < num_of_species; i++) {
+    species[i] = mySpecies_create();
+    mySpecies_initWithModel(species[i], model, i);
+  }
+}
+
+static void create_parameters(myParameter *parameters[], Model_t *model) {
+  unsigned int i;
+  unsigned int num_of_parameters = Model_getNumParameters(model);
+  for (i = 0; i < num_of_parameters; i++) {
+    parameters[i] = myParameter_create();
+    myParameter_initWithModel(parameters[i], model, i);
+  }
+}
+
+static void create_compartments(myCompartment *compartments[], Model_t *model) {
+  unsigned int i;
+  unsigned int num_of_compartments = Model_getNumCompartments(model);
+  for (i = 0; i < num_of_compartments; i++) {
+    compartments[i] = myCompartment_create();
+    myCompartment_initWithModel(compartments[i], model, i);
+  }
+}
+
+static void create_reactions(myReaction *reactions[], mySpecies *species[], Model_t *model) {
+  unsigned int i;
+  unsigned int num_of_reactions = Model_getNumReactions(model);
+  unsigned int num_of_species = Model_getNumSpecies(model);
+  for (i = 0; i < num_of_reactions; i++) {
+    reactions[i] = myReaction_create();
+    myReaction_initWithModel(reactions[i], model, i);
+    myReaction_initProducts(reactions[i], species, num_of_species);
+    myReaction_initReactants(reactions[i], species, num_of_species);
   }
 }
 

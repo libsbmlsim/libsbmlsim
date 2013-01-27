@@ -35,6 +35,11 @@ struct _myReaction {
 myReaction *myReaction_create();
 void myReaction_initWithModel(myReaction *reaction, Model_t *model, int index);
 void myReaction_free(myReaction *reaction);
+
+void myReaction_initProducts(myReaction *reaction, mySpecies **species, unsigned int num_of_species);
+void myReaction_initReactants(myReaction *reaction, mySpecies **species, unsigned int num_of_species);
+
+Reaction_t *myReaction_getOrigin(myReaction *reaction);
 void myReaction_addProduct(myReaction *reaction, mySpeciesReference *product);
 void myReaction_addReactant(myReaction *reaction, mySpeciesReference *reactant);
 

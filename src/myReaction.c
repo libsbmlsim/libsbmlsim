@@ -13,56 +13,119 @@
  * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/myReaction.h"
 #include <stdlib.h>
+#include <string.h>
 #include <sbml/SBMLTypes.h>
 
 myReaction *myReaction_create() {
-  myReaction *ret = (myReaction *)malloc(sizeof(myReaction));
-  return ret;
+  myReaction *reaction = (myReaction *)malloc(sizeof(myReaction));
+  reaction->origin = NULL;
+  reaction->eq = NULL;
+  reaction->products = NULL;
+  reaction->num_of_products = 0;
+  reaction->reactants = NULL;
+  reaction->num_of_reactants = 0;
+  reaction->is_fast = false;
+  reaction->is_reversible = false;
+  reaction->products_equili_numerator = NULL;
+  reaction->reactants_equili_numerator = NULL;
+  return reaction;
 }
 
 void myReaction_initWithModel(myReaction *reaction, Model_t *model, int index) {
-  int num_products, num_reactants;
+  int num_of_products, num_of_reactants;
   Reaction_t *origin = (Reaction_t *)ListOf_get(Model_getListOfReactions(model), index);
 
-  num_products = Reaction_getNumProducts(origin);
-  num_reactants = Reaction_getNumReactants(origin);
+  num_of_products = Reaction_getNumProducts(origin);
+  num_of_reactants = Reaction_getNumReactants(origin);
 
   reaction->origin = origin;
+  reaction->eq = equation_create();
+  reaction->products = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_products);
+  reaction->reactants = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_reactants);
   reaction->is_fast = Reaction_getFast(origin);
   reaction->is_reversible = Reaction_getReversible(origin);
-  reaction->num_of_products = 0;
-  reaction->num_of_reactants = 0;
-  reaction->products = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_products);
-  reaction->reactants = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_reactants);
-  reaction->products_equili_numerator = NULL;
-  reaction->reactants_equili_numerator = NULL;
-  reaction->eq = NULL;
 }
 
 void myReaction_free(myReaction *reaction) {
   unsigned int i;
 
-  for (i = 0; i < reaction->num_of_products; i++) {
-    mySpeciesReference_free(reaction->products[i]);
+  if (reaction == NULL) {
+    return;
   }
-  free(reaction->products);
 
-  for (i = 0; i < reaction->num_of_reactants; i++) {
-    mySpeciesReference_free(reaction->reactants[i]);
+  if (reaction->eq != NULL) {
+    equation_free(reaction->eq);
   }
-  free(reaction->reactants);
-
+  if (reaction->products != NULL) {
+    for (i = 0; i < reaction->num_of_products; i++) {
+      mySpeciesReference_free(reaction->products[i]);
+    }
+    free(reaction->products);
+  }
+  if (reaction->reactants != NULL) {
+    for (i = 0; i < reaction->num_of_reactants; i++) {
+      mySpeciesReference_free(reaction->reactants[i]);
+    }
+    free(reaction->reactants);
+  }
   if (reaction->products_equili_numerator != NULL) {
     equation_free(reaction->products_equili_numerator);
   }
   if (reaction->reactants_equili_numerator != NULL) {
     equation_free(reaction->reactants_equili_numerator);
   }
-  if (reaction->eq != NULL) {
-    equation_free(reaction->eq);
-  }
 
   free(reaction);
+}
+
+void myReaction_initProducts(myReaction *reaction, mySpecies **species, unsigned int num_of_species) {
+  unsigned int i, j;
+  unsigned int num_of_products;
+  Reaction_t *origin;
+  const char *product_id;
+  mySpeciesReference *ref;
+
+  origin = myReaction_getOrigin(reaction);
+  num_of_products = Reaction_getNumProducts(origin);
+
+  for (i = 0; i < num_of_products; i++) {
+    product_id = SpeciesReference_getSpecies(Reaction_getProduct(origin, i));
+    for (j = 0; j < num_of_species; j++) {
+      if (strcmp(product_id, Species_getId(species[j]->origin)) == 0) {
+        ref = mySpeciesReference_create();
+        mySpeciesReference_initAsProduct(ref, reaction, i);
+        mySpeciesReference_setSpecies(ref, species[j]);
+        myReaction_addProduct(reaction, ref);
+      }
+    }
+  }
+}
+
+void myReaction_initReactants(myReaction *reaction, mySpecies **species, unsigned int num_of_species) {
+  unsigned int i, j;
+  unsigned int num_of_reactants;
+  Reaction_t *origin;
+  const char *reactant_id;
+  mySpeciesReference *ref;
+
+  origin = myReaction_getOrigin(reaction);
+  num_of_reactants = Reaction_getNumReactants(origin);
+
+  for (i = 0; i < num_of_reactants; i++) {
+    reactant_id = SpeciesReference_getSpecies(Reaction_getReactant(origin, i));
+    for (j = 0; j < num_of_species; j++) {
+      if (strcmp(reactant_id, Species_getId(species[j]->origin)) == 0) {
+        ref = mySpeciesReference_create();
+        mySpeciesReference_initAsReactant(ref, reaction, i);
+        mySpeciesReference_setSpecies(ref, species[j]);
+        myReaction_addReactant(reaction, ref);
+      }
+    }
+  }
+}
+
+Reaction_t *myReaction_getOrigin(myReaction *reaction) {
+  return reaction->origin;
 }
 
 void myReaction_addProduct(myReaction *reaction, mySpeciesReference *product) {

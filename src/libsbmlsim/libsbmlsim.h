@@ -59,7 +59,11 @@ extern "C" {
 #include "myReaction.h"
 #include "myEvent.h"
 #include "myEventAssignment.h"
+#include "myInitialAssignment.h"
 #include "myRule.h"
+#include "myDelay.h"
+#include "allocated_memory.h"
+#include "copied_AST.h"
 
 #define DSFMT_MEXP 19937
 #include "dSFMT-params19937.h"
@@ -71,20 +75,6 @@ struct _timeVariantAssignments{
   unsigned int num_of_time_variant_assignments;
   equation *eq[MAX_TIME_VARIANT_ASSIGNMENT];
   char *target_id[MAX_TIME_VARIANT_ASSIGNMENT];
-};
-
-struct _myDelay{
-  Delay_t *origin;
-  equation *eq;
-};
-
-struct _myInitialAssignment{
-  InitialAssignment_t *origin;
-  equation *eq;
-  mySpecies *target_species;
-  myParameter *target_parameter;
-  myCompartment *target_compartment;
-  mySpeciesReference *target_species_reference;
 };
 
 struct _myASTNode{
@@ -130,16 +120,6 @@ struct _myAlgTargetParam{
 struct _myAlgTargetComp{
   myCompartment *target_compartment;
   int order;
-};
-
-struct _allocated_memory{
-  double *memory[MAX_ALLOCATED_MEMORY];
-  unsigned int num_of_allocated_memory;
-};
-
-struct _copied_AST{
-  ASTNode_t *ast[MAX_COPIED_AST];
-  unsigned int num_of_copied_AST;
 };
 
 /* Substitute kineticlaw local parameter node to simple Real value node in AST Tree

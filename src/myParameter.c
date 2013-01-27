@@ -16,36 +16,42 @@
 #include <sbml/SBMLTypes.h>
 
 myParameter *myParameter_create() {
-  myParameter *ret = (myParameter *)malloc(sizeof(myParameter));
-  return ret;
-}
-
-void myParameter_initWithModel(myParameter *parameter, Model_t *model, int index) {
-  Parameter_t *origin = (Parameter_t *)ListOf_get(Model_getListOfParameters(model), index);
-
-  parameter->origin = origin;
-
-  if (Parameter_isSetValue(origin)) {
-    parameter->value = Parameter_getValue(origin);
-  } else {
-    parameter->value = 0;
-  }
-
-  parameter->temp_value = parameter->value;
-  parameter->delay_val = NULL;
-  parameter->depending_rule = NULL;
+  myParameter *parameter = (myParameter *)malloc(sizeof(myParameter));
+  parameter->origin = NULL;
+  parameter->value = 0;
+  parameter->temp_value = 0;
   parameter->k[0] = 0;
   parameter->k[1] = 0;
   parameter->k[2] = 0;
   parameter->k[3] = 0;
   parameter->k[4] = 0;
   parameter->k[5] = 0;
-  parameter->prev_val[0] = parameter->value;
-  parameter->prev_val[1] = parameter->value;
-  parameter->prev_val[2] = parameter->value;
+  parameter->delay_val = NULL;
+  parameter->delay_val_width = 0;
+  parameter->delay_val_length = 0;
+  parameter->depending_rule = NULL;
+  parameter->prev_val[0] = 0;
+  parameter->prev_val[1] = 0;
+  parameter->prev_val[2] = 0;
   parameter->prev_k[0] = 0;
   parameter->prev_k[1] = 0;
   parameter->prev_k[2] = 0;
+  return parameter;
+}
+
+void myParameter_initWithModel(myParameter *parameter, Model_t *model, int index) {
+  Parameter_t *origin = (Parameter_t *)ListOf_get(Model_getListOfParameters(model), index);
+
+  parameter->origin = origin;
+  if (Parameter_isSetValue(origin)) {
+    parameter->value = Parameter_getValue(origin);
+  } else {
+    parameter->value = 0;
+  }
+  parameter->temp_value = parameter->value;
+  parameter->prev_val[0] = parameter->value;
+  parameter->prev_val[1] = parameter->value;
+  parameter->prev_val[2] = parameter->value;
 }
 
 void myParameter_initDelayVal(myParameter *parameter, unsigned int length, unsigned int width) {
@@ -60,6 +66,11 @@ void myParameter_initDelayVal(myParameter *parameter, unsigned int length, unsig
 
 void myParameter_free(myParameter *parameter) {
   unsigned int i;
+
+  if (parameter == NULL) {
+    return;
+  }
+
   if (parameter->delay_val != NULL) {
     for (i = 0; i < parameter->delay_val_length; i++) {
       free(parameter->delay_val[i]);
@@ -86,3 +97,12 @@ void myParameter_reallocDelayVal(myParameter *parameter, unsigned int length, un
   }
   parameter->delay_val = delay_val;
 }
+
+Parameter_t *myParameter_getOrigin(myParameter *parameter) {
+  return parameter->origin;
+}
+
+void myParameter_setDependingRule(myParameter *parameter, myRule *rule) {
+  parameter->depending_rule = rule;
+}
+

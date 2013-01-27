@@ -12,12 +12,14 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/osarch.h
   ${PROJECT_SOURCE_DIR}/src/libsbmlsim/version.h
   ${PROJECT_SOURCE_DIR}/src/alg_alter_tree_structure.c
+  ${PROJECT_SOURCE_DIR}/src/allocated_memory.c
   ${PROJECT_SOURCE_DIR}/src/alter_tree_structure.c
   ${PROJECT_SOURCE_DIR}/src/assignment_alter_tree_structure.c
   ${PROJECT_SOURCE_DIR}/src/bifurcation_analysis.c
   ${PROJECT_SOURCE_DIR}/src/check_AST.c
   ${PROJECT_SOURCE_DIR}/src/check_math.c
   ${PROJECT_SOURCE_DIR}/src/check_num.c
+  ${PROJECT_SOURCE_DIR}/src/copied_AST.c
   ${PROJECT_SOURCE_DIR}/src/count_ode.c
   ${PROJECT_SOURCE_DIR}/src/dSFMT.c
   ${PROJECT_SOURCE_DIR}/src/ev_alter_tree_structure.c
@@ -25,9 +27,14 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/get_equation.c
   ${PROJECT_SOURCE_DIR}/src/myASTNode.c
   ${PROJECT_SOURCE_DIR}/src/myCompartment.c
+  ${PROJECT_SOURCE_DIR}/src/myDelay.c
+  ${PROJECT_SOURCE_DIR}/src/myEvent.c
+  ${PROJECT_SOURCE_DIR}/src/myEventAssignment.c
+  ${PROJECT_SOURCE_DIR}/src/myInitialAssignment.c
   ${PROJECT_SOURCE_DIR}/src/myParameter.c
   ${PROJECT_SOURCE_DIR}/src/myReaction.c
   ${PROJECT_SOURCE_DIR}/src/myResult.c
+  ${PROJECT_SOURCE_DIR}/src/myRule.c
   ${PROJECT_SOURCE_DIR}/src/mySpecies.c
   ${PROJECT_SOURCE_DIR}/src/mySpeciesReference.c
   ${PROJECT_SOURCE_DIR}/src/mySBML_objects.c

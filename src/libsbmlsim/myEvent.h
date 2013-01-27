@@ -16,6 +16,9 @@
 
 #include "typedefs.h"
 #include "boolean.h"
+#include "equation.h"
+#include "myEventAssignment.h"
+#include "myDelay.h"
 #include <sbml/SBMLTypes.h>
 
 struct _myEvent {
@@ -30,5 +33,11 @@ struct _myEvent {
   boolean is_persistent;
   equation *priority_eq;
 };
+
+myEvent *myEvent_create();
+void myEvent_initWithModel(myEvent *event, Model_t *mode, int index);
+void myEvent_free(myEvent *event);
+
+Event_t *myEvent_getOrigin(myEvent *event);
 
 #endif /* LibSBMLSim_MyEvent_h */

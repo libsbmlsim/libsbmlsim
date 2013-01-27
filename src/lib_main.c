@@ -170,11 +170,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   allocated_memory *mem;
   copied_AST *cp_AST;
 
-  mem = (allocated_memory*)malloc(sizeof(allocated_memory));
-  mem->num_of_allocated_memory = 0;
-
-  cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
-  cp_AST->num_of_copied_AST = 0;
+  mem = allocated_memory_create();
+  cp_AST = copied_AST_create();
 
   /* Check atol, rtol and facmax, whether it is set to 0.0 */
   if (atol == 0.0) {
@@ -474,13 +471,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
    */
   use_lazy_method = 0;
 
-
-
-  mem = (allocated_memory*)malloc(sizeof(allocated_memory));
-  mem->num_of_allocated_memory = 0;
-
-  cp_AST = (copied_AST*)malloc(sizeof(copied_AST));
-  cp_AST->num_of_copied_AST = 0;
+  mem = allocated_memory_create();
+  cp_AST = copied_AST_create();
 
   /* determin bifurcation analysis condition*/
   if (use_bifurcation_analysis) {

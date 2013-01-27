@@ -37,5 +37,7 @@ void myParameter_initDelayVal(myParameter *parameter, unsigned int length, unsig
 void myParameter_free(myParameter *parameter);
 
 void myParameter_reallocDelayVal(myParameter *parameter, unsigned int length, unsigned int width);
+Parameter_t *myParameter_getOrigin(myParameter *parameter);
+void myParameter_setDependingRule(myParameter *parameter, myRule *rule);
 
 #endif /* LibSBMLSim_MyParameter_h */

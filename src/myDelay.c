@@ -11,19 +11,38 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/equation.h"
+#include "libsbmlsim/myDelay.h"
 #include <stdlib.h>
 #include <sbml/SBMLTypes.h>
 
-equation *equation_create() {
-  equation *ret = (equation *)malloc(sizeof(equation));
-  ret->math_length = 0;
-  return ret;
+myDelay *myDelay_create() {
+  myDelay *delay = (myDelay *)malloc(sizeof(myDelay));
+  delay->origin = NULL;
+  delay->eq = NULL;
+  return delay;
 }
 
-void equation_free(equation *eq) {
-  if (eq == NULL) {
+void myDelay_initWithOrigin(myDelay *delay, Delay_t *origin) {
+  delay->origin = origin;
+  delay->eq = equation_create();
+}
+
+void myDelay_free(myDelay *delay) {
+  if (delay == NULL) {
     return;
   }
-  free(eq);
+
+  if (delay->eq != NULL) {
+    equation_free(delay->eq);
+  }
+  free(delay);
 }
+
+Delay_t *myDelay_getOrigin(myDelay *delay) {
+  return delay->origin;
+}
+
+equation *myDelay_getEquation(myDelay *delay) {
+  return delay->eq;
+}
+

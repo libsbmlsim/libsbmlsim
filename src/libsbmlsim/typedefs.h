@@ -23,17 +23,17 @@ typedef struct _mySpeciesReference mySpeciesReference;
 typedef struct _myReaction myReaction;
 typedef struct _myEvent myEvent;
 typedef struct _myEventAssignment myEventAssignment;
+typedef struct _myDelay myDelay;
+typedef struct _myInitialAssignment myInitialAssignment;
+typedef struct _allocated_memory allocated_memory;
+typedef struct _copied_AST copied_AST;
 
 /* no header files yet */
 typedef struct _timeVariantAssignments timeVariantAssignments;
-typedef struct _myDelay myDelay;
-typedef struct _myInitialAssignment myInitialAssignment;
 typedef struct _myASTNode myASTNode;
 typedef struct _myAlgebraicEquations myAlgebraicEquations;
 typedef struct _myAlgTargetSp myAlgTargetSp;
 typedef struct _myAlgTargetParam myAlgTargetParam;
 typedef struct _myAlgTargetComp myAlgTargetComp;
-typedef struct _allocated_memory allocated_memory;
-typedef struct _copied_AST copied_AST;
 
 #endif  /* LibSBMLSim_Typedefs_h */

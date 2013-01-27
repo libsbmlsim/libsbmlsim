@@ -11,19 +11,18 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/equation.h"
-#include <stdlib.h>
-#include <sbml/SBMLTypes.h>
+#ifndef LibSBMLSim_AllocatedMemory_h
+#define LibSBMLSim_AllocatedMemory_h
 
-equation *equation_create() {
-  equation *ret = (equation *)malloc(sizeof(equation));
-  ret->math_length = 0;
-  return ret;
-}
+#include "typedefs.h"
+#include "common.h"
 
-void equation_free(equation *eq) {
-  if (eq == NULL) {
-    return;
-  }
-  free(eq);
-}
+struct _allocated_memory {
+  double *memory[MAX_ALLOCATED_MEMORY];
+  unsigned int num_of_allocated_memory;
+};
+
+allocated_memory *allocated_memory_create();
+void allocated_memory_free(allocated_memory *mem);
+
+#endif /* LibSBMLSim_AllocatedMemory_h */

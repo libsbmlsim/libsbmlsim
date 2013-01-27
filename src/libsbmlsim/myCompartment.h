@@ -41,5 +41,8 @@ void myCompartment_initDelayVal(myCompartment *compartment, unsigned int length,
 void myCompartment_free(myCompartment *compartment);
 
 void myCompartment_reallocDelayVal(myCompartment *compartment, unsigned int length, unsigned int width);
+Compartment_t *myCompartment_getOrigin(myCompartment *compartment);
+void myCompartment_setDependingRule(myCompartment *compartment, myRule *rule);
+void myCompartment_addIncludingSpecies(myCompartment *compartment, mySpecies *species);
 
 #endif /* LibSBMLSim_MyCompartment_h */

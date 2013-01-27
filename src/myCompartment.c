@@ -16,37 +16,43 @@
 #include <sbml/SBMLTypes.h>
 
 myCompartment *myCompartment_create() {
-  myCompartment *ret = (myCompartment *)malloc(sizeof(myCompartment));
-  return ret;
-}
-
-void myCompartment_initWithModel(myCompartment *compartment, Model_t *model, int index) {
-  Compartment_t *origin = (Compartment_t *)ListOf_get(Model_getListOfCompartments(model), index);
-
-  compartment->origin = origin;
-
-  if (Compartment_isSetSize(origin)) {
-    compartment->value = Compartment_getSize(origin);
-  } else {
-    compartment->value = 1.0;
-  }
-
-  compartment->temp_value = compartment->value;
-  compartment->delay_val = NULL;
-  compartment->depending_rule = NULL;
+  myCompartment *compartment = (myCompartment *)malloc(sizeof(myCompartment));
+  compartment->origin = NULL;
+  compartment->value = 1.0;
+  compartment->temp_value = 1.0;
   compartment->k[0] = 0;
   compartment->k[1] = 0;
   compartment->k[2] = 0;
   compartment->k[3] = 0;
   compartment->k[4] = 0;
   compartment->k[5] = 0;
-  compartment->prev_val[0] = compartment->value;
-  compartment->prev_val[1] = compartment->value;
-  compartment->prev_val[2] = compartment->value;
+  compartment->delay_val = NULL;
+  compartment->delay_val_width = 0;
+  compartment->delay_val_length = 0;
+  compartment->depending_rule = NULL;
+  compartment->prev_val[0] = 1.0;
+  compartment->prev_val[1] = 1.0;
+  compartment->prev_val[2] = 1.0;
   compartment->prev_k[0] = 0;
   compartment->prev_k[1] = 0;
   compartment->prev_k[2] = 0;
   compartment->num_of_including_species = 0;
+  return compartment;
+}
+
+void myCompartment_initWithModel(myCompartment *compartment, Model_t *model, int index) {
+  Compartment_t *origin = (Compartment_t *)ListOf_get(Model_getListOfCompartments(model), index);
+
+  compartment->origin = origin;
+  if (Compartment_isSetSize(origin)) {
+    compartment->value = Compartment_getSize(origin);
+  } else {
+    compartment->value = 1.0;
+  }
+  compartment->temp_value = compartment->value;
+  compartment->prev_val[0] = compartment->value;
+  compartment->prev_val[1] = compartment->value;
+  compartment->prev_val[2] = compartment->value;
 }
 
 void myCompartment_initDelayVal(myCompartment *compartment, unsigned int length, unsigned int width) {
@@ -87,3 +93,18 @@ void myCompartment_reallocDelayVal(myCompartment *compartment, unsigned int leng
   }
   compartment->delay_val = delay_val;
 }
+
+Compartment_t *myCompartment_getOrigin(myCompartment *compartment) {
+  return compartment->origin;
+}
+
+void myCompartment_setDependingRule(myCompartment *compartment, myRule *rule) {
+  compartment->depending_rule = rule;
+}
+
+void myCompartment_addIncludingSpecies(myCompartment *compartment, mySpecies *species) {
+  unsigned int num = compartment->num_of_including_species;
+  compartment->including_species[num] = species;
+  compartment->num_of_including_species++;
+}
+

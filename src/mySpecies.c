@@ -16,8 +16,31 @@
 #include <sbml/SBMLTypes.h>
 
 mySpecies *mySpecies_create() {
-  mySpecies *ret = (mySpecies *)malloc(sizeof(mySpecies));
-  return ret;
+  mySpecies *species = (mySpecies *)malloc(sizeof(mySpecies));
+  species->origin = NULL;
+  species->value = 0;
+  species->temp_value = 0;
+  species->is_amount = true;
+  species->is_concentration = false;
+  species->has_only_substance_units = false;
+  species->locating_compartment = NULL;
+  species->k[0] = 0;
+  species->k[1] = 0;
+  species->k[2] = 0;
+  species->k[3] = 0;
+  species->k[4] = 0;
+  species->k[5] = 0;
+  species->delay_val = NULL;
+  species->delay_val_width = 0;
+  species->delay_val_length = 0;
+  species->depending_rule = NULL;
+  species->prev_val[0] = 0;
+  species->prev_val[1] = 0;
+  species->prev_val[2] = 0;
+  species->prev_k[0] = 0;
+  species->prev_k[1] = 0;
+  species->prev_k[2] = 0;
+  return species;
 }
 
 void mySpecies_initWithModel(mySpecies *species, Model_t *model, int index) {
@@ -46,23 +69,9 @@ void mySpecies_initWithModel(mySpecies *species, Model_t *model, int index) {
 
   species->has_only_substance_units = Species_getHasOnlySubstanceUnits(origin);
   species->temp_value = species->value;
-  species->locating_compartment = NULL;
-  species->delay_val = NULL;
-  species->delay_val_width = 0;
-  species->delay_val_length = 0;
-  species->depending_rule = NULL;
-  species->k[0] = 0;
-  species->k[1] = 0;
-  species->k[2] = 0;
-  species->k[3] = 0;
-  species->k[4] = 0;
-  species->k[5] = 0;
   species->prev_val[0] = species->value;
   species->prev_val[1] = species->value;
   species->prev_val[2] = species->value;
-  species->prev_k[0] = 0;
-  species->prev_k[1] = 0;
-  species->prev_k[2] = 0;
 }
 
 void mySpecies_initDelayVal(mySpecies *species, unsigned int length, unsigned int width) {
@@ -77,6 +86,11 @@ void mySpecies_initDelayVal(mySpecies *species, unsigned int length, unsigned in
 
 void mySpecies_free(mySpecies *species) {
   unsigned int i;
+
+  if (species == NULL) {
+    return;
+  }
+
   if (species->delay_val != NULL) {
     for (i = 0; i < species->delay_val_length; i++) {
       free(species->delay_val[i]);
@@ -103,3 +117,12 @@ void mySpecies_reallocDelayVal(mySpecies *species, unsigned int length, unsigned
   }
   species->delay_val = delay_val;
 }
+
+void mySpecies_setLocatingCompartment(mySpecies *species, myCompartment *compartment) {
+  species->locating_compartment = compartment;
+}
+
+void mySpecies_setDependingRule(mySpecies *species, myRule *rule) {
+  species->depending_rule = rule;
+}
+

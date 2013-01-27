@@ -16,16 +16,34 @@
 #include <sbml/SBMLTypes.h>
 
 mySpeciesReference *mySpeciesReference_create() {
-  mySpeciesReference *ret = (mySpeciesReference *)malloc(sizeof(mySpeciesReference));
-  return ret;
+  mySpeciesReference *ref = (mySpeciesReference *)malloc(sizeof(mySpeciesReference));
+  ref->mySp = NULL;
+  ref->origin = NULL;
+  ref->eq = NULL;
+  ref->value = 0;
+  ref->temp_value = 0;
+  ref->k[0] = 0;
+  ref->k[1] = 0;
+  ref->k[2] = 0;
+  ref->k[3] = 0;
+  ref->k[4] = 0;
+  ref->k[5] = 0;
+  ref->delay_val = NULL;
+  ref->delay_val_width = 0;
+  ref->delay_val_length = 0;
+  ref->depending_rule = NULL;
+  ref->prev_val[0] = 0;
+  ref->prev_val[1] = 0;
+  ref->prev_val[2] = 0;
+  ref->prev_k[0] = 0;
+  ref->prev_k[1] = 0;
+  ref->prev_k[2] = 0;
+  return ref;
 }
 
 void mySpeciesReference_initWithOrigin(mySpeciesReference *ref, SpeciesReference_t *origin) {
   ref->origin = origin;
-  ref->mySp = NULL;
-  ref->delay_val = NULL;
-  ref->depending_rule = NULL;
-  ref->eq = NULL;
+  ref->eq = equation_create();
 }
 
 void mySpeciesReference_initAsReactant(mySpeciesReference *ref, myReaction *reaction, int index) {
@@ -39,6 +57,10 @@ void mySpeciesReference_initAsProduct(mySpeciesReference *ref, myReaction *react
 }
 
 void mySpeciesReference_free(mySpeciesReference *ref) {
+  if (ref == NULL) {
+    return;
+  }
+
   if (ref->eq != NULL) {
     equation_free(ref->eq);
   }
@@ -47,5 +69,9 @@ void mySpeciesReference_free(mySpeciesReference *ref) {
 
 void mySpeciesReference_setSpecies(mySpeciesReference *ref, mySpecies *species) {
   ref->mySp = species;
+}
+
+void mySpeciesReference_setDependingRule(mySpeciesReference *ref, myRule *rule) {
+  ref->depending_rule = rule;
 }
 

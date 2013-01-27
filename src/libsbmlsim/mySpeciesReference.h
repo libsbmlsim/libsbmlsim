@@ -29,6 +29,8 @@ struct _mySpeciesReference {
   double temp_value;
   double k[6]; /* for runge kutta */
   double **delay_val;
+  unsigned int delay_val_width;
+  unsigned int delay_val_length;
   myRule *depending_rule;
   double prev_val[3];
   double prev_k[3];
@@ -39,6 +41,8 @@ void mySpeciesReference_initWithOrigin(mySpeciesReference *ref, SpeciesReference
 void mySpeciesReference_initAsProduct(mySpeciesReference *ref, myReaction *reaction, int index);
 void mySpeciesReference_initAsReactant(mySpeciesReference *ref, myReaction *reaction, int index);
 void mySpeciesReference_free(mySpeciesReference *ref);
+
 void mySpeciesReference_setSpecies(mySpeciesReference *ref, mySpecies *species);
+void mySpeciesReference_setDependingRule(mySpeciesReference *ref, myRule *rule);
 
 #endif /* LibSBMLSim_MySpeciesReference_h */
