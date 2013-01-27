@@ -194,8 +194,11 @@ SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
 #SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;\\\\.DS_Store;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;.*~;/templates/;/diff/;/simulation_results/;/bindings/;^l?v*;build_.*\\\\.sh;depend-.*\\\\.zip;ev_func_piece\\\\.xml") 
 SET(CPACK_SOURCE_IGNORE_FILES 
   "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
-  "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/;/templates/"
+  "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/"
   "testcases/simulateSBML"
+  "testcases/cases/"
+  "testcases/.*-results\\\\.csv"
+  "testcases/out\\\\.csv"
   "build_csharp\\\\.sh;build_java\\\\.sh;build_python\\\\.sh;depend-.*\\\\.zip;result\\\\.zip"
   "Makefile\\\\.dist;ev_func_piece\\\\.xml;00remove\\\\.sh"
 )
