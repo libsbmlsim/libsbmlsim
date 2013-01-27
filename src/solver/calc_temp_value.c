@@ -110,14 +110,9 @@ double calc_eps(double value) {
 double calc_error(double dxdt, double dxdt4, double cur_value, double next_value, double atol, double rtol) {
   double sci;
   double err;
-  //printf("atol = %1.15lf, rtol = %lf\n", atol, rtol);
 
-  /* Define absolute and relative tolerance from SOSOlib default value */
-  /* http://www.tbi.univie.ac.at/~raim/odeSolver/doc/app.html */
   sci = atol + my_fmax(fabs(cur_value), fabs(next_value)) * rtol;
   err = (dxdt4 - dxdt) / sci;
-  //printf("(dxdt - dxdt4) / sci = (%.16g) / %.16g\n", dxdt - dxdt4, sci);
-  //printf("err^2 %.16g\n", err * err);
   return err * err;
 }
 
