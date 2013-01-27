@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Mon, 28 Jan 2013 01:31:19 +0900
+-- Last modified: Mon, 28 Jan 2013 02:12:31 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -153,7 +153,6 @@
     $prefix\include\libsbmlsim       ... Header files
     $prefix\share\libsbmlsim\        ... Sample files (SBML, results)
                             \c       ... Sample C code
-                            \cpp     ... Sample C++ code
                             \cpp     ... Sample C++ code
                             \csharp  ... Sample C# code and language bindings
                             \java    ... Sample Java code and language bingings
