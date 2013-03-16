@@ -24,7 +24,9 @@ foreach my $num (@ARGV) {
 ### Open settings
 	my $Ta = 0.0;
 	my $Tr = 0.0;
-	open(SET, "$BaseDir/$num/$num-settings.txt") or die;
+	if (!open(SET, "$BaseDir/$num/$num-settings.txt")) {
+    next;
+  }
 	while(<SET>) {
 		chomp;
 		if (/absolute: (\S+)/) {
