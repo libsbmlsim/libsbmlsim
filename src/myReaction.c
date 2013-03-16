@@ -43,7 +43,37 @@ void myReaction_initWithModel(myReaction *reaction, Model_t *model, int index) {
   reaction->products = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_products);
   reaction->reactants = (mySpeciesReference **)malloc(sizeof(mySpeciesReference *) * num_of_reactants);
   reaction->is_fast = Reaction_getFast(origin);
-  reaction->is_reversible = Reaction_getReversible(origin);
+  /* reaction->is_reversible = Reaction_getReversible(origin); */
+  reaction->is_reversible = Reaction_getReversibleFromMath(origin);
+}
+
+char traverse(const ASTNode_t *node, Reaction_t* r, char flag) {
+  unsigned int i;
+  const char *name;
+  if (flag == 3) {
+    return flag;
+  }
+  if (ASTNode_getType(node) == AST_NAME) {
+    name = ASTNode_getName(node);
+    if (Reaction_getReactantBySpecies(r, name) != NULL) {
+      flag |=  2;
+    } else if (Reaction_getProductBySpecies(r, name) != NULL) {
+      flag |=  1;
+    }
+  } else {
+    for (i = 0; i < ASTNode_getNumChildren(node); i++) {
+      flag = traverse(ASTNode_getChild(node, i), r, flag);
+    }
+  }
+  return flag;
+}
+
+boolean Reaction_getReversibleFromMath(Reaction_t *r) {
+  char flag = 0;
+  const ASTNode_t *node = KineticLaw_getMath(Reaction_getKineticLaw(r));
+  flag = traverse(node, r, flag);
+  if (flag == 3) return true;
+  return false;
 }
 
 void myReaction_free(myReaction *reaction) {

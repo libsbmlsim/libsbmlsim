@@ -46,21 +46,60 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
   Species_t *sp;
 
   node = *node_p;
-  for(i=0; i<ASTNode_getNumChildren(node); i++){
-    next_node = ASTNode_getChild(node, i);
-    if(ASTNode_getNumChildren(node) == 1 && ASTNode_getType(node) == AST_MINUS){
+  /* Check whether this node is '-' and only have one child. */
+  if(ASTNode_getNumChildren(node) == 1 && ASTNode_getType(node) == AST_MINUS){
+    next_node = ASTNode_getChild(node, 0);
+    zero_node = ASTNode_create();
+    ASTNode_setType(zero_node, AST_REAL);
+    ASTNode_setReal(zero_node, 0);
+    ASTNode_replaceChild(node, 0, zero_node);
+    ASTNode_addChild(*node_p, next_node);
+  }
+  /* Have to treat with special situations that there is no child under operator */
+  /* (but MathML allows it) */
+  if (ASTNode_getNumChildren(node) == 0) {
+    if( ASTNode_getType(node) == AST_PLUS ) { /* change to 0.0 */
+      ASTNode_setType(node, AST_REAL);
+      ASTNode_setReal(node, 0.0);
+    } else if ( ASTNode_getType(node) == AST_TIMES ) { /* change to 1.0 */
+      ASTNode_setType(node, AST_REAL);
+      ASTNode_setReal(node, 1.0);
+    } else if ( ASTNode_getType(node) == AST_LOGICAL_AND ) {
+      ASTNode_setType(node, AST_INTEGER);
+      ASTNode_setReal(node, true);
+    } else if ( ASTNode_getType(node) == AST_LOGICAL_OR  || ASTNode_getType(node) == AST_LOGICAL_XOR ){
+      ASTNode_setType(node, AST_INTEGER);
+      ASTNode_setReal(node, false);
+    }
+  }
+  /* Have to treat with special situations that it has only 1 child under operator */
+  /* (but MathML allows it) */
+  if (ASTNode_getNumChildren(node) == 1) {
+    if( ASTNode_getType(node) == AST_PLUS  || ASTNode_getType(node) == AST_TIMES ||
+        ASTNode_getType(node) == AST_LOGICAL_AND ||
+        ASTNode_getType(node) == AST_LOGICAL_OR || 
+        ASTNode_getType(node) == AST_LOGICAL_XOR ) { /* change to its child value (convert as 'child + 0' */
+      /* change myself as '+' */
+      ASTNode_setType(node, AST_PLUS);
+      /* creat 0 node */
       zero_node = ASTNode_create();
       ASTNode_setType(zero_node, AST_REAL);
       ASTNode_setReal(zero_node, 0);
-      ASTNode_replaceChild(node, 0, zero_node);
-      ASTNode_addChild(*node_p, next_node);
-    }else{
-      /* TRACE(("down to %d th child from\n", i)); */
-      /* print_node_type(node); */
-      alter_tree_structure(m, &next_node, *node_p, i, cp_AST);
+      /* add 0 to right node */
+      ASTNode_addChild(node, zero_node);
     }
   }
 
+  /* Do the same thing for children (recursive) */
+  for(i=0; i<ASTNode_getNumChildren(node); i++){
+    next_node = ASTNode_getChild(node, i);
+    /* TRACE(("down to %d th child from\n", i)); */
+    /* print_node_type(node); */
+    alter_tree_structure(m, &next_node, *node_p, i, cp_AST);
+  }
+
+  /* If node is Name (Species, Parameter, etc.) */
+  /* !!! CAUTION !!! this part should not be before the recursive call!!! */
   if(ASTNode_getType(node) == AST_NAME){
     for(i=0; i<Model_getNumSpecies(m); i++){
       sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);      
@@ -95,6 +134,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       }
     }
   }
+  /* If node is Function (don't call this function for children. */
   if(ASTNode_getType(node) == AST_FUNCTION){
     arg_node_num = ASTNode_getNumChildren(node);
     for(i=0; i<arg_node_num; i++){
@@ -110,13 +150,17 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
           fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
           ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
         }
-        /* test */
-        /* 	for(i=0; i<ASTNode_getNumChildren(fd_body); i++){ */
-        /* 	  next_node = ASTNode_getChild(fd_body, i); */
-        /* 	  TRACE(("down to %d th child from\n", i)); */
-        /* 	  print_node_type(node); */
-        /* 	  alter_tree_structure(m, &next_node, fd_body, i, cp_AST); */
-        /* 	} */
+        /* Support nested functions */
+        /* Confirmed by funa & takizawa 2013/03/16 */
+        /* We can not uncomment this part because it causes SEGV on free_mySBML_object() */
+        /* But this part is required if we want to call function from function (nested functions) */
+          /* for(i=0; i<ASTNode_getNumChildren(fd_body); i++){ */
+            /* next_node = ASTNode_getChild(fd_body, i); */
+            /* TRACE(("down to %d th child from\n", i)); */
+            /* print_node_type(node); */
+            /* alter_tree_structure(m, &next_node, fd_body, i, cp_AST); */
+          /* } */
+         /* Uncomment end */
         minus_func(fd_body);
         check_AST(fd_body, NULL);
         if(parent != NULL){
@@ -129,7 +173,16 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       }
     }
   }
+  /* If node is Piecewise */
   if(ASTNode_getType(node) == AST_FUNCTION_PIECEWISE){
+    if(ASTNode_getNumChildren(node) % 2 == 0) {
+      /* creat 0 node */
+      zero_node = ASTNode_create();
+      ASTNode_setType(zero_node, AST_REAL);
+      ASTNode_setReal(zero_node, 0);
+      /* add 0 to right node */
+      ASTNode_addChild(node, zero_node);
+    }
     ASTNode_setType(node, AST_PLUS);
     ASTNode_setName(node, NULL);
     times_node = ASTNode_createWithType(AST_TIMES);

@@ -34,6 +34,8 @@ struct _myReaction {
 
 myReaction *myReaction_create();
 void myReaction_initWithModel(myReaction *reaction, Model_t *model, int index);
+char traverse(const ASTNode_t *node, Reaction_t* r, char flag);
+boolean Reaction_getReversibleFromMath(Reaction_t *r);
 void myReaction_free(myReaction *reaction);
 
 void myReaction_initProducts(myReaction *reaction, mySpecies **species, unsigned int num_of_species);
