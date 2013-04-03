@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Mon, 28 Jan 2013 02:12:31 +0900
+-- Last modified: Thu, 04 Apr 2013 03:10:38 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -13,8 +13,8 @@
   numerical integration (simulate) and export its results.
   Both explicit and implicit methods are supported on libSBMLSim.
   LibSBMLSim is confirmed to pass all SBML Level-2 Version 4 and Level-3
-  Version 1 test cases (sbml-test-cases-2.0.2.zip, available from
-  http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/).
+  Version 1 core test cases (sbml-test-cases-2013-02-03.zip, available from
+  http://sourceforge.net/projects/sbml/files/test-suite/2.3.2/).
   The libSBMLSim code is portable. It is written in C programming language
   (ANSI C89) and it does not depend on other third-party libraries
   except libSBML(*1).
@@ -51,7 +51,7 @@
 - Binary install of libSBMLSim
   We have provided installer for Windows, MacOSX and Linux from libSBMLSim-1.1.
   = Windows (both 32bit and 64bit)
-    Download libSBMLSim Installer for Windows (libsbmlsim-1.1.0-win{32,64}.exe)
+    Download libSBMLSim Installer for Windows (libsbmlsim-1.2.0-win{32,64}.exe)
     and double-click the installer. It will ask few questions, and will
     install libSBMLSim to
       "C:\Program Files\libsbmlsim-1.1"       (32bit)
@@ -60,15 +60,15 @@
 
   = MacOSX (64bit)
     Download libSBMLSim Installer archive for MacOSX
-    (libsbmlsim-1.1.0-macosx-lion-x64.dmg) and double-click the .dmg file.
-    You will see an installer (libsbmlsim-1.1.0-macosx-lion-x64.pkg) in a
+    (libsbmlsim-1.2.0-macosx-lion-x64.dmg) and double-click the .dmg file.
+    You will see an installer (libsbmlsim-1.2.0-macosx-lion-x64.pkg) in a
     Finder window. Double-click the installer and follow the instructions.
     It will install libSBMLSim to /usr/local .
 
   = Linux (64bit)
-    Download libsbmlsim-1.1.0_amd64.deb, and install with the following
+    Download libsbmlsim-1.2.0_amd64.deb, and install with the following
     command in your terminal.
-      $ sudo dpkg -i libsbmlsim-1.1.0_amd64.deb
+      $ sudo dpkg -i libsbmlsim-1.2.0_amd64.deb
     It will install libSBMLSim to /usr .
 
 * Compile and Install from source code.
@@ -86,11 +86,11 @@
 
 - How to build libSBMLSim
   1. Extract the archive file
-   % tar xvzf libsbmlsim-1.1.0.tar.gz (for tar ball)
-   % unzip libsbmlsim-1.1.0.zip       (for zip archive)
+   % tar xvzf libsbmlsim-1.2.0.tar.gz (for tar ball)
+   % unzip libsbmlsim-1.2.0.zip       (for zip archive)
   2. Compile
-   % mkdir libsbmlsim-1.1.0/build
-   % cd libsbmlsim-1.1.0/build
+   % mkdir libsbmlsim-1.2.0/build
+   % cd libsbmlsim-1.2.0/build
    % cmake ..
    % ccmake .
      CUI from cmake will be launched. Please confirm that
@@ -248,7 +248,7 @@
   SBML test cases, then the result will be marked as "[NG]".
 
   (*4 Online SBML Test Suite: http://sbml.org/Facilities/Online_SBML_Test_Suite)
-  (*5 SBML-test-cases-2.0.2 : http://sourceforge.net/projects/sbml/files/test-suite/2.0.2/sbml-test-cases-2.0.2.zip/download)
+  (*5 SBML-test-cases-2.3.2 : http://sourceforge.net/projects/sbml/files/test-suite/2.3.2)
 
 * LibSBMLSim API and its language bindings
   Example usage of libSBMLSim APIs are as follows.
