@@ -9,6 +9,7 @@ else(MSVC)
   add_definitions(-Wall -Wextra -fno-strict-aliasing)
 endif(MSVC)
 set(CMAKE_C_FLAGS "-O2")
+#set(CMAKE_C_FLAGS "-O0 -g")
 
 # build mode
 if(NOT CMAKE_BUILD_TYPE)
@@ -39,19 +40,24 @@ set(LIBSBML_DEFINITIONS ${PC_LIBSBML_CFLAGS_OTHER})
 
 find_path(LIBSBML_INCLUDE_DIR
   NAMES sbml/SBMLTypes.h
-  PATHS /usr/include /usr/local/include /opt/local/include
+  PATHS ENV C_INCLUDE_PATH
+        /usr/include /usr/local/include /opt/local/include
         ${CMAKE_SOURCE_DIR}/depend/include
   HINTS ${PC_LIBSBML_INCLUDEDIR} ${PC_LIBSBML_INCLUDE_DIRS} )
 
 find_library(LIBSBML_LIBRARY
   NAMES libsbml.lib sbml
-  PATHS /usr/lib /usr/local/lib /opt/local/lib
+  PATHS ENV DYLD_LIBRARY_PATH
+        ENV LD_LIBRARY_PATH
+        /usr/lib /usr/local/lib /opt/local/lib
         ${CMAKE_SOURCE_DIR}/depend/lib
   HINTS ${PC_LIBSBML_LIBDIR} ${PC_LIBSBML_LIBRARY_DIRS} )
 
 find_library(LIBBZIP2_LIBRARY
   NAMES bzip2.lib bz2 libbz2.lib
-  PATHS /usr/lib /usr/local/lib /opt/local/lib
+  PATHS ENV DYLD_LIBRARY_PATH
+        ENV LD_LIBRARY_PATH
+        /usr/lib /usr/local/lib /opt/local/lib
         ${CMAKE_SOURCE_DIR}/depend/lib
   HINTS ${PC_LIBBZIP2} ${PC_LIBBZIP2_LIBRARY_DIRS} )
 
