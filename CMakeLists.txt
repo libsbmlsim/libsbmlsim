@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 project(libsbmlsim)
 
+# version number
+SET(LIBSBMLSIM_VERSION_MAJOR "1")
+SET(LIBSBMLSIM_VERSION_MINOR "2")
+SET(LIBSBMLSIM_VERSION_PATCH "0")
+SET(PACKAGE_VERSION "${LIBSBMLSIM_VERSION_MAJOR}.${LIBSBMLSIM_VERSION_MINOR}.${LIBSBMLSIM_VERSION_PATCH}")
+
 # cmake variables
 if(MSVC)
   add_definitions(/W3)
