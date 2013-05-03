@@ -107,7 +107,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/src/libsbmlsim" ${LIBSBML_INCLUDE_DI
 # Shared library
 add_library(sbmlsim SHARED ${SOURCES_LIB})
 target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES})
-set_target_properties(sbmlsim PROPERTIES VERSION "${PACKAGE_VERSION}" SOVERSION "${LIBSBMLSIM_VERSION_MAJOR}.${LIBSBMLSIM_VERSION_MINOR}")
+set_target_properties(sbmlsim PROPERTIES VERSION "${PACKAGE_VERSION}" SOVERSION "${PACKAGE_COMPAT_VERSION}")
 
 # Test program
 add_executable(test ${SOURCES_TEST})
