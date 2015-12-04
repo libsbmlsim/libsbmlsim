@@ -110,8 +110,8 @@ target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES})
 set_target_properties(sbmlsim PROPERTIES VERSION "${PACKAGE_VERSION}" SOVERSION "${PACKAGE_COMPAT_VERSION}")
 
 # Test program
-add_executable(test ${SOURCES_TEST})
-target_link_libraries(test sbmlsim ${LIBSBML_LIBRARIES})
+add_executable(testprog ${SOURCES_TEST})
+target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES})
 
 # Simulator for test suiteprogram
 add_executable(simulateSBML ${SOURCES_MAIN})

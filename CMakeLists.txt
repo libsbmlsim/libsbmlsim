@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 project(libsbmlsim)
 
 # version number
@@ -14,6 +14,8 @@ else(MSVC)
 endif(MSVC)
 set(CMAKE_C_FLAGS "-O2")
 #set(CMAKE_C_FLAGS "-O0 -g")
+# enable @rpath in the install name for any shared library being built
+set(CMAKE_MACOSX_RPATH 1)
 
 # build mode
 if(NOT CMAKE_BUILD_TYPE)
@@ -80,7 +82,7 @@ message(STATUS "
 libSBMLSim version ${PACKAGE_VERSION}
 ----------------------------------------------------------------------
 
-Configured on host "$ENV{COMPUTERNAME}" ${HOSTNAME}
+Configured on host '${HOSTNAME}'
   host type                     = ${CMAKE_SYSTEM_NAME}
   host operating system         = ${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_VERSION}
   host CPU architecture         = ${CMAKE_SYSTEM_PROCESSOR}
