@@ -31,7 +31,7 @@ struct _myCompartment {
   myRule *depending_rule;
   double prev_val[3]; /* previous values for multistep solution */
   double prev_k[3]; /* previous values for multistep solution */
-  mySpecies *including_species[MAX_INCLUDING_SPECIES];
+  mySpecies **including_species;
   unsigned int num_of_including_species;
 };
 

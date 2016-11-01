@@ -2357,8 +2357,7 @@ static void locate_species_in_compartment(
     for (j = 0; j < num_of_compartments; j++) {
       if (strcmp(cid, Compartment_getId(compartments[j]->origin)) == 0) {
         species[i]->locating_compartment = compartments[j];
-        compartments[j]->including_species[compartments[j]->num_of_including_species] = species[i];
-        compartments[j]->num_of_including_species++;
+        myCompartment_addIncludingSpecies(compartments[j], species[i]);
       }
     }
   }

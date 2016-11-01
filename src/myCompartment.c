@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <sbml/SBMLTypes.h>
 
+static unsigned int get_num_of_including_species(Compartment_t *compartment, Model_t *model);
+
 myCompartment *myCompartment_create() {
   myCompartment *compartment = (myCompartment *)malloc(sizeof(myCompartment));
   compartment->origin = NULL;
@@ -36,12 +38,14 @@ myCompartment *myCompartment_create() {
   compartment->prev_k[0] = 0;
   compartment->prev_k[1] = 0;
   compartment->prev_k[2] = 0;
+  compartment->including_species = NULL;
   compartment->num_of_including_species = 0;
   return compartment;
 }
 
 void myCompartment_initWithModel(myCompartment *compartment, Model_t *model, int index) {
   Compartment_t *origin = (Compartment_t *)ListOf_get(Model_getListOfCompartments(model), index);
+  unsigned int num_of_including_species;
 
   compartment->origin = origin;
   if (Compartment_isSetSize(origin)) {
@@ -53,6 +57,9 @@ void myCompartment_initWithModel(myCompartment *compartment, Model_t *model, int
   compartment->prev_val[0] = compartment->value;
   compartment->prev_val[1] = compartment->value;
   compartment->prev_val[2] = compartment->value;
+
+  num_of_including_species = get_num_of_including_species(origin, model);
+  compartment->including_species = (mySpecies **)malloc(num_of_including_species * sizeof(mySpecies *));
 }
 
 void myCompartment_initDelayVal(myCompartment *compartment, unsigned int length, unsigned int width) {
@@ -72,6 +79,9 @@ void myCompartment_free(myCompartment *compartment) {
       free(compartment->delay_val[i]);
     }
     free(compartment->delay_val);
+  }
+  if (compartment->including_species != NULL) {
+    free(compartment->including_species);
   }
   free(compartment);
 }
@@ -106,5 +116,20 @@ void myCompartment_addIncludingSpecies(myCompartment *compartment, mySpecies *sp
   unsigned int num = compartment->num_of_including_species;
   compartment->including_species[num] = species;
   compartment->num_of_including_species++;
+}
+
+static unsigned int get_num_of_including_species(Compartment_t *compartment, Model_t *model) {
+  unsigned int ret = 0;
+  const char *cid = Compartment_getId(compartment);
+  unsigned int num_of_species = Model_getNumSpecies(model);
+  unsigned int i;
+  for (i = 0; i < num_of_species; i++) {
+    Species_t *s = Model_getSpecies(model, i);
+    if (Species_isSetCompartment(s) &&
+        strcmp(cid, Species_getCompartment(s)) == 0) {
+      ret++;
+    }
+  }
+  return ret;
 }
 
