@@ -183,8 +183,8 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       /* add 0 to right node */
       ASTNode_addChild(node, zero_node);
     }
-    ASTNode_setType(node, AST_PLUS);
     ASTNode_setName(node, NULL);
+    ASTNode_setType(node, AST_PLUS);
     times_node = ASTNode_createWithType(AST_TIMES);
     pc_eq = ASTNode_getRightChild(node);
     ASTNode_addChild(times_node, pc_eq);
