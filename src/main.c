@@ -20,19 +20,20 @@
 #endif
 
 void usage(char *str) {
-  printf("Usage : %s [option] filename(SBML file only)\n", str);
-  printf(" -t # : specify simulation time (ex. -t 100 )\n");
-  printf(" -s # : specify simulation step (ex. -s 100 )\n");
-  printf(" -d # : specify simulation delta (ex. -d 0.01 [default:1/4096])\n");
-  printf("        dt is calculated in (delta)*(time)/(step)\n");
-  printf(" -l   : use lazy method for integration\n");
-  printf(" -n   : do not use lazy method\n");
-  printf(" -a   : print Species Value in Amount\n");
-  printf(" -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])\n");
-  printf(" -R # : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])\n");
-  printf(" -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
-  printf(" -B   : use bifurcation analysis \n");
-  printf(" -m # : specify numerical integration algorithm (ex. -m 3 )\n");
+  printf("Usage    : %s [option] filename(SBML file only)\n", str);
+  printf(" -t #    : specify simulation time (ex. -t 100 )\n");
+  printf(" -s #    : specify simulation step (ex. -s 100 )\n");
+  printf(" -d #    : specify simulation delta (ex. -d 0.01 [default:1/4096])\n");
+  printf("           dt is calculated in (delta)*(time)/(step)\n");
+  printf(" -a      : print Species Value in Amount\n");
+  printf(" -o file : specify result file (ex. -o output.csv )\n");
+  printf(" -l      : use lazy method for integration\n");
+  printf(" -n      : do not use lazy method\n");
+  printf(" -A #    : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])\n");
+  printf(" -R #    : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])\n");
+  printf(" -M #    : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
+  printf(" -B      : use bifurcation analysis \n");
+  printf(" -m #    : specify numerical integration algorithm (ex. -m 3 )\n");
   printf("        1: Runge-Kutta\n");
   printf("        2: AM1 & BD1 (implicit Euler)\n");
   printf("        3: AM2 (Crank Nicolson)\n");
@@ -68,6 +69,7 @@ int main(int argc, char *argv[]){
   double delta = 1.0/4096;
   double dt = 0;
   int print_interval = 0;
+  char* outfile = NULL;
 
   double atol = ABSOLUTE_ERROR_TOLERANCE;
   double rtol = RELATIVE_ERROR_TOLERANCE;
@@ -89,7 +91,7 @@ int main(int argc, char *argv[]){
   myResult *rtn;
 
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "t:s:d:m:A:R:M:lnaB")) != -1){
+  while ((ch = getopt(argc, argv, "t:s:d:m:A:R:M:o:lnaB")) != -1){
     switch (ch) {
       case 't':
         sim_time = atof(optarg);
@@ -113,20 +115,26 @@ int main(int argc, char *argv[]){
         print_amount = 1;
         break;
       case 'A':
-		  atol = atof(optarg);
-		  break;
+        atol = atof(optarg);
+        break;
       case 'R':
-		  rtol = atof(optarg);
-		  break;
+        rtol = atof(optarg);
+        break;
       case 'B':
-		  use_bifurcation_analysis = 1;
-		  break;
+        use_bifurcation_analysis = 1;
+        break;
       case 'M':
-		  facmax = atof(optarg);
-		  break;
+        facmax = atof(optarg);
+        break;
+      case 'o':
+        outfile = optarg;
+        break;
       default:
         usage(myname);
     }
+  }
+  if (outfile == NULL) {
+    outfile = "out.csv";
   }
   argc -= optind;
   argv += optind;
@@ -309,7 +317,7 @@ int main(int argc, char *argv[]){
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
-    write_csv(rtn, "out.csv"); /*  for SBML test suite */
+    write_csv(rtn, outfile); /*  for SBML test suite */
     /* for more generic simulator
        write_separate_result(rtn,
        "./simulation_results/species_result.dat",

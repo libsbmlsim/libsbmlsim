@@ -23,7 +23,6 @@ done
 basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 sim="$basedir/simulateSBML"
 genresult="$basedir/genresult.pl"
-tmpout="out.csv"
 
 ### 00001-settings.txt
 # duration: 5
@@ -95,6 +94,6 @@ fi
 echo "$num: $duration : $steps : [$variables] : [$amount] : [$concentration] : $atol : $rtol"
 echo -en $print_msg
 # $sim -t $duration -s $steps $opt_delta -m 13 -A $atol -R $rtol $opt_facmax -n $opt_amount $sbml && \
-$sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount $sbml && \
-  $genresult $tmpout $variables $steps > $out_dir/$result
-rm -f $tmpout
+$sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount -o $result $sbml && \
+  $genresult $result $variables $steps > $out_dir/$result
+rm -f $result
