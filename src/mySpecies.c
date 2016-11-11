@@ -118,10 +118,6 @@ void mySpecies_reallocDelayVal(mySpecies *species, unsigned int length, unsigned
   species->delay_val = delay_val;
 }
 
-void mySpecies_setLocatingCompartment(mySpecies *species, myCompartment *compartment) {
-  species->locating_compartment = compartment;
-}
-
 void mySpecies_setDependingRule(mySpecies *species, myRule *rule) {
   species->depending_rule = rule;
 }

@@ -43,7 +43,6 @@ void mySpecies_initDelayVal(mySpecies *species, unsigned int length, unsigned in
 void mySpecies_free(mySpecies *species);
 
 void mySpecies_reallocDelayVal(mySpecies *species, unsigned int length, unsigned int width);
-void mySpecies_setLocatingCompartment(mySpecies *species, myCompartment *compartment);
 void mySpecies_setDependingRule(mySpecies *species, myRule *rule);
 
 #endif /* LibSBMLSim_MySpecies_h */
