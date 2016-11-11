@@ -1,0 +1,36 @@
+# object files
+*.o
+*.lo
+*.slo
+*.obj
+
+# precompiled headers
+*.gch
+*.pch
+
+# dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# static libraries
+*.a
+*.la
+*.lai
+*.lib
+
+# executables
+*.app
+*.exe
+*.out
+
+# cmake
+build
+
+# example, test executables
+examples/c/test
+examples/cpp/test
+testcases/simulateSBML
+
+# IntelliJ
+.idea/
