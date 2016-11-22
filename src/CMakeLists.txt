@@ -106,12 +106,20 @@ include_directories ("${PROJECT_SOURCE_DIR}/src/libsbmlsim" ${LIBSBML_INCLUDE_DI
 
 # Shared library
 add_library(sbmlsim SHARED ${SOURCES_LIB})
-target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES} m)
+#if(MSVC)
+  target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES})
+#else(MSVC)
+  target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES} m)
+#endif()
 set_target_properties(sbmlsim PROPERTIES VERSION "${PACKAGE_VERSION}" SOVERSION "${PACKAGE_COMPAT_VERSION}")
 
 # Test program
 add_executable(testprog ${SOURCES_TEST})
-target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES} m)
+#if(MSVC)
+  target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES})
+#else(MSVC)
+  target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES} m)
+#endif()
 
 # Simulator for test suiteprogram
 add_executable(simulateSBML ${SOURCES_MAIN})
