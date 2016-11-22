@@ -32,7 +32,7 @@ void usage(char *str) {
   printf(" -A #    : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])\n");
   printf(" -R #    : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])\n");
   printf(" -M #    : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
-  printf(" -B      : use bifurcation analysis \n");
+  printf(" -B      : use bifurcation analysis\n");
   printf(" -m #    : specify numerical integration algorithm (ex. -m 3 )\n");
   printf("        1: Runge-Kutta\n");
   printf("        2: AM1 & BD1 (implicit Euler)\n");
