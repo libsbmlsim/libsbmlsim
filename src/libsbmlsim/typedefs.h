@@ -27,6 +27,7 @@ typedef struct _myDelay myDelay;
 typedef struct _myInitialAssignment myInitialAssignment;
 typedef struct _allocated_memory allocated_memory;
 typedef struct _copied_AST copied_AST;
+typedef struct _variable variable;
 
 /* no header files yet */
 typedef struct _timeVariantAssignments timeVariantAssignments;

@@ -31,6 +31,7 @@ build
 examples/c/test
 examples/cpp/test
 testcases/simulateSBML
+testcases/simulateSBMLFlint
 
 # IntelliJ
 .idea/

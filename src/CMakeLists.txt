@@ -38,6 +38,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/mySpecies.c
   ${PROJECT_SOURCE_DIR}/src/mySpeciesReference.c
   ${PROJECT_SOURCE_DIR}/src/mySBML_objects.c
+  ${PROJECT_SOURCE_DIR}/src/variable.c
   ${PROJECT_SOURCE_DIR}/src/output_result.c
   ${PROJECT_SOURCE_DIR}/src/prepare_algebraic.c
   ${PROJECT_SOURCE_DIR}/src/prepare_reversible_fast_reaction.c
@@ -79,8 +80,9 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/util/str_is_number.c
   )
 
-set (SOURCES_LIB ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/lib_main.c)
+set (SOURCES_LIB ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/lib_main.c ${PROJECT_SOURCE_DIR}/src/lib_main_flint.c)
 set (SOURCES_MAIN ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/main.c)
+set (SOURCES_MAIN_FLINT ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/main_flint.c)
 set (SOURCES_TEST test.c)
 
 set (INSTALL_DOCS)
@@ -124,8 +126,24 @@ ADD_CUSTOM_COMMAND(TARGET simulateSBML
   )
 endif()
 
+# Simulator for Flint
+add_executable(simulateSBMLFlint ${SOURCES_MAIN_FLINT})
+target_link_libraries(simulateSBMLFlint sbmlsim-static ${LIBSBML_LIBRARIES})
+if(NOT MSVC)
+ADD_CUSTOM_COMMAND(TARGET simulateSBMLFlint
+  POST_BUILD
+  COMMAND cmake -E echo "Copying simulator for flint to testcase directory..."
+  COMMAND cmake -E copy simulateSBMLFlint ${PROJECT_SOURCE_DIR}/testcases
+  )
+endif()
+
 # Install targets
 INSTALL(TARGETS simulateSBML sbmlsim-static sbmlsim
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  )
+INSTALL(TARGETS simulateSBMLFlint sbmlsim-static sbmlsim
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
@@ -197,6 +215,7 @@ SET(CPACK_SOURCE_IGNORE_FILES
   "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
   "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/"
   "testcases/simulateSBML"
+  "testcases/simulateSBMLFlint"
   "testcases/cases/"
   "testcases/.*-results\\\\.csv"
   "testcases/out\\\\.csv"

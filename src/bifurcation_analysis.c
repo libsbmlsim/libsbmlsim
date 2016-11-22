@@ -88,9 +88,9 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print
 				time = 0.0;
 				mySp[sta_var_column]->value = init_max * dsfmt_genrand_close_open(&d);
 				if (is_explicit == 1) {
-					rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
+					rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, NULL);
 				}else{
-					rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
+					rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, NULL);
 				}
 				local_max = search_local_max(rtn, sta_var_column, transition_time, sim_time);
 				local_min = search_local_min(rtn, sta_var_column, transition_time, sim_time);
@@ -108,9 +108,9 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print
 				time = 0.0;
 				mySp[sta_var_column]->value = init_max * dsfmt_genrand_close_open(&d);
 				if (is_explicit == 1) {
-					rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
+					rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, NULL);
 				  }else{
-					rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
+					rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, NULL);
 				}
 				local_max = search_local_max(rtn, sta_var_column, transition_time, sim_time);
 				local_min = search_local_min(rtn, sta_var_column, transition_time, sim_time);

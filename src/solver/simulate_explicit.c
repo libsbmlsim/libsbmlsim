@@ -24,7 +24,7 @@ double calc_explicit_formula(int order, double k1, double k2, double k3, double 
   return c_e[order][0]*k1 + c_e[order][1]*k2 + c_e[order][2]*k3 + c_e[order][3]*k4;
 }
 
-myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem){
+myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, observer obs) {
   unsigned int i, j;
   int cycle;
   int error;
@@ -69,6 +69,9 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   myParameter **var_param;
   myCompartment **var_comp;
   mySpeciesReference **var_spr;
+  /* observer */
+  variable **variables;
+  unsigned int num_of_variables = 0;
 
   set_seed();
 
@@ -269,7 +272,69 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   initialize_delay_val(sp, num_of_species, param, num_of_parameters, comp, num_of_compartments, re, num_of_reactions, sim_time, dt, 1);
 
   /* cycle start */
-  for(cycle=0; cycle<=end_cycle; cycle++){
+  for (cycle = 0; cycle <= end_cycle; cycle++) {
+    /* observer */
+    if (obs != NULL) {
+      num_of_variables = num_of_species + num_of_parameters + num_of_compartments;
+      variables = (variable **)malloc(sizeof(variable *) * num_of_variables);
+
+      // prepare variables for observer
+      for (i = 0; i < num_of_compartments; i++) {
+        variables[i] = variable_create(Compartment_getId(comp[i]->origin), comp[i]->value);
+      }
+      for (i = 0; i < num_of_species; i++) {
+        if (print_amount) {
+          if (sp[i]->is_concentration) {
+            variables[num_of_compartments + i] = variable_create(Species_getId(sp[i]->origin), sp[i]->value * sp[i]->locating_compartment->value);
+          } else {
+            variables[num_of_compartments + i] = variable_create(Species_getId(sp[i]->origin), sp[i]->value);
+          }
+        } else {
+          if (sp[i]->is_amount) {
+            variables[num_of_compartments + i] = variable_create(Species_getId(sp[i]->origin), sp[i]->value / sp[i]->locating_compartment->value);
+          } else {
+            variables[num_of_compartments + i] = variable_create(Species_getId(sp[i]->origin), sp[i]->value);
+          }
+        }
+      }
+      for (i = 0; i < num_of_parameters; i++) {
+        variables[num_of_compartments + num_of_species + i] = variable_create(Parameter_getId(param[i]->origin), param[i]->value);
+      }
+
+      // call observer
+      obs(variables, num_of_variables, *time);
+
+      // write back variables
+      for (i = 0; i < num_of_compartments; i++) {
+        comp[i]->value = variable_getValue(variables[i]);
+      }
+      for (i = 0; i < num_of_species; i++) {
+        if (print_amount) {
+          if (sp[i]->is_concentration) {
+            sp[i]->value = variable_getValue(variables[num_of_compartments + i]) / sp[i]->locating_compartment->value;
+          } else {
+            sp[i]->value = variable_getValue(variables[num_of_compartments + i]);
+          }
+        } else {
+          if (sp[i]->is_amount) {
+            sp[i]->value = variable_getValue(variables[num_of_compartments + i]) * sp[i]->locating_compartment->value;
+          } else {
+            sp[i]->value = variable_getValue(variables[num_of_compartments + i]);
+          }
+        }
+      }
+      for (i = 0; i < num_of_parameters; i++) {
+        param[i]->value = variable_getValue(variables[num_of_compartments + num_of_species + i]);
+      }
+
+      // cleanup
+      for (i = 0; i < num_of_variables; i++) {
+        variable_free(variables[i]);
+      }
+      free(variables);
+      variables = NULL;
+    }
+
     /* calculate unreversible fast reaction */
     for(i=0; i<num_of_reactions; i++){
       if(re[i]->is_fast && !re[i]->is_reversible){
@@ -527,7 +592,7 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   return result;
 }
 
-myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, double atol, double rtol, double facmax, copied_AST *cp_AST, int* err_zero_flag){
+myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, double atol, double rtol, double facmax, copied_AST *cp_AST, int* err_zero_flag, observer obs) {
   unsigned int i, j;
   int cycle;
   int error;
