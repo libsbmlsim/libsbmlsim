@@ -15,7 +15,7 @@
 
 /* libSBMLSimulator API for Flint */
 
-SBMLSIM_EXPORT myResult* simulateSBMLFromFileWithFlint(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, observer obs) {
+SBMLSIM_EXPORT myResult* simulateSBMLFromFileWithFlint(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, observer obs, observer_args obs_args) {
   SBMLDocument_t* d;
   Model_t* m;
   myResult *rtn;
@@ -60,14 +60,14 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromFileWithFlint(const char* file, double 
     }
   }
   m = SBMLDocument_getModel(d);
-  rtn = simulateSBMLModelWithFlint(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax, obs);
+  rtn = simulateSBMLModelWithFlint(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax, obs, obs_args);
   if (rtn == NULL)
     rtn = create_myResult_with_errorCode(SimulationFailed);
   SBMLDocument_free(d);
   return rtn;
 }
 
-SBMLSIM_EXPORT myResult* simulateSBMLModelWithFlint(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax, observer obs) {
+SBMLSIM_EXPORT myResult* simulateSBMLModelWithFlint(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax, observer obs, observer_args obs_args) {
   double time = 0;
   int order = 0;
   int is_explicit = 0;
@@ -339,13 +339,13 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelWithFlint(Model_t *m, double sim_time,
   if (is_variable_step) {
     /* if (order == 5 || order == 6) { */
     if (is_explicit) {
-      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, obs);
+      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, obs, obs_args);
     }
   } else {  /* Fixed step size */
     if (is_explicit) {
-    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, obs);
+    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, obs, obs_args);
   }else{
-    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, obs);
+    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, obs, obs_args);
   }
   }
 

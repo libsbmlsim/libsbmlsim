@@ -17,7 +17,8 @@
 #include <sbml/SBMLTypes.h>
 #include "variable.h"
 
-typedef void (*observer)(variable **variables, int size, double time);
+typedef void * observer_args;
+typedef void (*observer)(observer_args obs_args, variable **variables, int size, double time);
 
 #endif /* LibSBMLSim_Observer_h */
 

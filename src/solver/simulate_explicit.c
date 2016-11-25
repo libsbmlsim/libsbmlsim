@@ -24,7 +24,7 @@ double calc_explicit_formula(int order, double k1, double k2, double k3, double 
   return c_e[order][0]*k1 + c_e[order][1]*k2 + c_e[order][2]*k3 + c_e[order][3]*k4;
 }
 
-myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, observer obs) {
+myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, observer obs, observer_args obs_args) {
   unsigned int i, j;
   int cycle;
   int error;
@@ -302,7 +302,7 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
       }
 
       // call observer
-      obs(variables, num_of_variables, *time);
+      obs(obs_args, variables, num_of_variables, *time);
 
       // write back variables
       for (i = 0; i < num_of_compartments; i++) {
@@ -592,7 +592,7 @@ myResult* simulate_explicit(Model_t *m, myResult* result, mySpecies *sp[], myPar
   return result;
 }
 
-myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, double atol, double rtol, double facmax, copied_AST *cp_AST, int* err_zero_flag, observer obs) {
+myResult* simulate_explicitf(Model_t *m, myResult* result, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *rule[], myEvent *event[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, timeVariantAssignments *timeVarAssign, double sim_time, double dt, int print_interval, double *time, int order, int print_amount, allocated_memory *mem, double atol, double rtol, double facmax, copied_AST *cp_AST, int* err_zero_flag, observer obs, observer_args obs_args) {
   unsigned int i, j;
   int cycle;
   int error;

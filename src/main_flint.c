@@ -51,7 +51,11 @@ void usage(char *str) {
   exit(1);
 }
 
-void flint_observer(variable **variables, int size, double time) {
+void flint_observer(observer_args obs_args, variable **variables, int size, double time) {
+  if (obs_args != NULL) {
+    printf("obs_args = %s\n", (char *)obs_args);
+  }
+
   /*
   int i;
   printf("observer called\n");
@@ -101,6 +105,9 @@ int main(int argc, char *argv[]){
   /*for variable step-size numerical integration*/
   boolean use_variable_stepsize = false;
   double facmax = DEFAULT_FACMAX;
+
+  /* observer */
+  char observer_args[] = "flint";
 
   myResult *rtn;
 
@@ -325,7 +332,7 @@ int main(int argc, char *argv[]){
   }
 	  print_interval = (int)(1/delta);
 	  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
-	  rtn = simulateSBMLModelWithFlint(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax, flint_observer);
+	  rtn = simulateSBMLModelWithFlint(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax, flint_observer, observer_args);
 
   /* write CSV */
   if (rtn == NULL) {

@@ -391,13 +391,13 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   if (is_variable_step) {
     /* if (order == 5 || order == 6) { */
     if (is_explicit) {
-      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, NULL);
+      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, NULL, NULL);
     }
   } else {  /* Fixed step size */
     if (is_explicit) {
-    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, NULL);
+    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, NULL, NULL);
   }else{
-    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, NULL);
+    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem, NULL, NULL);
   }
   }
 
@@ -631,7 +631,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   if (is_explicit == 1) {
 	  /* Runge-Kutta Fehlberg, variable step-size numerical integration */
 	  if (order == 5 || order == 6) {
- 		  rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, NULL);
+ 		  rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag, NULL, NULL);
 		  //write_csv(rtn, "variable.csv"); /* save the result data by variable step-size */
 		  if (err_zero_flag == 0) {
 			  //rtn = approximate_result_linearly(m, rtn, mySp, myParam, myComp, sim_time, dt);
