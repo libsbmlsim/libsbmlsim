@@ -86,8 +86,8 @@ struct _myASTNode{
 
 /* num_of_algebraic_equation and num_of_algebraic_variables
  * must be the same
- * coefficinet matrix size must be regular matrix and the size of this is
- * num_of_algebraic_variables * num_of_algebraic_variables)  */
+ * coefficient matrix must be regular and the size of this is
+ * (num_of_algebraic_variables * num_of_algebraic_variables)  */
 struct _myAlgebraicEquations{
   unsigned int num_of_algebraic_rules;
   unsigned int num_of_algebraic_variables;
@@ -134,7 +134,7 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
 unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, int print_interval);
 
 
-/* Calculate equations wrriten in reverse polish notation */
+/* Calculate equations written in reverse polish notation */
 double calc(equation *eq, double dt, int cycle, double *reverse_time, int rk_order);
 
 double calcf(equation *eq, double dt, int cycle, double *reverse_time, int rk_order, double* time, double* stage_time, myResult* res, int print_interval, int* err_zero_flag);
@@ -142,7 +142,7 @@ double calcf(equation *eq, double dt, int cycle, double *reverse_time, int rk_or
 
 
 
-/* Calculate event equations wrriten in reverse polish notation */
+/* Calculate event equations written in reverse polish notation */
 void calc_event(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time);
 
 void calc_eventf(myEvent *event[], unsigned int num_of_events, double dt, double time, int cycle, double *reverse_time, myResult* res, int print_interval, int* err_zero_flag);
@@ -259,7 +259,7 @@ double calc_eps(double value);
 /* forwarding value(substitute calculated temp value to value) */
 void forwarding_value(mySpecies *sp[], int sp_num, myParameter *param[], int param_num, myCompartment *comp[], int comp_num, mySpeciesReference *spr[], int spr_num);
 
-/* check the number of object for culculation */
+/* check the number of object for calculation */
 void check_num(unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int *num_of_all_var_species, unsigned int *num_of_all_var_parameters, unsigned int *num_of_all_var_compartments, unsigned int *num_of_all_var_species_reference, unsigned int *num_of_var_species, unsigned int *num_of_var_parameters, unsigned int *num_of_var_compartments, unsigned int *num_of_var_species_reference, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[]);
 
 /* create list of object for calculation */
@@ -344,7 +344,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time,
 /* Bifurcation Analysis mode */
 myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print_interval, double time, int order, int print_amount, int use_lazy_method, int is_explicit, unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int num_of_rules, unsigned int num_of_events, unsigned int num_of_initialAssignments, mySpecies* mySp[], myParameter* myParam[], myCompartment* myComp[], myReaction* myRe[], myRule* myRu[], myEvent* myEv[], myInitialAssignment* myInitAssign[], myAlgebraicEquations* myAlgEq, timeVariantAssignments* timeVarAssign, allocated_memory* mem, copied_AST* cp_AST, myResult* result, myResult* rtn, boolean bif_param_is_local, char* sta_var_id, char* bif_param_id, double bif_param_min, double bif_param_max, double bif_param_stepsize, double transition_time);
 
-/*for vaariable step-size integration */
+/*for variable step-size integration */
 /* calculate the solution in the past by linear approximation */
 double approximate_delay_linearly(double* stack, int pos, double** delay_preserver, double* time, int rk_order, myResult* res, int cycle, int print_interval, int* err_zero_flag);
 
