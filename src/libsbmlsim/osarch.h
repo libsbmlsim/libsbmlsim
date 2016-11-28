@@ -40,7 +40,9 @@ typedef unsigned __int64 uint64_t;
 
 /* asinh(), acosh(), atanh(), log1p is not C90 standard */
 #if defined(_MSC_VER) || defined(__STRICT_ANSI__)
+#ifndef __USE_BSD
 #define __USE_BSD
+#endif
 #include "math_private.h"
 #endif
 
