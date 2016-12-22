@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Thu, 04 Apr 2013 03:10:38 +0900
+-- Last modified: Thu, 22 Dec 2016 22:18:27 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -49,26 +49,26 @@
   with Windows version of libSBMLSim Installer.
   
 - Binary install of libSBMLSim
-  We have provided installer for Windows, MacOSX and Linux from libSBMLSim-1.1.
+  We have provided installer for Windows, MacOSX and Linux from libSBMLSim-1.3.
   = Windows (both 32bit and 64bit)
-    Download libSBMLSim Installer for Windows (libsbmlsim-1.2.0-win{32,64}.exe)
+    Download libSBMLSim Installer for Windows (libsbmlsim-1.3.0-win{32,64}.exe)
     and double-click the installer. It will ask few questions, and will
     install libSBMLSim to
-      "C:\Program Files\libsbmlsim-1.1"       (32bit)
-      "C:\Program Files (x86)\libsbmlsim-1.1" (64bit)
+      "C:\Program Files\libsbmlsim-1.3"       (32bit)
+      "C:\Program Files (x86)\libsbmlsim-1.3" (64bit)
     by default.
 
   = MacOSX (64bit)
     Download libSBMLSim Installer archive for MacOSX
-    (libsbmlsim-1.2.0-macosx-lion-x64.dmg) and double-click the .dmg file.
-    You will see an installer (libsbmlsim-1.2.0-macosx-lion-x64.pkg) in a
+    (libsbmlsim-1.3.0-macosx-lion-x64.dmg) and double-click the .dmg file.
+    You will see an installer (libsbmlsim-1.3.0-macosx-lion-x64.pkg) in a
     Finder window. Double-click the installer and follow the instructions.
     It will install libSBMLSim to /usr/local .
 
   = Linux (64bit)
-    Download libsbmlsim-1.2.0_amd64.deb, and install with the following
+    Download libsbmlsim-1.3.0_amd64.deb, and install with the following
     command in your terminal.
-      $ sudo dpkg -i libsbmlsim-1.2.0_amd64.deb
+      $ sudo dpkg -i libsbmlsim-1.3.0_amd64.deb
     It will install libSBMLSim to /usr .
 
 * Compile and Install from source code.
@@ -86,11 +86,11 @@
 
 - How to build libSBMLSim
   1. Extract the archive file
-   % tar xvzf libsbmlsim-1.2.0.tar.gz (for tar ball)
-   % unzip libsbmlsim-1.2.0.zip       (for zip archive)
+   % tar xvzf libsbmlsim-1.3.0.tar.gz (for tar ball)
+   % unzip libsbmlsim-1.3.0.zip       (for zip archive)
   2. Compile
-   % mkdir libsbmlsim-1.2.0/build
-   % cd libsbmlsim-1.2.0/build
+   % mkdir libsbmlsim-1.3.0/build
+   % cd libsbmlsim-1.3.0/build
    % cmake ..
    % ccmake .
      CUI from cmake will be launched. Please confirm that
@@ -164,34 +164,36 @@
   simulateSBML is a simple SBML simulator which accept SBML file as
   an input, and then output "out.csv" as a result.
   Usage: simulateSBML [option] filename(SBML)
-    -t # : specify simulation time (ex. -t 100 )
-    -s # : specify simulation step (ex. -s 100 )
-    -d # : specify simulation delta (ex. -d 0.01 [default:1/4096])
-           dt is calculated in (delta)*(time)/(step)
-    -l   : use lazy method for integration
-    -n   : do not use lazy method
-    -a   : print Species Value in Amount
-    -A # : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])
-    -R # : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])
-    -M # : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])
-    -m # : specify numerical integration algorithm (ex. -m 3 )
-        1: Runge-Kutta
-        2: AM1 & BD1 (implicit Euler)
-        3: AM2 (Crank Nicolson)
-        4: AM3
-        5: AM4
-        6: BD2
-        7: BD3
-        8: BD4
-        9: AB1 (explicit Euler)
-       10: AB2
-       11: AB3
-       12: AB4
-       13: Runge-Kutta-Fehlberg
-       14: Cash-Karp
-       (AM: Adams-Moulton, BD: Backward-Difference, AB: Adams-Bashforth.
-        Number after synonim specifies the order of integration.
-        For example, AM2 is "2nd order Adams-Moulton" method)
+    -t #    : specify simulation time (ex. -t 100 )
+    -s #    : specify simulation step (ex. -s 100 )
+    -d #    : specify simulation delta (ex. -d 0.01 [default:1/4096])
+              dt is calculated in (delta)*(time)/(step)
+    -a      : print Species Value in Amount
+    -o file : specify result file (ex. -o output.csv )
+    -l      : use lazy method for integration
+    -n      : do not use lazy method
+    -A #    : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])
+    -R #    : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])
+    -M #    : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])
+    -B      : use bifurcation analysis
+    -m #    : specify numerical integration algorithm (ex. -m 3 )
+           1: Runge-Kutta
+           2: AM1 & BD1 (implicit Euler)
+           3: AM2 (Crank Nicolson)
+           4: AM3
+           5: AM4
+           6: BD2
+           7: BD3
+           8: BD4
+           9: AB1 (explicit Euler)
+          10: AB2
+          11: AB3
+          12: AB4
+          13: Runge-Kutta-Fehlberg
+          14: Cash-Karp
+          (AM: Adams-Moulton, BD: Backward-Difference, AB: Adams-Bashforth.
+           Number after synonim specifies the order of integration.
+           For example, AM2 is "2nd order Adams-Moulton" method)
 
 - Scripts for "SBML test cases"
   LibSBMLSim provides scripts to easily run SBML test cases (*4)
@@ -205,6 +207,7 @@
                         /runall.sh     ... Script which will run all tests
                         /compare.pl
                         /genresult.pl
+                        /wrapper.sh    ... Wrapper script for SBML Test Runner
 
   "simulateSBML" simulates SBML model and generates simulation result
   as a CSV file, which is identical with the one installed under
@@ -221,6 +224,7 @@
                         /runall.sh     ... Script which will run all tests
                         /compare.pl
                         /genresult.pl
+                        /wrapper.sh    ... Wrapper script for SBML Test Runner
                         /cases/semantic/00001 ... Test case 1
                         /cases/semantic/00002 ... Test case 2
                         /cases/semantic/00003 ... Test case 3

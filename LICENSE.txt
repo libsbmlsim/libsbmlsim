@@ -1,6 +1,6 @@
            Licensing and Distribution Terms for libSBMLSim
 
-Copyright (C) 2011-2013 by the Keio University, Yokohama, Japan
+Copyright (C) 2011-2016 by the Keio University, Yokohama, Japan
  
 This file is part of libSBMLSim.
 

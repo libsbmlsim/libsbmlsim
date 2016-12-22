@@ -1,6 +1,36 @@
            libSBMLSim NEWS -- History of user-visible changes
 
-- Last modified: Thu, 04 Apr 2013 02:56:39 +0900
+- Last modified: Thu, 22 Dec 2016 22:11:24 +0900
+
+======================================================================
+Version 1.3.0 (2016-12-23)
+======================================================================
+
+* New features
+
+  - Add wrapper script (wrapper.sh) for SBML Test Runner.
+
+  - Add -o option so that user can specify an output file. This will
+    enable SBML Test Runner to run wrapper.sh in parallel.
+
+* Bug fixes
+
+  - Allocate including_species dynamically, so that the library can
+    handle more than 256 species.
+
+  - Fixed warnings (CMP0037 CMP0042) from cmake.
+
+  - Fixed alter_tree_structure to call ASTNode_setName() in the
+    proper order.
+
+  - Removed unused function (mySpecies_setLocatingCompartment()) from
+    mySpecies.
+
+  - Add -lm to linker option.
+
+  - Avoid a C preprocessor warning on Linux.
+
+  libsbmlsim confirmed to pass SBML test cases from 00001 to 01185.
 
 ======================================================================
 Version 1.2.0 (2013-04-04)
