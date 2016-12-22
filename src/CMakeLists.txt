@@ -99,27 +99,29 @@ set (INSTALL_DOCS ${INSTALL_DOCS}
 include_directories ("${PROJECT_SOURCE_DIR}/src/libsbmlsim" ${LIBSBML_INCLUDE_DIR})
 
 # Static library (only for UNIX)
-#if(NOT MSVC)
-  add_library(sbmlsim-static STATIC ${SOURCES_LIB})
+add_library(sbmlsim-static STATIC ${SOURCES_LIB})
+if(MSVC)
+  target_link_libraries(sbmlsim-static ${LIBSBML_LIBRARIES})
+else(MSVC)
   target_link_libraries(sbmlsim-static ${LIBSBML_LIBRARIES} m)
-#endif()
+endif()
 
 # Shared library
 add_library(sbmlsim SHARED ${SOURCES_LIB})
-#if(MSVC)
+if(MSVC)
   target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES})
-#else(MSVC)
+else(MSVC)
   target_link_libraries(sbmlsim ${LIBSBML_LIBRARIES} m)
-#endif()
+endif()
 set_target_properties(sbmlsim PROPERTIES VERSION "${PACKAGE_VERSION}" SOVERSION "${PACKAGE_COMPAT_VERSION}")
 
 # Test program
 add_executable(testprog ${SOURCES_TEST})
-#if(MSVC)
+if(MSVC)
   target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES})
-#else(MSVC)
+else(MSVC)
   target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES} m)
-#endif()
+endif()
 
 # Simulator for test suiteprogram
 add_executable(simulateSBML ${SOURCES_MAIN})
