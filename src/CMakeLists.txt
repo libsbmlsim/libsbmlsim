@@ -202,7 +202,7 @@ SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
 #SET(CPACK_SOURCE_TOPLEVEL_TAG "Source") 
 #SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;\\\\.DS_Store;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;.*~;/templates/;/diff/;/simulation_results/;/bindings/;^l?v*;build_.*\\\\.sh;depend-.*\\\\.zip;ev_func_piece\\\\.xml") 
 SET(CPACK_SOURCE_IGNORE_FILES 
-  "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
+  "/CVS/;/\\\\.gitignore/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
   "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/"
   "testcases/simulateSBML"
   "testcases/cases/"
