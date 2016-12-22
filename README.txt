@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Fri, 23 Dec 2016 00:22:24 +0900
+-- Last modified: Fri, 23 Dec 2016 02:28:09 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -172,6 +172,7 @@
     -o file : specify result file (ex. -o output.csv )
     -l      : use lazy method for integration
     -n      : do not use lazy method
+    -v      : prints version info
     -A #    : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])
     -R #    : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])
     -M #    : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])
