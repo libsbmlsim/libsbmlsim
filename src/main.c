@@ -29,6 +29,7 @@ void usage(char *str) {
   printf(" -o file : specify result file (ex. -o output.csv )\n");
   printf(" -l      : use lazy method for integration\n");
   printf(" -n      : do not use lazy method\n");
+  printf(" -v      : prints version info\n");
   printf(" -A #    : specify absolute tolerance for variable stepsize (ex. -A 1e-03 [default:1e-09])\n");
   printf(" -R #    : specify relative tolerance for variable stepsize (ex. -R 0.1   [default:1e-06])\n");
   printf(" -M #    : specify the max change rate of stepsize (ex. -M 1.5 [default:2.0])\n");
@@ -91,7 +92,7 @@ int main(int argc, char *argv[]){
   myResult *rtn;
 
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "t:s:d:m:A:R:M:o:lnaB")) != -1){
+  while ((ch = getopt(argc, argv, "t:s:d:m:A:R:M:o:lnaBv")) != -1){
     switch (ch) {
       case 't':
         sim_time = atof(optarg);
@@ -111,6 +112,9 @@ int main(int argc, char *argv[]){
       case 'n':
         use_lazy_method = false;
         break;
+      case 'v':
+        printf("%s version %s\n", myname, LIBSBMLSIM_DOTTED_VERSION);
+        exit(0);
       case 'a':
         print_amount = 1;
         break;
