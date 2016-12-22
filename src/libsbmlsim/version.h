@@ -14,8 +14,8 @@
 #ifndef LibSBMLSim_Version_h
 #define LibSBMLSim_Version_h
 
-#define LIBSBMLSIM_DOTTED_VERSION "1.2.0"
-#define LIBSBMLSIM_VERSION 10200
-#define LIBSBMSIML_VERSION_STRING "10200"
+#define LIBSBMLSIM_DOTTED_VERSION "1.3.0"
+#define LIBSBMLSIM_VERSION 10300
+#define LIBSBMSIML_VERSION_STRING "10300"
 
 #endif  /* LibSBMLSim_Version_h */
