@@ -29,7 +29,8 @@ IF (RBCONFIG_MAJOR EQUAL 1 AND RBCONFIG_MINOR EQUAL 8)
   SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES CPLUSPLUS OFF)
   SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
   SWIG_ADD_MODULE(libsbmlsim_ruby ruby libsbmlsim.i ${SOURCES_LIB})
-  SWIG_LINK_LIBRARIES(libsbmlsim_ruby ${RUBY_LIBRARY} sbml)
+  SWIG_LINK_LIBRARIES(libsbmlsim_ruby ${RUBY_LIBRARY} ${LIBSBML_LIBRARIES})
+
 
   set_target_properties (libsbmlsim_ruby PROPERTIES OUTPUT_NAME "libsbmlsim")
   if (UNIX)
