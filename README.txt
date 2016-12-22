@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Fri, 23 Dec 2016 03:55:14 +0900
+-- Last modified: Fri, 23 Dec 2016 04:33:07 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -60,8 +60,8 @@
 
   = MacOSX (64bit)
     Download libSBMLSim Installer archive for MacOSX
-    (libsbmlsim-1.3.0-macosx-lion-x64.dmg) and double-click the .dmg file.
-    You will see an installer (libsbmlsim-1.3.0-macosx-lion-x64.pkg) in a
+    (libsbmlsim-1.3.0-macosx-mavericks-x64.dmg) and double-click the .dmg file.
+    You will see an installer (libsbmlsim-1.3.0-macosx-mavericks-x64.pkg) in a
     Finder window. Double-click the installer and follow the instructions.
     It will install libSBMLSim to /usr/local .
 
