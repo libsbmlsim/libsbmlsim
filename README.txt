@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Thu, 22 Dec 2016 22:18:27 +0900
+-- Last modified: Fri, 23 Dec 2016 00:22:24 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -13,8 +13,8 @@
   numerical integration (simulate) and export its results.
   Both explicit and implicit methods are supported on libSBMLSim.
   LibSBMLSim is confirmed to pass all SBML Level-2 Version 4 and Level-3
-  Version 1 core test cases (sbml-test-cases-2013-02-03.zip, available from
-  http://sourceforge.net/projects/sbml/files/test-suite/2.3.2/).
+  Version 1 core test cases (sbml-test-cases-2014-10-22.zip, available from
+  http://sourceforge.net/projects/sbml/files/test-suite/3.1.1/).
   The libSBMLSim code is portable. It is written in C programming language
   (ANSI C89) and it does not depend on other third-party libraries
   except libSBML(*1).
@@ -230,7 +230,7 @@
                         /cases/semantic/00003 ... Test case 3
                         /cases/semantic/...
 
-  Following command will test all 980 tests and print out the
+  Following command will test all 1,125 tests and print out the
   results, whether the simulation result matches with the result
   with the one from SBML test cases.
 
@@ -252,7 +252,34 @@
   SBML test cases, then the result will be marked as "[NG]".
 
   (*4 Online SBML Test Suite: http://sbml.org/Facilities/Online_SBML_Test_Suite)
-  (*5 SBML-test-cases-2.3.2 : http://sourceforge.net/projects/sbml/files/test-suite/2.3.2)
+  (*5 SBML-test-cases-3.1.1 : http://sourceforge.net/projects/sbml/files/test-suite/3.1.1)
+  
+  Note: Because 00983/00983-sbml-l3v1.xml is an invalid SBML document in
+        SBML-test-cases-3.1.1, libSBMLSim will not run a simulation for this
+        model. We confirmed that libSBMLSim will pass the test of
+        00983/00983-sbml-l3v1.xml from SBML-test-cases-3.2.0.
+
+- Wrapper script for "SBML Test Runner"
+  As from v1.3.0, libSBMLSim provides a wrapper script, "wrapper.sh" for
+  SBML Test Runner (*6). By using wrapper.sh, uesrs can easily run all
+  SBML test cases on libSBMLSim through a Graphical User Interface of
+  SBML Test Runner.
+  To run libSBMLSim through SBML Test Runner, you have to create a
+  configuration for libSBMLSim from [Preference] menu on SBML Test Runner.
+  In the "Preferences" dialog, please assign a name to the configuration
+  (ex. libsbmlsim), and fill out the text fields as follows:
+    = Name: libsbmlsim
+    = Wrapper path: $some_where/libsbmlsim/testcases/wrapper.sh
+    = Output directory: $some_where/output
+    = Unsupported tags: comp, fbc
+    = Arguments to wrapper: %d %n %o %l %v
+    you can turn on "Wrapper can handle any SBML Level/Version" and
+    "Wrapper can be run in parallel".
+  After filling out the text fields, save the configuration and then
+  selecting [Test] -> [Run All Supported Tests] from the menu, SBML
+  Test Runner will run all test cases. You can browse its results on
+  its GUI.
+  (*6 SBML Test Runner: https://github.com/sbmlteam/sbml-test-suite)
 
 * LibSBMLSim API and its language bindings
   Example usage of libSBMLSim APIs are as follows.
