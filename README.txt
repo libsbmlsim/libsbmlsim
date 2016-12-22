@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Fri, 23 Dec 2016 02:28:09 +0900
+-- Last modified: Fri, 23 Dec 2016 03:55:14 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -54,8 +54,8 @@
     Download libSBMLSim Installer for Windows (libsbmlsim-1.3.0-win{32,64}.exe)
     and double-click the installer. It will ask few questions, and will
     install libSBMLSim to
-      "C:\Program Files\libsbmlsim-1.3"       (32bit)
-      "C:\Program Files (x86)\libsbmlsim-1.3" (64bit)
+      "C:\Program Files\libsbmlsim-1.3"       (64bit)
+      "C:\Program Files (x86)\libsbmlsim-1.3" (32bit)
     by default.
 
   = MacOSX (64bit)
@@ -74,7 +74,7 @@
 * Compile and Install from source code.
 - Required software packages to compile libSBMLSim
   CMake(*2) is required to compile libSBMLSim. Please download
-  and install CMake-2.8.7 or above from (*2) before building libSBMLSim.
+  and install CMake-2.8.12 or above from (*2) before building libSBMLSim.
   If you want to use language bindings of libSBMLSim, please
   download and install SWIG-2.0.4 or above from (*3).
   (Note: If you installed SWIG from MacPorts, please install

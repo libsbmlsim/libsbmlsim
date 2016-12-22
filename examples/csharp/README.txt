@@ -1,15 +1,15 @@
 * How to compile & run a test program:
   [Windows]
     1. Copy following files under
-         "C:\Program Files\libsbmlsim-1.1\share\libsbmlsim\csharp"       (32bit)
-         "C:\Program Files (x86)\libsbmlsim-1.1\share\libsbmlsim\csharp" (64bit)
+         "C:\Program Files\libsbmlsim-1.1\share\libsbmlsim\csharp"       (64bit)
+         "C:\Program Files (x86)\libsbmlsim-1.1\share\libsbmlsim\csharp" (32bit)
        to your temporary directory (say, your Desktop\temp).
         - Test.cs
         - libsbmlsimcs.dll
         - libsbmlsimcsP.dll
     2. Copy following .dll files under
-         "C:\Program Files\libsbmlsim-1.1\bin"       (32bit)
-         "C:\Program Files (x86)\libsbmlsim-1.1\bin" (64bit)
+         "C:\Program Files\libsbmlsim-1.1\bin"       (64bit)
+         "C:\Program Files (x86)\libsbmlsim-1.1\bin" (32bit)
        to your temporary directory (Desktop\temp).
        These DLLs are required to be placed in the same directory of above files.
         - libbz2.dll
@@ -18,8 +18,8 @@
         - libxml2.dll
         - zlib1.dll
     3. Copy sample SBML model (sample.xml) files under
-         "C:\Program Files\libsbmlsim-1.1\share\libsbmlsim"       (32bit)
-         "C:\Program Files (x86)\libsbmlsim-1.1\share\libsbmlsim" (64bit)
+         "C:\Program Files\libsbmlsim-1.1\share\libsbmlsim"       (64bit)
+         "C:\Program Files (x86)\libsbmlsim-1.1\share\libsbmlsim" (32bit)
        to your Desktop (not Desktop\temp).
     4. Open cmd.exe and navigate to Desktop\temp like:
        cd Desktop\temp
