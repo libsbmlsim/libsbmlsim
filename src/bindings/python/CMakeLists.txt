@@ -23,7 +23,7 @@ file(COPY ${PROJECT_SOURCE_DIR}/examples/python/README.txt DESTINATION ${CMAKE_C
 file(COPY ${PROJECT_SOURCE_DIR}/examples/sample.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../)
 
 # Install targets
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/python/Test.py ${PROJECT_SOURCE_DIR}/examples/python/README.txt ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION share/libsbmlsim/python)
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/python/Test.py ${PROJECT_SOURCE_DIR}/examples/python/GridSearch.py ${PROJECT_SOURCE_DIR}/examples/python/data.csv ${PROJECT_SOURCE_DIR}/examples/python/simple.xml ${PROJECT_SOURCE_DIR}/examples/python/README.txt ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION share/libsbmlsim/python)
 INSTALL(TARGETS _libsbmlsim
   LIBRARY DESTINATION share/libsbmlsim/python
   ARCHIVE DESTINATION share/libsbmlsim/python
