@@ -7,7 +7,7 @@
   (2) If you are in installed directory (ex. /usr/local/share/libsbml/python)
       % python Test.py
 
-* Output from this test program will be:
+* Output from this test script will be:
     numOfRows: 26
     numOfSpecies: 6
     numOfParameters: 12
@@ -38,7 +38,7 @@
 
   [1] http://sbml.org/Software/libSBML/Downloading_libSBML
 
-* Output from this test program will be:
+* Output from this grid search script will be:
     Experimental Data
     ('time', 'A', 'B', 'k', 'default')
     [(  0.,   1.00000000e+00,  0.        ,  0.8,  1.)
@@ -61,3 +61,53 @@
     Parameter k = 0.9       Error = 0.00794285269809
     Parameter k = 0.95      Error = 0.0163981861688
     Parameter k = 1.0       Error = 0.0268413252801
+
+* How to run a bayesian optimization script:
+  At first, you have to install python bindings of libSBML.
+  Please refer to libSBML installation guide[1] to install it.
+  Also, you have to create your account on SigOpt[2] and obtain your
+  API token.
+  (1) If you are in a example directory under libsbml distirbution:
+      % cp ../../build/src/bindings/python/libsbmlsim.py .
+      % cp ../../build/src/bindings/python/_libsbmlsim.so .
+      % vim bayesianOptimization.py
+      api_token = "YOUR_API_TOKEN"  # <-- write your API token here!
+      % python bayesianOptimization.py
+
+  (2) If you are in installed directory (ex. /usr/local/share/libsbml/python)
+      % vim bayesianOptimization.py
+      api_token = "YOUR_API_TOKEN"  # <-- write your API token here!
+      % python bayesianOptimization.py
+
+  [1] http://sbml.org/Software/libSBML/Downloading_libSBML
+  [2] https://sigopt.com/
+
+* Output from this test program will be:
+    Experimental Data
+    ('time', 'A', 'B', 'k', 'default')
+    [(  0.,   1.00000000e+00,  0.        ,  0.8,  1.)
+     (  1.,   4.49329095e-01,  0.5506709 ,  0.8,  1.)
+     (  2.,   2.01896636e-01,  0.79810336,  0.8,  1.)
+     (  3.,   9.07180327e-02,  0.90928197,  0.8,  1.)
+     (  4.,   4.07622516e-02,  0.95923775,  0.8,  1.)
+     (  5.,   1.83156656e-02,  0.98168433,  0.8,  1.)
+     (  6.,   8.22976146e-03,  0.99177024,  0.8,  1.)
+     (  7.,   3.69787127e-03,  0.99630213,  0.8,  1.)
+     (  8.,   1.66156115e-03,  0.99833844,  0.8,  1.)
+     (  9.,   7.46587770e-04,  0.99925341,  0.8,  1.)
+     ( 10.,   3.35463607e-04,  0.99966454,  0.8,  1.)]
+    Created experiment: https://sigopt.com/experiment/XXXXX
+    0 suggestion: k = 0.777548916271
+      value = -0.000502708675749
+    1 suggestion: k = 0.19437067801
+      value = -2.28043813724
+    ...
+    19 suggestion: k = 0.67033918398
+      value = -0.0209722719496
+    Assignments({
+      "k": 0.808111293885327
+    })
+
+  You will see the optimized value of 'k'.
+
+Have fun!
