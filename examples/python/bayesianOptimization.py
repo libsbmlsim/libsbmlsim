@@ -19,7 +19,6 @@
 from libsbml import *
 from libsbmlsim import *
 from numpy import genfromtxt
-from numpy import linspace
 from sigopt import Connection
 
 api_token = "YOUR_API_TOKEN"
