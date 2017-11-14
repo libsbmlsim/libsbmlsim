@@ -15,6 +15,7 @@
 #define LibSBMLSim_MyParameter_h
 
 #include "typedefs.h"
+#include "common.h"
 #include "myRule.h"
 #include <sbml/SBMLTypes.h>
 

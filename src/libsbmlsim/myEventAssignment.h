@@ -15,6 +15,7 @@
 #define LibSBMLSim_MyEventAssignment_h
 
 #include "typedefs.h"
+#include "common.h"
 #include "equation.h"
 #include "mySpecies.h"
 #include "myParameter.h"

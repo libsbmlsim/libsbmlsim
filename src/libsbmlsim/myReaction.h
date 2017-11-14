@@ -16,6 +16,7 @@
 
 #include "typedefs.h"
 #include "boolean.h"
+#include "common.h"
 #include "mySpeciesReference.h"
 #include <sbml/SBMLTypes.h>
 

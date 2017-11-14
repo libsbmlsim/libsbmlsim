@@ -317,6 +317,7 @@ int main(int argc, char *argv[]){
 	  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
 	  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax);
 
+  MEM_TRACE();
   /* write CSV */
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
@@ -331,9 +332,7 @@ int main(int argc, char *argv[]){
   }
 
   /* free */
-  MEM_TRACE();
   SBMLDocument_free(d);
-  MEM_TRACE();
   free_myResult(rtn);
   MEM_TRACE();
   return 0;

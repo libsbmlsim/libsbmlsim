@@ -15,6 +15,7 @@
 #define LibSBMLSim_MySpeciesReference_h
 
 #include "typedefs.h"
+#include "common.h"
 #include "equation.h"
 #include "mySpecies.h"
 #include "myRule.h"

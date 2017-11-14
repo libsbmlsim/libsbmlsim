@@ -16,6 +16,7 @@
 
 #include "typedefs.h"
 #include "boolean.h"
+#include "common.h"
 #include "equation.h"
 #include "mySpecies.h"
 #include "myParameter.h"
