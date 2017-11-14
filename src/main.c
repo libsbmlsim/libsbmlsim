@@ -331,7 +331,10 @@ int main(int argc, char *argv[]){
   }
 
   /* free */
+  MEM_TRACE();
   SBMLDocument_free(d);
+  MEM_TRACE();
   free_myResult(rtn);
+  MEM_TRACE();
   return 0;
 }

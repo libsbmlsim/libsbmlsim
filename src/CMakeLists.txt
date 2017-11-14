@@ -69,6 +69,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/solver/substitute_delay_val.c
   ${PROJECT_SOURCE_DIR}/src/util/chomp.c
   ${PROJECT_SOURCE_DIR}/src/util/dbg_printf.c
+  ${PROJECT_SOURCE_DIR}/src/util/debug_memory.c
   ${PROJECT_SOURCE_DIR}/src/util/dupstr.c
   ${PROJECT_SOURCE_DIR}/src/util/get_end_cycle.c
   ${PROJECT_SOURCE_DIR}/src/util/my_time.c
@@ -181,7 +182,7 @@ add_subdirectory(bindings/csharp)
 endif()
 
 # for installer
-INCLUDE(InstallRequiredSystemLibraries)                                                                                                                                           
+INCLUDE(InstallRequiredSystemLibraries)
 
 SET(CPACK_PACKAGE_DESCRIPTION "LibSBMLSim")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LibSBMLSim: The library for simulating SBML models")
@@ -197,11 +198,11 @@ SET(CPACK_RESOURCE_FILE_WELCOME "${PROJECT_SOURCE_DIR}/templates/Welcome.txt")
 
 # for Source code archive
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP") 
+SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
 #SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY "1")
-#SET(CPACK_SOURCE_TOPLEVEL_TAG "Source") 
+#SET(CPACK_SOURCE_TOPLEVEL_TAG "Source")
 #SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;\\\\.DS_Store;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;.*~;/templates/;/diff/;/simulation_results/;/bindings/;^l?v*;build_.*\\\\.sh;depend-.*\\\\.zip;ev_func_piece\\\\.xml") 
-SET(CPACK_SOURCE_IGNORE_FILES 
+SET(CPACK_SOURCE_IGNORE_FILES
   "/CVS/;/\\\\.gitignore/;/\\\\.svn/;/\\\\.git/;\\\\.DS_Store;\\\\.swp$"
   "/build/;^bindings/java;^bindings/perl;^bindings/python;/diff/;/simulation_results/"
   "testcases/simulateSBML"
@@ -246,8 +247,8 @@ ELSE(WIN32 AND NOT UNIX)
     SET(CPACK_RPM_PACKAGE_GROUP "Libraries/Development")
     SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
     SET(CPACK_DEBIAN_PACKAGE_SECTION "Libraries")
-    STRING(TOLOWER "${CPACK_PACKAGE_NAME}" CPACK_PACKAGE_NAME_LOWERCASE) 
-    SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME_LOWERCASE}_${CPACK_PACKAGE_VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")   
+    STRING(TOLOWER "${CPACK_PACKAGE_NAME}" CPACK_PACKAGE_NAME_LOWERCASE)
+    SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME_LOWERCASE}_${CPACK_PACKAGE_VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
   ELSEIF(APPLE)
     SET (CPACK_GENERATOR "PackageMaker")
     IF(${CMAKE_SYSTEM_VERSION} MATCHES "^5\\.")
@@ -274,6 +275,8 @@ ELSE(WIN32 AND NOT UNIX)
       SET(MACOSX_NAME "elcapitan")
     ELSEIF(${CMAKE_SYSTEM_VERSION} MATCHES "^16\\.")
       SET(MACOSX_NAME "sierra")
+    ELSEIF(${CMAKE_SYSTEM_VERSION} MATCHES "^17\\.")
+      SET(MACOSX_NAME "highsierra")
     ELSE()
       SET(MACOSX_NAME "unknown")
     ENDIF()

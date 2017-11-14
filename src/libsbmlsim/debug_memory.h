@@ -4,31 +4,25 @@
  * http://fun.bio.keio.ac.jp/software/libsbmlsim/ for more
  * information about libSBMLSim and its latest version.
  *
- * Copyright (C) 2011-2016 by the Keio University, Yokohama, Japan
+ * Copyright (C) 2011-2017 by the Keio University, Yokohama, Japan
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/libsbmlsim.h"
+#ifndef LibSBMLSim_Debug_Memory_h
+#define LibSBMLSim_Debug_Memory_h
 
-allocated_memory *allocated_memory_create() {
-  allocated_memory *mem = (allocated_memory *)malloc(sizeof(allocated_memory));
-  mem->num_of_allocated_memory = 0;
-  return mem;
-}
+/* Total bytes allocated */
+int total_allocated;
 
-void allocated_memory_free(allocated_memory *mem) {
-  unsigned int i;
+/* wrapper for malloc, free */
+void* debug_malloc(size_t, char*, int);
+void* debug_calloc(size_t, size_t, char*, int);
+void* debug_realloc(void*, size_t, char*, int);
+void debug_free(void*, char*, int);
+char* debug_strdup(const char*, char*, int);
+char* debug_strndup(const char*, size_t, char*, int);
 
-  if (mem == NULL) {
-    return;
-  }
-
-  for (i = 0; i < mem->num_of_allocated_memory; i++) {
-    free(mem->memory[i]);
-  }
-  free(mem);
-}
-
+#endif /* LibSBMLSim_Debug_Memory_h */

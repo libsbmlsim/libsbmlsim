@@ -12,8 +12,7 @@ else(MSVC)
   #  add_definitions(-Wall -Wextra -ansi -pedantic -fno-strict-aliasing)
   add_definitions(-Wall -Wextra -fno-strict-aliasing)
 endif(MSVC)
-set(CMAKE_C_FLAGS "-O2")
-#set(CMAKE_C_FLAGS "-O0 -g")
+
 # enable @rpath in the install name for any shared library being built
 set(CMAKE_MACOSX_RPATH 1)
 
@@ -32,6 +31,30 @@ if(NOT WIN32)
   #  option(WITH_PERL   "Generate Perl language bindings."   OFF)
   option(WITH_RUBY   "Generate Ruby language bindings."   OFF)
 endif(NOT WIN32)
+
+# debug options
+option(DEBUG_PRINT "Enable debug-print (only for developers)" OFF)
+option(DEBUG_MEMORY "Enable debug-memory (only for developers)" OFF)
+option(PROGRESS_PRINT "Enable progress-print (only for developers)" OFF)
+
+if(NOT MSVC)
+  if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-g -O0)
+    SET(DEBUG_MEMORY ON)
+  else(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-O3)
+  endif(CMAKE_BUILD_TYPE MATCHES Debug)
+endif(NOT MSVC)
+
+if(DEBUG_PRINT)
+  add_definitions(-DDEBUG_PRINT)
+endif(DEBUG_PRINT)
+if(DEBUG_MEMORY)
+  add_definitions(-DDEBUG_MEMORY)
+endif(DEBUG_MEMORY)
+if(PROGRESS_PRINT)
+  add_definitions(-DPROGRESS_PRINT)
+endif(PROGRESS_PRINT)
 
 # - Try to find libSBML
 # Once done this will define

@@ -11,8 +11,7 @@
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include <stdlib.h>
-#include <string.h>
+#include "../libsbmlsim/libsbmlsim.h"
 
 char* dupstr(const char *str)
 {
