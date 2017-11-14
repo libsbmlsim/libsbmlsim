@@ -65,8 +65,6 @@ extern "C" {
 #include "allocated_memory.h"
 #include "copied_AST.h"
 
-#include "debug_memory.h"
-
 #define DSFMT_MEXP 19937
 #include "dSFMT-params19937.h"
 #include "dSFMT.h"

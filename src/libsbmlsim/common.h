@@ -16,18 +16,11 @@
 
 /* debug memory */
 #ifdef DEBUG_MEMORY
-#include<stdlib.h>
-#include"debug_memory.h"
-#define DEBUG_MEMORY_FLAG 1
-#define malloc(n) debug_malloc(n, __FILE__, __LINE__)
-#define calloc(c, n) debug_calloc(c, n, __FILE__, __LINE__)
-#define realloc(p,n) debug_realloc(p, n, __FILE__, __LINE__)
-#define free(p) debug_free(p, __FILE__, __LINE__)
+#include "debug_memory.h"
+#define MEM_TRACE() do { printf("=== %s():%d ", __FUNCTION__, __LINE__); print_allocated_memory(); } while (0)
 #else
-#define DEBUG_MEMORY_FLAG 0
+#define MEM_TRACE()
 #endif
-
-#define MEM_TRACE() do { if (DEBUG_MEMORY_FLAG) printf("%12s %5d Allocated bytes: %d\n", __FUNCTION__, __LINE__, total_allocated); } while (0)
 
 /* debug print */
 #ifdef DEBUG_PRINT
