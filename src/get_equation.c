@@ -13,7 +13,12 @@
  * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
-unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem){
+unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[],
+    myParameter *param[], myCompartment *comp[], myReaction *re[],
+    ASTNode_t *node, unsigned int index, double sim_time, double dt,
+    double *time, myInitialAssignment *initAssign[],
+    char *time_variant_target_id[], unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem) {
   unsigned int i, j, k;
   int flag;
   int op;
@@ -21,6 +26,10 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
   const char *name;
   double value;
   ASTNode_t *left, *right, *comp_node;
+
+  /* new code */
+  eq->time_reverse_flag = 0;
+  /* new code end */
 
   if((ASTNode_getType(node) == AST_LOGICAL_AND
         || ASTNode_getType(node) == AST_LOGICAL_OR
@@ -413,7 +422,13 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter
   return index;
 }
 
-unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, int print_interval){
+unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[],
+    myParameter *param[], myCompartment *comp[], myReaction *re[],
+    ASTNode_t *node, unsigned int index, double sim_time, double dt,
+    double *time, myInitialAssignment *initAssign[],
+    char *time_variant_target_id[], unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem,
+    int print_interval){
   unsigned int i, j, k;
   int flag;
   int op;
@@ -660,10 +675,10 @@ unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParamete
       }
     }
   }else if((left=ASTNode_getLeftChild(node)) != NULL){
-	  index = get_equationf(m, eq, sp, param, comp, re, left, index, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem, print_interval);
+    index = get_equationf(m, eq, sp, param, comp, re, left, index, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem, print_interval);
   }
   if((right=ASTNode_getRightChild(node)) != NULL){
-	  index = get_equationf(m, eq, sp, param, comp, re, right, index, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem, print_interval);
+    index = get_equationf(m, eq, sp, param, comp, re, right, index, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem, print_interval);
   }
   if(ASTNode_isOperator(node)
       || ASTNode_isFunction(node)
