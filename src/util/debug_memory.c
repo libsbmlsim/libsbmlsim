@@ -70,19 +70,19 @@ void print_debug_node(debug_node_t* node) {
   printf("size    : %zu bytes\n", node->site->s.n);
   printf("file    : %s\n", node->site->s.file);
   printf("line    : %d\n", node->site->s.line);
-  printf("----------------------------------------\n");
+  printf("----------------------------------------------\n");
 }
 
-void print_allocated_memory(void) {
+void print_allocated_memory(const char* func, int line) {
   debug_node_t *current = debug_root_node;
-  if (current == NULL) return;
-  printf("=== Allocated Memory (v%s) ==========\n", DEBUG_MEMORY_DOTTED_VERSION);
+  /* if (current == NULL) return; */
+  printf("=== Allocated Memory (v%s) ================\n", DEBUG_MEMORY_DOTTED_VERSION);
   while (current != NULL) {
     print_debug_node(current);
     current = current->next;
   }
-  printf("Total   : %d bytes\n", total_allocated);
-  printf("========================================\n");
+  printf("Total   : %d bytes (called from %s():%d)\n", total_allocated, func, line);
+  printf("==============================================\n");
 }
 
 void* debug_malloc(size_t n, char *file, int line) {

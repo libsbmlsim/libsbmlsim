@@ -17,7 +17,7 @@
 /* debug memory */
 #ifdef DEBUG_MEMORY
 #include "debug_memory.h"
-#define MEM_TRACE() do { printf("=== %s():%d ", __FUNCTION__, __LINE__); print_allocated_memory(); } while (0)
+#define MEM_TRACE() do { print_allocated_memory(__FUNCTION__, __LINE__); } while (0)
 #else
 #define MEM_TRACE()
 #endif

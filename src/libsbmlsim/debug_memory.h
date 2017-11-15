@@ -45,7 +45,7 @@ debug_node_t* create_node(Site*);
 void add_node(Site*);
 void remove_node(Site*);
 void print_debug_node(debug_node_t*);
-void print_allocated_memory(void);
+void print_allocated_memory(const char*, int);
 
 /* debug_memory.c will not read this to avoid recursive expansion */
 #ifndef C_DEBUG_MEMORY_C
