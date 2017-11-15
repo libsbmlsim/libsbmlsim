@@ -119,7 +119,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time
   return rtn;
 }
 
-SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax){
+SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt,
+    int print_interval, int print_amount, int method, int use_lazy_method,
+    double atol, double rtol, double facmax){
   double time = 0;
   int order = 0;
   int is_explicit = 0;
@@ -163,7 +165,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
 
   char* tmp;
   unsigned int i, a, b;
-  
+
   /* for variable stepsize */
   int err_zero_flag = 0;
 
@@ -183,7 +185,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   if (facmax == 0.0) {
     facmax = DEFAULT_FACMAX;
   }
-  
+
   /* determin bifurcation analysis condition */
   if (use_bifurcation_analysis) {
 	  while(1) {
@@ -310,7 +312,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   /* myRule *myRu[num_of_rules]; */
   myRu = (myRule**)malloc(sizeof(myRule*) * num_of_rules);
   /* prepare myEvents */
-  num_of_events = Model_getNumEvents(m);  
+  num_of_events = Model_getNumEvents(m);
   /* myEvent *myEv[num_of_events]; */
   myEv = (myEvent**)malloc(sizeof(myEvent*) * num_of_events);
   /* prepare myInitial Assignments */
@@ -375,9 +377,13 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
 
   /* create myObjects */
   if (is_variable_step) {
-    create_mySBML_objectsf(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST, print_interval);
+    create_mySBML_objectsf(m, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem,
+        cp_AST, print_interval);
   } else {
-    create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST);
+    create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem,
+        cp_AST);
   }
 
   /* create myResult */
@@ -391,19 +397,32 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   if (is_variable_step) {
     /* if (order == 5 || order == 6) { */
     if (is_explicit) {
-      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem, atol, rtol, facmax, cp_AST, &err_zero_flag);
+      rtn = simulate_explicitf(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
+          myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
+          &time, order, print_amount, mem, atol, rtol, facmax, cp_AST,
+          &err_zero_flag);
     }
   } else {  /* Fixed step size */
     if (is_explicit) {
-    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, print_amount, mem);
+    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
+        &time, order, print_amount, mem);
   }else{
-    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval, &time, order, use_lazy_method, print_amount, mem);
+    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
+        &time, order, use_lazy_method, print_amount, mem);
   }
   }
 
   /* bifurcation analysis */
   if(use_bifurcation_analysis) {
-	  rtn = bifurcation_analysis(m, sim_time, dt, print_interval, time, order, print_amount, use_lazy_method, is_explicit, num_of_species, num_of_parameters, num_of_compartments, num_of_reactions, num_of_rules, num_of_events, num_of_initialAssignments, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST, result, rtn, bif_param_is_local, sta_var_id, bif_param_id, bif_param_min, bif_param_max, bif_param_stepsize, transition_time);
+	  rtn = bifurcation_analysis(m, sim_time, dt, print_interval, time, order,
+        print_amount, use_lazy_method, is_explicit,
+        num_of_species, num_of_parameters, num_of_compartments,
+        num_of_reactions, num_of_rules, num_of_events, num_of_initialAssignments,
+        mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq,
+        timeVarAssign, mem, cp_AST, result, rtn, bif_param_is_local, sta_var_id,
+        bif_param_id, bif_param_min, bif_param_max, bif_param_stepsize, transition_time);
   }
   /* after bifurcation analysis */
   if (use_bifurcation_analysis) {
@@ -412,7 +431,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   }
   /* free */
   if (use_bifurcation_analysis == 0 || (use_bifurcation_analysis == 1 && bif_param_is_local == false)) {
-    free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
+    free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
   }
 
   if (rtn == NULL)
@@ -461,11 +481,10 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   double transition_time = 0;
   /* for variable stepsize */
   int err_zero_flag = 0;
-  
 
   allocated_memory *mem;
   copied_AST *cp_AST;
-  
+
   /* This code is not called from library, but just avoid warnigns,
    * we will asign a value to unused variable
    */
