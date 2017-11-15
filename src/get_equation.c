@@ -27,10 +27,6 @@ unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[],
   double value;
   ASTNode_t *left, *right, *comp_node;
 
-  /* new code */
-  eq->time_reverse_flag = 0;
-  /* new code end */
-
   if((ASTNode_getType(node) == AST_LOGICAL_AND
         || ASTNode_getType(node) == AST_LOGICAL_OR
         || ASTNode_getType(node) == AST_LOGICAL_XOR)
