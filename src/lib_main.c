@@ -144,6 +144,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   myAlgebraicEquations *myAlgEq = NULL;
   /* prepare timeVariantAssignments */
   timeVariantAssignments *timeVarAssign = NULL;
+  /* prepare time_variant_target_id */
+  char **time_variant_target_id = NULL;
   /* prepare return value */
   myResult *result, *rtn = NULL;
   /* Variables for bifurcation analysis */
@@ -376,14 +378,16 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   TRACE(("simulate with %s\n", method_name));
 
   /* create myObjects */
+  /* free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
+         myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST); */
   if (is_variable_step) {
     create_mySBML_objectsf(m, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem,
-        cp_AST, print_interval);
+        myInitAssign, &myAlgEq, &timeVarAssign, time_variant_target_id,
+        sim_time, dt, &time, mem, cp_AST, print_interval);
   } else {
     create_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem,
-        cp_AST);
+        myInitAssign, &myAlgEq, &timeVarAssign, time_variant_target_id,
+        sim_time, dt, &time, mem, cp_AST);
   }
 
   /* create myResult */
@@ -404,14 +408,14 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
     }
   } else {  /* Fixed step size */
     if (is_explicit) {
-    rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
-        &time, order, print_amount, mem);
-  }else{
-    rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
-        &time, order, use_lazy_method, print_amount, mem);
-  }
+      rtn = simulate_explicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
+          myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
+          &time, order, print_amount, mem);
+    }else{
+      rtn = simulate_implicit(m, result, mySp, myParam, myComp, myRe, myRu, myEv,
+          myInitAssign, myAlgEq, timeVarAssign, sim_time, dt, print_interval,
+          &time, order, use_lazy_method, print_amount, mem);
+    }
   }
 
   /* bifurcation analysis */
@@ -421,7 +425,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
         num_of_species, num_of_parameters, num_of_compartments,
         num_of_reactions, num_of_rules, num_of_events, num_of_initialAssignments,
         mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq,
-        timeVarAssign, mem, cp_AST, result, rtn, bif_param_is_local, sta_var_id,
+        timeVarAssign, time_variant_target_id,
+        mem, cp_AST, result, rtn, bif_param_is_local, sta_var_id,
         bif_param_id, bif_param_min, bif_param_max, bif_param_stepsize, transition_time);
   }
   /* after bifurcation analysis */
@@ -432,7 +437,7 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   /* free */
   if (use_bifurcation_analysis == 0 || (use_bifurcation_analysis == 1 && bif_param_is_local == false)) {
     free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
+        myInitAssign, myAlgEq, timeVarAssign, time_variant_target_id, mem, cp_AST);
   }
 
   if (rtn == NULL)
@@ -463,6 +468,8 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   myAlgebraicEquations *myAlgEq = NULL;
   /* prepare timeVariantAssignments */
   timeVariantAssignments *timeVarAssign = NULL;
+  /* prepare time_variant_target_id */
+  char **time_variant_target_id = NULL;
   /* prepare return value */
   myResult *result, *rtn = NULL;
   /* Variables for bifurcation analysis */
@@ -627,7 +634,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   /* myInitialAssignment *myInitAssign[num_of_initialAssignments]; */
   myInitAssign = (myInitialAssignment**)malloc(sizeof(myInitialAssignment*) * num_of_initialAssignments);
   /* create myObjects */
-  create_mySBML_objectsf(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, &myAlgEq, &timeVarAssign, sim_time, dt, &time, mem, cp_AST, print_interval);
+  create_mySBML_objectsf(m, mySp, myParam, myComp, myRe, myRu, myEv,
+      myInitAssign, &myAlgEq, &timeVarAssign, time_variant_target_id,
+      sim_time, dt, &time, mem, cp_AST, print_interval);
   /* create myResult */
   result = create_myResultf(m, mySp, myParam, myComp, sim_time, dt);
 
@@ -670,7 +679,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double 
   }
   /* free */
   if (use_bifurcation_analysis == 0 || (use_bifurcation_analysis == 1 && bif_param_is_local == false)) {
-  free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv, myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST);
+    free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
+        myInitAssign, myAlgEq,
+        timeVarAssign, time_variant_target_id, mem, cp_AST);
   }
   if (rtn == NULL)
     free_myResult(result);

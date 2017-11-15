@@ -31,8 +31,9 @@ static void create_reactions(myReaction *reactions[], mySpecies *species[], Mode
 void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
     myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
     myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
-    timeVariantAssignments **timeVarAssign, double sim_time, double dt,
-    double *time, allocated_memory *mem, copied_AST *cp_AST){
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST) {
   unsigned int i, j;
   int flag;
   /* num of each objects */
@@ -58,7 +59,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   myEventAssignment *myEvAssign;
   myDelay *evDelay;
   myAlgebraicEquations *algEq;
-  char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
+  time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
   /* create mySpecies, myParameters, myCompartments */
   create_species(mySp, m);
@@ -599,9 +600,9 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
 void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
     myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
     myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
-    timeVariantAssignments **timeVarAssign, double sim_time, double dt,
-    double *time, allocated_memory *mem, copied_AST *cp_AST,
-    char* bif_param_id, double bif_param_value){
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST, char* bif_param_id, double bif_param_value) {
   unsigned int i, j;
   int flag;
   /* num of each objects */
@@ -625,7 +626,7 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
 
   myEventAssignment *myEvAssign;
   myAlgebraicEquations *algEq;
-  char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
+  time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
   /* create mySpecies, myParameters, myCompartments */
   create_species(mySp, m);
@@ -1163,8 +1164,9 @@ void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myP
 void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
     myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
     myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
-    timeVariantAssignments **timeVarAssign, double sim_time, double dt,
-    double *time, allocated_memory *mem, copied_AST *cp_AST, int print_interval){
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval){
   unsigned int i, j;
   int flag;
   /* num of each objects */
@@ -1188,7 +1190,7 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
 
   myEventAssignment *myEvAssign;
   myAlgebraicEquations *algEq;
-  char **time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
+  time_variant_target_id = (char **)malloc(sizeof(char *) * MAX_DELAY_REACTION_NUM);
 
   /* create mySpecies, myParameters, myCompartments */
   create_species(mySp, m);
@@ -1759,7 +1761,11 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
   }
 }
 
-void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
+void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq,
+    timeVariantAssignments *timeVarAssign, char** time_variant_target_id,
+    allocated_memory *mem, copied_AST *cp_AST){
   unsigned int i, j;
 
   for (i = 0; i < Model_getNumSpecies(m); i++) {
@@ -1825,10 +1831,20 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], 
     }
     free(myAlgEq);
   }
+
   for(i=0; i<timeVarAssign->num_of_time_variant_assignments; i++){
     free(timeVarAssign->eq[i]);
   }
   free(timeVarAssign);
+
+  if (time_variant_target_id != NULL) {
+    for (i = 0; i < MAX_DELAY_REACTION_NUM; i++) {
+      if (time_variant_target_id[i] != NULL) {
+        free(time_variant_target_id[i]);
+      }
+    }
+    free(time_variant_target_id);
+  }
 
   allocated_memory_free(mem);
   copied_AST_free(cp_AST);

@@ -204,15 +204,33 @@ SBMLSIM_EXPORT void free_myResult(myResult *res);
 SBMLSIM_EXPORT void __free_myResult(myResult *res);
 
 /* create my SBML obejects for efficient simulations */
-void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST);
+void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST);
 
-void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, char* bif_param_id, double bif_param_value);
+void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval);
 
-void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq, timeVariantAssignments **timeVarAssign, double sim_time, double dt, double *time, allocated_memory *mem, copied_AST *cp_AST, int print_interval);
-
+void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
+    timeVariantAssignments **timeVarAssign, char** time_variant_target_id,
+    double sim_time, double dt, double *time, allocated_memory *mem,
+    copied_AST *cp_AST, char* bif_param_id, double bif_param_value);
 
 /* free all created my SBML objects */
-void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[], myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
+void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations *myAlgEq,
+    timeVariantAssignments *timeVarAssign, char** time_variant_target_id,
+    allocated_memory *mem, copied_AST *cp_AST);
 
 /* print result column list */
 void print_result_list(Model_t *m, mySpecies *mySp[], myParameter *myParam[], myCompartment *myComp[]);
@@ -342,7 +360,21 @@ SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time
 SBMLSIM_EXPORT myResult* simulateSBMLFromFile(const char* file, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);
 
 /* Bifurcation Analysis mode */
-myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt, int print_interval, double time, int order, int print_amount, int use_lazy_method, int is_explicit, unsigned int num_of_species, unsigned int num_of_parameters, unsigned int num_of_compartments, unsigned int num_of_reactions, unsigned int num_of_rules, unsigned int num_of_events, unsigned int num_of_initialAssignments, mySpecies* mySp[], myParameter* myParam[], myCompartment* myComp[], myReaction* myRe[], myRule* myRu[], myEvent* myEv[], myInitialAssignment* myInitAssign[], myAlgebraicEquations* myAlgEq, timeVariantAssignments* timeVarAssign, allocated_memory* mem, copied_AST* cp_AST, myResult* result, myResult* rtn, boolean bif_param_is_local, char* sta_var_id, char* bif_param_id, double bif_param_min, double bif_param_max, double bif_param_stepsize, double transition_time);
+myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
+    int print_interval, double time, int order, int print_amount,
+    int use_lazy_method, int is_explicit,
+    unsigned int num_of_species, unsigned int num_of_parameters,
+    unsigned int num_of_compartments, unsigned int num_of_reactions,
+    unsigned int num_of_rules, unsigned int num_of_events,
+    unsigned int num_of_initialAssignments,
+    mySpecies* mySp[], myParameter* myParam[], myCompartment* myComp[],
+    myReaction* myRe[], myRule* myRu[], myEvent* myEv[],
+    myInitialAssignment* myInitAssign[], myAlgebraicEquations* myAlgEq,
+    timeVariantAssignments* timeVarAssign, char** time_variant_target_id,
+    allocated_memory* mem, copied_AST* cp_AST,
+    myResult* result, myResult* rtn, boolean bif_param_is_local, char* sta_var_id,
+    char* bif_param_id, double bif_param_min, double bif_param_max,
+    double bif_param_stepsize, double transition_time);
 
 /*for variable step-size integration */
 /* calculate the solution in the past by linear approximation */
