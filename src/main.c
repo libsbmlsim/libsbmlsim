@@ -313,17 +313,19 @@ int main(int argc, char *argv[]){
 	  /* calculate simulation condition */
 	  dt = sim_time/step;
   }
-	  print_interval = (int)(1/delta);
-	  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
-	  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax);
+  print_interval = (int)(1/delta);
+  printf("  time:%g step:%d dt:%f\n", sim_time, step, dt);
+  rtn = simulateSBMLModel(m, sim_time, dt, print_interval, print_amount, method, use_lazy_method, atol, rtol, facmax);
 
-  MEM_TRACE();
+  /* display allocated memory */
+  /* MEM_TRACE(); */
+
   /* write CSV */
   if (rtn == NULL) {
     printf("Returned result is NULL\n");
   } else {
     write_csv(rtn, outfile); /*  for SBML test suite */
-    /* for more generic simulator
+    /* to be more generic simulator
        write_separate_result(rtn,
        "./simulation_results/species_result.dat",
        "./simulation_results/parameter_result.dat",
@@ -334,6 +336,7 @@ int main(int argc, char *argv[]){
   /* free */
   SBMLDocument_free(d);
   free_myResult(rtn);
+  /* check memory leak */
   MEM_TRACE();
   return 0;
 }
