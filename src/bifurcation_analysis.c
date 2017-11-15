@@ -23,7 +23,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
     mySpecies* mySp[], myParameter* myParam[], myCompartment* myComp[],
     myReaction* myRe[], myRule* myRu[], myEvent* myEv[],
     myInitialAssignment* myInitAssign[], myAlgebraicEquations* myAlgEq,
-    timeVariantAssignments* timeVarAssign, char** time_variant_target_id,
+    timeVariantAssignments* timeVarAssign,
     allocated_memory* mem, copied_AST* cp_AST,
     myResult* result, myResult* rtn, boolean bif_param_is_local,
     char* sta_var_id, char* bif_param_id,
@@ -72,7 +72,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
 				if (strcmp(bif_param_id, Parameter_getId(KineticLaw_getParameter(Reaction_getKineticLaw(myRe[a]->origin), b))) == 0) {
 					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
               myInitAssign, myAlgEq,
-              timeVarAssign, time_variant_target_id, mem, cp_AST);
+              timeVarAssign, mem, cp_AST);
 					free_myResult(result);
 					/* mySpecies *mySp[num_of_species]; */
 					mySp = (mySpecies**)malloc(sizeof(mySpecies*) * num_of_species);
@@ -94,7 +94,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
 					cp_AST->num_of_copied_AST = 0;
 					bif_param_value = bif_param_min;
 					create_mySBML_objects_forBA(m, mySp, myParam, myComp, myRe, myRu, myEv,
-              myInitAssign, &myAlgEq, &timeVarAssign, time_variant_target_id,
+              myInitAssign, &myAlgEq, &timeVarAssign,
               sim_time, dt, &time, mem, cp_AST, bif_param_id, bif_param_value);
 					break;
 				}
@@ -139,7 +139,7 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
 				fprintf(BAfp, "%.16g,%.16g,%.16g\n", bif_param_value, local_max, local_min);
 				free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
             myInitAssign, myAlgEq,
-            timeVarAssign, time_variant_target_id, mem, cp_AST);
+            timeVarAssign, mem, cp_AST);
 				if (bif_param_value + bif_param_stepsize < bif_param_max) {
 					free_myResult(result);
 				}
@@ -164,12 +164,12 @@ myResult* bifurcation_analysis(Model_t *m, double sim_time, double dt,
 				bif_param_value += bif_param_stepsize;
 				create_mySBML_objects_forBA(m, mySp, myParam, myComp, myRe, myRu, myEv,
             myInitAssign, &myAlgEq,
-            &timeVarAssign, time_variant_target_id,
+            &timeVarAssign,
             sim_time, dt, &time, mem, cp_AST, bif_param_id, bif_param_value);
 				if (bif_param_value > bif_param_max) {
 					free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
               myInitAssign, myAlgEq,
-              timeVarAssign, time_variant_target_id, mem, cp_AST);
+              timeVarAssign, mem, cp_AST);
 				}
 			}
 		}
