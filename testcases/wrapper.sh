@@ -93,7 +93,7 @@ else
 fi
 echo "$num: $duration : $steps : [$variables] : [$amount] : [$concentration] : $atol : $rtol"
 echo -en $print_msg
-$sim -t $duration -s $steps $opt_delta -m 13 -A $atol -R $rtol $opt_facmax -n $opt_amount -o $result $sbml && \
-#$sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount -o $result $sbml && \
+#$sim -t $duration -s $steps $opt_delta -m 13 -A $atol -R $rtol $opt_facmax -n $opt_amount -o $result $sbml && \
+$sim -t $duration -s $steps $opt_delta -m 1 -n $opt_amount -o $result $sbml && \
   $genresult $result $variables $steps > $out_dir/$result
 rm -f $result
