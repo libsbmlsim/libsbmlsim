@@ -1804,13 +1804,20 @@ void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[
 }
 
 void free_time_variant_target_id(char** time_variant_target_id) {
-  int i;
   if (time_variant_target_id != NULL) {
+    /*
+     * This is not used because all the entry of this array comes from
+     * time_variant_target_id[i] = (char*)InitialAssignment_getSymbol(initAssign);
+     * where InitialAssignment_getSymbol returns (const char*).
+     * I don't know why the above code casts to (char*).
+     */
+    /*
     for (i = 0; i < MAX_DELAY_REACTION_NUM; i++) {
       if (time_variant_target_id[i] != NULL) {
         free(time_variant_target_id[i]);
       }
     }
+    */
     free(time_variant_target_id);
   }
 }
