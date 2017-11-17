@@ -54,6 +54,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     ASTNode_setReal(zero_node, 0);
     ASTNode_replaceChild(node, 0, zero_node);
     ASTNode_addChild(*node_p, next_node);
+    /* checked no leak just by code reading 2017-11-17 by funa */
   }
   /* Have to treat with special situations that there is no child under operator */
   /* (but MathML allows it) */
@@ -71,13 +72,14 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       ASTNode_setType(node, AST_INTEGER);
       ASTNode_setReal(node, false);
     }
+    /* checked no leak just by code reading 2017-11-17 by funa */
   }
   /* Have to treat with special situations that it has only 1 child under operator */
   /* (but MathML allows it) */
   if (ASTNode_getNumChildren(node) == 1) {
     if( ASTNode_getType(node) == AST_PLUS  || ASTNode_getType(node) == AST_TIMES ||
         ASTNode_getType(node) == AST_LOGICAL_AND ||
-        ASTNode_getType(node) == AST_LOGICAL_OR || 
+        ASTNode_getType(node) == AST_LOGICAL_OR ||
         ASTNode_getType(node) == AST_LOGICAL_XOR ) { /* change to its child value (convert as 'child + 0' */
       /* change myself as '+' */
       ASTNode_setType(node, AST_PLUS);
@@ -88,10 +90,11 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
       /* add 0 to right node */
       ASTNode_addChild(node, zero_node);
     }
+    /* checked no leak just by code reading 2017-11-17 by funa */
   }
 
   /* Do the same thing for children (recursive) */
-  for(i=0; i<ASTNode_getNumChildren(node); i++){
+  for(i = 0; i < ASTNode_getNumChildren(node); i++) {
     next_node = ASTNode_getChild(node, i);
     /* TRACE(("down to %d th child from\n", i)); */
     /* print_node_type(node); */
@@ -100,9 +103,9 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
 
   /* If node is Name (Species, Parameter, etc.) */
   /* !!! CAUTION !!! this part should not be before the recursive call!!! */
-  if(ASTNode_getType(node) == AST_NAME){
-    for(i=0; i<Model_getNumSpecies(m); i++){
-      sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);      
+  if(ASTNode_getType(node) == AST_NAME) {
+    for(i = 0; i < Model_getNumSpecies(m); i++) {
+      sp = (Species_t*)ListOf_get(Model_getListOfSpecies(m), i);
       if(strcmp(Species_getId(sp), ASTNode_getName(node)) == 0){
         if(!Species_getHasOnlySubstanceUnits(sp) && Species_isSetInitialAmount(sp) && Compartment_getSpatialDimensions(Model_getCompartmentById(m, Species_getCompartment(sp))) != 0){/* use val/comp in calculation */
           divide_node = ASTNode_createWithType(AST_DIVIDE);
