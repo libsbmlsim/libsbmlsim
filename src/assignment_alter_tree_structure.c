@@ -28,7 +28,7 @@ void assignment_alter_tree_structure(ASTNode_t **node_p, char* comp_name, int sw
     ASTNode_setName(comp_node, comp_name);
     ASTNode_addChild(divide_node, *node_p);
     ASTNode_addChild(divide_node, comp_node);
-    *node_p = divide_node;    
+    *node_p = divide_node;
   }
 }
 
