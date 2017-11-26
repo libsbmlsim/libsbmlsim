@@ -13,7 +13,7 @@
  * ---------------------------------------------------------------------- -->*/
 #define C_DEBUG_MEMORY_C  /* Have to be defined before including debug_memory.h */
 
-#include "debug_memory.h"
+#include "../libsbmlsim/debug_memory.h"
 
 debug_node_t* create_node(Site* site) {
 #ifdef DEBUG_MEMORY_DEBUG
