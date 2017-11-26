@@ -18,6 +18,8 @@
 #include<stdio.h>
 #include<string.h>
 
+#include <sbml/SBMLTypes.h>
+
 #define DEBUG_MEMORY_DOTTED_VERSION "0.0.1"
 #define DEBUG_MEMORY_VERSION 00001
 #define DEBUG_MEMORY_VERSION_STRING "00001"
@@ -38,7 +40,15 @@ void* debug_calloc(size_t, size_t, char*, int);
 void* debug_realloc(void*, size_t, char*, int);
 void debug_free(void*, char*, int);
 char* debug_strdup(const char*, char*, int);
-char* debug_strndup(const char*, size_t, char*, int);
+
+/* wrapper for ASTNode_deepCopy, ASTNode_free */
+unsigned int debug_ASTNode_count(const ASTNode_t*);
+/**
+ * XXX: can not use this function until we can get exact size of ASTNode tree.
+ *
+ASTNode_t* debug_ASTNode_deepCopy(const ASTNode_t*, char*, int);
+void debug_ASTNode_free(ASTNode_t*, char*, int);
+ */
 
 /* util */
 debug_node_t* create_node(Site*);
@@ -54,6 +64,10 @@ void print_allocated_memory(const char*, int);
 #define realloc(p,n) debug_realloc(p, n, __FILE__, __LINE__)
 #define free(p) debug_free(p, __FILE__, __LINE__)
 #define strdup(p) debug_strdup(p, __FILE__, __LINE__)
+#if 0
+#define ASTNode_deepCopy(p) debug_ASTNode_deepCopy(p, __FILE__, __LINE__)
+#define ASTNode_free(p) debug_ASTNode_deepCopy(p, __FILE__, __LINE__)
+#endif /* if 0 */
 #endif /* C_DEBUG_MEMORY_C */
 
 #endif /* LibSBMLSim_Debug_Memory_h */

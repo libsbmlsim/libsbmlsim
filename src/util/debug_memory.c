@@ -151,3 +151,47 @@ char* debug_strdup(const char* str, char *file, int line) {
   }
   return rp + sizeof(Site);
 }
+
+/**
+ * returns number of ASTNodes under given root node
+ */
+unsigned int debug_ASTNode_count(const ASTNode_t* root) {
+  unsigned int i;
+  unsigned int count = 0;
+  if (root == NULL) {
+    return 0;
+  }
+  for (i = 0; i < ASTNode_getNumChildren(root); i++) {
+    count += debug_ASTNode_count(ASTNode_getChild(root, i));
+  }
+  return count + 1;
+}
+
+/**
+ * XXX: can not use this function until we can get exact size of ASTNode tree.
+ *
+ASTNode_t* debug_ASTNode_deepCopy(const ASTNode_t* node, char *file, int line) {
+  int n = 4096; // XXX: hard to get the total size of ASTNode tree
+  char *rp = (char*)malloc(sizeof(Site)+n); // Site + 64bit pointer
+  ASTNode_t *root = ASTNode_deepCopy(node);
+  total_allocated += n;
+  ((Site*)rp)->s.n = n;
+  ((Site*)rp)->s.file = file;
+  ((Site*)rp)->s.line = line;
+  add_node((Site*)rp);
+  memcpy(rp + sizeof(Site), root, n);
+  ASTNode_free(root);
+  return (ASTNode_t*)(rp + sizeof(Site));
+}
+
+void debug_ASTNode_free(ASTNode_t* node, char *file, int line) {
+  char *rp;
+  rp = ((char*)node) - sizeof(Site);
+  total_allocated -= ((Site*)rp)->s.n;
+  ((Site*)rp)->s.file = file;
+  ((Site*)rp)->s.line = line;
+  remove_node((Site*)rp);
+  ASTNode_free((ASTNode_t*)node);
+  free(rp);
+}
+ */
