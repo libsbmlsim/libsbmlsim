@@ -25,7 +25,9 @@
 *.out
 
 # cmake
-build
+build/
+build_debug/
+cmake-build-debug/
 
 # example, test executables
 examples/c/test
