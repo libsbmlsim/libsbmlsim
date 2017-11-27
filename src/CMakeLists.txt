@@ -15,6 +15,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
   ${PROJECT_SOURCE_DIR}/src/allocated_memory.c
   ${PROJECT_SOURCE_DIR}/src/alter_tree_structure.c
   ${PROJECT_SOURCE_DIR}/src/assignment_alter_tree_structure.c
+  ${PROJECT_SOURCE_DIR}/src/ast_memory_manager.c
   ${PROJECT_SOURCE_DIR}/src/bifurcation_analysis.c
   ${PROJECT_SOURCE_DIR}/src/check_AST.c
   ${PROJECT_SOURCE_DIR}/src/check_math.c
@@ -83,6 +84,7 @@ set(SOURCES_COMMON ${SOURCES_COMMON}
 set (SOURCES_LIB ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/lib_main.c)
 set (SOURCES_MAIN ${SOURCES_COMMON} ${PROJECT_SOURCE_DIR}/src/main.c)
 set (SOURCES_TEST test.c)
+set (SOURCES_LEAK_TEST leaktest.c)
 
 set (INSTALL_DOCS)
 set (INSTALL_DOCS ${INSTALL_DOCS}
@@ -122,6 +124,14 @@ if(MSVC)
   target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES})
 else(MSVC)
   target_link_libraries(testprog sbmlsim ${LIBSBML_LIBRARIES} m)
+endif()
+
+# LeakTest program
+add_executable(leaktest ${SOURCES_LEAK_TEST})
+if(MSVC)
+  target_link_libraries(leaktest sbmlsim ${LIBSBML_LIBRARIES})
+else(MSVC)
+  target_link_libraries(leaktest sbmlsim ${LIBSBML_LIBRARIES} m)
 endif()
 
 # Simulator for test suiteprogram

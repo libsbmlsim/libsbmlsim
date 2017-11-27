@@ -64,6 +64,7 @@ extern "C" {
 #include "myDelay.h"
 #include "allocated_memory.h"
 #include "copied_AST.h"
+#include "ast_memory_manager.h"
 
 #define DSFMT_MEXP 19937
 #include "dSFMT-params19937.h"

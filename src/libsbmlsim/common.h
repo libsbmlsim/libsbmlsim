@@ -18,6 +18,7 @@
 #ifdef DEBUG_MEMORY
 #include "debug_memory.h"
 #define MEM_TRACE() do { print_allocated_memory(__FUNCTION__, __LINE__); } while (0)
+#define DEBUG_AST_MEMORY_DEBUG
 #else
 #define MEM_TRACE()
 #endif

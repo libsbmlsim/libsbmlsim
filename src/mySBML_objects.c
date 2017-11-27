@@ -52,7 +52,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
   Reaction_t *re;
   InitialAssignment_t *initAssign;
   Rule_t *rule;
-  ASTNode_t *times_node, *conv_factor_node;
+  ASTNode_t *times_node, *conv_factor_node, *event_delay_node;
   Event_t *event;
   Delay_t *delay;
 
@@ -108,6 +108,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL,
         time_variant_target_id, 0, NULL, mem);
     /* ASTNode_free(node); */
+    add_ast_memory_node(node, __FILE__, __LINE__);
     TRACE(("math\n"));
     check_math(myInitAssign[i]->eq);
   }
@@ -147,6 +148,8 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
             mySp, myParam, myComp, myRe, node, 0, sim_time, dt, time, NULL,
             time_variant_target_id, 0, NULL, mem);
       ((*timeVarAssign)->num_of_time_variant_assignments)++;
+      /* ASTode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
 
@@ -166,6 +169,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         time_variant_target_id, num_of_time_variant_targets, *timeVarAssign,
         mem);
     /* ASTNode_free(node); */
+    add_ast_memory_node(node, __FILE__, __LINE__);
     TRACE(("math of %s\n", Reaction_getId(myRe[i]->origin)));
     check_math(myRe[i]->eq);
     /* products start */
@@ -236,6 +240,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       TRACE(("alterated math of %s : ", SpeciesReference_getSpecies(myRe[i]->products[j]->origin)));
       check_AST(node, NULL);
       /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
       TRACE(("math of %s\n", SpeciesReference_getSpecies(myRe[i]->products[j]->origin)));
       check_math(myRe[i]->products[j]->eq);
       myRe[i]->products[j]->k[0] = 0;
@@ -319,6 +324,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       TRACE(("altered math of %s : ", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin)));
       check_AST(node, NULL);
       /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
       TRACE(("math of %s\n", SpeciesReference_getSpecies(myRe[i]->reactants[j]->origin)));
       check_math(myRe[i]->reactants[j]->eq);
       myRe[i]->reactants[j]->k[0] = 0;
@@ -371,6 +377,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           time_variant_target_id, num_of_time_variant_targets, *timeVarAssign,
           mem);
       /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
       TRACE(("math\n"));
       check_math(myRule_getEquation(myRu[i]));
     }
@@ -394,6 +401,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
     TRACE(("altered math of %s : ", Event_getId(myEv[i]->origin)));
     check_AST(node, NULL);
     /* ASTNode_free(node); */
+    add_ast_memory_node(node, __FILE__, __LINE__);
     TRACE(("math of %s\n", Event_getId(myEv[i]->origin)));
     check_math(myEv[i]->eq);
     myEv[i]->assignments = (myEventAssignment**)malloc(sizeof(myEventAssignment*)*Event_getNumEventAssignments(event));
@@ -406,8 +414,10 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       node = ASTNode_deepCopy(node);
       TRACE(("original math : "));
       check_AST(node, NULL);
-      if(Event_getDelay(myEv[i]->origin) != NULL && Event_getUseValuesFromTriggerTime(myEv[i]->origin)){
-        pre_ev_alter_tree_structure(&node, NULL, 0, (ASTNode_t*)Delay_getMath(Event_getDelay(myEv[i]->origin)));
+      if(Event_getDelay(myEv[i]->origin) != NULL &&
+          Event_getUseValuesFromTriggerTime(myEv[i]->origin)) {
+        event_delay_node = (ASTNode_t*)Delay_getMath(Event_getDelay(myEv[i]->origin));
+        pre_ev_alter_tree_structure(&node, NULL, 0, event_delay_node);
         TRACE(("after pre ev alter math : "));
         check_AST(node, NULL);
         ev_alter_tree_structure(m, &node, NULL, 0, cp_AST);
@@ -416,7 +426,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
         post_ev_alter_tree_structure(m, &node, NULL, 0);
         TRACE(("after post ev alter math : "));
         check_AST(node, NULL);
-      }else{
+      } else {
         alter_tree_structure(m, &node, NULL, 0, cp_AST);
       }
       /* unit */
@@ -438,6 +448,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           sim_time, dt, time, myInitAssign, time_variant_target_id,
           num_of_time_variant_targets, *timeVarAssign, mem);
       /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
       TRACE(("math\n"));
       check_math(myEv[i]->assignments[j]->eq);
     }
@@ -451,8 +462,7 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       myEv[i]->event_delay = (myDelay*)malloc(sizeof(myDelay));
       myEv[i]->event_delay->origin = Event_getDelay(event);
       */
-      node = (ASTNode_t *)Delay_getMath(delay);
-      node = ASTNode_deepCopy(node);
+      node = ASTNode_deepCopy((ASTNode_t *)Delay_getMath(delay));
       TRACE(("original math : "));
       check_AST(node, NULL);
       /* alter_tree_structure(m, &node, cp_AST); */
@@ -464,7 +474,6 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           num_of_time_variant_targets, *timeVarAssign, mem);
       TRACE(("altered math : "));
       check_AST(node, NULL);
-      /* ASTNode_free(node); */
       TRACE(("math\n"));
       check_math(myEv[i]->event_delay->eq);
       myEv[i]->firing_times = (double*)malloc(sizeof(double)*(int)(sim_time/dt));
@@ -473,6 +482,8 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
       }
       myEv[i]->num_of_delayed_events_que = 0;
       myEv[i]->next_firing_index = 0;
+      /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
     //myEv[i]->priority_eq = NULL;
     if(Event_isSetPriority(myEv[i]->origin)){
@@ -484,6 +495,8 @@ void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[]
           myEv[i]->priority_eq, mySp, myParam, myComp, myRe, node, 0, sim_time,
           dt, time, myInitAssign, time_variant_target_id,
           num_of_time_variant_targets, *timeVarAssign, mem);
+      /* ASTNode_free(node); */
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
 
@@ -1900,6 +1913,8 @@ void free_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
 
   allocated_memory_free(mem);
   copied_AST_free(cp_AST);
+
+  free_all_ast_memory_nodes();
 
   TRACE(("all allocated memory is freeed\n"));
 }

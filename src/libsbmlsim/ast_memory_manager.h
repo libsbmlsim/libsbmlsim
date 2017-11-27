@@ -4,28 +4,25 @@
  * http://fun.bio.keio.ac.jp/software/libsbmlsim/ for more
  * information about libSBMLSim and its latest version.
  *
- * Copyright (C) 2011-2016 by the Keio University, Yokohama, Japan
+ * Copyright (C) 2011-2017 by the Keio University, Yokohama, Japan
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation.  A copy of the license agreement is provided
  * in the file named "LICENSE.txt" included with this software distribution.
  * ---------------------------------------------------------------------- -->*/
-#include "libsbmlsim/copied_AST.h"
-#include <stdlib.h>
-#include <sbml/SBMLTypes.h>
+#ifndef LibSBMLSim_ASTMemoryManager_h
+#define LibSBMLSim_ASTMemoryManager_h
 
-copied_AST *copied_AST_create() {
-  copied_AST *ast = (copied_AST *)malloc(sizeof(copied_AST));
-  ast->num_of_copied_AST = 0;
-  return ast;
-}
+#include "common.h"
 
-void copied_AST_free(copied_AST *ast) {
-  if (ast == NULL) {
-    return;
-  }
+/* linked list */
+typedef struct ast_memory_node {ASTNode_t* ast; struct ast_memory_node* next; } ast_memory_node_t;
+ast_memory_node_t* ast_memory_root_node;
 
-  free(ast);
-}
+ast_memory_node_t* create_ast_memory_node(ASTNode_t*);
+void add_ast_memory_node(ASTNode_t*, char*, int);
+void remove_ast_memory_node(ASTNode_t*);
+void free_all_ast_memory_nodes(void);
 
+#endif /* LibSBMLSim_ASTMemoryManager_h */

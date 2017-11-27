@@ -25,7 +25,7 @@ void pre_ev_alter_tree_structure(ASTNode_t **node_p, ASTNode_t *parent, int chil
   if(ASTNode_getType(node) == AST_NAME){
     delay_node = ASTNode_createWithType(AST_FUNCTION_DELAY);
     ASTNode_addChild(delay_node, node);
-    ASTNode_addChild(delay_node, delay_math);
+    ASTNode_addChild(delay_node, ASTNode_deepCopy(delay_math));
     if(parent != NULL){
       ASTNode_replaceChild(parent, child_order, delay_node);
     }else{
