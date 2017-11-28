@@ -171,7 +171,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
         }else{
           *node_p = fd_body;
         }
-        ASTNode_free(node);
+        add_ast_memory_node(node, __FILE__, __LINE__);
         node = *node_p;
         break;
       }
