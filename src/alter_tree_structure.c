@@ -146,9 +146,9 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
     for(i=0; i<Model_getNumFunctionDefinitions(m); i++){
       fd = (FunctionDefinition_t*)ListOf_get(Model_getListOfFunctionDefinitions(m), i);
       fd_body = (ASTNode_t*)FunctionDefinition_getBody(fd);
-      if(strcmp(FunctionDefinition_getId(fd), ASTNode_getName(node)) == 0){
+      if(strcmp(FunctionDefinition_getId(fd), ASTNode_getName(node)) == 0) {
         fd_body = ASTNode_deepCopy(fd_body);
-        cp_AST->ast[cp_AST->num_of_copied_AST++] = fd_body;
+        /* cp_AST->ast[cp_AST->num_of_copied_AST++] = fd_body; */
         for(j=0; j<FunctionDefinition_getNumArguments(fd); j++){
           fd_arg = (ASTNode_t*)FunctionDefinition_getArgument(fd, j);
           ASTNode_replaceArgument(fd_body, (char*)ASTNode_getName(fd_arg), arg_node_list[j]);
@@ -171,6 +171,7 @@ void alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, int
         }else{
           *node_p = fd_body;
         }
+        ASTNode_free(node);
         node = *node_p;
         break;
       }
