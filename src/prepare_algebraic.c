@@ -305,6 +305,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       node = ASTNode_deepCopy(node);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       _prepare_algebraic1(node, included_id_in_alg, &num_of_included_id_in_alg);
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
 
@@ -350,6 +351,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
         _prepare_algebraic2(m, myNode, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, algEq->variables_id[j], j, mem);
         myASTNode_free(copied_myAST, num_of_copied_myAST);
       }
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
   TRACE(("zero substitute\n"));
@@ -372,6 +374,7 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       node = ASTNode_deepCopy(node);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
       _prepare_algebraic3(m, node, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, mem);
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
 
