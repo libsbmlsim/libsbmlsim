@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
   double dt = 0.01;
   int print_interval = 10;
   int print_amount = 1;
-  /* int method = MTHD_RUNGE_KUTTA; */
-  int method = MTHD_RUNGE_KUTTA_FEHLBERG_5;
+  int method = MTHD_RUNGE_KUTTA;
+  /* int method = MTHD_RUNGE_KUTTA_FEHLBERG_5; */
   boolean use_lazy_method = false;
 
   if (argc < 2) {
