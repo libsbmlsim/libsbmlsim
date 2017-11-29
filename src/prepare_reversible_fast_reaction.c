@@ -115,6 +115,7 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       TRACE(("target_id is %s\n", Species_getId(re[i]->reactants[0]->mySp->origin)));
       check_AST(cp_node1, NULL);
       _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->reactants[0]->mySp->origin), 0, mem);
+      add_ast_memory_node(cp_node1, __FILE__, __LINE__);
       /* get reactants numerator */
       myNode = (myASTNode*)malloc(sizeof(myASTNode));
       copied_myAST[num_of_copied_myAST++] = myNode;
@@ -127,7 +128,9 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       TRACE(("target_id is %s\n", Species_getId(re[i]->products[0]->mySp->origin)));
       check_AST(cp_node2, NULL);
       _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->products[0]->mySp->origin), 1, mem);
+      add_ast_memory_node(cp_node2, __FILE__, __LINE__);
       myASTNode_free(copied_myAST, num_of_copied_myAST);
+      add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
 }
