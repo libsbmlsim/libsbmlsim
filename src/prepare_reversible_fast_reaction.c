@@ -47,7 +47,7 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
           }else{
             eq_root_node->parent = NULL;
             break;
-          } 
+          }
         }else{
           eq_root_node = eq_root_node->parent;
         }
@@ -61,8 +61,9 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
         zero_node = ASTNode_createWithType(AST_INTEGER);
         ASTNode_setInteger(zero_node, 0);
         ASTNode_addChild(minus_node, zero_node);
-        ASTNode_addChild(minus_node, final_eq_node);
+        ASTNode_addChild(minus_node, ASTNode_deepCopy(final_eq_node));
         final_eq_node = minus_node;
+        add_ast_memory_node(final_eq_node, __FILE__, __LINE__);
       }
       if(p_or_r == 0){/* products coefficient */
         TRACE(("AST of product numerator is\n"));
@@ -73,11 +74,12 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
         zero_node = ASTNode_createWithType(AST_INTEGER);
         ASTNode_setInteger(zero_node, 0);
         ASTNode_addChild(minus_node, zero_node);
-        ASTNode_addChild(minus_node, final_eq_node);
+        ASTNode_addChild(minus_node, ASTNode_deepCopy(final_eq_node));
         final_eq_node = minus_node;
         TRACE(("AST of reactant numerator is\n"));
         check_AST(final_eq_node, NULL);
         re->reactants_equili_numerator->math_length = get_equation(m, re->reactants_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        add_ast_memory_node(final_eq_node, __FILE__, __LINE__);
       }
     }
   }
