@@ -38,7 +38,13 @@ set(CMAKE_SWIG_FLAGS -dllimport \"libsbmlsimcs\")
 
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES CPLUSPLUS OFF)
 SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
-SWIG_ADD_MODULE(libsbmlsimcs csharp libsbmlsim.i ${SOURCES_LIB})
+IF(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+  SWIG_ADD_MODULE(libsbmlsimcs csharp libsbmlsim.i ${SOURCES_LIB})
+ELSE()
+  SWIG_ADD_LIBRARY(libsbmlsimcs
+    LANGUAGE csharp
+    SOURCES libsbmlsim.i ${SOURCES_LIB})
+ENDIF()
 SWIG_LINK_LIBRARIES(libsbmlsimcs ${LIBSBML_LIBRARIES})
 
 set_target_properties(libsbmlsimcs PROPERTIES OUTPUT_NAME "libsbmlsimcs")

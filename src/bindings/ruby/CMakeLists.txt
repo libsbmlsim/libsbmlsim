@@ -28,7 +28,13 @@ IF (RBCONFIG_MAJOR EQUAL 1 AND RBCONFIG_MINOR EQUAL 8)
 
   SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES CPLUSPLUS OFF)
   SET_SOURCE_FILES_PROPERTIES(libsbmlsim.i PROPERTIES SWIG_FLAGS "-includeall")
-  SWIG_ADD_MODULE(libsbmlsim_ruby ruby libsbmlsim.i ${SOURCES_LIB})
+  IF(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+    SWIG_ADD_MODULE(libsbmlsim_ruby ruby libsbmlsim.i ${SOURCES_LIB})
+  ELSE()
+    SWIG_ADD_LIBRARY(libsbmlsim_ruby
+      LANGUAGE ruby
+      SOURCES libsbmlsim.i ${SOURCES_LIB})
+  ENDIF()
   SWIG_LINK_LIBRARIES(libsbmlsim_ruby ${RUBY_LIBRARY} ${LIBSBML_LIBRARIES})
 
 
