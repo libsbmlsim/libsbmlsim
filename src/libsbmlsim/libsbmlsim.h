@@ -130,9 +130,7 @@ void set_local_para_as_value_forBA(ASTNode_t *node, KineticLaw_t *kl, char* bif_
 
 
 /* Get mathematical equations for calculation in reverse polish Notation */
-unsigned int get_equation(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem);
-
-unsigned int get_equationf(Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, int print_interval);
+unsigned int get_equation(boolean is_variable_step, Model_t *m, equation *eq, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], ASTNode_t *node, unsigned int index, double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, int print_interval);
 
 
 /* Calculate equations written in reverse polish notation */
@@ -205,19 +203,20 @@ SBMLSIM_EXPORT void free_myResult(myResult *res);
 SBMLSIM_EXPORT void __free_myResult(myResult *res);
 
 /* create my SBML obejects for efficient simulations */
-void create_mySBML_objects(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
-    myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
-    myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
-    timeVariantAssignments **timeVarAssign,
-    double sim_time, double dt, double *time, allocated_memory *mem,
-    copied_AST *cp_AST);
-
-void create_mySBML_objectsf(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
+void create_mySBML_objects(boolean is_variable_step,
+    Model_t *m, mySpecies *mySp[], myParameter *myParam[],
     myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
     myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
     timeVariantAssignments **timeVarAssign,
     double sim_time, double dt, double *time, allocated_memory *mem,
     copied_AST *cp_AST, int print_interval);
+
+void create_mySBML_objectsf(boolean is_variable_step, Model_t *m, mySpecies
+    *mySp[], myParameter *myParam[], myCompartment *myComp[],
+    myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
+    myInitialAssignment *myInitAssign[], myAlgebraicEquations **myAlgEq,
+    timeVariantAssignments **timeVarAssign, double sim_time, double dt,
+    double *time, allocated_memory *mem, copied_AST *cp_AST, int print_interval);
 
 void create_mySBML_objects_forBA(Model_t *m, mySpecies *mySp[], myParameter *myParam[],
     myCompartment *myComp[], myReaction *myRe[], myRule *myRu[], myEvent *myEv[],
@@ -306,7 +305,13 @@ void check_AST(ASTNode_t *node, ASTNode_t *parent);
 void print_node_type(ASTNode_t *node);
 
 /* function for algebraic preparation */
-void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
+void prepare_algebraic(boolean is_variable_step, Model_t *m, mySpecies *sp[],
+    myParameter *param[], myCompartment *comp[], myReaction *re[],
+    myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[],
+    myAlgebraicEquations *algEq, double sim_time, double dt, double *time,
+    char *time_variant_target_id[], unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval);
 
 void alg_alter_tree_structure(ASTNode_t **node_p, ASTNode_t *parent, int child_order);
 
@@ -328,7 +333,13 @@ void myASTNode_free(myASTNode *copied_myAST[], unsigned int num_of_copied_myAST)
 void check_myAST(myASTNode *myNode);
 
 /* prepare reversible fast reaction */
-void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST);
+void prepare_reversible_fast_reaction(boolean is_variable_step, Model_t *m,
+    myReaction *re[], mySpecies *sp[], myParameter *param[],
+    myCompartment *comp[], double sim_time, double dt, double *time,
+    myInitialAssignment *initAssign[], char *time_variant_target_id[],
+    unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval);
 
 /* calculate initial assignment */
 void calc_initial_assignment(myInitialAssignment *initAssign[], unsigned int num_of_initialAssignments, double dt, int cycle, double *reverse_time);
@@ -354,8 +365,6 @@ void prg_printf(const char *fmt, ...);
 
 /* Run Simulation from SBML Model */
 SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax);
-
-SBMLSIM_EXPORT myResult* simulateSBMLModelf(Model_t *m, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method, double atol, double rtol, double facmax, int use_bifurcation_analysis);
 
 /* Run Simulation from SBML string */
 SBMLSIM_EXPORT myResult* simulateSBMLFromString(const char* str, double sim_time, double dt, int print_interval, int print_amount, int method, int use_lazy_method);

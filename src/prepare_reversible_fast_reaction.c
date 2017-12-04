@@ -13,16 +13,28 @@
  * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
-void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re_whole[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r, allocated_memory *mem){
+void _prepare_reversible_fast_reaction(boolean is_variable_step, Model_t *m,
+    myASTNode *myNode, myReaction *re, mySpecies *sp[], myParameter *param[],
+    myCompartment *comp[], myReaction *re_whole[],
+    double sim_time, double dt, double *time, myInitialAssignment *initAssign[],
+    char *time_variant_target_id[], unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, char *target_id, int p_or_r,
+    allocated_memory *mem, int print_interval){
   ASTNode_t *minus_node, *zero_node, *final_eq_node;
   myASTNode *eq_root_node;
   int minus_sign;
 
   if(myNode->left != NULL){
-    _prepare_reversible_fast_reaction(m, myNode->left, re, sp, param, comp, re_whole, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, target_id, p_or_r, mem);
+    _prepare_reversible_fast_reaction(is_variable_step, m, myNode->left, re,
+        sp, param, comp, re_whole, sim_time, dt, time, initAssign,
+        time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+        target_id, p_or_r, mem, print_interval);
   }
   if(myNode->right != NULL){
-    _prepare_reversible_fast_reaction(m, myNode->right, re, sp, param, comp, re_whole, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, target_id, p_or_r, mem);
+    _prepare_reversible_fast_reaction(is_variable_step, m, myNode->right, re,
+        sp, param, comp, re_whole, sim_time, dt, time, initAssign,
+        time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+        target_id, p_or_r, mem, print_interval);
   }
   if(ASTNode_getType(myNode->origin) == AST_NAME){
     if(strcmp(ASTNode_getName(myNode->origin), target_id) == 0){
@@ -68,7 +80,11 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
       if(p_or_r == 0){/* products coefficient */
         TRACE(("AST of product numerator is\n"));
         check_AST(final_eq_node, NULL);
-        re->products_equili_numerator->math_length = get_equation(m, re->products_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        re->products_equili_numerator->math_length = get_equation(is_variable_step,
+            m, re->products_equili_numerator, sp, param, comp, re_whole,
+            final_eq_node, 0, sim_time, dt, time, initAssign,
+            time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+            mem, print_interval);
       }else{/* reactants coefficient */
         minus_node = ASTNode_createWithType(AST_MINUS);
         zero_node = ASTNode_createWithType(AST_INTEGER);
@@ -78,14 +94,24 @@ void _prepare_reversible_fast_reaction(Model_t *m, myASTNode *myNode, myReaction
         final_eq_node = minus_node;
         TRACE(("AST of reactant numerator is\n"));
         check_AST(final_eq_node, NULL);
-        re->reactants_equili_numerator->math_length = get_equation(m, re->reactants_equili_numerator, sp, param, comp, re_whole, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        re->reactants_equili_numerator->math_length = get_equation(is_variable_step,
+            m, re->reactants_equili_numerator, sp, param, comp, re_whole,
+            final_eq_node, 0, sim_time, dt, time, initAssign,
+            time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+            mem, print_interval);
         add_ast_memory_node(final_eq_node, __FILE__, __LINE__);
       }
     }
   }
 }
 
-void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *sp[], myParameter *param[], myCompartment *comp[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
+void prepare_reversible_fast_reaction(boolean is_variable_step, Model_t *m,
+    myReaction *re[], mySpecies *sp[], myParameter *param[],
+    myCompartment *comp[], double sim_time, double dt, double *time,
+    myInitialAssignment *initAssign[], char *time_variant_target_id[],
+    unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval){
   unsigned int i;
   unsigned int num_of_reactions = Model_getNumReactions(m);
   ASTNode_t *node, *cp_node1, *cp_node2;
@@ -116,7 +142,11 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       re[i]->products_equili_numerator = (equation*)malloc(sizeof(equation));
       TRACE(("target_id is %s\n", Species_getId(re[i]->reactants[0]->mySp->origin)));
       check_AST(cp_node1, NULL);
-      _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->reactants[0]->mySp->origin), 0, mem);
+      _prepare_reversible_fast_reaction(is_variable_step, m, myNode, re[i], sp,
+          param, comp, re, sim_time, dt, time, initAssign,
+          time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+          (char*)Species_getId(re[i]->reactants[0]->mySp->origin), 0, mem,
+          print_interval);
       add_ast_memory_node(cp_node1, __FILE__, __LINE__);
       /* get reactants numerator */
       myNode = (myASTNode*)malloc(sizeof(myASTNode));
@@ -129,7 +159,11 @@ void prepare_reversible_fast_reaction(Model_t *m, myReaction *re[], mySpecies *s
       myASTNode_create(myNode, cp_node2, copied_myAST, &num_of_copied_myAST);
       TRACE(("target_id is %s\n", Species_getId(re[i]->products[0]->mySp->origin)));
       check_AST(cp_node2, NULL);
-      _prepare_reversible_fast_reaction(m, myNode, re[i], sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, (char*)Species_getId(re[i]->products[0]->mySp->origin), 1, mem);
+      _prepare_reversible_fast_reaction(is_variable_step, m, myNode, re[i], sp,
+          param, comp, re, sim_time, dt, time, initAssign,
+          time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+          (char*)Species_getId(re[i]->products[0]->mySp->origin), 1, mem,
+          print_interval);
       add_ast_memory_node(cp_node2, __FILE__, __LINE__);
       myASTNode_free(copied_myAST, num_of_copied_myAST);
       add_ast_memory_node(node, __FILE__, __LINE__);

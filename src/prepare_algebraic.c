@@ -15,9 +15,9 @@
 
 void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], unsigned int *num_of_included_id_in_alg);
 
-void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem);
+void _prepare_algebraic2(boolean is_variable_step, Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem, int print_interval);
 
-void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem);
+void _prepare_algebraic3(boolean is_variable_step, Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem, int print_interval);
 
 void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq);
 
@@ -48,16 +48,29 @@ void _prepare_algebraic1(ASTNode_t *node, char *included_id_in_alg[], unsigned i
 }
 
 /* find coefficient tree */
-void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char* time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, char *target_id, int variable_order, allocated_memory *mem){
+void _prepare_algebraic2(boolean is_variable_step, Model_t *m, myASTNode *myNode,
+    mySpecies *sp[], myParameter *param[], myCompartment *comp[],
+    myReaction *re[], double sim_time, double dt, double *time,
+    myInitialAssignment *initAssign[], char* time_variant_target_id[],
+    unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq,
+    int alg_order, char *target_id, int variable_order, allocated_memory *mem,
+    int print_interval){
   ASTNode_t *minus_node, *zero_node, *final_eq_node;
   myASTNode *eq_root_node;
   int minus_sign;
 
   if(myNode->left != NULL){
-    _prepare_algebraic2(m, myNode->left, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, alg_order, target_id, variable_order, mem);
+    _prepare_algebraic2(is_variable_step, m, myNode->left, sp, param, comp, re,
+        sim_time, dt, time, initAssign, time_variant_target_id,
+        num_of_time_variant_targets, timeVarAssign, algEq, alg_order,
+        target_id, variable_order, mem, print_interval);
   }
   if(myNode->right != NULL){
-    _prepare_algebraic2(m, myNode->right, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, alg_order, target_id, variable_order, mem);
+    _prepare_algebraic2(is_variable_step, m, myNode->right, sp, param, comp,
+        re, sim_time, dt, time, initAssign, time_variant_target_id,
+        num_of_time_variant_targets, timeVarAssign, algEq, alg_order,
+        target_id, variable_order, mem, print_interval);
   }
   if(ASTNode_getType(myNode->origin) == AST_NAME){
     if(strcmp(ASTNode_getName(myNode->origin), target_id) == 0){
@@ -102,27 +115,49 @@ void _prepare_algebraic2(Model_t *m, myASTNode *myNode, mySpecies *sp[], myParam
       if(algEq->num_of_algebraic_variables > 1){
         TRACE(("math AST of coefficient matrix[%d][%d] is\n", alg_order, variable_order));
         check_AST(eq_root_node->origin, NULL);
-        algEq->coefficient_matrix[alg_order][variable_order]->math_length = get_equation(m, algEq->coefficient_matrix[alg_order][variable_order], sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        algEq->coefficient_matrix[alg_order][variable_order]->math_length
+          = get_equation(is_variable_step, m,
+              algEq->coefficient_matrix[alg_order][variable_order], sp, param,
+              comp, re, final_eq_node, 0, sim_time, dt, time, initAssign,
+              time_variant_target_id, num_of_time_variant_targets,
+              timeVarAssign, mem, print_interval);
       }else{
         TRACE(("math AST of coefficient is\n"));
         check_AST(eq_root_node->origin, NULL);
-        algEq->coefficient->math_length = get_equation(m, algEq->coefficient, sp, param, comp, re, final_eq_node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+        algEq->coefficient->math_length
+          = get_equation(is_variable_step, m, algEq->coefficient, sp, param,
+              comp, re, final_eq_node, 0, sim_time, dt, time, initAssign,
+              time_variant_target_id, num_of_time_variant_targets,
+              timeVarAssign, mem, print_interval);
       }
     }
   }
 }
 
 /* find constant vector */
-void _prepare_algebraic3(Model_t *m, ASTNode_t *node, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], double sim_time, double dt, double *time, myInitialAssignment *initAssign[], char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq, int alg_order, allocated_memory *mem){
+void _prepare_algebraic3(boolean is_variable_step, Model_t *m, ASTNode_t *node,
+    mySpecies *sp[], myParameter *param[], myCompartment *comp[],
+    myReaction *re[], double sim_time, double dt, double *time,
+    myInitialAssignment *initAssign[], char *time_variant_target_id[],
+    unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, myAlgebraicEquations *algEq,
+    int alg_order, allocated_memory *mem, int print_interval) {
   _prepare_algebraic4(node, algEq);
   if(algEq->num_of_algebraic_variables > 1){
     TRACE(("math AST of constant vector[%d] is\n", alg_order));
     check_AST(node, NULL);
-    algEq->constant_vector[alg_order]->math_length = get_equation(m, algEq->constant_vector[alg_order], sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+    algEq->constant_vector[alg_order]->math_length
+      = get_equation(is_variable_step, m, algEq->constant_vector[alg_order],
+          sp, param, comp, re, node, 0, sim_time, dt, time, initAssign,
+          time_variant_target_id, num_of_time_variant_targets, timeVarAssign,
+          mem, print_interval);
   }else{
     TRACE(("math AST of constant is\n"));
     check_AST(node, NULL);
-    algEq->constant->math_length = get_equation(m, algEq->constant, sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+    algEq->constant->math_length
+      = get_equation(is_variable_step, m, algEq->constant, sp, param, comp,
+          re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id,
+          num_of_time_variant_targets, timeVarAssign, mem, print_interval);
   }
 
 }
@@ -154,7 +189,13 @@ void _prepare_algebraic4(ASTNode_t *node, myAlgebraicEquations *algEq){
   return;
 }
 
-void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myCompartment *comp[], myReaction *re[], myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[], myAlgebraicEquations *algEq, double sim_time, double dt, double *time, char *time_variant_target_id[], unsigned int num_of_time_variant_targets, timeVariantAssignments *timeVarAssign, allocated_memory *mem, copied_AST *cp_AST){
+void prepare_algebraic(boolean is_variable_step, Model_t *m, mySpecies *sp[],
+    myParameter *param[], myCompartment *comp[], myReaction *re[],
+    myRule *ru[], myEvent *ev[], myInitialAssignment *initAssign[],
+    myAlgebraicEquations *algEq, double sim_time, double dt, double *time,
+    char *time_variant_target_id[], unsigned int num_of_time_variant_targets,
+    timeVariantAssignments *timeVarAssign, allocated_memory *mem,
+    copied_AST *cp_AST, int print_interval) {
   unsigned int i, j, k;
   char *constants_in_alg[MAX_ALGEBRAIC_CONSTANTS];
   char *included_id_in_alg[MAX_ALGEBRAIC_CONSTANTS];
@@ -348,7 +389,10 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
         myNode->left = NULL;
         myNode->right = NULL;
         myASTNode_create(myNode, node, copied_myAST, &num_of_copied_myAST);
-        _prepare_algebraic2(m, myNode, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, algEq->variables_id[j], j, mem);
+        _prepare_algebraic2(is_variable_step, m, myNode, sp, param, comp, re,
+            sim_time, dt, time, initAssign, time_variant_target_id,
+            num_of_time_variant_targets, timeVarAssign, algEq, i,
+            algEq->variables_id[j], j, mem, print_interval);
         myASTNode_free(copied_myAST, num_of_copied_myAST);
       }
       add_ast_memory_node(node, __FILE__, __LINE__);
@@ -361,7 +405,11 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
         if(algEq->coefficient_matrix[i][j]->math_length == 0){
           node = ASTNode_createWithType(AST_INTEGER);
           ASTNode_setInteger(node, 0);
-          algEq->coefficient_matrix[i][j]->math_length = get_equation(m, algEq->coefficient_matrix[i][j], sp, param, comp, re, node, 0, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, mem);
+          algEq->coefficient_matrix[i][j]->math_length
+            = get_equation(is_variable_step, m, algEq->coefficient_matrix[i][j],
+                sp, param, comp, re, node, 0, sim_time, dt, time, initAssign,
+                time_variant_target_id, num_of_time_variant_targets,
+                timeVarAssign, mem, print_interval);
         }
       }
     }
@@ -373,7 +421,9 @@ void prepare_algebraic(Model_t *m, mySpecies *sp[], myParameter *param[], myComp
       node = (ASTNode_t*)Rule_getMath(ru[i]->origin);
       node = ASTNode_deepCopy(node);
       alter_tree_structure(m, &node, NULL, 0, cp_AST);
-      _prepare_algebraic3(m, node, sp, param, comp, re, sim_time, dt, time, initAssign, time_variant_target_id, num_of_time_variant_targets, timeVarAssign, algEq, i, mem);
+      _prepare_algebraic3(is_variable_step, m, node, sp, param, comp, re,
+          sim_time, dt, time, initAssign, time_variant_target_id,
+          num_of_time_variant_targets, timeVarAssign, algEq, i, mem, print_interval);
       add_ast_memory_node(node, __FILE__, __LINE__);
     }
   }
