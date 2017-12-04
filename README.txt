@@ -4,7 +4,7 @@
              http://fun.bio.keio.ac.jp/software/libsbmlsim/
                   mailto:sbmlsim@fun.bio.keio.ac.jp
 
--- Last modified: Fri, 23 Dec 2016 04:33:07 +0900
+-- Last modified: Tue, 05 Dec 2017 00:12:42 +0900
 
 * Overview
   LibSBMLSim is a library for simulating an SBML model which contains
@@ -40,18 +40,18 @@
 
   Please see the 'API.txt' and 'examples' directory for further information
   on libSBMLSim APIs.
-  
+
 * Installation
 - Dependencies
   LibSBMLSim requires libSBML to be installed on your system.
   Please follow the instruction on (*1) and install libSBML.
   LibSBML and its dependent libraries will be automatically installed
   with Windows version of libSBMLSim Installer.
-  
+
 - Binary install of libSBMLSim
   We have provided installer for Windows, MacOSX and Linux from libSBMLSim-1.3.
   = Windows (both 32bit and 64bit)
-    Download libSBMLSim Installer for Windows (libsbmlsim-1.3.0-win{32,64}.exe)
+    Download libSBMLSim Installer for Windows (libsbmlsim-1.4.0-win{32,64}.exe)
     and double-click the installer. It will ask few questions, and will
     install libSBMLSim to
       "C:\Program Files\libsbmlsim-1.3"       (64bit)
@@ -60,15 +60,15 @@
 
   = MacOSX (64bit)
     Download libSBMLSim Installer archive for MacOSX
-    (libsbmlsim-1.3.0-macosx-mavericks-x64.dmg) and double-click the .dmg file.
-    You will see an installer (libsbmlsim-1.3.0-macosx-mavericks-x64.pkg) in a
+    (libsbmlsim-1.4.0-macosx-mavericks-x64.dmg) and double-click the .dmg file.
+    You will see an installer (libsbmlsim-1.4.0-macosx-mavericks-x64.pkg) in a
     Finder window. Double-click the installer and follow the instructions.
     It will install libSBMLSim to /usr/local .
 
   = Linux (64bit)
-    Download libsbmlsim-1.3.0_amd64.deb, and install with the following
+    Download libsbmlsim-1.4.0_amd64.deb, and install with the following
     command in your terminal.
-      $ sudo dpkg -i libsbmlsim-1.3.0_amd64.deb
+      $ sudo dpkg -i libsbmlsim-1.4.0_amd64.deb
     It will install libSBMLSim to /usr .
 
 * Compile and Install from source code.
@@ -86,11 +86,11 @@
 
 - How to build libSBMLSim
   1. Extract the archive file
-   % tar xvzf libsbmlsim-1.3.0.tar.gz (for tar ball)
-   % unzip libsbmlsim-1.3.0.zip       (for zip archive)
+   % tar xvzf libsbmlsim-1.4.0.tar.gz (for tar ball)
+   % unzip libsbmlsim-1.4.0.zip       (for zip archive)
   2. Compile
-   % mkdir libsbmlsim-1.3.0/build
-   % cd libsbmlsim-1.3.0/build
+   % mkdir libsbmlsim-1.4.0/build
+   % cd libsbmlsim-1.4.0/build
    % cmake ..
    % ccmake .
      CUI from cmake will be launched. Please confirm that
@@ -114,7 +114,7 @@
      Once you press [c] key, cmake will run the configure procedure
      and tries to detect SWIG, Java, Python, C# and Ruby (depending on
      which language bindings you enabled). Hit [c] several times to
-     complete configuration. Once the configuration is done, 
+     complete configuration. Once the configuration is done,
      press [g] key and cmake will generate Makefile.
      After Makefile is generated, just run
 
@@ -133,7 +133,7 @@
   Following files are installed on your system.
   = Unix based systems (Linux, MacOSX, etc.)
     $prefix/bin/simulateSBML         ... SBML simulator
-    $prefix/lib/libsbmlsim-static.a  ... Static library 
+    $prefix/lib/libsbmlsim-static.a  ... Static library
                /libsbmlsim.dylib     ... Dynamic library (on MacOSX)
                /libsbmlsim.so        ... Dynamic library (on Linux)
     $prefix/include/libsbmlsim       ... Header files
@@ -202,7 +202,7 @@
   with Online SBML Test Suite (*4), so you can run all tests with
   this scripts and upload the results to Online SBML Test Suite.
   The scripts are not installed, you will find them under "testcases"
-  directory in the extracted source directory (libsbmlsim/testcases/). 
+  directory in the extracted source directory (libsbmlsim/testcases/).
 
     libsbmlsim/testcases/simulateSBML  ... SBML simulator
                         /runall.sh     ... Script which will run all tests
@@ -218,7 +218,7 @@
   functions called from runall.sh.
   The SBML test cases are not included in this distribution, so please
   download them from (*5). After downloading sbml-test-cases-X.Y.Z.zip,
-  unzip the archive and move (or copy) "cases/" directory to 
+  unzip the archive and move (or copy) "cases/" directory to
   libsbmlsim/testcases directory. The directory structure will be:
 
     libsbmlsim/testcases/simulateSBML  ... SBML simulator
@@ -254,7 +254,7 @@
 
   (*4 Online SBML Test Suite: http://sbml.org/Facilities/Online_SBML_Test_Suite)
   (*5 SBML-test-cases-3.1.1 : http://sourceforge.net/projects/sbml/files/test-suite/3.1.1)
-  
+
   Note: Because 00983/00983-sbml-l3v1.xml is an invalid SBML document in
         SBML-test-cases-3.1.1, libSBMLSim will not run a simulation for this
         model. We confirmed that libSBMLSim will pass the test of
@@ -299,7 +299,7 @@
   /*
    * Export simulation result as CSV file
    */
-  write_csv(r, "result.csv"); 
+  write_csv(r, "result.csv");
   /*
    * Free Result object
    */
@@ -313,7 +313,7 @@
   r = simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, MTHD_RUNGE_KUTTA, 0)
   write_csv(r, 'result.csv')
   =======================================
-  
+
   === Java ==============================
   import jp.ac.keio.bio.fun.libsbmlsim.*;
   ...
@@ -321,13 +321,13 @@
   myResult r = libsbmlsim.simulateSBMLFromFile("sbml.xml", 20.0, 0.1, 10, 0, libsbmlsim.MTHD_RUNGE_KUTTA, 0);
   libsbmlsim.write_csv(r, "result.csv");
   =======================================
-  
+
   === Ruby ==============================
   require 'libsbmlsim'
   r = Libsbmlsim::simulateSBMLFromFile('sbml.xml', 20.0, 0.1, 10, 0, Libsbmlsim::MTHD_RUNGE_KUTTA, 0)
   Libsbmlsim::write_csv(r, 'result.csv')
   =======================================
-  
+
   === C# ================================
   using System;
   public class Test
@@ -339,11 +339,11 @@
       }
   }
   =======================================
-  
+
   Please see the 'API.txt' and 'examples' directory for further information.
   The 'examples' directory contains sample code for test application
   in several programming languages (C, C++, Java, Python, Ruby, C# and Perl).
 
 Have fun!
--- 
+--
 LibSBMLSim development team <sbmlsim@fun.bio.keio.ac.jp>
