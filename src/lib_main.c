@@ -378,15 +378,9 @@ SBMLSIM_EXPORT myResult* simulateSBMLModel(Model_t *m, double sim_time, double d
   /* create myObjects */
   /* free_mySBML_objects(m, mySp, myParam, myComp, myRe, myRu, myEv,
          myInitAssign, myAlgEq, timeVarAssign, mem, cp_AST); */
-  if (is_variable_step) {
-    create_mySBML_objectsf(is_variable_step, m, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, &myAlgEq, &timeVarAssign,
-        sim_time, dt, &time, mem, cp_AST, print_interval);
-  } else {
-    create_mySBML_objects(is_variable_step, m, mySp, myParam, myComp, myRe, myRu, myEv,
-        myInitAssign, &myAlgEq, &timeVarAssign,
-        sim_time, dt, &time, mem, cp_AST, print_interval);
-  }
+  create_mySBML_objects(is_variable_step, m, mySp, myParam, myComp, myRe, myRu, myEv,
+      myInitAssign, &myAlgEq, &timeVarAssign,
+      sim_time, dt, &time, mem, cp_AST, print_interval);
 
   /* create myResult */
   if (is_variable_step) {

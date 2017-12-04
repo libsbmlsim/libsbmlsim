@@ -250,6 +250,11 @@ void create_mySBML_objects(boolean is_variable_step,
       myRe[i]->products[j]->k[1] = 0;
       myRe[i]->products[j]->k[2] = 0;
       myRe[i]->products[j]->k[3] = 0;
+      if (is_variable_step) {
+        /* 6 stages */
+        myRe[i]->products[j]->k[4] = 0;
+        myRe[i]->products[j]->k[5] = 0;
+      }
       myRe[i]->products[j]->prev_val[0] = myRe[i]->products[j]->value;
       myRe[i]->products[j]->prev_val[1] = myRe[i]->products[j]->value;
       myRe[i]->products[j]->prev_val[2] = myRe[i]->products[j]->value;
@@ -334,6 +339,11 @@ void create_mySBML_objects(boolean is_variable_step,
       myRe[i]->reactants[j]->k[1] = 0;
       myRe[i]->reactants[j]->k[2] = 0;
       myRe[i]->reactants[j]->k[3] = 0;
+      if (is_variable_step) {
+        /* 6 stages */
+        myRe[i]->reactants[j]->k[4] = 0;
+        myRe[i]->reactants[j]->k[5] = 0;
+      }
       myRe[i]->reactants[j]->prev_val[0] = myRe[i]->reactants[j]->value;
       myRe[i]->reactants[j]->prev_val[1] = myRe[i]->reactants[j]->value;
       myRe[i]->reactants[j]->prev_val[2] = myRe[i]->reactants[j]->value;
