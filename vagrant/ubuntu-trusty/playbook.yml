@@ -1,0 +1,43 @@
+- hosts: all
+  become: yes
+  user: vagrant
+  tasks:
+    - name: install repositories
+      apt_repository: repo={{item}} state=present
+      with_items:
+        - ppa:ubuntu-toolchain-r/test
+        - ppa:george-edison55/cmake-3.x
+        - ppa:openjdk-r/ppa
+        - deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.8 main
+
+    - name: install required packages
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - clang-3.8
+        - lldb-3.8
+        - g++-5
+        - gcc-5
+        - cmake
+        - libbz2-dev
+        - ant
+        - git
+
+    - name: install packages to build bindings
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - swig
+        - openjdk-8-jdk
+
+    - name: install libsbml
+      apt:
+        deb: "https://ncu.dl.sourceforge.net/project/sbml/libsbml/5.15.0/stable/Linux/64-bit/libSBML-5.15.0-Linux-x64.deb"
+        state: present
+
+    - name: install packages for debug
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - gdb
+        - valgrind
+        - python-dbg
+        - openjdk-8-dbg
+        - libxml2-dbg
