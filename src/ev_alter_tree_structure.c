@@ -78,7 +78,7 @@ void ev_alter_tree_structure(Model_t *m, ASTNode_t **node_p, ASTNode_t *parent, 
         if(parent != NULL){
           ASTNode_replaceChild(parent, child_order, fd_body);
         }else{
-          ASTNode_free(*node_p);
+          add_ast_memory_node(*node_p, __FILE__, __LINE__);
           *node_p = fd_body;
         }
         node = *node_p;
