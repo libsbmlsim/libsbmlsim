@@ -39,6 +39,7 @@ typedef int BOOLEAN;
     $result = Py_True;
   else
     $result = Py_False;
+  Py_INCREF($result);
 %}
 #endif
 
