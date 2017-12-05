@@ -42,10 +42,17 @@ INSTALL(FILES ${PROJECT_SOURCE_DIR}/examples/python/Test.py
   ${PROJECT_SOURCE_DIR}/examples/python/simple.xml
   ${PROJECT_SOURCE_DIR}/examples/python/README.txt DESTINATION share/libsbmlsim/python)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION ${PYTHON_SITE_PACKAGES})
-
-INSTALL(TARGETS _libsbmlsim
-  LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES}
-  ARCHIVE DESTINATION ${PYTHON_SITE_PACKAGES}
-  )
-
+# Avoid absolute path on Windows because CPack won't allow it.
+IF(WIN32)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION share/libsbmlsim/python)
+  INSTALL(TARGETS _libsbmlsim
+    LIBRARY DESTINATION share/libsbmlsim/python
+    ARCHIVE DESTINATION share/libsbmlsim/python
+    )
+ELSE(UNIX)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libsbmlsim.py DESTINATION ${PYTHON_SITE_PACKAGES})
+  INSTALL(TARGETS _libsbmlsim
+    LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES}
+    ARCHIVE DESTINATION ${PYTHON_SITE_PACKAGES}
+    )
+ENDIF(WIN32)
