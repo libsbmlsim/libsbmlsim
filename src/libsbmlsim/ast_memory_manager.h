@@ -18,7 +18,6 @@
 
 /* linked list */
 typedef struct ast_memory_node {ASTNode_t* ast; struct ast_memory_node* next; } ast_memory_node_t;
-ast_memory_node_t* ast_memory_root_node;
 
 ast_memory_node_t* create_ast_memory_node(ASTNode_t*);
 void add_ast_memory_node(ASTNode_t*, char*, int);
