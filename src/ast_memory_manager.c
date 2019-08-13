@@ -13,6 +13,8 @@
  * ---------------------------------------------------------------------- -->*/
 #include "libsbmlsim/libsbmlsim.h"
 
+ast_memory_node_t* ast_memory_root_node;
+
 ast_memory_node_t* create_ast_memory_node(ASTNode_t* ast) {
 #ifdef DEBUG_AST_MEMORY_DEBUG
   /* printf("create_ast_memory_node for [%p] %s\n", ast, SBML_formulaToString(ast)); */

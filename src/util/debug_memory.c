@@ -15,6 +15,9 @@
 
 #include "../libsbmlsim/debug_memory.h"
 
+int total_allocated;
+debug_node_t* debug_root_node;
+
 debug_node_t* create_node(Site* site) {
 #ifdef DEBUG_MEMORY_DEBUG
   printf("create_node for %s %4d [%p]\n", site->s.file, site->s.line, site);

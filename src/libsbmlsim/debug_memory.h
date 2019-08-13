@@ -24,15 +24,11 @@
 #define DEBUG_MEMORY_VERSION 00001
 #define DEBUG_MEMORY_VERSION_STRING "00001"
 
-/* Total bytes allocated */
-int total_allocated;
-
 /* Memory alignment is important */
 typedef union { double d; struct {size_t n; char *file; int line;} s; } Site;
 
 /* linked list */
 typedef struct debug_node {Site* site; struct debug_node* next; } debug_node_t;
-debug_node_t* debug_root_node;
 
 /* wrapper for malloc, free */
 void* debug_malloc(size_t, char*, int);

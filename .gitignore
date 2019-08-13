@@ -29,10 +29,12 @@ build/
 build_debug/
 cmake-build-debug/
 
-# example, test executables
+# example, test executables and outputs
 examples/c/test
 examples/cpp/test
 testcases/simulateSBML
+testcases/out.csv
+testcases/*-results.csv
 
 # IntelliJ
 .idea/
