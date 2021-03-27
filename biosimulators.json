@@ -1,0 +1,452 @@
+{
+    "id": "libsbmlsim",
+    "name": "LibSBMLSim",
+    "version": "1.4.0",
+    "description": "A library for simulating an SBML model which contains Ordinary Differential Equations (ODEs).",
+    "urls": [{
+        "type": "Home page",
+        "url": "https://fun.bio.keio.ac.jp/software/libsbmlsim/"
+    }],
+    "image": null,
+    "authors": [{
+            "firstName": "Hiromu",
+            "lastName": "Takizawa",
+            "identifiers": []
+        },
+        {
+            "firstName": "Akito",
+            "lastName": "Tabira",
+            "identifiers": []
+        },
+        {
+            "firstName": "Kazushige",
+            "lastName": "Nakamura",
+            "identifiers": []
+        },
+        {
+            "firstName": "Yoichi",
+            "lastName": "Chikahara",
+            "identifiers": []
+        },
+        {
+            "firstName": "Tatsuhiro",
+            "lastName": "Matsui",
+            "identifiers": []
+        },
+        {
+            "firstName": "Noriko",
+            "lastName": "Hiroi",
+            "identifiers": []
+        },
+        {
+            "firstName": "Akira",
+            "lastName": "Funahashi",
+            "identifiers": []
+        },
+        {
+            "firstName": "Kazuki",
+            "lastName": "Hirata",
+            "identifiers": []
+        },
+        {
+            "firstName": "Keisuke",
+            "lastName": "Iba",
+            "identifiers": []
+        },
+        {
+            "firstName": "Suguru",
+            "lastName": "Sakuma",
+            "identifiers": []
+        },
+        {
+            "firstName": "Nobuyuki",
+            "lastName": "Ohta",
+            "identifiers": []
+        },
+        {
+            "firstName": "Takeshi",
+            "lastName": "Abe",
+            "identifiers": []
+        }
+    ],
+    "references": {
+        "identifiers": [],
+        "citations": [{
+            "title": "LibSBMLSim: a reference implementation of fully functional SBML simulator",
+            "authors": "Hiromu Takizawa, Kazushige Nakamura, Akito Tabira, Yoichi Chikahara, Tatsuhiro Matsui, Noriko Hiroi & Akira Funahashi",
+            "journal": "Bioinformatics",
+            "volume": 29,
+            "issue": "11",
+            "year": 2013,
+            "pages": "1474-1476",
+            "identifiers": [{
+                "namespace": "doi",
+                "id": "10.1093/bioinformatics/btt157",
+                "url": "https://doi.org/10.1093/bioinformatics/btt157"
+            }]
+        }]
+    },
+    "license": {
+        "namespace": "SPDX",
+        "id": "GPL-2.0-or-later"
+    },
+    "algorithms": [{
+            "id": "Euler",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000030"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "Adams-Bashforth",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000279"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "4th order Runge-Kutta",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000032"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "5th order Runge-Kutta Fehlberg (variable step size)",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000086"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "5th order Cash-Karp (variable step size)",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000321"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "Backward-Euler",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000031"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "Crank-Nicolson",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000309"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "Adams-Moulton",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000280"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        },
+        {
+            "id": "Backward Difference",
+            "kisaoId": {
+                "namespace": "KISAO",
+                "id": "KISAO_0000288"
+            },
+            "modelingFrameworks": [{
+                "namespace": "SBO",
+                "id": "SBO_0000293"
+            }],
+            "modelFormats": [{
+                "namespace": "EDAM",
+                "id": "format_2585",
+                "version": null,
+                "supportedFeatures": []
+            }],
+            "simulationFormats": [],
+            "archiveFormats": [],
+            "citations": [],
+            "parameters": null,
+            "dependentDimensions": [{
+                "namespace": "SIO",
+                "id": "SIO_000418"
+            }],
+            "dependentVariableTargetPatterns": [{
+                    "variables": "species concentrations",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species"
+                },
+                {
+                    "variables": "parameter values",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                }
+            ],
+            "availableSoftwareInterfaceTypes": ["library"],
+            "dependencies": null
+        }
+    ],
+    "interfaceTypes": ["library"],
+    "supportedOperatingSystemTypes": ["Linux", "Mac OS", "Windows"],
+    "supportedProgrammingLanguages": [{
+            "namespace": "Linguist",
+            "id": "C"
+        },
+        {
+            "namespace": "Linguist",
+            "id": "C++"
+        },
+        {
+            "namespace": "Linguist",
+            "id": "C#"
+        },
+        {
+            "namespace": "Linguist",
+            "id": "Java"
+        },
+        {
+            "namespace": "Linguist",
+            "id": "Python"
+        },
+        {
+            "namespace": "Linguist",
+            "id": "Ruby"
+        }
+    ],
+    "funding": [],
+    "biosimulators": {
+        "specificationVersion": "1.0.0",
+        "imageVersion": "1.0.0",
+        "validated": false,
+        "validationTests": null
+    }
+}
