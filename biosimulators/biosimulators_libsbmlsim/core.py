@@ -85,17 +85,28 @@ def exec_sed_task(task, variables, log=None):
     # execute the simulation
     integrator = get_integrator(task.simulation.algorithm)
     args = [task.model,
-            task.simulation.output_end_time, task.simulation.output_end_time/task.simulation.number_of_points,
+            task.simulation.output_end_time, task.simulation.output_end_time / task.simulation.number_of_points,
             1, 0, integrator, 0]
     results = libsbmlsim.simulateSBMLFromFile(*args)
 
     # extract results
     variable_results = VariableResults()
     for variable in variables:
-        sbml_id = target_x_paths_to_sbml_ids[variable.target]
-
         # TODO: extract results from `results` and convert to numpy array
         # TODO: throw errors in the simulation request an invalid/unsupported output
+
+        if variable.symbol:
+            if variable.symbol == Symbol.time:
+                i_result = todo_index_of_time_in_results  # index in results for time
+            else:
+                raise NotImplementedError('Symbol {} is not supported'.format(variable.symbol))
+
+        else:
+            sbml_id = target_x_paths_to_sbml_ids[variable.target]
+            i_result = todo_index_of_sbml_id_in_results  # index in results for SBML id
+            if not i_result:
+                raise NotImplementedError('Variable with target {} is not supported'.format(variable.target))
+
         variable_results[variable.id] = results[i_result][-(task.simulation.number_of_points + 1):]
 
     # log action
