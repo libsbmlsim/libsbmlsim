@@ -1,0 +1,2 @@
+biosimulators_utils[logging] >= 0.1.43
+libsbmlsim
