@@ -70,6 +70,9 @@ def exec_sed_task(task, variables, log=None):
     '''
     log = log or TaskLog()
 
+    model = task.model
+    sim = task.simulation
+
     raise_errors_warnings(validation.validate_model_language(task.model.language, ModelLanguage.SBML),
                           error_summary='Language for model `{}` is not supported.'.format(model.id))
     raise_errors_warnings(validation.validate_model_change_types(task.model.changes, ()),
