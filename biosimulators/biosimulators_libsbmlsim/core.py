@@ -15,6 +15,7 @@ from biosimulators_utils.sedml.data_model import (Task, ModelLanguage, UniformTi
                                                   Variable, Symbol)
 from biosimulators_utils.sedml import validation
 from biosimulators_utils.sedml.exec import exec_sed_doc
+from biosimulators_utils.utils.core import raise_errors_warnings
 import functools
 import libsbmlsim
 
@@ -69,13 +70,12 @@ def exec_sed_task(task, variables, log=None):
     '''
     log = log or TaskLog()
 
-    validation.validate_task(task)
-    validation.validate_model_language(task.model.language, ModelLanguage.SBML)
-    validation.validate_model_change_types(task.model.changes, ())
-    validation.validate_model_changes(task.model.changes)
-    validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, ))
-    validation.validate_uniform_time_course_simulation(task.simulation)
-    validation.validate_data_generator_variables(variables)
+    raise_errors_warnings(validation.validate_model_language(task.model.language, ModelLanguage.SBML),
+                          error_summary='Language for model `{}` is not supported.'.format(model.id))
+    raise_errors_warnings(validation.validate_model_change_types(task.model.changes, ()),
+                          error_summary='Changes for model `{}` are not supported.'.format(model.id))
+    raise_errors_warnings(validation.validate_simulation_type(task.simulation, (UniformTimeCourseSimulation, )),
+                          error_summary='{} `{}` is not supported.'.format(sim.__class__.__name__, sim.id))
     target_x_paths_to_sbml_ids = validation.validate_variable_xpaths(variables, task.model.source, attr='id')
 
     # validate time course
