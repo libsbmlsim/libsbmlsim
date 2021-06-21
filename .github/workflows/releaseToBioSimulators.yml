@@ -117,8 +117,8 @@ jobs:
         if: steps.determine-if-release-needed.outputs.release == '1'
         run: |
           docker login ghcr.io \
-            --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} \
-            --password ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+            --username ${{ secrets.GHCR_USERNAME }} \
+            --password ${{ secrets.GHCR_TOKEN }}
           docker push ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }}
           docker push ghcr.io/${{ github.repository }}/libsbmlsim:latest
 
@@ -129,7 +129,7 @@ jobs:
           REVISION=$(git rev-parse HEAD)
           curl \
             -X POST \
-            -u ${{ secrets.GH_ISSUE_USERNAME }}:${{ secrets.GH_ISSUE_TOKEN }} \
+            -u ${{ secrets.BIOSIMULATORS_GH_USERNAME }}:${{ secrets.BIOSIMULATORS_GH_TOKEN }} \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/biosimulators/Biosimulators/issues \
             -d "{\"labels\": [\"Validate/submit simulator\"], \"title\": \"Submit LibSBMLsim ${{ steps.get-version-number.outputs.version }}\", \"body\": \"---\nid: libsbmlsim\nversion: ${{ steps.get-version-number.outputs.version }}\nspecificationsUrl: https://raw.githubusercontent.com/${{ github.repository }}/${REVISION}/biosimulators.json\nspecificationsPatch:\n  version: ${{ steps.get-version-number.outputs.version }}\n  image:\n    url: ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }}\nvalidateImage: true\ncommitSimulator: true\n\n---\"}"
