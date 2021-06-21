@@ -146,7 +146,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -212,7 +214,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -262,7 +266,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -312,7 +318,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -362,7 +370,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -412,7 +422,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -462,7 +474,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -528,7 +542,9 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         },
         {
@@ -594,11 +610,15 @@
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
                 }
             ],
-            "availableSoftwareInterfaceTypes": ["library"],
+            "availableSoftwareInterfaceTypes": ["library", "command-line application",
+                "BioSimulators Docker image"
+            ],
             "dependencies": null
         }
     ],
-    "interfaceTypes": ["library"],
+    "interfaceTypes": ["library", "command-line application",
+        "BioSimulators Docker image"
+    ],
     "supportedOperatingSystemTypes": ["Linux", "Mac OS", "Windows"],
     "supportedProgrammingLanguages": [{
             "namespace": "Linguist",

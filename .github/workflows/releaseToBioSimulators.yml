@@ -76,6 +76,7 @@ jobs:
             --build-arg VERSION=${{ steps.get-version-number.outputs.version }} \
             --tag ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }} \
             --tag ghcr.io/${{ github.repository }}/libsbmlsim:latest \
+            -f biosimulators/Dockerfile \
             .
 
       #############################################
