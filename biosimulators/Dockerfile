@@ -1,7 +1,8 @@
 # Base OS
-FROM python:2.7-slim-buster
+FROM python:3.9-slim-buster
 
 ARG VERSION=1.4.0
+ARG LIBSBML_VERSION=5.19.0
 
 # metadata
 LABEL \
@@ -15,7 +16,7 @@ LABEL \
     org.opencontainers.image.vendor="LibSBMLsim Team" \
     org.opencontainers.image.licenses="LGPL-2.1-or-later" \
     \
-    base_image="python:2.7-slim-buster" \
+    base_image="python:3.9-slim-buster" \
     version="${VERSION}" \
     software="LibSBMLsim" \
     software.version="${VERSION}" \
@@ -27,10 +28,54 @@ LABEL \
     about.tags="BioSimulators,mathematical model,kinetic model,simulation,systems biology,computational biology,SBML,SED-ML,COMBINE,OMEX" \
     maintainer="LibSBMLsim Team <info@fun.bio.keio.ac.jp>"
 
-# Install requirements
-RUN wget http://fun.bio.keio.ac.jp/software/libsbmlsim/downloads/libsbmlsim_${VERSION}_amd64.deb -o /tmp/libsbmlsim_${VERSION}_amd64.deb \
-    sudo dpkg -i /tmp/libsbmlsim_${VERSION}_amd64.deb \
-    rm /tmp/libsbmlsim_${VERSION}_amd64.deb
+# install libSBML
+RUN apt-get update -y \
+    && apt-get install --no-install-recommends -y \
+        wget \
+        libxml2 \
+    \
+    && wget https://master.dl.sourceforge.net/project/sbml/libsbml/${LIBSBML_VERSION}/stable/Linux/64-bit/libSBML-${LIBSBML_VERSION}-Linux-x64.deb \
+    && dpkg -i libSBML-${LIBSBML_VERSION}-Linux-x64.deb \
+    && rm libSBML-${LIBSBML_VERSION}-Linux-x64.deb \
+    && export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH \
+    \
+    && apt-get remove -y \
+        wget \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+ENV LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
+
+# install libSBMLSim
+COPY . /root/libsbmlsim/
+RUN apt-get update -y \
+    && apt-get install --no-install-recommends -y \
+        wget \
+        build-essential \
+        cmake \
+        swig \
+        libbz2-dev \
+    \
+    && cd /root/libsbmlsim \
+    && mkdir build \
+    && cd build \
+    && cmake \
+        -D LIBSBML_INCLUDE_DIR=/usr/include \
+        -D LIBSBML_LIBRARY=/usr/lib64/libsbml.so \
+        -D WITH_PYTHON=ON \
+        .. \
+    && make \
+    && make install \
+    && cd /root \
+    && rm -r libsbmlsim \
+    \
+    && apt-get remove -y \
+        wget \
+        build-essential \
+        cmake \
+        swig \
+        libbz2-dev \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it
 COPY biosimulators/ /root/biosimulators/
@@ -39,8 +84,9 @@ RUN pip install /root/biosimulators \
 
 # supported environment variables
 ENV ALGORITHM_SUBSTITUTION_POLICY=SIMILAR_VARIABLES \
-    VERBOSE=0
+    VERBOSE=0 \
+    MPLBACKEND=PDF
 
 # Entrypoint
-ENTRYPOINT ["libsbmlsim"]
+ENTRYPOINT ["biosimulators-libsbmlsim"]
 CMD []

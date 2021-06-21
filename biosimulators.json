@@ -118,7 +118,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -155,20 +169,36 @@
             "archiveFormats": [],
             "citations": [],
             "parameters": [{
-                "kisaoId": {
-                    "namespace": "KISAO",
-                    "id": "KISAO_0000594"
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000594"
+                    },
+                    "name": "order",
+                    "type": "integer",
+                    "value": "4",
+                    "recommendedRange": ["1", "4"],
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
                 },
-                "name": "order",
-                "type": "integer",
-                "value": "1",
-                "recommendedRange": [1, 4],
-                "availableSoftwareInterfaceTypes": [
-                    "library",
-                    "command-line application",
-                    "BioSimulators Docker image"
-                ]
-            }],
+                {
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000483"
+                    },
+                    "name": "step size",
+                    "type": "float",
+                    "value": null,
+                    "recommendedRange": null,
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
+                }
+            ],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -204,7 +234,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -240,7 +284,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -276,7 +334,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -312,7 +384,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -348,7 +434,21 @@
             "simulationFormats": [],
             "archiveFormats": [],
             "citations": [],
-            "parameters": [],
+            "parameters": [{
+                "kisaoId": {
+                    "namespace": "KISAO",
+                    "id": "KISAO_0000483"
+                },
+                "name": "step size",
+                "type": "float",
+                "value": null,
+                "recommendedRange": null,
+                "availableSoftwareInterfaceTypes": [
+                    "library",
+                    "command-line application",
+                    "BioSimulators Docker image"
+                ]
+            }],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -385,20 +485,36 @@
             "archiveFormats": [],
             "citations": [],
             "parameters": [{
-                "kisaoId": {
-                    "namespace": "KISAO",
-                    "id": "KISAO_0000594"
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000594"
+                    },
+                    "name": "order",
+                    "type": "integer",
+                    "value": "4",
+                    "recommendedRange": ["2", "4"],
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
                 },
-                "name": "order",
-                "type": "integer",
-                "value": "2",
-                "recommendedRange": [2, 4],
-                "availableSoftwareInterfaceTypes": [
-                    "library",
-                    "command-line application",
-                    "BioSimulators Docker image"
-                ]
-            }],
+                {
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000483"
+                    },
+                    "name": "step size",
+                    "type": "float",
+                    "value": null,
+                    "recommendedRange": null,
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
+                }
+            ],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"
@@ -435,20 +551,36 @@
             "archiveFormats": [],
             "citations": [],
             "parameters": [{
-                "kisaoId": {
-                    "namespace": "KISAO",
-                    "id": "KISAO_0000594"
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000594"
+                    },
+                    "name": "order",
+                    "type": "integer",
+                    "value": "4",
+                    "recommendedRange": ["2", "4"],
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
                 },
-                "name": "order",
-                "type": "integer",
-                "value": "2",
-                "recommendedRange": [2, 4],
-                "availableSoftwareInterfaceTypes": [
-                    "library",
-                    "command-line application",
-                    "BioSimulators Docker image"
-                ]
-            }],
+                {
+                    "kisaoId": {
+                        "namespace": "KISAO",
+                        "id": "KISAO_0000483"
+                    },
+                    "name": "step size",
+                    "type": "float",
+                    "value": null,
+                    "recommendedRange": null,
+                    "availableSoftwareInterfaceTypes": [
+                        "library",
+                        "command-line application",
+                        "BioSimulators Docker image"
+                    ]
+                }
+            ],
             "dependentDimensions": [{
                 "namespace": "SIO",
                 "id": "SIO_000418"

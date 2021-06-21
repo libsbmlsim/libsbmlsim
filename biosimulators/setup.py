@@ -48,7 +48,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'libsbmlsim = biosimulators_libsbmlsim.__main__:main',
+            'biosimulators-libsbmlsim = biosimulators_libsbmlsim.__main__:main',
         ],
     },
 )
