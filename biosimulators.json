@@ -115,8 +115,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -167,8 +177,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
@@ -235,8 +255,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -287,8 +317,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -339,8 +379,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -391,8 +441,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -443,8 +503,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -495,8 +565,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
@@ -563,8 +643,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
