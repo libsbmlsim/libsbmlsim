@@ -81,14 +81,13 @@ jobs:
       ## Test
       #############################################
       - name: Run the tests
-        working-directory: biosimulators
         run: |
           cwd=$(pwd)
           docker run \
               --rm \
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_libsbmlsim \
-              --workdir /root/Biosimulators_libsbmlsim \
+              --workdir /root/Biosimulators_libsbmlsim/biosimulators \
               ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install pytest pytest-cov \
