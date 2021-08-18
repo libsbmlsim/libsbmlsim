@@ -113,7 +113,7 @@ jobs:
               --rm \
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_libsbmlsim \
-              --workdir /root/Biosimulators_libsbmlsim \
+              --workdir /root/Biosimulators_libsbmlsim/biosimulators \
               ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install docs-src/requirements.txt \
