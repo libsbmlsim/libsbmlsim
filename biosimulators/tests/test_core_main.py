@@ -50,7 +50,7 @@ class CliTestCase(unittest.TestCase):
             for line in file:
                 if 'LIBSBMLSIM_DOTTED_VERSION' in line:
                     _, version, _ = line.split('"')
-        self.assertEqual(biosimulators_libsbmlsim.__version__,
+        self.assertEqual(biosimulators_libsbmlsim.get_simulator_version(),
                          version)
 
     def test_exec_sed_task(self):
