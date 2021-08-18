@@ -98,11 +98,10 @@ jobs:
 
       - name: Upload the coverage report to Codecov
         uses: codecov/codecov-action@v1.0.3
-        working-directory: biosimulators
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
-          file: ./coverage.xml
+          file: ./biosimulators/coverage.xml
 
       #############################################
       ## Compile documentation
