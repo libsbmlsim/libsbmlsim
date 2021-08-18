@@ -8,7 +8,7 @@
         "url": "https://fun.bio.keio.ac.jp/software/libsbmlsim/"
     }],
     "image": {
-        "url": "ghcr.io/libsbmlsim/libsbmlsim:1.4.0",
+        "url": "ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:1.4.0",
         "format": {
             "namespace": "EDAM",
             "id": "format_3973",
