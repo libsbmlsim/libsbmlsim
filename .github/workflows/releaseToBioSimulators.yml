@@ -121,7 +121,7 @@ jobs:
                   pip install docs-src/requirements.txt \
                   && sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc \
                   && mkdir -p docs-src/_static \
-                  && sphinx-build docs-src docs
+                  && sphinx-build docs-src ../docs
 
       #############################################
       ## Release
@@ -131,7 +131,6 @@ jobs:
       - id: commit-docs
         name: Commit the compiled documentation
         if: startsWith(github.ref, 'refs/tags/')
-        working-directory: biosimulators
         run: |
           git config --local user.email "biosimulators.daemon@gmail.com"
           git config --local user.name "biosimulatorsdaemon"
