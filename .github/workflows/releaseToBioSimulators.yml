@@ -120,6 +120,7 @@ jobs:
                   && sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc \
                   && mkdir -p docs-src/_static \
                   && sphinx-build docs-src ../docs
+              "
 
       #############################################
       ## Release
