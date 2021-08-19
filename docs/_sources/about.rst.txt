@@ -1,0 +1,47 @@
+About BioSimulators-LibSBMLSim
+
+License
+
+This package is released under the
+
+MIT License
+
+. LibSBMLSim is released under the
+
+GPL 2.0 License
+
+.
+
+Development team
+
+This package was developed by the
+
+Karr Lab
+
+ at the Icahn School of Medicine at Mount Sinai and the
+
+Center for Reproducible Biomedical Modeling
+
+. LibSBMLSim was developed by the
+
+Funahashi Lab
+
+ at
+
+Keio University
+
+.
+
+Questions and comments
+
+Please contact the
+
+BioSimulators Team
+
+ with any questions or comments about the command-line program or
+Docker image. Please address questions and comments about LibSBMLSim
+to the
+
+Funahashi Lab
+
+.

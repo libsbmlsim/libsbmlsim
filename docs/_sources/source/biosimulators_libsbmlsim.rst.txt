@@ -1,0 +1,206 @@
+biosimulators_libsbmlsim package
+
+biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None)
+
+   Execute a task and save its results
+
+   Parameters:
+      task (Task) -- task
+
+      variables (list of Variable) -- variables that should be
+      recorded
+
+      log (TaskLog, optional) -- log for the task
+
+   Returns:
+      "VariableResults": results of variables "TaskLog": log
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, return_results=False, report_formats=None, plot_formats=None, bundle_outputs=None, keep_individual_outputs=None, raise_exceptions=True)
+
+   Execute the SED tasks defined in a COMBINE/OMEX archive and save
+   the outputs
+
+   Parameters:
+      archive_filename (str) -- path to COMBINE/OMEX archive
+
+      out_dir (str) -- path to store the outputs of the archiveCSV:
+      directory in which to save outputs to files { out_dir }/{
+      relative-path-to-SED-ML-file-within-archive }/{ report.id }.csv
+      HDF5: directory in which to save a single HDF5 file ({ out_dir
+      }/reports.h5), with reports at keys { relative-path-to-SED-ML-
+      file-within-archive }/{ report.id } within the HDF5 file
+
+      return_results (bool, optional) -- whether to return the result
+      of each output of each SED-ML file
+
+      report_formats (list of ReportFormat, optional) -- report format
+      (e.g., csv or h5)
+
+      plot_formats (list of VizFormat, optional) -- report format
+      (e.g., pdf)
+
+      bundle_outputs (bool, optional) -- if True, bundle outputs into
+      archives for reports and plots
+
+      keep_individual_outputs (bool, optional) -- if True, keep
+      individual output files
+
+      raise_exceptions (bool, optional) -- whether to raise exceptions
+
+   Returns:
+      SedDocumentResults: results
+
+      CombineArchiveLog: log
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.get_simulator_version()
+
+   Get the version of LibSBMLSim
+
+   Returns:
+      version
+
+   Return type:
+      "str"
+
+Submodules
+
+biosimulators_libsbmlsim.core module
+
+Methods for executing SED tasks in COMBINE archives and saving their
+outputs
+
+Author:
+   Jonathan Karr <
+
+   karr@mssm.edu
+
+   >
+
+Date:
+   2021-03-27
+
+Copyright:
+   2021, Center for Reproducible Biomedical Modeling
+
+License:
+   MIT
+
+biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None)
+
+   Execute a task and save its results
+
+   Parameters:
+      task (Task) -- task
+
+      variables (list of Variable) -- variables that should be
+      recorded
+
+      log (TaskLog, optional) -- log for the task
+
+   Returns:
+      "VariableResults": results of variables "TaskLog": log
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, return_results=False, report_formats=None, plot_formats=None, bundle_outputs=None, keep_individual_outputs=None, raise_exceptions=True)
+
+   Execute the SED tasks defined in a COMBINE/OMEX archive and save
+   the outputs
+
+   Parameters:
+      archive_filename (str) -- path to COMBINE/OMEX archive
+
+      out_dir (str) -- path to store the outputs of the archiveCSV:
+      directory in which to save outputs to files { out_dir }/{
+      relative-path-to-SED-ML-file-within-archive }/{ report.id }.csv
+      HDF5: directory in which to save a single HDF5 file ({ out_dir
+      }/reports.h5), with reports at keys { relative-path-to-SED-ML-
+      file-within-archive }/{ report.id } within the HDF5 file
+
+      return_results (bool, optional) -- whether to return the result
+      of each output of each SED-ML file
+
+      report_formats (list of ReportFormat, optional) -- report format
+      (e.g., csv or h5)
+
+      plot_formats (list of VizFormat, optional) -- report format
+      (e.g., pdf)
+
+      bundle_outputs (bool, optional) -- if True, bundle outputs into
+      archives for reports and plots
+
+      keep_individual_outputs (bool, optional) -- if True, keep
+      individual output files
+
+      raise_exceptions (bool, optional) -- whether to raise exceptions
+
+   Returns:
+      SedDocumentResults: results
+
+      CombineArchiveLog: log
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.data_model module
+
+Data model for mapping KiSAO terms to LibSBMLsim integrators and their
+settings
+
+Author:
+   Jonathan Karr <
+
+   karr@mssm.edu
+
+   >
+
+Date:
+   2021-03-27
+
+Copyright:
+   2021, Center for Reproducible Biomedical Modeling
+
+License:
+   MIT
+
+biosimulators_libsbmlsim.data_model.get_integrator(algorithm)
+
+   Get the LiSBMLsim integrator and its parameter for a SED-ML/KiSAO
+   algorithm
+
+   Parameters:
+      algorithm
+
+       ("Algorithm") -- SED-ML algorithm
+
+   Returns:
+      "int": id of LibSBMLsim integrator "float": time step
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.data_model.get_integrator_parameters(algorithm, supported_orders=None)
+
+   Get the order and time step of a LiSBMLsim integrator for a SED-
+   ML/KiSAO algorithm
+
+   Parameters:
+      algorithm (Algorithm) -- SED-ML algorithm
+
+      supported_orders (list of int, optional) -- orders supported by
+      the SED-ML algorithm
+
+   Returns:
+      int: order
+
+      float: time step
+
+   Return type:
+      "tuple"
