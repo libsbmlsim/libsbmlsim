@@ -106,7 +106,6 @@ jobs:
       ## Compile documentation
       #############################################
       - name: Compile documentation
-        working-directory: biosimulators
         run: |
           cwd=$(pwd)
           docker run \
