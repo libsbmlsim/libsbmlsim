@@ -109,7 +109,7 @@ jobs:
               -c "
                   pip install pytest pytest-cov \
                   && pip install -r tests/requirements.txt \
-                  && python -m pytest tests/ --cov biosimulators_libsbmlsim
+                  && python -m pytest tests/ --cov biosimulators_libsbmlsim --cov-report=xml
               "
           sudo chown ${UID} ./biosimulators/coverage.xml
 
