@@ -11,10 +11,27 @@ jobs:
       #############################################
       ## Checkout repository
       #############################################
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+      - name: Clone repository
+        run: |
+          git clone https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} .
+
+      - id: get-main-branch
+        name: Determine main branch
+        run: |
+          mainBranch=$(git symbolic-ref refs/remotes/origin/HEAD | cut -d '/' -f 4)
+          mainBranchHeadRevision=$(git rev-parse refs/remotes/origin/${mainBranch})
+          echo "::set-output name=mainBranch::$mainBranch"
+          echo "::set-output name=mainBranchRef::refs/heads/$mainBranch"
+          echo "::set-output name=mainBranchHeadRevision::$mainBranchHeadRevision"
+
+      - name: Checkout ref
+        run: |
+          if [[ "${{ github.ref }}" =~ ^refs/heads/ ]]; then
+            branch=$(echo "${{ github.ref }}" | cut -d'/' -f 3-)
+            git checkout ${branch}
+          else
+            git checkout ${{ github.ref }}
+          fi
 
       #############################################
       ## Install package and its dependencies
@@ -134,7 +151,7 @@ jobs:
           git config --local user.name "biosimulatorsdaemon"
           git config pull.rebase false
           git stash
-          git checkout dev
+          git checkout ${{ steps.get-main-branch.outputs.mainBranch }}
           git pull
           set +e
           git stash pop
@@ -154,7 +171,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: dev
+          branch: ${{ steps.get-main-branch.outputs.mainBranch }}
 
       # Create GitHub release
       - name: Create GitHub release
