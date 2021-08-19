@@ -105,6 +105,7 @@ jobs:
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
               --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
+              --user ${UID} \
               ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install pytest pytest-cov \
@@ -130,6 +131,7 @@ jobs:
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
               --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
+              --user ${UID} \
               ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install -r docs-src/requirements.txt \
