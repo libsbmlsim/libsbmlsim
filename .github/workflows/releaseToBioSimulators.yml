@@ -105,13 +105,13 @@ jobs:
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
               --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
-              --user ${UID} \
               ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install pytest pytest-cov \
                   && pip install -r tests/requirements.txt \
                   && python -m pytest tests/ --cov biosimulators_libsbmlsim
               "
+          sudo chown ${UID} ./biosimulators/coverage.xml
 
       - name: Upload the coverage report to Codecov
         uses: codecov/codecov-action@v1.0.3
@@ -131,14 +131,15 @@ jobs:
               --entrypoint bash \
               --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
               --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
-              --user ${UID} \
-              ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
+              ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:1.4.0 \
               -c "
                   pip install -r docs-src/requirements.txt \
                   && sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc \
                   && mkdir -p docs-src/_static \
                   && sphinx-build docs-src ../docs
               "
+          sudo chown ${UID} -R docs
+          sudo chown ${UID} -R biosimulators/docs-src
 
       #############################################
       ## Release
