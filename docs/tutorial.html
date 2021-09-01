@@ -4,8 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tutorial &#8212; BioSimulators-LibSBMLSim 0.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Tutorial &#8212; BioSimulators-LibSBMLSim 0.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -108,27 +109,27 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="tutorial">
+  <section id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
 <p>BioSimulators-LibSBMLSim is available as a command-line program and as a command-line program encapsulated into a Docker image.</p>
-<div class="section" id="creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml">
+<section id="creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml">
 <h2>Creating COMBINE/OMEX archives and encoding simulation experiments into SED-ML<a class="headerlink" href="#creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml" title="Permalink to this headline">¶</a></h2>
 <p>Information about how to create COMBINE/OMEX archives which can be executed by BioSimulators-LibSBMLSim is available at <a class="reference external" href="https://biosimulators.org/help">BioSimulators</a>.</p>
 <p>A list of the algorithms and algorithm parameters supported by LibSBMLSim is available at <a class="reference external" href="https://biosimulators.org/simulators/libsbmlsim">BioSimulators</a>.</p>
-<div class="section" id="models-sbml">
+<section id="models-sbml">
 <h3>Models (SBML)<a class="headerlink" href="#models-sbml" title="Permalink to this headline">¶</a></h3>
 <p>BioSimulators-LibSBMLSim can execute models encoded in SBML format.</p>
-</div>
-<div class="section" id="simulation-experiments-sed-ml-kisao">
+</section>
+<section id="simulation-experiments-sed-ml-kisao">
 <h3>Simulation experiments (SED-ML, KISAO)<a class="headerlink" href="#simulation-experiments-sed-ml-kisao" title="Permalink to this headline">¶</a></h3>
 <p>BioSimulators-LibSBMLSim can execute simulation experiments encoded in SED-ML, using KiSAO to indicate specific algorithms and their parameters. Information about the algorithms (KiSAO terms), algorithm parameters (KiSAO terms), and outputs (XML XPaths for variables) supported by BioSimulators-LibSBMLSim is available from the <a class="reference external" href="https://biosimulators.org/simulators/libsbmlsim">BioSimulators registry</a>.</p>
-</div>
-<div class="section" id="example-combine-omex-archives">
+</section>
+<section id="example-combine-omex-archives">
 <h3>Example COMBINE/OMEX archives<a class="headerlink" href="#example-combine-omex-archives" title="Permalink to this headline">¶</a></h3>
 <p>Examples of COMBINE/OMEX archives for simulations which BioSimulators-LibSBMLSim can execute are available in the <a class="reference external" href="https://github.com/biosimulators/Biosimulators_test_suite/tree/deploy/examples">BioSimulators test suite</a>.</p>
-</div>
-</div>
-<div class="section" id="command-line-program">
+</section>
+</section>
+<section id="command-line-program">
 <h2>Command-line program<a class="headerlink" href="#command-line-program" title="Permalink to this headline">¶</a></h2>
 <p>The command-line program can be used to execute COMBINE/OMEX archives that describe simulations as illustrated below.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>usage: biosimulators-libsbmlsim [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
@@ -151,8 +152,8 @@ optional arguments:
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>biosimulators-libsbmlsim -i ./modeling-study.omex -o ./
 </pre></div>
 </div>
-</div>
-<div class="section" id="docker-image-with-a-command-line-entrypoint">
+</section>
+<section id="docker-image-with-a-command-line-entrypoint">
 <h2>Docker image with a command-line entrypoint<a class="headerlink" href="#docker-image-with-a-command-line-entrypoint" title="Permalink to this headline">¶</a></h2>
 <p>The entrypoint to the Docker image supports the same command-line interface described above.</p>
 <p>For example, the following command could be used to use the Docker image to execute the same simulations described in <code class="docutils literal notranslate"><span class="pre">./modeling-study.omex</span></code> and save their results to <code class="docutils literal notranslate"><span class="pre">./</span></code>:</p>
@@ -165,8 +166,8 @@ optional arguments:
         -o /tmp/working-dir
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>

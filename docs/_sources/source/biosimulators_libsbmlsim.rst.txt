@@ -1,6 +1,6 @@
 biosimulators_libsbmlsim package
 
-biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None)
+biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None, config=None)
 
    Execute a task and save its results
 
@@ -12,13 +12,15 @@ biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None)
 
       log (TaskLog, optional) -- log for the task
 
+      config (Config, optional) -- BioSimulators common configuration
+
    Returns:
       "VariableResults": results of variables "TaskLog": log
 
    Return type:
       "tuple"
 
-biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, return_results=False, report_formats=None, plot_formats=None, bundle_outputs=None, keep_individual_outputs=None, raise_exceptions=True)
+biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=None)
 
    Execute the SED tasks defined in a COMBINE/OMEX archive and save
    the outputs
@@ -33,22 +35,7 @@ biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive(archive_filename, ou
       }/reports.h5), with reports at keys { relative-path-to-SED-ML-
       file-within-archive }/{ report.id } within the HDF5 file
 
-      return_results (bool, optional) -- whether to return the result
-      of each output of each SED-ML file
-
-      report_formats (list of ReportFormat, optional) -- report format
-      (e.g., csv or h5)
-
-      plot_formats (list of VizFormat, optional) -- report format
-      (e.g., pdf)
-
-      bundle_outputs (bool, optional) -- if True, bundle outputs into
-      archives for reports and plots
-
-      keep_individual_outputs (bool, optional) -- if True, keep
-      individual output files
-
-      raise_exceptions (bool, optional) -- whether to raise exceptions
+      config (Config, optional) -- BioSimulators common configuration
 
    Returns:
       SedDocumentResults: results
@@ -91,7 +78,7 @@ Copyright:
 License:
    MIT
 
-biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None)
+biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None, config=None)
 
    Execute a task and save its results
 
@@ -103,13 +90,15 @@ biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None)
 
       log (TaskLog, optional) -- log for the task
 
+      config (Config, optional) -- BioSimulators common configuration
+
    Returns:
       "VariableResults": results of variables "TaskLog": log
 
    Return type:
       "tuple"
 
-biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, return_results=False, report_formats=None, plot_formats=None, bundle_outputs=None, keep_individual_outputs=None, raise_exceptions=True)
+biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=None)
 
    Execute the SED tasks defined in a COMBINE/OMEX archive and save
    the outputs
@@ -124,22 +113,7 @@ biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive(archive_filenam
       }/reports.h5), with reports at keys { relative-path-to-SED-ML-
       file-within-archive }/{ report.id } within the HDF5 file
 
-      return_results (bool, optional) -- whether to return the result
-      of each output of each SED-ML file
-
-      report_formats (list of ReportFormat, optional) -- report format
-      (e.g., csv or h5)
-
-      plot_formats (list of VizFormat, optional) -- report format
-      (e.g., pdf)
-
-      bundle_outputs (bool, optional) -- if True, bundle outputs into
-      archives for reports and plots
-
-      keep_individual_outputs (bool, optional) -- if True, keep
-      individual output files
-
-      raise_exceptions (bool, optional) -- whether to raise exceptions
+      config (Config, optional) -- BioSimulators common configuration
 
    Returns:
       SedDocumentResults: results
