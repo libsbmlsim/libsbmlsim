@@ -1,7 +1,7 @@
 # Base OS
 FROM python:3.9-slim-buster
 
-ARG VERSION=0.0.2
+ARG VERSION=0.0.3
 ARG SIMULATOR_VERSION=1.4.0
 ARG LIBSBML_VERSION=5.19.0
 
@@ -76,6 +76,11 @@ RUN apt-get update -y \
         swig \
         libbz2-dev \
     && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# fonts for matplotlib
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends libfreetype6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it

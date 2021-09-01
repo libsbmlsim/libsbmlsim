@@ -17,6 +17,10 @@
         },
         "operatingSystemType": "Linux"
     },
+    "pythonApi": {
+      "package": "biosimulators-libsbmlsim",
+      "module": "biosimulators_libsbmlsim"
+    },
     "authors": [{
             "firstName": "Hiromu",
             "lastName": "Takizawa",
@@ -79,7 +83,11 @@
         }
     ],
     "references": {
-        "identifiers": [],
+        "identifiers": [{
+            "namespace": "pypi",
+            "id": "biosimulators-libsbmlsim",
+            "url": "https://pypi.org/project/biosimulators-libsbmlsim/"
+          }],
         "citations": [{
             "title": "LibSBMLSim: a reference implementation of fully functional SBML simulator",
             "authors": "Hiromu Takizawa, Kazushige Nakamura, Akito Tabira, Yoichi Chikahara, Tatsuhiro Matsui, Noriko Hiroi & Akira Funahashi",

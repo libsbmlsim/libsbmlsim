@@ -11,6 +11,7 @@ from biosimulators_libsbmlsim import core
 from biosimulators_libsbmlsim.data_model import KISAO_ALGORITHMS_MAP
 from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
+from biosimulators_utils.config import get_config
 from biosimulators_utils.sedml.data_model import (
     SedDocument, Model, ModelLanguage, UniformTimeCourseSimulation, Task, Variable, Symbol,
     Algorithm, AlgorithmParameterChange,
@@ -260,9 +261,13 @@ class CliTestCase(unittest.TestCase):
         CombineArchiveWriter().run(archive, archive_dirname, archive_filename)
 
         out_dir = os.path.join(self.dirname, 'results')
-        core.exec_sedml_docs_in_combine_archive(
-            archive_filename, out_dir,
-            report_formats=[report_data_model.ReportFormat.h5])
+
+        config = get_config()
+        config.REPORT_FORMATS = [report_data_model.ReportFormat.h5]
+
+        _, log = core.exec_sedml_docs_in_combine_archive(archive_filename, out_dir, config=config)
+        if log.exception:
+            raise log.exception
 
         results = ReportReader().run(report, out_dir, 'sim.sedml/report', format=report_data_model.ReportFormat.h5)
 
