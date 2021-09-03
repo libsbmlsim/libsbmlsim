@@ -175,9 +175,9 @@ class CliTestCase(unittest.TestCase):
 
         task2 = copy.deepcopy(task)
         task2.model.source = 'undefined'
-        with mock.patch('biosimulators_utils.sedml.validation.validate_variable_xpaths', return_value={}):
+        with mock.patch('biosimulators_utils.sedml.validation.validate_target_xpaths', return_value={}):
             with mock.patch('biosimulators_utils.sedml.validation.validate_model', return_value=([], [])):
-                with self.assertRaisesRegex(ValueError, 'File Not Found'):
+                with self.assertRaisesRegex(FileNotFoundError, 'is not a file'):
                     core.exec_sed_task(task2, variables)
 
         variables2 = copy.deepcopy(variables)

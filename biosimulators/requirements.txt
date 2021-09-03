@@ -1,4 +1,5 @@
-biosimulators_utils[sbml,logging] >= 0.1.114
+biosimulators_utils[sbml,logging] >= 0.1.116
 # libsbmlsim
+lxml
 kisao
 pandas
