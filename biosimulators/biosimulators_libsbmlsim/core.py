@@ -331,9 +331,6 @@ def preprocess_sed_task(task, variables, config=None):
     Args:
         task (:obj:`Task`): task
         variables (:obj:`list` of :obj:`Variable`): variables that should be recorded
-        preprocessed_task (:obj:`PreprocessedTask`, optional): preprocessed information about the task, including possible
-            model changes and variables. This can be used to avoid repeatedly executing the same initialization for repeated
-            calls to this method.
         config (:obj:`Config`, optional): BioSimulators common configuration
 
     Returns:
