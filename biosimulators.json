@@ -19,7 +19,8 @@
     },
     "pythonApi": {
       "package": "biosimulators-libsbmlsim",
-      "module": "biosimulators_libsbmlsim"
+      "module": "biosimulators_libsbmlsim",
+      "installationInstructions": "https://docs.biosimulators.org/Biosimulators_LibSBMLSim/installation.html"
     },
     "authors": [{
             "firstName": "Hiromu",
