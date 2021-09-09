@@ -1,0 +1,54 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,500&display=swap);@import url(https://fonts.googleapis.com/css?family=Material+Icons);html{scroll-behavior:smooth;font-size:16px;}body,html{height:100%;}body{margin:0;}body{--primary-color:#ff9800;--primary-lighter-color:#ffdaa5;--primary-darker-color:#ff7b00;--text-primary-color:#fff;--text-primary-lighter-color:rgba(0,0,0,0.8);--text-primary-darker-color:#fff;--accent-color:#2196f3;--accent-lighter-color:#9bcff9;--accent-darker-color:#1479ed;--text-accent-color:rgba(0,0,0,0.8);--text-accent-lighter-color:rgba(0,0,0,0.8);--text-accent-darker-color:rgba(0,0,0,0.8);--tertiary-color:#38cc00;--tertiary-lighter-color:#9bff75;--tertiary-darker-color:#35c100;--text-tertiary-color:rgba(0,0,0,0.8);--text-tertiary-lighter-color:rgba(0,0,0,0.8);--text-tertiary-darker-color:rgba(0,0,0,0.8);--quartenary-color:#951ed9;--quartenary-lighter-color:#d097f0;--quartenary-darker-color:#8d1cce;--text-quartenary-color:rgba(0,0,0,0.8);--text-quartenary-lighter-color:rgba(0,0,0,0.8);--text-quartenary-darker-color:rgba(0,0,0,0.8);--warn-color:#f44336;--warn-lighter-color:#fcc7c3;--warn-darker-color:#ef2c22;--text-warn-color:#fff;--text-warn-lighter-color:rgba(0,0,0,0.8);--text-warn-darker-color:#fff;}
+
+:root {
+    --pst-font-family-base-system: Raleway;
+    --pst-font-size-h1: 28px;
+    --pst-font-size-h2: 24px;
+    --pst-font-size-h3: 20px;
+    --pst-font-size-h4: 16px;
+    --pst-font-size-h5: 15px;
+    --pst-font-size-h6: 14px;
+    --pst-font-size-base: 14px;
+    --pst-color-primary: 255, 152, 0;
+    --pst-color-link: 33, 150, 243;
+    --pst-color-link-hover: var(--pst-color-link);
+    --pst-color-h1: var(--pst-color-primary);
+    --pst-color-h2: var(--pst-color-text-base);
+    --pst-color-text-base: 51, 51, 51;
+    --pst-color-headerlink: var(--pst-color-primary);
+    --pst-color-headerlink-hover: 255, 255, 255;
+    --pst-color-active-navigation: var(--pst-color-primary);
+    --pst-color-inline-code: var(--pst-color-link);
+}
+
+.navbar-light {
+    background: rgba(var(--pst-color-primary), 1) !important;
+}
+
+.navbar-light .navbar-nav li a.nav-link {
+    color: #fff;
+}
+
+.navbar-light .navbar-nav li a.nav-link:hover {
+    color: rgba(var(--pst-color-link));
+}
+
+.toctree-wrapper a {
+    color: rgba(var(--pst-color-text-base), 1);
+}
+
+.toctree-wrapper a:hover {
+    color: rgba(var(--pst-color-link), 1);
+}
+
+.headerlink {
+    display: none;
+}
+
+body {
+    font-size: 14px;
+}
+
+.editthispage a {
+    color: rgba(var(--pst-color-text-base));
+}

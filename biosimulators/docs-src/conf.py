@@ -94,36 +94,81 @@ def linkcode_resolve(domain, info):
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
+html_theme = 'pydata_sphinx_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named 'default.css' will overwrite the builtin 'default.css'.
 html_static_path = ['_static']
 
+html_logo = "_static/biosimulators-logo.svg"
+
+html_css_files = [
+    'css/biosimulators.css',
+]
+
 html_theme_options = {
-    'github_user': 'biosimulators',
-    'github_repo': 'Biosimulators_LibSBMLSim',
-    'github_banner': True,
-    'github_button': True,
-    'description': 'BioSimulators-compliant interface to LibSBMLSim',
-    'fixed_sidebar': True,
-    'show_powered_by': False,
-    'show_relbars': False,
-    'extra_nav_links': {
-        'BioSimulators': 'https://biosimulators.org',
-        'runBioSimulations': 'https://run.biosimulations.org',
-        'BioSimulations': 'https://biosimulations.org',
-        'LibSBMLSim': 'https://fun.bio.keio.ac.jp/software/libsbmlsim/',
-    }
+    "favicons": [
+        {
+            "rel": "icon",
+            "sizes": "16x16",
+            "href": "https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-16x16.png",
+        },
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "href": "https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-32x32.png",
+        },
+    ],
+
+    "show_toc_level": 4,
+    "navigation_depth": 5,
+    "collapse_navigation": True,
+    "show_prev_next": False,
+    "use_edit_page_button": True,
+    "navigation_with_keys": False,
+
+    "search_bar_text": "Enter text to search for ...",
+
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/biosimulators/Biosimulators_LibSBMLSim",
+            "icon": "fab fa-github",
+        },
+        {
+            "name": "Twitter",
+            "url": "https://twitter.com/biosimulators",
+            "icon": "fab fa-twitter",
+        },
+        {
+            "name": "Email",
+            "url": "mailto:info@biosimulators.org",
+            "icon": "fas fa-envelope",
+        },
+    ],
+    "icon_links_label": "Quick links",
+
+    "navbar_center": [
+    ],
+    "navbar_end": [
+        "navbar-icon-links.html",
+    ],
+    "footer_items": [
+        "copyright",
+    ],
+}
+
+html_context = {
+    "github_user": "biosimulators",
+    "github_repo": "Biosimulators_LibSBMLSim",
+    "github_version": "dev",
+    "doc_path": "docs-src",
 }
 
 html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',
-        'searchbox.html',
-        'donate.html',
+    "**": [
+        "search-field.html",
+        "sidebar-nav-bs.html",
     ]
 }
