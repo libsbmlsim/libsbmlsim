@@ -13,7 +13,7 @@ from biosimulators_utils.combine import data_model as combine_data_model
 from biosimulators_utils.combine.io import CombineArchiveWriter
 from biosimulators_utils.config import get_config
 from biosimulators_utils.sedml.data_model import (
-    SedDocument, Model, ModelLanguage, UniformTimeCourseSimulation, Task, Variable, Symbol,
+    SedDocument, Model, ModelLanguage, ModelAttributeChange, UniformTimeCourseSimulation, Task, Variable, Symbol,
     Algorithm, AlgorithmParameterChange,
     Report, DataGenerator, DataSet)
 from biosimulators_utils.sedml.io import SedmlSimulationWriter
@@ -85,25 +85,26 @@ class CliTestCase(unittest.TestCase):
         numpy.testing.assert_allclose(results['time'], numpy.linspace(0., 10., 11))
         self.assertEqual(results['PIP2_PHGFP_PM'].shape, (11,))
         self.assertFalse(numpy.any(numpy.isnan(results['PIP2_PHGFP_PM'])))
+        self.assertEqual(results['PIP2_PHGFP_PM'][0], 0)
 
         task2 = copy.deepcopy(task)
         task2.simulation.output_start_time = 5.
-        results, log = core.exec_sed_task(task2, variables)
-        self.assertEqual(set(results.keys()), set(['time', 'PIP2_PHGFP_PM']))
-        numpy.testing.assert_allclose(results['time'], numpy.linspace(5., 10., 11))
-        self.assertEqual(results['PIP2_PHGFP_PM'].shape, (11,))
-        self.assertFalse(numpy.any(numpy.isnan(results['PIP2_PHGFP_PM'])))
+        results2, log = core.exec_sed_task(task2, variables)
+        self.assertEqual(set(results2.keys()), set(['time', 'PIP2_PHGFP_PM']))
+        numpy.testing.assert_allclose(results2['time'], numpy.linspace(5., 10., 11))
+        self.assertEqual(results2['PIP2_PHGFP_PM'].shape, (11,))
+        self.assertFalse(numpy.any(numpy.isnan(results2['PIP2_PHGFP_PM'])))
 
         task2 = copy.deepcopy(task)
         task2.simulation.algorithm.changes.append(AlgorithmParameterChange(
             kisao_id='KISAO_0000483',
             new_value='0.001',
         ))
-        results, log = core.exec_sed_task(task2, variables)
-        self.assertEqual(set(results.keys()), set(['time', 'PIP2_PHGFP_PM']))
-        numpy.testing.assert_allclose(results['time'], numpy.linspace(0., 10., 11))
-        self.assertEqual(results['PIP2_PHGFP_PM'].shape, (11,))
-        self.assertFalse(numpy.any(numpy.isnan(results['PIP2_PHGFP_PM'])))
+        results2, log = core.exec_sed_task(task2, variables)
+        self.assertEqual(set(results2.keys()), set(['time', 'PIP2_PHGFP_PM']))
+        numpy.testing.assert_allclose(results2['time'], numpy.linspace(0., 10., 11))
+        self.assertEqual(results2['PIP2_PHGFP_PM'].shape, (11,))
+        self.assertFalse(numpy.any(numpy.isnan(results2['PIP2_PHGFP_PM'])))
 
         # algorithm substitution
         task2 = copy.deepcopy(task)
@@ -130,6 +131,24 @@ class CliTestCase(unittest.TestCase):
             with self.assertWarns(BioSimulatorsWarning):
                 core.exec_sed_task(task2, variables)
 
+        # model changes
+        task2 = copy.deepcopy(task)
+        preprocessed_task = core.preprocess_sed_task(task2, variables)
+        task2.model.changes = [
+            ModelAttributeChange(
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='PIP2_PHGFP_PM']/@initialConcentration",
+                target_namespaces=self.NAMESPACES,
+                new_value=1,
+            )
+        ]
+        results2, log = core.exec_sed_task(task2, variables, preprocessed_task=preprocessed_task)
+        self.assertEqual(results2['PIP2_PHGFP_PM'][0], 1.0)
+        self.assertNotEqual(results2['PIP2_PHGFP_PM'][0], results['PIP2_PHGFP_PM'][0])
+
+        task2.model.changes = [None]
+        with self.assertRaises(ValueError):
+            core.exec_sed_task(task2, variables, preprocessed_task=preprocessed_task)
+
         # all algorithms
         for alg_props in KISAO_ALGORITHMS_MAP.values():
             for order in alg_props['orders']:
@@ -145,16 +164,23 @@ class CliTestCase(unittest.TestCase):
                     kisao_id='KISAO_0000483',
                     new_value='0.001',
                 ))
-                results, log = core.exec_sed_task(task2, variables)
-                self.assertEqual(set(results.keys()), set(['time', 'PIP2_PHGFP_PM']))
-                numpy.testing.assert_allclose(results['time'], numpy.linspace(0., 10., 11))
-                self.assertEqual(results['PIP2_PHGFP_PM'].shape, (11,))
-                self.assertFalse(numpy.any(numpy.isnan(results['PIP2_PHGFP_PM'])))
+                results2, log = core.exec_sed_task(task2, variables)
+                self.assertEqual(set(results2.keys()), set(['time', 'PIP2_PHGFP_PM']))
+                numpy.testing.assert_allclose(results2['time'], numpy.linspace(0., 10., 11))
+                self.assertEqual(results2['PIP2_PHGFP_PM'].shape, (11,))
+                self.assertFalse(numpy.any(numpy.isnan(results2['PIP2_PHGFP_PM'])))
 
         # error handling
         task2 = copy.deepcopy(task)
         task2.simulation.initial_time = 1.
         task2.simulation.output_start_time = 1.
+        task2.model.changes = [
+            ModelAttributeChange(
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='PIP2_PHGFP_PM']/@initialConcentration",
+                target_namespaces=self.NAMESPACES,
+                new_value=1,
+            )
+        ]
         with self.assertRaisesRegex(NotImplementedError, 'must be zero'):
             core.exec_sed_task(task2, variables)
 
@@ -162,6 +188,13 @@ class CliTestCase(unittest.TestCase):
         task2.simulation.algorithm.changes.append(AlgorithmParameterChange(
             kisao_id='KISAO_0000483', new_value='3',
         ))
+        task2.model.changes = [
+            ModelAttributeChange(
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='PIP2_PHGFP_PM']/@initialConcentration",
+                target_namespaces=self.NAMESPACES,
+                new_value=1,
+            )
+        ]
         with self.assertRaisesRegex(ValueError, 'must specify a positive integer number of steps'):
             core.exec_sed_task(task2, variables)
 
@@ -170,6 +203,13 @@ class CliTestCase(unittest.TestCase):
         task2.simulation.algorithm.changes.append(AlgorithmParameterChange(
             kisao_id='KISAO_0000483', new_value='0.1',
         ))
+        task2.model.changes = [
+            ModelAttributeChange(
+                target="/sbml:sbml/sbml:model/sbml:listOfSpecies/sbml:species[@id='PIP2_PHGFP_PM']/@initialConcentration",
+                target_namespaces=self.NAMESPACES,
+                new_value=1,
+            )
+        ]
         with self.assertRaisesRegex(ValueError, 'must specify a positive integer number of intervals'):
             core.exec_sed_task(task2, variables)
 
