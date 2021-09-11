@@ -4,11 +4,30 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installation instructions &#8212; BioSimulators-LibSBMLSim 0.0.4 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
-    <title>Installation instructions &#8212; BioSimulators-LibSBMLSim 0.0.3 documentation</title>
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/biosimulators.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -18,136 +37,186 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorial" href="tutorial.html" />
     <link rel="prev" title="BioSimulators-LibSBMLSim documentation" href="index.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+      
+      <link rel="icon" sizes="16x16" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-16x16.png">
+      
+    
+      
+      <link rel="icon" sizes="32x32" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-32x32.png">
+      
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="index.html">
+  <img src="_static/biosimulators-logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  <div class="document">
-    
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">BioSimulators-LibSBMLSim</a></h1>
-
-
-
-<p class="blurb">BioSimulators-compliant interface to LibSBMLSim</p>
-
-
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=biosimulators&repo=Biosimulators_LibSBMLSim&type=watch&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#command-line-program">Command-line program</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker-image-with-a-command-line-entrypoint">Docker image with a command-line entrypoint</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/biosimulators_libsbmlsim.html">API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About BioSimulators-LibSBMLSim</a></li>
-<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
-</ul>
-
-
-<hr />
-<ul>
-    
-    <li class="toctree-l1"><a href="https://biosimulators.org">BioSimulators</a></li>
-    
-    <li class="toctree-l1"><a href="https://run.biosimulations.org">runBioSimulations</a></li>
-    
-    <li class="toctree-l1"><a href="https://biosimulations.org">BioSimulations</a></li>
-    
-    <li class="toctree-l1"><a href="https://fun.bio.keio.ac.jp/software/libsbmlsim/">LibSBMLSim</a></li>
-    
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">BioSimulators-LibSBMLSim documentation</a></li>
-      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
-
-
-
-
-
-
-
-        </div>
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/biosimulators" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mailto:info@biosimulators.org" rel="noopener" target="_blank" title="Email">
+            <span><i class="fas fa-envelope"></i></span>
+            <label class="sr-only">Email</label>
+          </a>
+        </li>
+      </ul>
       </div>
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Enter text to search for ..." aria-label="Enter text to search for ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
           
 
-          <div class="body" role="main">
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
             
-  <section id="installation-instructions">
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#command-line-program">
+   Command-line program
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#docker-image-with-a-command-line-entrypoint">
+   Docker image with a command-line entrypoint
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/edit/dev/docs-src/installation.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="installation-instructions">
 <h1>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
 <p>BioSimulators-LibSBMLSim is available as a command-line program and as a command-line program encapsulated into a Docker image.</p>
-<section id="command-line-program">
+<div class="section" id="command-line-program">
 <h2>Command-line program<a class="headerlink" href="#command-line-program" title="Permalink to this headline">¶</a></h2>
 <p>After installing <a class="reference external" href="https://fun.bio.keio.ac.jp/software/libsbmlsim/">LibSBMLSim</a>, run the following command to install BioSimulators-LibSBMLSim:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pip install biosimulators-libsbmlsim
 </pre></div>
 </div>
-</section>
-<section id="docker-image-with-a-command-line-entrypoint">
+</div>
+<div class="section" id="docker-image-with-a-command-line-entrypoint">
 <h2>Docker image with a command-line entrypoint<a class="headerlink" href="#docker-image-with-a-command-line-entrypoint" title="Permalink to this headline">¶</a></h2>
 <p>After installing <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>, run the following command to install the Docker image for BioSimulators-LibSBMLSim:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>docker pull ghcr.io/biosimulators/libsbmlsim
 </pre></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
-          </div>
+              </div>
+              
+              
+          </main>
           
-        </div>
+
       </div>
-    <div class="clearer"></div>
-  </div>
-    <div class="footer">
-      &copy;2021, BioSimulators Team.
-      
-      |
-      <a href="_sources/installation.rst.txt"
-          rel="nofollow">Page source</a>
     </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
     
-    <a href="https://github.com/biosimulators/Biosimulators_LibSBMLSim" class="github">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
-    </a>
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, BioSimulators Team.<br/>
+</p>
+    </div>
     
-
-    
+  </div>
+</footer>
   </body>
 </html>

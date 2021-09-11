@@ -1,6 +1,55 @@
 biosimulators_libsbmlsim package
 
-biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None, config=None)
+biosimulators_libsbmlsim.exec_sed_doc(doc, working_dir, base_out_path, rel_out_path=None, apply_xml_model_changes=True, log=None, indent=0, pretty_print_modified_xml_models=False, log_level=StandardOutputErrorCapturerLevel.c, config=None)
+
+   Execute the tasks specified in a SED document and generate the
+   specified outputs
+
+   Parameters:
+      doc (SedDocument or str) -- SED document or a path to SED-ML
+      file which defines a SED document
+
+      working_dir (str) -- working directory of the SED document (path
+      relative to which models are located)
+
+      base_out_path (str) -- path to store the outputsCSV: directory
+      in which to save outputs to files
+      {base_out_path}/{rel_out_path}/{report.id}.csv  HDF5: directory
+      in which to save a single HDF5 file
+      ({base_out_path}/reports.h5), with reports at keys
+      {rel_out_path}/{report.id} within the HDF5 file
+
+      rel_out_path (str, optional) -- path relative to base_out_path
+      to store the outputs
+
+      apply_xml_model_changes (bool, optional) -- if True, apply any
+      model changes specified in the SED-ML file before calling
+      task_executer.
+
+      log (SedDocumentLog, optional) -- log of the document
+
+      indent (int, optional) -- degree to indent status messages
+
+      pretty_print_modified_xml_models (bool, optional) -- if True,
+      pretty print modified XML models
+
+      log_level (StandardOutputErrorCapturerLevel, optional) -- level
+      at which to log output
+
+      config (Config, optional) -- BioSimulators common configuration
+
+      simulator_config (SimulatorConfig, optional) -- tellurium
+      configuration
+
+   Returns:
+      ReportResults: results of each report
+
+      SedDocumentLog: log of the document
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None)
 
    Execute a task and save its results
 
@@ -9,6 +58,11 @@ biosimulators_libsbmlsim.exec_sed_task(task, variables, log=None, config=None)
 
       variables (list of Variable) -- variables that should be
       recorded
+
+      preprocessed_task (object, optional) -- preprocessed information
+      about the task, including possible model changes and variables.
+      This can be used to avoid repeatedly executing the same
+      initialization for repeated calls to this method.
 
       log (TaskLog, optional) -- log for the task
 
@@ -55,6 +109,30 @@ biosimulators_libsbmlsim.get_simulator_version()
    Return type:
       "str"
 
+biosimulators_libsbmlsim.preprocess_sed_task(task, variables, config=None)
+
+   Preprocess a SED task, including its possible model changes and
+   variables. This is useful for avoiding repeatedly initializing
+   tasks on repeated calls of
+
+   exec_sed_task
+
+   .
+
+   Parameters:
+      task (Task) -- task
+
+      variables (list of Variable) -- variables that should be
+      recorded
+
+      config (Config, optional) -- BioSimulators common configuration
+
+   Returns:
+      preprocessed information about the task
+
+   Return type:
+      "object"
+
 Submodules
 
 biosimulators_libsbmlsim.core module
@@ -78,7 +156,56 @@ Copyright:
 License:
    MIT
 
-biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None, config=None)
+biosimulators_libsbmlsim.core.exec_sed_doc(doc, working_dir, base_out_path, rel_out_path=None, apply_xml_model_changes=True, log=None, indent=0, pretty_print_modified_xml_models=False, log_level=StandardOutputErrorCapturerLevel.c, config=None)
+
+   Execute the tasks specified in a SED document and generate the
+   specified outputs
+
+   Parameters:
+      doc (SedDocument or str) -- SED document or a path to SED-ML
+      file which defines a SED document
+
+      working_dir (str) -- working directory of the SED document (path
+      relative to which models are located)
+
+      base_out_path (str) -- path to store the outputsCSV: directory
+      in which to save outputs to files
+      {base_out_path}/{rel_out_path}/{report.id}.csv  HDF5: directory
+      in which to save a single HDF5 file
+      ({base_out_path}/reports.h5), with reports at keys
+      {rel_out_path}/{report.id} within the HDF5 file
+
+      rel_out_path (str, optional) -- path relative to base_out_path
+      to store the outputs
+
+      apply_xml_model_changes (bool, optional) -- if True, apply any
+      model changes specified in the SED-ML file before calling
+      task_executer.
+
+      log (SedDocumentLog, optional) -- log of the document
+
+      indent (int, optional) -- degree to indent status messages
+
+      pretty_print_modified_xml_models (bool, optional) -- if True,
+      pretty print modified XML models
+
+      log_level (StandardOutputErrorCapturerLevel, optional) -- level
+      at which to log output
+
+      config (Config, optional) -- BioSimulators common configuration
+
+      simulator_config (SimulatorConfig, optional) -- tellurium
+      configuration
+
+   Returns:
+      ReportResults: results of each report
+
+      SedDocumentLog: log of the document
+
+   Return type:
+      "tuple"
+
+biosimulators_libsbmlsim.core.exec_sed_task(task, variables, preprocessed_task=None, log=None, config=None)
 
    Execute a task and save its results
 
@@ -87,6 +214,11 @@ biosimulators_libsbmlsim.core.exec_sed_task(task, variables, log=None, config=No
 
       variables (list of Variable) -- variables that should be
       recorded
+
+      preprocessed_task (object, optional) -- preprocessed information
+      about the task, including possible model changes and variables.
+      This can be used to avoid repeatedly executing the same
+      initialization for repeated calls to this method.
 
       log (TaskLog, optional) -- log for the task
 
@@ -122,6 +254,30 @@ biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive(archive_filenam
 
    Return type:
       "tuple"
+
+biosimulators_libsbmlsim.core.preprocess_sed_task(task, variables, config=None)
+
+   Preprocess a SED task, including its possible model changes and
+   variables. This is useful for avoiding repeatedly initializing
+   tasks on repeated calls of
+
+   exec_sed_task
+
+   .
+
+   Parameters:
+      task (Task) -- task
+
+      variables (list of Variable) -- variables that should be
+      recorded
+
+      config (Config, optional) -- BioSimulators common configuration
+
+   Returns:
+      preprocessed information about the task
+
+   Return type:
+      "object"
 
 biosimulators_libsbmlsim.data_model module
 
