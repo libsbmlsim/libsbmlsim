@@ -187,7 +187,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
     }
     if (pindex == -1)
       return -0.0;
-    return $self->values_param[index];
+    return $self->values_param[index * $self->num_of_columns_param + pindex];
   }
 
   double getCompartmentValueAtIndex(char *cname, int index) {
@@ -203,7 +203,7 @@ extern void write_separate_result(myResult* result, char* file_s, char* file_p, 
     }
     if (cindex == -1)
       return -0.0;
-    return $self->values_comp[index];
+    return $self->values_comp[index * $self->num_of_columns_comp + cindex];
   }
 
 };
