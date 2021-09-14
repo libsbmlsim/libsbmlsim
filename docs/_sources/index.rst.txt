@@ -1,0 +1,39 @@
+BioSimulators-LibSBMLSim documentation
+
+BioSimulators-LibSBMLSim provides a
+
+BioSimulators
+
+-compliant command-line interface to the
+
+LibSBMLSim
+
+ simulation tool. A Docker image for this package is also available.
+
+This command-line interface and Docker image enable users to use
+LibSBMLSim to execute
+
+COMBINE/OMEX archives
+
+ that describe one or more simulation experiments (in
+
+SED-ML format
+
+) of one or more kinetic models in SBML format.
+
+A list of the algorithms and algorithm parameters supported by
+LibSBMLSim is available at
+
+BioSimulators
+
+.
+
+A simple web application and web service for using LibSBMLSim to
+execute COMBINE/OMEX archives is also available at
+
+runBioSimulations
+
+.
+
+Contents
+

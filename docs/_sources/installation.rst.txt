@@ -1,0 +1,25 @@
+Installation instructions
+
+BioSimulators-LibSBMLSim is available as a command-line program and as
+a command-line program encapsulated into a Docker image.
+
+Command-line program
+
+After installing
+
+LibSBMLSim
+
+, run the following command to install BioSimulators-LibSBMLSim:
+
+   pip install biosimulators-libsbmlsim
+
+Docker image with a command-line entrypoint
+
+After installing
+
+Docker
+
+, run the following command to install the Docker image for
+BioSimulators-LibSBMLSim:
+
+   docker pull ghcr.io/biosimulators/libsbmlsim

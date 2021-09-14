@@ -7,6 +7,7 @@
 """
 
 from biosimulators_utils.sedml.data_model import Algorithm, AlgorithmParameterChange  # noqa: F401
+import collections
 import libsbmlsim
 
 __all__ = [
@@ -15,16 +16,24 @@ __all__ = [
     'get_integrator_parameters',
 ]
 
-KISAO_ALGORITHMS_MAP = {
-    'KISAO_0000030': {
+KISAO_ALGORITHMS_MAP = collections.OrderedDict([
+    ('KISAO_0000086', {
+        'id': 'KISAO_0000086',
+        'name': 'Fehlberg method',
+        'orders': {
+            None: libsbmlsim.MTHD_RUNGE_KUTTA_FEHLBERG_5,
+        },
+        'uses_print_interval': False,
+    }),
+    ('KISAO_0000030', {
         'id': 'KISAO_0000030',
         'name': 'Forward Euler method',
         'orders': {
             None: libsbmlsim.MTHD_EULER,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000279': {
+    }),
+    ('KISAO_0000279', {
         'id': 'KISAO_0000279',
         'name': 'Adams-Bashforth method',
         'orders': {
@@ -35,48 +44,40 @@ KISAO_ALGORITHMS_MAP = {
             None: libsbmlsim.MTHD_ADAMS_BASHFORTH_4,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000032': {
+    }),
+    ('KISAO_0000032', {
         'id': 'KISAO_0000032',
         'name': 'Explicit fourth-order Runge-Kutta method',
         'orders': {
             None: libsbmlsim.MTHD_RUNGE_KUTTA,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000086': {
-        'id': 'KISAO_0000086',
-        'name': 'Fehlberg method',
-        'orders': {
-            None: libsbmlsim.MTHD_RUNGE_KUTTA_FEHLBERG_5,
-        },
-        'uses_print_interval': False,
-    },
-    'KISAO_0000321': {
+    }),
+    ('KISAO_0000321', {
         'id': 'KISAO_0000321',
         'name': 'Cash-Karp method',
         'orders': {
             None: libsbmlsim.MTHD_CASH_KARP,
         },
         'uses_print_interval': False,
-    },
-    'KISAO_0000031': {
+    }),
+    ('KISAO_0000031', {
         'id': 'KISAO_0000031',
         'name': 'Backward Euler method',
         'orders': {
             None: libsbmlsim.MTHD_BACKWARD_EULER,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000309': {
+    }),
+    ('KISAO_0000309', {
         'id': 'KISAO_0000309',
         'name': 'Crank-Nicolson method',
         'orders': {
             None: libsbmlsim.MTHD_CRANK_NICOLSON,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000280': {
+    }),
+    ('KISAO_0000280', {
         'id': 'KISAO_0000280',
         'name': 'Adams Moulton method',
         'orders': {
@@ -86,8 +87,8 @@ KISAO_ALGORITHMS_MAP = {
             None: libsbmlsim.MTHD_ADAMS_MOULTON_4,
         },
         'uses_print_interval': True,
-    },
-    'KISAO_0000288': {
+    }),
+    ('KISAO_0000288', {
         'id': 'KISAO_0000288',
         'name': 'Backward difference method',
         'orders': {
@@ -97,8 +98,8 @@ KISAO_ALGORITHMS_MAP = {
             None: libsbmlsim.MTHD_BACKWARD_DIFFERENCE_4,
         },
         'uses_print_interval': True,
-    },
-}
+    }),
+])
 
 
 def get_integrator(algorithm):

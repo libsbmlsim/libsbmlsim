@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial &#8212; BioSimulators-LibSBMLSim 0.0.4 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/biosimulators.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="biosimulators_libsbmlsim package" href="source/biosimulators_libsbmlsim.html" />
+    <link rel="prev" title="Installation instructions" href="installation.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+      
+      <link rel="icon" sizes="16x16" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-16x16.png">
+      
+    
+      
+      <link rel="icon" sizes="32x32" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-32x32.png">
+      
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="index.html">
+  <img src="_static/biosimulators-logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/biosimulators" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mailto:info@biosimulators.org" rel="noopener" target="_blank" title="Email">
+            <span><i class="fas fa-envelope"></i></span>
+            <label class="sr-only">Email</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Enter text to search for ..." aria-label="Enter text to search for ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml">
+   Creating COMBINE/OMEX archives and encoding simulation experiments into SED-ML
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#models-sbml">
+     Models (SBML)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#simulation-experiments-sed-ml-kisao">
+     Simulation experiments (SED-ML, KISAO)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-combine-omex-archives">
+     Example COMBINE/OMEX archives
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#command-line-program">
+   Command-line program
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#docker-image-with-a-command-line-entrypoint">
+   Docker image with a command-line entrypoint
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/edit/dev/docs-src/tutorial.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>BioSimulators-LibSBMLSim is available as a command-line program and as a command-line program encapsulated into a Docker image.</p>
+<div class="section" id="creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml">
+<h2>Creating COMBINE/OMEX archives and encoding simulation experiments into SED-ML<a class="headerlink" href="#creating-combine-omex-archives-and-encoding-simulation-experiments-into-sed-ml" title="Permalink to this headline">¶</a></h2>
+<p>Information about how to create COMBINE/OMEX archives which can be executed by BioSimulators-LibSBMLSim is available at <a class="reference external" href="https://biosimulators.org/help">BioSimulators</a>.</p>
+<p>A list of the algorithms and algorithm parameters supported by LibSBMLSim is available at <a class="reference external" href="https://biosimulators.org/simulators/libsbmlsim">BioSimulators</a>.</p>
+<div class="section" id="models-sbml">
+<h3>Models (SBML)<a class="headerlink" href="#models-sbml" title="Permalink to this headline">¶</a></h3>
+<p>BioSimulators-LibSBMLSim can execute models encoded in SBML format.</p>
+</div>
+<div class="section" id="simulation-experiments-sed-ml-kisao">
+<h3>Simulation experiments (SED-ML, KISAO)<a class="headerlink" href="#simulation-experiments-sed-ml-kisao" title="Permalink to this headline">¶</a></h3>
+<p>BioSimulators-LibSBMLSim can execute simulation experiments encoded in SED-ML, using KiSAO to indicate specific algorithms and their parameters. Information about the algorithms (KiSAO terms), algorithm parameters (KiSAO terms), and outputs (XML XPaths for variables) supported by BioSimulators-LibSBMLSim is available from the <a class="reference external" href="https://biosimulators.org/simulators/libsbmlsim">BioSimulators registry</a>.</p>
+</div>
+<div class="section" id="example-combine-omex-archives">
+<h3>Example COMBINE/OMEX archives<a class="headerlink" href="#example-combine-omex-archives" title="Permalink to this headline">¶</a></h3>
+<p>Examples of COMBINE/OMEX archives for simulations which BioSimulators-LibSBMLSim can execute are available in the <a class="reference external" href="https://github.com/biosimulators/Biosimulators_test_suite/tree/deploy/examples">BioSimulators test suite</a>.</p>
+</div>
+</div>
+<div class="section" id="command-line-program">
+<h2>Command-line program<a class="headerlink" href="#command-line-program" title="Permalink to this headline">¶</a></h2>
+<p>The command-line program can be used to execute COMBINE/OMEX archives that describe simulations as illustrated below.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>usage: biosimulators-libsbmlsim [-h] [-d] [-q] -i ARCHIVE [-o OUT_DIR] [-v]
+
+BioSimulators-compliant command-line interface to the LibSBMLSim &lt;https://fun.bio.keio.ac.jp/software/libsbmlsim/&gt; simulation program.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           full application debug mode
+  -q, --quiet           suppress all console output
+  -i ARCHIVE, --archive ARCHIVE
+                        Path to OMEX file which contains one or more SED-ML-
+                        encoded simulation experiments
+  -o OUT_DIR, --out-dir OUT_DIR
+                        Directory to save outputs
+  -v, --version         show program&#39;s version number and exit
+</pre></div>
+</div>
+<p>For example, the following command could be used to execute the simulations described in <code class="docutils literal notranslate"><span class="pre">./modeling-study.omex</span></code> and save their results to <code class="docutils literal notranslate"><span class="pre">./</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>biosimulators-libsbmlsim -i ./modeling-study.omex -o ./
+</pre></div>
+</div>
+</div>
+<div class="section" id="docker-image-with-a-command-line-entrypoint">
+<h2>Docker image with a command-line entrypoint<a class="headerlink" href="#docker-image-with-a-command-line-entrypoint" title="Permalink to this headline">¶</a></h2>
+<p>The entrypoint to the Docker image supports the same command-line interface described above.</p>
+<p>For example, the following command could be used to use the Docker image to execute the same simulations described in <code class="docutils literal notranslate"><span class="pre">./modeling-study.omex</span></code> and save their results to <code class="docutils literal notranslate"><span class="pre">./</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>docker run \
+    --tty \
+    --rm \
+    --mount type=bind,source=&quot;$(pwd),target=/tmp/working-dir \
+    ghcr.io/biosimulators/libsbmlsim:latest \
+        -i /tmp/working-dir/modeling-study.omex \
+        -o /tmp/working-dir
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, BioSimulators Team.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

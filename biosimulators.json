@@ -8,7 +8,7 @@
         "url": "https://fun.bio.keio.ac.jp/software/libsbmlsim/"
     }],
     "image": {
-        "url": "ghcr.io/libsbmlsim/libsbmlsim:1.4.0",
+        "url": "ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:1.4.0",
         "format": {
             "namespace": "EDAM",
             "id": "format_3973",
@@ -16,6 +16,11 @@
             "supportedFeatures": []
         },
         "operatingSystemType": "Linux"
+    },
+    "pythonApi": {
+      "package": "biosimulators-libsbmlsim",
+      "module": "biosimulators_libsbmlsim",
+      "installationInstructions": "https://docs.biosimulators.org/Biosimulators_LibSBMLSim/installation.html"
     },
     "authors": [{
             "firstName": "Hiromu",
@@ -79,7 +84,11 @@
         }
     ],
     "references": {
-        "identifiers": [],
+        "identifiers": [{
+            "namespace": "pypi",
+            "id": "biosimulators-libsbmlsim",
+            "url": "https://pypi.org/project/biosimulators-libsbmlsim/"
+          }],
         "citations": [{
             "title": "LibSBMLSim: a reference implementation of fully functional SBML simulator",
             "authors": "Hiromu Takizawa, Kazushige Nakamura, Akito Tabira, Yoichi Chikahara, Tatsuhiro Matsui, Noriko Hiroi & Akira Funahashi",
@@ -115,8 +124,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -144,6 +163,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -167,8 +190,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
@@ -212,6 +245,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -235,8 +272,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -264,6 +311,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -287,8 +338,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -316,6 +377,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -339,8 +404,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -368,6 +443,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -391,8 +470,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -420,6 +509,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -443,8 +536,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                 "kisaoId": {
@@ -472,6 +575,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -495,8 +602,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
@@ -540,6 +657,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",
@@ -563,8 +684,18 @@
                 "version": null,
                 "supportedFeatures": []
             }],
-            "simulationFormats": [],
-            "archiveFormats": [],
+            "simulationFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3685",
+                "version": "L1V3",
+                "supportedFeatures": []
+            }],
+            "archiveFormats": [{
+                "namespace": "EDAM",
+                "id": "format_3686",
+                "version": null,
+                "supportedFeatures": []
+            }],
             "citations": [],
             "parameters": [{
                     "kisaoId": {
@@ -608,6 +739,10 @@
                 {
                     "variables": "parameter values",
                     "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfParameters/sbml:parameter/@value"
+                },
+                {
+                    "variables": "compartment sizes",
+                    "targetPattern": "/sbml:sbml/sbml:model/sbml:listOfCompartments/sbml:compartment"
                 }
             ],
             "availableSoftwareInterfaceTypes": ["library", "command-line application",

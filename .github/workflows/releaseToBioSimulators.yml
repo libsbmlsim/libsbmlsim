@@ -11,10 +11,27 @@ jobs:
       #############################################
       ## Checkout repository
       #############################################
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+      - name: Clone repository
+        run: |
+          git clone https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} .
+
+      - id: get-main-branch
+        name: Determine main branch
+        run: |
+          mainBranch=$(git symbolic-ref refs/remotes/origin/HEAD | cut -d '/' -f 4)
+          mainBranchHeadRevision=$(git rev-parse refs/remotes/origin/${mainBranch})
+          echo "::set-output name=mainBranch::$mainBranch"
+          echo "::set-output name=mainBranchRef::refs/heads/$mainBranch"
+          echo "::set-output name=mainBranchHeadRevision::$mainBranchHeadRevision"
+
+      - name: Checkout ref
+        run: |
+          if [[ "${{ github.ref }}" =~ ^refs/heads/ ]]; then
+            branch=$(echo "${{ github.ref }}" | cut -d'/' -f 3-)
+            git checkout ${branch}
+          else
+            git checkout ${{ github.ref }}
+          fi
 
       #############################################
       ## Install package and its dependencies
@@ -22,7 +39,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.9'
 
       - name: Setup pip cache
         uses: actions/cache@v2
@@ -44,9 +61,8 @@ jobs:
         run: python -m pip install flake8
 
       - name: Lint the package
-        run: |
-          cd biosimulators
-          python -m flake8
+        working-directory: biosimulators
+        run: python -m flake8
 
       #############################################
       ## Get and sync version number
@@ -54,13 +70,11 @@ jobs:
       - id: get-version-number
         name: Get version number
         run: |
-          VERSION=$(cat src/libsbmlsim/version.h | grep LIBSBMLSIM_DOTTED_VERSION | cut -d '"' -f 2)
-          echo "::set-output name=version::$VERSION"
+          SIMULATOR_VERSION=$(cat src/libsbmlsim/version.h | grep LIBSBMLSIM_DOTTED_VERSION | cut -d '"' -f 2)
+          echo "::set-output name=simulatorVersion::$SIMULATOR_VERSION"
 
-      - name: Synchronize Python package with  version number
-        env:
-            VERSION: ${{ steps.get-version-number.outputs.version }}
-        run: echo "__version__ = '${VERSION}'" > biosimulators/biosimulators_libsbmlsim/_version.py
+          VERSION=$(cat biosimulators/biosimulators_libsbmlsim/_version.py | grep __version__ | cut -d "'" -f 2)
+          echo "::set-output name=version::$VERSION"
 
       #############################################
       ## Build Docker image
@@ -74,8 +88,9 @@ jobs:
             --label org.opencontainers.image.revision=${REVISION} \
             --label org.opencontainers.image.created=${CREATED} \
             --build-arg VERSION=${{ steps.get-version-number.outputs.version }} \
-            --tag ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }} \
-            --tag ghcr.io/${{ github.repository }}/libsbmlsim:latest \
+            --build-arg SIMULATOR_VERSION=${{ steps.get-version-number.outputs.simulatorVersion }} \
+            --tag ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:${{ steps.get-version-number.outputs.simulatorVersion }} \
+            --tag ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
             -f biosimulators/Dockerfile \
             .
 
@@ -88,43 +103,134 @@ jobs:
           docker run \
               --rm \
               --entrypoint bash \
-              --mount type=bind,source=${cwd},target=/root/libsbmlsim \
-              --workdir /root/libsbmlsim/biosimulators \
-              ghcr.io/${{ github.repository }}/libsbmlsim:latest \
+              --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
+              --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
+              ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest \
               -c "
                   pip install pytest pytest-cov \
                   && pip install -r tests/requirements.txt \
-                  && python -m pytest tests/ --cov biosimulators_libsbmlsim
+                  && python -m pytest tests/ --cov biosimulators_libsbmlsim --cov-report=xml
               "
+          sudo chown ${UID} ./biosimulators/coverage.xml
+
+      - name: Upload the coverage report to Codecov
+        uses: codecov/codecov-action@v1.0.3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          file: ./biosimulators/coverage.xml
 
       #############################################
-      ## Release to BioSimulators registry
+      ## Compile documentation
       #############################################
-
-      - id: determine-if-release-needed
-        name: Determine if a release should be made
+      - name: Compile documentation
         run: |
-          release="0"
+          cwd=$(pwd)
+          docker run \
+              --rm \
+              --entrypoint bash \
+              --mount type=bind,source=${cwd},target=/root/Biosimulators_LibSBMLSim \
+              --workdir /root/Biosimulators_LibSBMLSim/biosimulators \
+              ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:1.4.0 \
+              -c "
+                  pip install -r docs-src/requirements.txt \
+                  && sphinx-apidoc . setup.py --output-dir docs-src/source --force --module-first --no-toc \
+                  && mkdir -p docs-src/_static \
+                  && sphinx-build docs-src ../docs
+              "
+          sudo chown ${UID} -R docs
+          sudo chown ${UID} -R biosimulators/docs-src
 
-          if [[ "${{ github.ref }}" =~ ^refs/tags/ ]]; then
-            release="1"
+      #############################################
+      ## Release
+      #############################################
+
+      # If new tag, commit and push documentation
+      - id: commit-docs
+        name: Commit the compiled documentation
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git config --local user.email "biosimulators.daemon@gmail.com"
+          git config --local user.name "biosimulatorsdaemon"
+          git config pull.rebase false
+          git stash
+          git checkout ${{ steps.get-main-branch.outputs.mainBranch }}
+          git pull
+          set +e
+          git stash pop
+          git add docs
+          git commit -m "Updating compiled documentation"
+          git checkout .
+          git clean -f -d
+          if [[ $? = 0 ]]; then
+            docsChanged=1
+          else
+            docsChanged=0
           fi
+          echo "::set-output name=docsChanged::$docsChanged"
 
-          echo "::set-output name=release::$release"
+      - name: Push the compiled documentation
+        if: startsWith(github.ref, 'refs/tags/') && steps.commit-docs.outputs.docsChanged == '1'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.get-main-branch.outputs.mainBranch }}
+
+      # Create GitHub release
+      - name: Create GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-version-number.outputs.version }}
+          release_name: Release ${{ steps.get-version-number.outputs.version }}
+
+      # Create PyPI release
+      - name: Create PyPI release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        working-directory: biosimulators
+        run: |
+          # Install pandoc
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends wget
+
+          wget https://github.com/jgm/pandoc/releases -O /tmp/pandocVersions.html
+          urlPart=`grep "\.deb" /tmp/pandocVersions.html | head -n 1 | cut -d'/' -f2-7 | cut -d'"' -f1`
+          wget "https://github.com/$urlPart" -O /tmp/pandoc.deb
+          sudo dpkg -i /tmp/pandoc.deb
+          rm /tmp/pandocVersions.html
+          rm /tmp/pandoc.deb
+
+          # Convert README to .rst format
+          pandoc --from=gfm --output=README.rst --to=rst README.md
+
+          # Install twine
+          python -m pip install wheel twine
+
+          # Create packages to upload to PyPI
+          python setup.py sdist
+          python setup.py bdist_wheel
+
+          # Upload packages to PyPI
+          twine upload dist/*
 
       # build Docker image and push to GitHub Container Registry
       - name: Push Docker image
-        if: steps.determine-if-release-needed.outputs.release == '1'
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           docker login ghcr.io \
             --username ${{ secrets.GHCR_USERNAME }} \
             --password ${{ secrets.GHCR_TOKEN }}
-          docker push ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }}
-          docker push ghcr.io/${{ github.repository }}/libsbmlsim:latest
+          docker push ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:${{ steps.get-version-number.outputs.simulatorVersion }}
+          docker push ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:latest
 
       # Submit to BioSimulators registry
       - name: Submit to BioSimulators registry
-        if: steps.determine-if-release-needed.outputs.release == '1'
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           REVISION=$(git rev-parse HEAD)
           curl \
@@ -132,4 +238,4 @@ jobs:
             -u ${{ secrets.BIOSIMULATORS_GH_USERNAME }}:${{ secrets.BIOSIMULATORS_GH_TOKEN }} \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/biosimulators/Biosimulators/issues \
-            -d "{\"labels\": [\"Validate/submit simulator\"], \"title\": \"Submit LibSBMLsim ${{ steps.get-version-number.outputs.version }}\", \"body\": \"---\nid: libsbmlsim\nversion: ${{ steps.get-version-number.outputs.version }}\nspecificationsUrl: https://raw.githubusercontent.com/${{ github.repository }}/${REVISION}/biosimulators.json\nspecificationsPatch:\n  version: ${{ steps.get-version-number.outputs.version }}\n  image:\n    url: ghcr.io/${{ github.repository }}/libsbmlsim:${{ steps.get-version-number.outputs.version }}\nvalidateImage: true\ncommitSimulator: true\n\n---\"}"
+            -d "{\"labels\": [\"Validate/submit simulator\"], \"title\": \"Submit LibSBMLsim ${{ steps.get-version-number.outputs.simulatorVersion }}\", \"body\": \"---\nid: libsbmlsim\nversion: ${{ steps.get-version-number.outputs.simulatorVersion }}\nspecificationsUrl: https://raw.githubusercontent.com/${{ github.repository }}/${REVISION}/biosimulators.json\nspecificationsPatch:\n  version: ${{ steps.get-version-number.outputs.simulatorVersion }}\n  image:\n    url: ghcr.io/biosimulators/biosimulators_libsbmlsim/libsbmlsim:${{ steps.get-version-number.outputs.simulatorVersion }}\nvalidateImage: true\ncommitSimulator: true\n\n---\"}"

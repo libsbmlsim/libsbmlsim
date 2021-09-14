@@ -1,13 +1,14 @@
 # Base OS
 FROM python:3.9-slim-buster
 
-ARG VERSION=1.4.0
+ARG VERSION=0.0.4
+ARG SIMULATOR_VERSION=1.4.0
 ARG LIBSBML_VERSION=5.19.0
 
 # metadata
 LABEL \
     org.opencontainers.image.title="LibSBMLsim" \
-    org.opencontainers.image.version="${VERSION}" \
+    org.opencontainers.image.version="${SIMULATOR_VERSION}" \
     org.opencontainers.image.description="Library for simulating an SBML model which contains Ordinary Differential Equations" \
     org.opencontainers.image.url="http://fun.bio.keio.ac.jp/software/libsbmlsim/" \
     org.opencontainers.image.documentation="http://fun.bio.keio.ac.jp/software/libsbmlsim/" \
@@ -19,7 +20,7 @@ LABEL \
     base_image="python:3.9-slim-buster" \
     version="${VERSION}" \
     software="LibSBMLsim" \
-    software.version="${VERSION}" \
+    software.version="${SIMULATOR_VERSION}" \
     about.summary="Library for simulating an SBML model which contains Ordinary Differential Equations" \
     about.home="http://fun.bio.keio.ac.jp/software/libsbmlsim/" \
     about.documentation="http://fun.bio.keio.ac.jp/software/libsbmlsim/" \
@@ -75,6 +76,11 @@ RUN apt-get update -y \
         swig \
         libbz2-dev \
     && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# fonts for matplotlib
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends libfreetype6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy code for command-line interface into image and install it

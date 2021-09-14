@@ -1,0 +1,26 @@
+biosimulators\_libsbmlsim package
+=================================
+
+.. automodule:: biosimulators_libsbmlsim
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+biosimulators\_libsbmlsim.core module
+-------------------------------------
+
+.. automodule:: biosimulators_libsbmlsim.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biosimulators\_libsbmlsim.data\_model module
+--------------------------------------------
+
+.. automodule:: biosimulators_libsbmlsim.data_model
+   :members:
+   :undoc-members:
+   :show-inheritance:

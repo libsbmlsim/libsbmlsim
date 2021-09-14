@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biosimulators_libsbmlsim package &#8212; BioSimulators-LibSBMLSim 0.0.4 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/biosimulators.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="About BioSimulators-LibSBMLSim" href="../about.html" />
+    <link rel="prev" title="Tutorial" href="../tutorial.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+      
+      <link rel="icon" sizes="16x16" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-16x16.png">
+      
+    
+      
+      <link rel="icon" sizes="32x32" href="https://github.com/biosimulations/biosimulations/raw/dev/libs/shared/assets/src/assets/icons/favicon-32x32.png">
+      
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../index.html">
+  <img src="../_static/biosimulators-logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/biosimulators" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="mailto:info@biosimulators.org" rel="noopener" target="_blank" title="Email">
+            <span><i class="fas fa-envelope"></i></span>
+            <label class="sr-only">Email</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Enter text to search for ..." aria-label="Enter text to search for ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#submodules">
+   Submodules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-biosimulators_libsbmlsim.core">
+   biosimulators_libsbmlsim.core module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-biosimulators_libsbmlsim.data_model">
+   biosimulators_libsbmlsim.data_model module
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/edit/dev/docs-src/source/biosimulators_libsbmlsim.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-biosimulators_libsbmlsim">
+<span id="biosimulators-libsbmlsim-package"></span><h1>biosimulators_libsbmlsim package<a class="headerlink" href="#module-biosimulators_libsbmlsim" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.exec_sed_doc">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.</span></span><span class="sig-name descname"><span class="pre">exec_sed_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_xml_model_changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretty_print_modified_xml_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">StandardOutputErrorCapturerLevel.c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.exec_sed_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the tasks specified in a SED document and generate the specified outputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocument</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – SED document or a path to SED-ML file which defines a SED document</p></li>
+<li><p><strong>working_dir</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – working directory of the SED document (path relative to which models are located)</p></li>
+<li><p><strong>base_out_path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – <p>path to store the outputs</p>
+<ul>
+<li><p>CSV: directory in which to save outputs to files
+<code class="docutils literal notranslate"><span class="pre">{base_out_path}/{rel_out_path}/{report.id}.csv</span></code></p></li>
+<li><p>HDF5: directory in which to save a single HDF5 file (<code class="docutils literal notranslate"><span class="pre">{base_out_path}/reports.h5</span></code>),
+with reports at keys <code class="docutils literal notranslate"><span class="pre">{rel_out_path}/{report.id}</span></code> within the HDF5 file</p></li>
+</ul>
+</p></li>
+<li><p><strong>rel_out_path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, optional) – path relative to <code class="xref py py-obj docutils literal notranslate"><span class="pre">base_out_path</span></code> to store the outputs</p></li>
+<li><p><strong>apply_xml_model_changes</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, apply any model changes specified in the SED-ML file before
+calling <code class="xref py py-obj docutils literal notranslate"><span class="pre">task_executer</span></code>.</p></li>
+<li><p><strong>log</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentLog</span></code>, optional) – log of the document</p></li>
+<li><p><strong>indent</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional) – degree to indent status messages</p></li>
+<li><p><strong>pretty_print_modified_xml_models</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, pretty print modified XML models</p></li>
+<li><p><strong>log_level</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardOutputErrorCapturerLevel</span></code>, optional) – level at which to log output</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+<li><p><strong>simulator_config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SimulatorConfig</span></code>, optional) – tellurium configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReportResults</span></code>: results of each report</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentLog</span></code>: log of the document</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.exec_sed_task">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.</span></span><span class="sig-name descname"><span class="pre">exec_sed_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessed_task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.exec_sed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a task and save its results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Task</span></code>) – task</p></li>
+<li><p><strong>variables</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code>) – variables that should be recorded</p></li>
+<li><p><strong>preprocessed_task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>, optional) – preprocessed information about the task, including possible
+model changes and variables. This can be used to avoid repeatedly executing the same initialization
+for repeated calls to this method.</p></li>
+<li><p><strong>log</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskLog</span></code>, optional) – log for the task</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariableResults</span></code>: results of variables
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskLog</span></code>: log</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.</span></span><span class="sig-name descname"><span class="pre">exec_sedml_docs_in_combine_archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.exec_sedml_docs_in_combine_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the SED tasks defined in a COMBINE/OMEX archive and save the outputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>archive_filename</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – path to COMBINE/OMEX archive</p></li>
+<li><p><strong>out_dir</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – <p>path to store the outputs of the archive</p>
+<ul>
+<li><p>CSV: directory in which to save outputs to files
+<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">out_dir</span> <span class="pre">}/{</span> <span class="pre">relative-path-to-SED-ML-file-within-archive</span> <span class="pre">}/{</span> <span class="pre">report.id</span> <span class="pre">}.csv</span></code></p></li>
+<li><p>HDF5: directory in which to save a single HDF5 file (<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">out_dir</span> <span class="pre">}/reports.h5</span></code>),
+with reports at keys <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">relative-path-to-SED-ML-file-within-archive</span> <span class="pre">}/{</span> <span class="pre">report.id</span> <span class="pre">}</span></code> within the HDF5 file</p></li>
+</ul>
+</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentResults</span></code>: results</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CombineArchiveLog</span></code>: log</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.get_simulator_version">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.</span></span><span class="sig-name descname"><span class="pre">get_simulator_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.get_simulator_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version of LibSBMLSim</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>version</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.preprocess_sed_task">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.</span></span><span class="sig-name descname"><span class="pre">preprocess_sed_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.preprocess_sed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess a SED task, including its possible model changes and variables. This is useful for avoiding
+repeatedly initializing tasks on repeated calls of <a class="reference internal" href="#biosimulators_libsbmlsim.exec_sed_task" title="biosimulators_libsbmlsim.exec_sed_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exec_sed_task</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Task</span></code>) – task</p></li>
+<li><p><strong>variables</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code>) – variables that should be recorded</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>preprocessed information about the task</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-biosimulators_libsbmlsim.core">
+<span id="biosimulators-libsbmlsim-core-module"></span><h2>biosimulators_libsbmlsim.core module<a class="headerlink" href="#module-biosimulators_libsbmlsim.core" title="Permalink to this headline">¶</a></h2>
+<p>Methods for executing SED tasks in COMBINE archives and saving their outputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Jonathan Karr &lt;<a class="reference external" href="mailto:karr&#37;&#52;&#48;mssm&#46;edu">karr<span>&#64;</span>mssm<span>&#46;</span>edu</a>&gt;</p>
+</dd>
+<dt class="field-even">Date</dt>
+<dd class="field-even"><p>2021-03-27</p>
+</dd>
+<dt class="field-odd">Copyright</dt>
+<dd class="field-odd"><p>2021, Center for Reproducible Biomedical Modeling</p>
+</dd>
+<dt class="field-even">License</dt>
+<dd class="field-even"><p>MIT</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.core.exec_sed_doc">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.core.</span></span><span class="sig-name descname"><span class="pre">exec_sed_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_xml_model_changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretty_print_modified_xml_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">StandardOutputErrorCapturerLevel.c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/core.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.core.exec_sed_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the tasks specified in a SED document and generate the specified outputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocument</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – SED document or a path to SED-ML file which defines a SED document</p></li>
+<li><p><strong>working_dir</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – working directory of the SED document (path relative to which models are located)</p></li>
+<li><p><strong>base_out_path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – <p>path to store the outputs</p>
+<ul>
+<li><p>CSV: directory in which to save outputs to files
+<code class="docutils literal notranslate"><span class="pre">{base_out_path}/{rel_out_path}/{report.id}.csv</span></code></p></li>
+<li><p>HDF5: directory in which to save a single HDF5 file (<code class="docutils literal notranslate"><span class="pre">{base_out_path}/reports.h5</span></code>),
+with reports at keys <code class="docutils literal notranslate"><span class="pre">{rel_out_path}/{report.id}</span></code> within the HDF5 file</p></li>
+</ul>
+</p></li>
+<li><p><strong>rel_out_path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, optional) – path relative to <code class="xref py py-obj docutils literal notranslate"><span class="pre">base_out_path</span></code> to store the outputs</p></li>
+<li><p><strong>apply_xml_model_changes</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, apply any model changes specified in the SED-ML file before
+calling <code class="xref py py-obj docutils literal notranslate"><span class="pre">task_executer</span></code>.</p></li>
+<li><p><strong>log</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentLog</span></code>, optional) – log of the document</p></li>
+<li><p><strong>indent</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional) – degree to indent status messages</p></li>
+<li><p><strong>pretty_print_modified_xml_models</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, pretty print modified XML models</p></li>
+<li><p><strong>log_level</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardOutputErrorCapturerLevel</span></code>, optional) – level at which to log output</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+<li><p><strong>simulator_config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">SimulatorConfig</span></code>, optional) – tellurium configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReportResults</span></code>: results of each report</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentLog</span></code>: log of the document</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.core.exec_sed_task">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.core.</span></span><span class="sig-name descname"><span class="pre">exec_sed_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessed_task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/core.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.core.exec_sed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a task and save its results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Task</span></code>) – task</p></li>
+<li><p><strong>variables</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code>) – variables that should be recorded</p></li>
+<li><p><strong>preprocessed_task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>, optional) – preprocessed information about the task, including possible
+model changes and variables. This can be used to avoid repeatedly executing the same initialization
+for repeated calls to this method.</p></li>
+<li><p><strong>log</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskLog</span></code>, optional) – log for the task</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariableResults</span></code>: results of variables
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskLog</span></code>: log</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.core.</span></span><span class="sig-name descname"><span class="pre">exec_sedml_docs_in_combine_archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/core.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.core.exec_sedml_docs_in_combine_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the SED tasks defined in a COMBINE/OMEX archive and save the outputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>archive_filename</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – path to COMBINE/OMEX archive</p></li>
+<li><p><strong>out_dir</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – <p>path to store the outputs of the archive</p>
+<ul>
+<li><p>CSV: directory in which to save outputs to files
+<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">out_dir</span> <span class="pre">}/{</span> <span class="pre">relative-path-to-SED-ML-file-within-archive</span> <span class="pre">}/{</span> <span class="pre">report.id</span> <span class="pre">}.csv</span></code></p></li>
+<li><p>HDF5: directory in which to save a single HDF5 file (<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">out_dir</span> <span class="pre">}/reports.h5</span></code>),
+with reports at keys <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">relative-path-to-SED-ML-file-within-archive</span> <span class="pre">}/{</span> <span class="pre">report.id</span> <span class="pre">}</span></code> within the HDF5 file</p></li>
+</ul>
+</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SedDocumentResults</span></code>: results</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CombineArchiveLog</span></code>: log</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.core.preprocess_sed_task">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.core.</span></span><span class="sig-name descname"><span class="pre">preprocess_sed_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/core.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.core.preprocess_sed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess a SED task, including its possible model changes and variables. This is useful for avoiding
+repeatedly initializing tasks on repeated calls of <a class="reference internal" href="#biosimulators_libsbmlsim.core.exec_sed_task" title="biosimulators_libsbmlsim.core.exec_sed_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exec_sed_task</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Task</span></code>) – task</p></li>
+<li><p><strong>variables</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code>) – variables that should be recorded</p></li>
+<li><p><strong>config</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Config</span></code>, optional) – BioSimulators common configuration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>preprocessed information about the task</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-biosimulators_libsbmlsim.data_model">
+<span id="biosimulators-libsbmlsim-data-model-module"></span><h2>biosimulators_libsbmlsim.data_model module<a class="headerlink" href="#module-biosimulators_libsbmlsim.data_model" title="Permalink to this headline">¶</a></h2>
+<p>Data model for mapping KiSAO terms to LibSBMLsim integrators and their settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Jonathan Karr &lt;<a class="reference external" href="mailto:karr&#37;&#52;&#48;mssm&#46;edu">karr<span>&#64;</span>mssm<span>&#46;</span>edu</a>&gt;</p>
+</dd>
+<dt class="field-even">Date</dt>
+<dd class="field-even"><p>2021-03-27</p>
+</dd>
+<dt class="field-odd">Copyright</dt>
+<dd class="field-odd"><p>2021, Center for Reproducible Biomedical Modeling</p>
+</dd>
+<dt class="field-even">License</dt>
+<dd class="field-even"><p>MIT</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.data_model.get_integrator">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.data_model.</span></span><span class="sig-name descname"><span class="pre">get_integrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/data_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.data_model.get_integrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the LiSBMLsim integrator and its parameter for a SED-ML/KiSAO algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>algorithm</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Algorithm</span></code>) – SED-ML algorithm</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>: id of LibSBMLsim integrator
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>: time step</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biosimulators_libsbmlsim.data_model.get_integrator_parameters">
+<span class="sig-prename descclassname"><span class="pre">biosimulators_libsbmlsim.data_model.</span></span><span class="sig-name descname"><span class="pre">get_integrator_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supported_orders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/biosimulators/Biosimulators_LibSBMLSim/blob/dev/biosimulators_libsbmlsim/data_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biosimulators_libsbmlsim.data_model.get_integrator_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the order and time step of a LiSBMLsim integrator for a SED-ML/KiSAO algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>algorithm</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Algorithm</span></code>) – SED-ML algorithm</p></li>
+<li><p><strong>supported_orders</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional) – orders supported by the SED-ML algorithm</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>: order</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>: time step</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, BioSimulators Team.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
